@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>💬 پاسخ خودکار</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16)}}
+  .page-title{text-align:center;font-size:19px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px;display:flex;align-items:center;justify-content:center;gap:10px}
+
+  .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-card{border-radius:16px;padding:14px 10px;text-align:center;border:1.5px solid;background:rgba(0,10,8,.6)}
+  .sc-green{border-color:#00ff9d;box-shadow:0 0 18px rgba(0,255,157,.4)}
+  .sc-blue{border-color:#00d4ff;box-shadow:0 0 18px rgba(0,212,255,.4)}
+  .stat-v{font-size:24px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 12px rgba(0,255,157,.8)}
+  .sc-blue .stat-v{color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,.8)}
+  .stat-l{font-size:11px;color:#7dfcc7;margin-top:5px}
+
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:18px;box-shadow:0 0 15px rgba(0,255,157,.15);margin-bottom:14px}
+  .box-title{text-align:center;font-size:14px;color:#00ff9d;margin-bottom:14px;text-shadow:0 0 10px rgba(0,255,157,.6);padding-bottom:12px;border-bottom:1px solid rgba(0,255,157,.2);display:flex;align-items:center;justify-content:center;gap:8px}
+
+  label{display:block;font-size:12px;color:#7dfcc7;margin-bottom:6px;font-weight:bold}
+  input[type=text],textarea,select{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;margin-bottom:12px;transition:.25s}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+  textarea{min-height:70px;resize:vertical;line-height:1.7}
+  select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff9d' stroke-width='3'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:left 10px center;background-size:14px;padding-left:32px}
+
+  .submit-btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:15px;font-family:inherit;font-size:14.5px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(0,255,157,.7);transition:.3s;position:relative;overflow:hidden}
+  .submit-btn:active{transform:scale(.97)}
+  .submit-btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:sweep 3s ease-in-out infinite}
+  @keyframes sweep{0%{left:-100%}50%,100%{left:100%}}
+
+  .rule{background:rgba(0,10,8,.6);border:1.5px solid rgba(0,255,157,.3);border-radius:14px;padding:14px;margin-bottom:10px;animation:rin .5s cubic-bezier(.2,.8,.2,1) both;transition:.25s}
+  .rule:hover{border-color:rgba(0,255,157,.6);box-shadow:0 0 18px rgba(0,255,157,.3)}
+  @keyframes rin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .rule.off{opacity:.5;filter:grayscale(.5)}
+  .rule-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+  .rule-keyword{font-size:13.5px;font-weight:900;color:#00ff9d;text-shadow:0 0 10px rgba(0,255,157,.6);padding:4px 10px;background:rgba(0,255,157,.1);border-radius:8px;border:1px solid rgba(0,255,157,.3);display:inline-block}
+  .rule-badge{font-size:10px;padding:3px 8px;border-radius:7px;font-weight:900}
+  .b-on{background:rgba(0,255,157,.2);color:#00ff9d;border:1px solid #00ff9d}
+  .b-off{background:rgba(148,163,184,.2);color:#94a3b8;border:1px solid #94a3b8}
+  .rule-resp{font-size:12.5px;color:#cbd5e1;line-height:1.7;padding:10px;background:rgba(0,0,0,.3);border-radius:10px;border-right:3px solid #00d4ff;margin-bottom:10px}
+  .rule-meta{font-size:10.5px;color:#6b8f80;display:flex;gap:12px;flex-wrap:wrap}
+  .rule-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+  .act-btn{padding:9px;border-radius:10px;font-family:inherit;font-size:11.5px;font-weight:bold;cursor:pointer;border:none;text-decoration:none;text-align:center;transition:.25s;display:flex;align-items:center;justify-content:center;gap:4px}
+  .act-toggle{background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid #00d4ff}
+  .act-edit{background:rgba(255,215,0,.15);color:#ffd700;border:1px solid #ffd700}
+  .act-del{background:rgba(255,77,109,.15);color:#ff4d6d;border:1px solid #ff4d6d}
+
+  .incoming-item{padding:12px;border-bottom:1px dashed rgba(0,255,157,.15);font-size:12.5px;animation:rin .4s ease both}
+  .incoming-item:last-child{border:none}
+  .ic-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
+  .ic-phone{color:#00d4ff;font-weight:900;direction:ltr;font-size:12px}
+  .ic-date{color:#6b8f80;font-size:10.5px}
+  .ic-msg{color:#cbd5e1;line-height:1.7;padding:8px;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:6px}
+  .ic-reply{font-size:11px;color:#00ff9d;padding:6px 10px;background:rgba(0,255,157,.08);border-radius:8px;border-right:3px solid #00ff9d}
+
+  .empty{color:#6b8f80;text-align:center;padding:30px 0;font-size:12.5px}
+  .empty-ic{font-size:44px;display:block;margin-bottom:8px;opacity:.5}
+
+  .hint{padding:12px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.4);border-radius:12px;font-size:11.5px;color:#7de5ff;line-height:1.9;margin-top:12px}
+  .hint b{color:#00d4ff}
+
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85)}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <div class="page-title">💬 پاسخ خودکار</div>
+
+  <div class="stats-row">
+    <div class="stat-card sc-green">
+      <div class="stat-v">{{ active_count }}</div>
+      <div class="stat-l">قاعده فعال</div>
+    </div>
+    <div class="stat-card sc-blue">
+      <div class="stat-v">{{ incoming_today }}</div>
+      <div class="stat-l">پیامک امروز</div>
+    </div>
+  </div>
+
+  <!-- فرم ساخت / ویرایش -->
+  <div class="box">
+    <div class="box-title">
+      {% if editing %}✏️ ویرایش قاعده{% else %}➕ ساخت قاعده جدید{% endif %}
+    </div>
+    <form method="POST">
+      <input type="hidden" name="action" value="{% if editing %}edit{% else %}add{% endif %}">
+      {% if editing %}<input type="hidden" name="id" value="{{ editing[0] }}">{% endif %}
+
+      <label>🔑 کلمه کلیدی</label>
+      <input type="text" name="keyword" placeholder="مثلاً: قیمت، سفارش، تخفیف" value="{{ editing[2] if editing else '' }}" required>
+
+      <label>🎯 نوع تطبیق</label>
+      <select name="match_type">
+        <option value="contains" {% if editing and editing[4] == 'contains' %}selected{% endif %}>شامل باشد (پیش‌فرض)</option>
+        <option value="exact" {% if editing and editing[4] == 'exact' %}selected{% endif %}>دقیقاً برابر</option>
+        <option value="starts" {% if editing and editing[4] == 'starts' %}selected{% endif %}>با این شروع شود</option>
+      </select>
+
+      <label>💬 پاسخ خودکار</label>
+      <textarea name="response" placeholder="متن پاسخی که باید فرستاده شود..." required>{{ editing[3] if editing else '' }}</textarea>
+
+      <button class="submit-btn" type="submit">
+        {% if editing %}💾 ذخیره تغییرات{% else %}✨ ساخت قاعده{% endif %}
+      </button>
+
+      {% if editing %}
+      <a href="/panel/auto-reply" style="display:block;text-align:center;margin-top:10px;color:#94a3b8;text-decoration:none;font-size:12px">✖ انصراف از ویرایش</a>
+      {% endif %}
+    </form>
+  </div>
+
+  <!-- لیست قواعد -->
+  <div class="box">
+    <div class="box-title">📋 قواعد من</div>
+    {% if rules %}
+      {% for r in rules %}
+        <div class="rule {% if not r[4] %}off{% endif %}" style="animation-delay:{{ loop.index0 * 0.04 }}s">
+          <div class="rule-head">
+            <div class="rule-keyword">🔑 {{ r[1] }}</div>
+            <div class="rule-badge {% if r[4] %}b-on{% else %}b-off{% endif %}">
+              {% if r[4] %}✅ فعال{% else %}⏸ غیرفعال{% endif %}
+            </div>
+          </div>
+          <div class="rule-resp">💬 {{ r[2] }}</div>
+          <div class="rule-meta">
+            <span>🎯 {{ r[3] }}</span>
+            <span>📊 {{ r[5] or 0 }} بار استفاده</span>
+            <span>🕐 {{ r[6] }}</span>
+          </div>
+          <div class="rule-actions">
+            <form method="POST" action="/panel/auto-reply/{{ r[0] }}/toggle" style="display:contents">
+              <button class="act-btn act-toggle" type="submit">{% if r[4] %}⏸ خاموش{% else %}▶ روشن{% endif %}</button>
+            </form>
+            <a class="act-btn act-edit" href="/panel/auto-reply?edit={{ r[0] }}">✏️ ویرایش</a>
+            <form method="POST" action="/panel/auto-reply/{{ r[0] }}/delete" style="display:contents" onsubmit="return confirm('این قاعده حذف بشه؟')">
+              <button class="act-btn act-del" type="submit">🗑 حذف</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><span class="empty-ic">📭</span>هنوز قاعده‌ای نساختی</div>
+    {% endif %}
+  </div>
+
+  <!-- پیامک‌های ورودی -->
+  {% if incoming %}
+  <div class="box">
+    <div class="box-title">📥 آخرین پیامک‌های ورودی</div>
+    {% for i in incoming %}
+      <div class="incoming-item" style="animation-delay:{{ loop.index0 * 0.04 }}s">
+        <div class="ic-head">
+          <span class="ic-phone">📱 {{ i[1] }}</span>
+          <span class="ic-date">🕐 {{ i[5] }}</span>
+        </div>
+        <div class="ic-msg">{{ i[2] }}</div>
+        {% if i[4] %}
+          <div class="ic-reply">✅ پاسخ خودکار: {{ i[4] }}</div>
+        {% elif i[3] %}
+          <div class="ic-reply" style="color:#fbbf24;border-right-color:#fbbf24;background:rgba(251,191,36,.08)">⚠️ قاعده مچ شد ولی پاسخ نرفت</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="hint">
+    <b>💡 چطور کار می‌کند؟</b><br>
+    1️⃣ کاربر به خط شما پیامک می‌فرستد<br>
+    2️⃣ سیستم کلیدواژه را بررسی می‌کند<br>
+    3️⃣ اگر مچ شد، پاسخ خودکار ارسال می‌شود<br>
+    4️⃣ نوتیف در بخش «پیامک‌های ورودی» ثبت می‌شود
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/dashboard"><span class="ic">🏠</span><span>پنل</span></a>
+    <a class="nav-item" href="/panel/send"><span class="ic">✉️</span><span>ارسال</span></a>
+    <a class="nav-item" href="/panel/contacts"><span class="ic">📞</span><span>مخاطبین</span></a>
+    <a class="nav-item active" href="/panel/auto-reply"><span class="ic">💬</span><span>پاسخ خودکار</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

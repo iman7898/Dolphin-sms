@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پیگیری سفارش</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,212,255,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,255,157,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid #00d4ff;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #00d4ff;border-radius:26px;padding:18px 14px;background:rgba(0,15,30,.35)}
+.pt{text-align:center;font-size:18px;font-weight:900;color:#00d4ff;margin:0 0 16px}
+.info{padding:14px;background:rgba(0,10,8,.6);border:1.5px solid rgba(0,212,255,.35);border-radius:14px;margin-bottom:16px}
+.ih{font-size:14px;color:#00d4ff;font-weight:bold;margin-bottom:8px}
+.im{font-size:12px;color:#7de5ff;margin-top:4px}
+.tl{padding:10px 0}
+.tli{display:flex;gap:10px;padding-bottom:14px;position:relative}
+.tli::before{content:"";position:absolute;right:13px;top:28px;bottom:-6px;width:2px;background:rgba(0,255,157,.3)}
+.tli:last-child::before{display:none}
+.tld{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#00ff9d,#00b377);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;box-shadow:0 0 12px rgba(0,255,157,.6)}
+.tlc{flex:1}
+.tls{font-size:13.5px;color:#00ff9d;font-weight:900;margin-bottom:4px}
+.tln{font-size:12px;color:#cbd5e1;line-height:1.6}
+.tld2{font-size:10px;color:#6b8f80;margin-top:4px;direction:ltr}
+.nw{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d,#00d4ff 35%,#bf00ff 70%,#00ff9d);z-index:100}
+.bn2{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px}
+.ni .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+.ni.act{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));border-radius:20px}
+.ni.act .ic{filter:none;color:#00ff9d}.ni.act span:last-child{color:#00ff9d;font-weight:bold}
+</style></head><body>
+<a class="back-btn" href="/customer/orders">→ سفارش‌ها</a>
+<div class="frame">
+<div class="pt">📦 پیگیری سفارش #{{ order[0] }}</div>
+
+<div class="info">
+<div class="ih">📌 {{ order[2] }}</div>
+<div class="im">🏪 {{ order[1] or '—' }}</div>
+<div class="im">🕐 {{ order[6] }}</div>
+</div>
+
+<div class="tl">
+{% for s in statuses %}
+<div class="tli">
+<div class="tld">
+{% if s[0] == 'pending' %}⏳
+{% elif s[0] == 'processing' %}⚙️
+{% elif s[0] == 'ready' %}✅
+{% elif s[0] == 'sent' %}🚚
+{% elif s[0] == 'delivered' %}📦
+{% elif s[0] == 'cancelled' %}❌
+{% else %}•{% endif %}
+</div>
+<div class="tlc">
+<div class="tls">
+{% if s[0] == 'pending' %}سفارش ثبت شد
+{% elif s[0] == 'processing' %}در حال آماده‌سازی
+{% elif s[0] == 'ready' %}آماده تحویل
+{% elif s[0] == 'sent' %}ارسال شد
+{% elif s[0] == 'delivered' %}تحویل داده شد
+{% elif s[0] == 'cancelled' %}لغو شد
+{% else %}{{ s[0] }}{% endif %}
+</div>
+{% if s[1] %}<div class="tln">{{ s[1] }}</div>{% endif %}
+<div class="tld2">{{ s[2] }}</div>
+</div>
+</div>
+{% endfor %}
+</div>
+</div>
+<div class="nw"><div class="bn2">
+<a class="ni" href="/customer/dashboard"><span class="ic">🏠</span><span>خانه</span></a>
+<a class="ni" href="/customer/search"><span class="ic">🔍</span><span>جستجو</span></a>
+<a class="ni act" href="/customer/orders"><span class="ic">📋</span><span>سفارش‌ها</span></a>
+<a class="ni" href="/customer/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+</div></div>
+{% include "_global_bg.html" %}
+</body></html>

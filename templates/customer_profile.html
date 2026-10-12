@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پروفایل</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,212,255,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(255,77,109,.15);color:#ff4d6d;border:1px solid #ff4d6d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #00d4ff;border-radius:26px;padding:18px 14px;background:rgba(0,15,30,.35)}
+.pt{text-align:center;font-size:20px;font-weight:900;color:#00d4ff;margin:0 0 16px;text-shadow:0 0 14px rgba(0,212,255,.8)}
+.card{background:rgba(0,10,8,.6);border:1.5px solid rgba(0,212,255,.4);border-radius:18px;padding:18px;margin-bottom:14px}
+.avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#00ff9d,#00d4ff);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:50px;box-shadow:0 0 25px rgba(0,212,255,.6)}
+.name{text-align:center;font-size:18px;font-weight:900;color:#00d4ff;margin-bottom:4px}
+.phone{text-align:center;font-size:13px;color:#7de5ff;direction:ltr;margin-bottom:14px}
+.row{padding:10px 0;border-bottom:1px dashed rgba(0,212,255,.2);display:flex;justify-content:space-between;font-size:13px}
+.row:last-child{border:none}
+.row b{color:#7de5ff}
+.row span{color:#cbd5e1}
+.btn{width:100%;background:linear-gradient(135deg,#ff4d6d,#c8102e);color:#fff;border:none;border-radius:14px;padding:15px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 0 20px rgba(255,77,109,.6);text-decoration:none;display:block;text-align:center}
+
+
+
+
+
+
+</style></head><body>
+<a class="back-btn" href="/customer/logout">خروج</a>
+<div class="frame">
+<div class="pt">👤 پروفایل من</div>
+
+<div class="card">
+<div class="avatar">👤</div>
+<div class="name">{{ customer[2] if customer else 'مشتری' }}</div>
+<div class="phone">{{ customer[1] if customer else '' }}</div>
+
+<div class="row"><b>📱 شماره:</b><span>{{ customer[1] if customer else '—' }}</span></div>
+<div class="row"><b>📅 عضویت:</b><span>{{ customer[3] if customer and customer|length > 3 else '—' }}</span></div>
+</div>
+
+<a href="/customer/logout" class="btn">🚪 خروج از حساب</a>
+</div>
+{% include "_global_bg.html" %}
+{% with active="profile" %}{% include "_customer_nav.html" %}{% endwith %}
+</body></html>

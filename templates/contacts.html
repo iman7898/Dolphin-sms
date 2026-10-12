@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>مخاطبین</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<script src="/static/custom-alert.js"></script>
+</head>
+<body class="matrix-bg">
+<div class="container">
+
+<div class="header-bar">
+<div class="header-title">{% if admin_view %}📞 مخاطبین {{ user[3] or user[1] }}{% else %}📞 مخاطبین من{% endif %} ({{ total }})</div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+        <div class="{{ 'success' if cat=='success' else 'error' }}">{{ msg }}</div>
+    {% endfor %}
+{% endwith %}
+
+<!-- نوار اکشن‌ها -->
+<div class="footer-box">
+<div class="footer-actions">
+{% if not admin_view %}
+<button type="button" class="btn-nav" onclick="openAddModal()">➕ افزودن مخاطب</button>
+{% endif %}
+<button type="button" class="btn-nav" style="background:#1a0033;color:#bf00ff;border-color:#bf00ff;" onclick="openImportModal()">📥 ایمپورت گروهی</button>
+</div>
+</div>
+
+<!-- جستجو -->
+<form method="get" {% if admin_view %}action="/admin/contacts/{{ user_id }}"{% endif %} class="search-form" style="margin:16px 0;">
+<input type="text" name="q" value="{{ search }}" placeholder="🔍 جستجو نام یا شماره...">
+<button type="submit" class="chat-send">🔍</button>
+</form>
+
+<!-- گروه‌ها -->
+{% if groups %}
+<div class="groups-bar">
+<a href="{% if admin_view %}/admin/contacts/{{ user_id }}{% else %}/panel/contacts{% endif %}" class="group-chip {% if not current_group %}active{% endif %}">
+همه ({{ total }})
+</a>
+{% for g in groups %}
+<a href="{% if admin_view %}/admin/contacts/{{ user_id }}?group={{ g.name }}{% else %}/panel/contacts?group={{ g.name }}{% endif %}" class="group-chip {% if current_group == g.name %}active{% endif %}">
+{{ g.name }} ({{ g.count }})
+</a>
+{% endfor %}
+</div>
+{% endif %}
+
+<!-- لیست مخاطبین -->
+<h2>📋 لیست مخاطبین</h2>
+{% if contacts %}
+<div class="contacts-list">
+{% for c in contacts %}
+<div class="contact-card">
+<div class="contact-avatar">{{ c[2][0] if c[2] else '?' }}</div>
+<div class="contact-info">
+<div class="contact-name">{{ c[2] }}</div>
+<div class="contact-phone">{{ c[3] }}</div>
+{% if c[4] and c[4] != 'معمولی' %}
+<div class="contact-group">🏷 {{ c[4] }}</div>
+{% endif %}
+</div>
+<div class="contact-actions">
+{% if not admin_view %}<a href="/panel/send?phone={{ c[3] }}" class="mini-btn chat-btn" title="ارسال پیامک">✉</a>{% endif %}
+{% if not admin_view %}<button type="button" class="mini-btn edit-btn" onclick="openEditModal({{ c[0] }}, '{{ c[2]|e }}', '{{ c[3] }}', '{{ c[4]|e }}', '{{ c[5]|e }}')" title="ویرایش">✏</button>{% endif %}
+{% if not admin_view %}<form method="post" action="/panel/contacts/delete/{{ c[0] }}" style="display:inline;" data-confirm="مطمئنی این مخاطب حذف بشه؟">
+<button type="submit" class="mini-btn del-btn" title="حذف">🗑</button>
+</form>{% endif %}
+</div>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="chat-empty">هنوز مخاطبی اضافه نکردی 🤷</div>
+{% endif %}
+
+<div class="footer-box">
+<div class="footer-actions">
+{% if admin_view %}<a href="/admin/contacts" class="btn-nav">← بازگشت</a>{% else %}<a href="/panel/dashboard" class="btn-nav">← بازگشت به پنل</a>{% endif %}
+</div>
+</div>
+
+</div>
+
+<!-- مودال افزودن -->
+{% if not admin_view %}<div id="addModal" class="modal-overlay">
+<div class="modal-box">
+<div class="modal-icon">➕</div>
+<div class="modal-title">افزودن مخاطب</div>
+<form method="post" action="/panel/contacts/add">
+<label class="form-label">نام</label>
+<input type="text" name="name" required placeholder="مثلاً علی رضایی">
+<label class="form-label">شماره موبایل</label>
+<input type="text" name="phone" required placeholder="09123456789">
+<label class="form-label">گروه</label>
+<input type="text" name="group" placeholder="VIP، وفادار، معمولی..." list="groupsList" value="معمولی">
+<datalist id="groupsList">
+{% for g in groups %}<option value="{{ g.name }}">{% endfor %}
+<option value="VIP">
+<option value="وفادار">
+<option value="جدید">
+<option value="معمولی">
+</datalist>
+<label class="form-label">یادداشت (اختیاری)</label>
+<textarea name="notes" placeholder="توضیحات..." style="min-height:60px;"></textarea>
+<div class="modal-actions" style="margin-top:15px;">
+<button type="button" class="modal-btn modal-cancel" onclick="closeModal('addModal')">انصراف</button>
+<button type="submit" class="modal-btn modal-confirm">ذخیره</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- مودال ویرایش -->
+<div id="editModal" class="modal-overlay">
+<div class="modal-box">
+<div class="modal-icon">✏</div>
+<div class="modal-title">ویرایش مخاطب</div>
+<form method="post" id="editForm">
+<label class="form-label">نام</label>
+<input type="text" name="name" id="editName" required>
+<label class="form-label">شماره موبایل</label>
+<input type="text" name="phone" id="editPhone" required>
+<label class="form-label">گروه</label>
+<input type="text" name="group" id="editGroup" list="groupsList">
+<label class="form-label">یادداشت</label>
+<textarea name="notes" id="editNotes" style="min-height:60px;"></textarea>
+<div class="modal-actions" style="margin-top:15px;">
+<button type="button" class="modal-btn modal-cancel" onclick="closeModal('editModal')">انصراف</button>
+<button type="submit" class="modal-btn modal-confirm">ذخیره</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- مودال ایمپورت -->
+<div id="importModal" class="modal-overlay">
+<div class="modal-box">
+<div class="modal-icon">📥</div>
+<div class="modal-title">ایمپورت گروهی</div>
+<div style="color:#7a8599;font-size:12px;text-align:center;margin-bottom:12px;">
+هر خط یه مخاطب: <br>
+<strong>نام,شماره,گروه</strong>
+</div>
+<form method="post" action="/panel/contacts/import">
+<textarea name="contacts_text" required placeholder="علی,09121111111,VIP
+رضا,09122222222,وفادار
+مریم,09123333333,معمولی" style="min-height:150px;font-family:monospace;"></textarea>
+<div class="modal-actions" style="margin-top:15px;">
+<button type="button" class="modal-btn modal-cancel" onclick="closeModal('importModal')">انصراف</button>
+<button type="submit" class="modal-btn modal-confirm">ایمپورت</button>
+</div>
+</form>
+</div>
+</div>
+
+<nav class="bottom-nav">
+<a href="/panel/dashboard" class="nav-item">
+<span class="nav-icon">🏠</span><span class="nav-label">پنل</span>
+</a>
+<a href="/panel/contacts" class="nav-item active">
+<span class="nav-icon">📞</span><span class="nav-label">مخاطبین</span>
+</a>
+<a href="/panel/chat" class="nav-item">
+<span class="nav-icon">💬</span><span class="nav-label">چت</span>
+{% if unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
+</a>
+<a href="/panel/ai" class="nav-item">
+<span class="nav-icon">🤖</span><span class="nav-label">AI</span>
+</a>
+<a href="/panel/profile" class="nav-item">
+<span class="nav-icon">👤</span><span class="nav-label">پروفایل</span>
+</a>
+</nav>
+
+{% endif %}
+<script>
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function openAddModal() { document.getElementById('addModal').classList.add('show'); }
+function openImportModal() { document.getElementById('importModal').classList.add('show'); }
+function openEditModal(id, name, phone, group, notes) {
+    document.getElementById('editForm').action = '/panel/contacts/edit/' + id;
+    document.getElementById('editName').value = name;
+    document.getElementById('editPhone').value = phone;
+    document.getElementById('editGroup').value = group || 'معمولی';
+    document.getElementById('editNotes').value = notes || '';
+    document.getElementById('editModal').classList.add('show');
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+});
+</script>
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

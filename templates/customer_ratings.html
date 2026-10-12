@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نظرات</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(255,215,0,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(255,215,0,.15);color:#ffd700;border:1px solid #ffd700;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #ffd700;border-radius:26px;padding:18px 14px;background:rgba(30,20,0,.35)}
+.pt{text-align:center;font-size:19px;font-weight:900;color:#ffd700;margin:0 0 16px}
+.avg{text-align:center;font-size:40px;font-weight:900;color:#00ff9d;margin-bottom:6px}
+.avg-l{text-align:center;font-size:12px;color:#7dfcc7;margin-bottom:16px}
+.r{padding:12px;border-radius:12px;background:rgba(0,10,8,.6);border:1px solid rgba(255,215,0,.25);margin-bottom:8px}
+.rh{display:flex;justify-content:space-between;margin-bottom:6px}
+.rn{font-size:13px;color:#ffd700;font-weight:bold}
+.rs{color:#ffd700;font-size:14px;direction:ltr}
+.rc{font-size:12.5px;color:#cbd5e1;line-height:1.7;padding-top:6px;border-top:1px dashed rgba(255,215,0,.2)}
+.rd{font-size:10px;color:#6b8f80;margin-top:6px}
+.empty{text-align:center;color:#6b8f80;padding:30px 0}
+.nw{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d,#00d4ff 35%,#bf00ff 70%,#00ff9d);z-index:100}
+.bn2{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px}
+.ni .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+.ni.act{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));border-radius:20px}
+.ni.act .ic{filter:none;color:#00ff9d}.ni.act span:last-child{color:#00ff9d;font-weight:bold}
+</style></head><body>
+<a class="back-btn" href="/customer/shop/{{ shop[0] }}">→ بازگشت</a>
+<div class="frame">
+<div class="pt">⭐ نظرات {{ shop[2] or shop[1] }}</div>
+<div class="avg">{{ avg }}</div>
+<div class="avg-l">از {{ cnt }} نظر</div>
+{% if ratings %}
+{% for r in ratings %}
+<div class="r">
+<div class="rh">
+<div class="rn">👤 {{ r[2] or 'مشتری' }}</div>
+<div class="rs">{{ '⭐' * r[0] }}</div>
+</div>
+{% if r[1] %}<div class="rc">{{ r[1] }}</div>{% endif %}
+<div class="rd">🕐 {{ r[3] }}</div>
+</div>
+{% endfor %}
+{% else %}
+<div class="empty">📭 هنوز نظری نیست</div>
+{% endif %}
+</div>
+<div class="nw"><div class="bn2">
+<a class="ni" href="/customer/dashboard"><span class="ic">🏠</span><span>خانه</span></a>
+<a class="ni" href="/customer/search"><span class="ic">🔍</span><span>جستجو</span></a>
+<a class="ni" href="/customer/orders"><span class="ic">📋</span><span>سفارش‌ها</span></a>
+<a class="ni" href="/customer/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+</div></div>
+{% include "_global_bg.html" %}
+</body></html>

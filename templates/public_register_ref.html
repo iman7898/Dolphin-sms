@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎯 ثبت‌نام با دعوت</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:30px 14px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.16),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.14),transparent 45%);}
+  .frame{max-width:420px;margin:0 auto;border:2px solid #00ff9d;border-radius:26px;padding:24px 18px;background:rgba(0,20,15,.5);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,255,157,.6),0 0 80px rgba(0,255,157,.2);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 30px rgba(0,255,157,.6),0 0 80px rgba(0,255,157,.2)}50%{box-shadow:0 0 45px rgba(0,255,157,.9),0 0 120px rgba(0,255,157,.35)}}
+  .invite-card{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.08));border:1.5px solid #ffd700;border-radius:16px;padding:14px;text-align:center;margin-bottom:18px;box-shadow:0 0 20px rgba(255,215,0,.4)}
+  .invite-ic{font-size:32px;display:block;margin-bottom:6px;animation:crownFloat 3s ease-in-out infinite}
+  @keyframes crownFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-6px) rotate(5deg)}}
+  .invite-title{font-size:13px;color:#ffd700;font-weight:900;text-shadow:0 0 10px rgba(255,215,0,.7)}
+  .invite-name{font-size:16px;color:#fff;font-weight:900;margin-top:6px;text-shadow:0 0 12px rgba(255,215,0,.8)}
+  .invite-bonus{font-size:12px;color:#a7f3d0;margin-top:8px;line-height:1.6}
+
+  .page-title{text-align:center;font-size:18px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px}
+  label{display:block;font-size:12px;color:#7dfcc7;margin-bottom:6px;font-weight:bold}
+  input{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.4);border-radius:12px;padding:13px;font-family:inherit;font-size:14px;margin-bottom:12px;transition:.25s}
+  input:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+  .submit-btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 25px rgba(0,255,157,.7);transition:.25s;margin-top:8px}
+  .submit-btn:active{transform:scale(.98)}
+  .alert{border-radius:12px;padding:12px;font-size:12.5px;margin-bottom:14px;text-align:center;line-height:1.7}
+  .alert.ok{background:rgba(0,255,157,.15);border:1px solid #00ff9d;color:#00ff9d}
+  .alert.err{background:rgba(255,77,109,.15);border:1px solid #ff4d6d;color:#ff4d6d}
+</style>
+</head>
+<body>
+<div class="frame">
+
+  {% if not success and referrer %}
+  <div class="invite-card">
+    <span class="invite-ic">👑</span>
+    <div class="invite-title">دعوت‌نامه ویژه</div>
+    <div class="invite-name">{{ referrer[3] or referrer[1] }}</div>
+    <div class="invite-bonus">
+      شما رو دعوت کرده! 🎁<br>
+      <b>۲۵,۰۰۰ ریال + ۲۵ امتیاز</b> هدیه بگیر
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="page-title">📝 ثبت‌نام</div>
+
+  {% if msg %}
+    <div class="alert {% if success %}ok{% else %}err{% endif %}">{{ msg }}</div>
+  {% endif %}
+
+  {% if success %}
+    <a href="/panel/login" style="display:block;text-align:center;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;text-decoration:none;padding:16px;border-radius:14px;font-weight:900;font-size:15px;box-shadow:0 0 20px rgba(0,255,157,.7);margin-top:10px">→ ورود به پنل</a>
+  {% else %}
+    <form method="POST">
+      <label>👤 نام کاربری</label>
+      <input type="text" name="username" placeholder="username" required autocomplete="off">
+
+      <label>🔒 رمز عبور</label>
+      <input type="password" name="password" placeholder="حداقل ۶ کاراکتر" required minlength="6">
+
+      <label>🏪 نام مغازه</label>
+      <input type="text" name="shop_name" placeholder="فروشگاه من">
+
+      <label>📱 شماره موبایل</label>
+      <input type="text" name="phone" placeholder="09xxxxxxxxx" pattern="09[0-9]{9}">
+
+      <button class="submit-btn" type="submit">🎉 ثبت‌نام و دریافت هدیه</button>
+    </form>
+  {% endif %}
+
+</div>
+<script src="/static/confetti.js"></script>
+<script>
+  {% if success %}if (window.confetti) setTimeout(() => window.confetti(), 200);{% endif %}
+</script>
+</body>
+</html>

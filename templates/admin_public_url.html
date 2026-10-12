@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>URL عمومی</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.4)}
+.pt{text-align:center;font-size:19px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px}
+.bx{background:rgba(0,20,15,.7);border:1.5px solid rgba(0,255,157,.35);border-radius:20px;padding:16px;margin-bottom:14px}
+.bt{text-align:center;font-size:14px;color:#00ff9d;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(0,255,157,.2)}
+label{display:block;font-size:12px;color:#7dfcc7;margin-bottom:8px;font-weight:bold}
+input{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:13px;font-family:inherit;font-size:13px;direction:ltr;margin-bottom:12px}
+input:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+.btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:15px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer}
+.info{padding:12px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.4);border-radius:12px;font-size:12px;color:#7de5ff;line-height:1.9;margin-bottom:14px}
+.info b{color:#00d4ff}
+.info code{background:rgba(0,0,0,.4);padding:2px 6px;border-radius:5px;color:#00ff9d;font-family:monospace;font-size:11px;display:inline-block;direction:ltr}
+.status{padding:12px;background:rgba(0,255,157,.1);border:1px solid #00ff9d;border-radius:12px;text-align:center;color:#00ff9d;font-weight:900;font-size:13px;margin-bottom:14px}
+.nw{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d,#00d4ff 35%,#bf00ff 70%,#00ff9d);z-index:100}
+.bn2{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px}
+.ni .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+.ni.act{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));border-radius:20px}
+.ni.act .ic{filter:none;color:#00ff9d}.ni.act span:last-child{color:#00ff9d;font-weight:bold}
+</style></head><body>
+
+<a class="back-btn" href="/admin/dashboard">→ داشبورد</a>
+<div class="frame">
+<div class="pt">🌐 آدرس عمومی سرور</div>
+
+<div class="status">
+📍 آدرس فعلی:<br>
+<code style="color:#00ff9d;font-size:14px;direction:ltr;display:inline-block;margin-top:6px">{{ current_url }}</code>
+</div>
+
+<div class="bx">
+<div class="bt">✏️ تغییر آدرس</div>
+<form method="POST">
+<label>🌐 آدرس عمومی (بدون / آخر)</label>
+<input type="text" name="public_url" value="{{ current_url }}" placeholder="http://100.117.170.106:8080" required>
+<button class="btn" type="submit">💾 ذخیره</button>
+</form>
+</div>
+
+<div class="bx">
+<div class="bt">📋 راهنما</div>
+<div class="info">
+<b>🎯 چرا این لازمه؟</b><br>
+وقتی مشتری با گوشی خودش به لینک پنل می‌ره، نباید <code>localhost</code> باشه چون اون فقط روی گوشی خودت کار می‌کنه.<br><br>
+<b>✅ راه‌های پیشنهادی:</b><br>
+<br>
+<b>1️⃣ Tailscale (پیشنهاد):</b><br>
+<code>tailscale ip -4</code><br>
+آدرسی مثل <code>100.117.170.106</code> می‌ده<br>
+آدرس کامل: <code>http://100.117.170.106:8080</code><br>
+<br>
+<b>2️⃣ bore.pub (عمومی):</b><br>
+<code>bore local 8080 --to bore.pub</code><br>
+پورت جدید هر بار متفاوته<br>
+آدرس: <code>http://bore.pub:PORT</code><br>
+<br>
+<b>3️⃣ IP شبکه لوکال:</b><br>
+اگه هر دو گوشی روی یه WiFi هستن<br>
+آدرس: <code>http://192.168.1.X:8080</code>
+</div>
+</div>
+
+</div>
+
+<div class="nw"><div class="bn2">
+<a class="ni" href="/admin/dashboard"><span class="ic">🏠</span><span>داشبورد</span></a>
+<a class="ni" href="/admin/bots"><span class="ic">🤖</span><span>ربات‌ها</span></a>
+<a class="ni act" href="/admin/public-url"><span class="ic">🌐</span><span>URL</span></a>
+</div></div>
+{% include "_global_bg.html" %}
+</body></html>

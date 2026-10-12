@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ shop[2] or shop[1] }}</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:0 0 90px;background:#0a0a0f;color:#e2e8f0;font-family:Vazirmatn,Tahoma,sans-serif;overflow-x:hidden}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{box-shadow:0 0 15px rgba(0,212,255,.5)}50%{box-shadow:0 0 30px rgba(0,212,255,.9)}}
+@keyframes goldGlow{0%,100%{box-shadow:0 0 15px rgba(255,215,0,.5)}50%{box-shadow:0 0 30px rgba(255,215,0,.9)}}
+.topbar{padding:12px 14px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#0a1520,#0a0a0f);border-bottom:1.5px solid rgba(0,212,255,.3);position:sticky;top:0;z-index:50;backdrop-filter:blur(15px)}
+.back{width:38px;height:38px;border-radius:12px;background:rgba(0,212,255,.12);border:1.5px solid rgba(0,212,255,.5);color:#00d4ff;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px;font-weight:bold}
+.back:active{background:rgba(0,212,255,.3)}
+.topbar-title{font-size:15px;font-weight:900;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,.7);flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile{padding:20px 16px 10px;text-align:center;animation:fadeUp .5s ease-out both}
+.avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0088cc);display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto 12px;border:3px solid #00d4ff;animation:glow 3s ease-in-out infinite}
+.shop-name{font-size:18px;font-weight:900;color:#fff;text-shadow:0 0 15px rgba(0,212,255,.6);margin-bottom:4px}
+.shop-user{font-size:12.5px;color:#7de5ff;margin-bottom:14px}
+.stats{display:flex;justify-content:space-around;padding:12px 20px;margin:0 16px 14px;background:rgba(0,212,255,.05);border:1.5px solid rgba(0,212,255,.25);border-radius:16px;animation:fadeUp .5s ease-out .1s both}
+.stat{text-align:center;flex:1}
+.stat b{display:block;font-size:15px;font-weight:900;color:#00d4ff;text-shadow:0 0 10px rgba(0,212,255,.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px}
+.stat span{font-size:10.5px;color:#7de5ff}
+.actions{display:flex;gap:10px;margin:0 16px 16px;animation:fadeUp .5s ease-out .2s both}
+.act-btn{flex:1;padding:12px;border-radius:14px;text-decoration:none;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;border:none;cursor:pointer;font-family:inherit;transition:.3s}
+.act-order{background:linear-gradient(135deg,#bf00ff,#7700cc);color:#fff;box-shadow:0 0 20px rgba(191,0,255,.7)}
+.act-fav{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a1a00;box-shadow:0 0 20px rgba(255,215,0,.6)}
+.act-fav.on{background:linear-gradient(135deg,#00d4ff,#0088cc);color:#fff;animation:glow 2.5s ease-in-out infinite}
+.act-btn:active{transform:scale(.97)}
+.tabs{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;animation:fadeUp .5s ease-out .3s both}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:9px 14px;border-radius:12px;background:rgba(0,212,255,.06);border:1.5px solid rgba(0,212,255,.25);color:#7de5ff;font-family:inherit;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap;transition:.3s}
+.tab.active{background:linear-gradient(135deg,#00d4ff,#0088cc);color:#fff;border-color:#00d4ff;box-shadow:0 0 20px rgba(0,212,255,.7)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 12px 20px}
+.prod{background:linear-gradient(135deg,#0a1520,#0a0a0f);border:1.5px solid rgba(0,212,255,.25);border-radius:14px;padding:10px 6px;text-align:center;text-decoration:none;color:#e2e8f0;animation:fadeUp .4s ease-out both;transition:.3s;position:relative;overflow:hidden}
+.prod:hover{border-color:#00d4ff;transform:translateY(-3px);box-shadow:0 0 20px rgba(0,212,255,.5)}
+.prod.hide{display:none}
+.pimg{font-size:34px;margin-bottom:8px;filter:drop-shadow(0 0 8px rgba(0,212,255,.5));height:60px;display:flex;align-items:center;justify-content:center}
+.pimg img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.pname{font-size:11px;font-weight:bold;color:#fff;margin-bottom:4px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pprice{font-size:11.5px;font-weight:900;color:#ffd700;direction:ltr;text-shadow:0 0 8px rgba(255,215,0,.5)}
+.info-box{margin:16px;padding:14px;background:rgba(0,212,255,.04);border:1.5px solid rgba(0,212,255,.3);border-radius:16px;animation:fadeUp .5s ease-out both}
+.info-title{font-size:14px;font-weight:900;color:#00d4ff;text-align:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed rgba(0,212,255,.3)}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;margin:4px 0;border-radius:10px;background:rgba(0,212,255,.05);font-size:12.5px;gap:8px}
+.info-row b{color:#00d4ff;flex-shrink:0}
+.info-row span{text-align:left;direction:ltr;color:#cbd5e1}
+.empty{text-align:center;padding:40px 20px;color:#7de5ff;font-size:13px;animation:fadeUp .5s ease-out both}
+
+
+
+
+
+</style></head><body>
+
+<div class="topbar">
+  <a href="/customer/search" class="back">→</a>
+  <div class="topbar-title">{{ shop[2] or shop[1] }}</div>
+  <div style="width:38px"></div>
+</div>
+
+<div class="profile">
+  <div class="avatar">🏪</div>
+  <div class="shop-name">{{ shop[2] or shop[1] }}</div>
+  <div class="shop-user">@{{ shop[1] }}</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>{{ products|length }}</b><span>محصول</span></div>
+  <div class="stat"><b>{% if info and info[1] %}{{ info[1][:10] }}{% else %}—{% endif %}</b><span>نوع</span></div>
+  <div class="stat"><b>⭐ {{ shop[4] if shop|length > 4 and shop[4] else '—' }}</b><span>امتیاز</span></div>
+</div>
+
+<div class="actions">
+  <a href="/customer/order/{{ shop[0] }}" class="act-btn act-order">📝 سفارش</a>
+  {% if is_fav %}
+  <form method="POST" action="/customer/fav/{{ shop[0] }}" style="flex:1;margin:0;display:flex">
+    <input type="hidden" name="action" value="remove">
+    <button class="act-btn act-fav on" type="submit" style="width:100%">✓ ذخیره</button>
+  </form>
+  {% else %}
+  <form method="POST" action="/customer/fav/{{ shop[0] }}" style="flex:1;margin:0;display:flex">
+    <input type="hidden" name="action" value="add">
+    <button class="act-btn act-fav" type="submit" style="width:100%">☆ ذخیره</button>
+  </form>
+  {% endif %}
+</div>
+
+{% if products %}
+<div class="tabs">
+  <button class="tab active" onclick="showTab(this,'all')">📦 همه</button>
+  <button class="tab" onclick="showTab(this,'new')">🆕 جدید</button>
+  <button class="tab" onclick="showTab(this,'cheap')">💰 ارزان</button>
+  <button class="tab" onclick="showTab(this,'exp')">💎 گران</button>
+</div>
+
+<div class="grid" id="grid">
+{% for p in products %}
+<a href="/customer/order/{{ shop[0] }}" class="prod" data-tags="all{% if loop.index0 < 6 %} new{% endif %}{% if p[2] < 50000 %} cheap{% endif %}{% if p[2] > 200000 %} exp{% endif %}">
+  <div class="pimg">
+    {% if p[6] %}<img src="{{ p[6] }}" alt="">{% else %}📦{% endif %}
+  </div>
+  <div class="pname">{{ p[1] }}</div>
+  <div class="pprice">{{ "{:,}".format(p[2]) }} ت</div>
+</a>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty">📦 هنوز محصولی اضافه نشده</div>
+{% endif %}
+
+{% if info and (info[3] or info[4] or info[5] or info[6] or info[8]) %}
+<div class="info-box">
+  <div class="info-title">📋 اطلاعات تماس</div>
+  {% if info[3] %}<div class="info-row"><b>📍 آدرس</b><span>{{ info[3] }}</span></div>{% endif %}
+  {% if info[4] %}<div class="info-row"><b>📞 تلفن</b><span>{{ info[4] }}</span></div>{% endif %}
+  {% if info[5] %}<div class="info-row"><b>🕐 ساعات</b><span>{{ info[5] }}</span></div>{% endif %}
+  {% if info[6] %}<div class="info-row"><b>📷 اینستا</b><span>@{{ info[6] }}</span></div>{% endif %}
+  {% if info[8] %}<div class="info-row"><b>💬 توضیح</b><span>{{ info[8] }}</span></div>{% endif %}
+</div>
+{% endif %}
+
+<script>
+function showTab(btn, tag){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  btn.classList.add('active');
+  document.querySelectorAll('#grid .prod').forEach(function(p){
+    var tags = (p.dataset.tags || '').split(' ');
+    if (tag === 'all' || tags.indexOf(tag) !== -1){ p.classList.remove('hide'); }
+    else { p.classList.add('hide'); }
+  });
+}
+</script>
+{% with active="search" %}{% include "_customer_nav.html" %}{% endwith %}
+</body></html>

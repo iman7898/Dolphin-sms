@@ -1,0 +1,21 @@
+<div class="nw">
+  <a class="ni {% if active == 'home' %}act{% endif %}" href="/customer/home"><span class="ic">🏠</span><span>خانه</span></a>
+  <a class="ni {% if active == 'search' %}act{% endif %}" href="/customer/search"><span class="ic">🔍</span><span>جستجو</span></a>
+  <a class="ni {% if active == 'cart' %}act{% endif %}" href="/customer/cart/list"><span class="ic">🛒</span><span>سبد</span></a>
+  <a class="ni {% if active == 'profile' %}act{% endif %}" href="/customer/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+</div>
+<style>
+.nw{position:fixed;bottom:0;left:0;right:0;height:70px;
+  background:linear-gradient(180deg,rgba(10,21,32,.98),rgba(10,10,15,1));
+  border-top:1.5px solid rgba(0,212,255,.4);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 6px;z-index:100;backdrop-filter:blur(20px);
+  box-shadow:0 -5px 30px rgba(0,212,255,.25);}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;color:#6b8f80;text-decoration:none;font-size:10.5px;
+  padding:8px 4px;transition:.4s;border-radius:12px;}
+.ni .ic{font-size:22px;transition:.4s;filter:grayscale(1) brightness(.7)}
+.ni.act{color:#00d4ff;background:rgba(0,212,255,.1)}
+.ni.act .ic{filter:none;transform:scale(1.2);filter:drop-shadow(0 0 12px #00d4ff)}
+.ni.act span:last-child{font-weight:bold;text-shadow:0 0 10px rgba(0,212,255,.7)}
+</style>

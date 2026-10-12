@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>قالب‌های پیامک</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<script src="/static/custom-alert.js"></script>
+</head>
+<body class="matrix-bg">
+<div class="container">
+
+<div class="header-bar">
+<div class="header-title">{% if admin_view %}✉ قالب‌های {{ user[3] or user[1] }}{% else %}✉ قالب‌های پیامک{% endif %} ({{ total }})</div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+        <div class="{{ 'success' if cat=='success' else 'error' }}">{{ msg }}</div>
+    {% endfor %}
+{% endwith %}
+
+{% if not admin_view %}
+<div class="footer-box">
+<div class="footer-actions">
+<button type="button" class="btn-nav" onclick="openAddModal()">➕ افزودن قالب</button>
+<a href="/panel/send" class="btn-nav" style="background:#001a33;color:#00d4ff;border-color:#00d4ff;">✉ ارسال پیامک</a>
+</div>
+</div>
+{% endif %}
+
+<!-- متغیرها -->
+<div class="vars-help">
+<strong>💡 متغیرهای قابل استفاده:</strong>
+<span class="var-chip">{name}</span> نام مشتری
+<span class="var-chip">{shop}</span> نام مغازه
+<span class="var-chip">{discount}</span> درصد تخفیف
+</div>
+
+<!-- فیلتر دسته‌بندی -->
+{% if categories %}
+<div class="groups-bar">
+<a href="{% if admin_view %}/admin/templates/{{ user_id }}{% else %}/panel/templates{% endif %}" class="group-chip {% if not current_cat %}active{% endif %}">همه ({{ total }})</a>
+{% for c in categories %}
+<a href="{% if admin_view %}/admin/templates/{{ user_id }}?cat={{ c.name }}{% else %}/panel/templates?cat={{ c.name }}{% endif %}" class="group-chip {% if current_cat == c.name %}active{% endif %}">
+{{ c.name }} ({{ c.count }})
+</a>
+{% endfor %}
+</div>
+{% endif %}
+
+<!-- لیست قالب‌ها -->
+<h2>📋 لیست قالب‌ها</h2>
+{% if templates %}
+<div class="templates-list">
+{% for t in templates %}
+<div class="template-card">
+<div class="template-header">
+<div class="template-title">📝 {{ t[2] }}</div>
+<div class="template-cat">{{ t[4] }}</div>
+</div>
+<div class="template-body">{{ t[3] }}</div>
+<div class="template-footer">
+<div class="template-meta">استفاده: {{ t[5] }} بار</div>
+<div class="template-actions">
+<button type="button" class="mini-btn copy-btn" onclick="copyTemplate('{{ t[3]|e }}')" title="کپی">📋</button>
+{% if not admin_view %}<a href="/panel/send?template_id={{ t[0] }}" class="mini-btn send-btn" title="ارسال">✉</a>{% endif %}
+{% if not admin_view %}<button type="button" class="mini-btn edit-btn" onclick="openEditModal({{ t[0] }}, '{{ t[2]|e }}', '{{ t[3]|e }}', '{{ t[4]|e }}')" title="ویرایش">✏</button>{% endif %}
+{% if not admin_view %}<form method="post" action="/panel/templates/delete/{{ t[0] }}" style="display:inline;" data-confirm="مطمئنی این قالب حذف بشه؟">
+<button type="submit" class="mini-btn del-btn" title="حذف">🗑</button>
+</form>{% endif %}
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="chat-empty">هنوز قالبی نساختی 🤷</div>
+{% endif %}
+
+<div class="footer-box">
+<div class="footer-actions">
+{% if admin_view %}<a href="/admin/templates" class="btn-nav">← بازگشت</a>{% else %}<a href="/panel/dashboard" class="btn-nav">← بازگشت به پنل</a>{% endif %}
+</div>
+</div>
+
+</div>
+
+<!-- مودال افزودن -->
+{% if not admin_view %}<div id="addModal" class="modal-overlay">
+<div class="modal-box">
+<div class="modal-icon">➕</div>
+<div class="modal-title">افزودن قالب جدید</div>
+<form method="post" action="/panel/templates/add">
+<label class="form-label">عنوان</label>
+<input type="text" name="title" required placeholder="مثلاً تخفیف ویژه">
+<label class="form-label">متن پیامک</label>
+<textarea name="body" required placeholder="سلام {name} عزیز، از {shop} به شما {discount}% تخفیف ویژه تعلق گرفت." style="min-height:100px;"></textarea>
+<label class="form-label">دسته‌بندی</label>
+<input type="text" name="category" list="catsList" value="عمومی">
+<datalist id="catsList">
+{% for c in categories %}<option value="{{ c.name }}">{% endfor %}
+<option value="تبلیغاتی">
+<option value="تبریک">
+<option value="اطلاع‌رسانی">
+<option value="تخفیف">
+<option value="یادآوری">
+</datalist>
+<div class="modal-actions" style="margin-top:15px;">
+<button type="button" class="modal-btn modal-cancel" onclick="closeModal('addModal')">انصراف</button>
+<button type="submit" class="modal-btn modal-confirm">ذخیره</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- مودال ویرایش -->
+<div id="editModal" class="modal-overlay">
+<div class="modal-box">
+<div class="modal-icon">✏</div>
+<div class="modal-title">ویرایش قالب</div>
+<form method="post" id="editForm">
+<label class="form-label">عنوان</label>
+<input type="text" name="title" id="editTitle" required>
+<label class="form-label">متن پیامک</label>
+<textarea name="body" id="editBody" required style="min-height:100px;"></textarea>
+<label class="form-label">دسته‌بندی</label>
+<input type="text" name="category" id="editCategory" list="catsList">
+<div class="modal-actions" style="margin-top:15px;">
+<button type="button" class="modal-btn modal-cancel" onclick="closeModal('editModal')">انصراف</button>
+<button type="submit" class="modal-btn modal-confirm">ذخیره</button>
+</div>
+</form>
+</div>
+</div>
+
+<nav class="bottom-nav">
+<a href="/panel/dashboard" class="nav-item">
+<span class="nav-icon">🏠</span><span class="nav-label">پنل</span>
+</a>
+<a href="/panel/contacts" class="nav-item">
+<span class="nav-icon">📞</span><span class="nav-label">مخاطبین</span>
+</a>
+<a href="/panel/templates" class="nav-item active">
+<span class="nav-icon">✉</span><span class="nav-label">قالب‌ها</span>
+</a>
+<a href="/panel/chat" class="nav-item">
+<span class="nav-icon">💬</span><span class="nav-label">چت</span>
+{% if unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
+</a>
+<a href="/panel/profile" class="nav-item">
+<span class="nav-icon">👤</span><span class="nav-label">پروفایل</span>
+</a>
+</nav>
+
+{% endif %}
+<script>
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function openAddModal() { document.getElementById('addModal').classList.add('show'); }
+function openEditModal(id, title, body, category) {
+    document.getElementById('editForm').action = '/panel/templates/edit/' + id;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editBody').value = body;
+    document.getElementById('editCategory').value = category || 'عمومی';
+    document.getElementById('editModal').classList.add('show');
+}
+function copyTemplate(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        if (window.alert) window.alert('✅ متن کپی شد');
+    });
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+});
+</script>
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ثبت‌نام - {{ shop[3] or shop[1] }}</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+</head>
+<body class="matrix-bg">
+<div class="container login-container" style="max-width:450px;">
+
+<div class="login-logo">🏪</div>
+<h1 class="login-title">{{ shop[3] or shop[1] }}</h1>
+<p class="login-subtitle">به ما خوش آمدید! برای دریافت تخفیف‌های ویژه، شماره‌تون رو ثبت کنید.</p>
+
+{% if msg %}
+<div class="{{ 'success' if success else 'error' }}">{{ msg }}</div>
+{% endif %}
+
+{% if not success %}
+<div class="login-form-box">
+<form method="post">
+<label class="form-label">نام (اختیاری)</label>
+<input type="text" name="name" placeholder="مثلاً علی">
+<label class="form-label">شماره موبایل</label>
+<input type="tel" name="phone" placeholder="09123456789" required>
+<button type="submit" class="btn-white">📱 ثبت شماره</button>
+</form>
+</div>
+<div style="text-align:center;margin-top:14px;font-size:11px;color:#7a8599;line-height:1.8;">
+با ثبت شماره، شما موافقت می‌کنید که پیامک‌های تبلیغاتی از این مغازه دریافت کنید.
+</div>
+{% else %}
+<div style="text-align:center;margin-top:20px;">
+<div style="font-size:60px;">🎉</div>
+<div style="color:#00ff9d;font-size:18px;font-weight:bold;margin-top:10px;">تبریک!</div>
+<div style="color:#7a8599;font-size:13px;margin-top:8px;">حالا عضو باشگاه مشتریان ما شدید.</div>
+</div>
+{% endif %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>چت با کاربران</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}</style>
+<script src="/static/custom-alert.js"></script>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00ff9d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
+    });
+}
+</script>
+</head>
+<body class="matrix-bg">
+<div class="container">
+
+    <div class="header-bar">
+        <div class="header-title">👥 کاربران</div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+            <div class="{{ 'success' if cat=='success' else 'error' }}">{{ msg }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- تب‌ها -->
+    <div class="tabs" id="tabsBar">
+        <button class="tab-btn active" data-tab="search" onclick="switchTab('search', event)">🔍 جستجو</button>
+        <button class="tab-btn" data-tab="all" onclick="switchTab('all', event)">📥 پیام همه</button>
+        <button class="tab-btn" data-tab="friends" onclick="switchTab('friends', event)">💬 دوستان</button>
+        <button class="tab-btn" data-tab="requests" onclick="switchTab('requests', event)">📨 {% if pending_count > 0 %}<span class="tab-badge">{{ pending_count }}</span>{% endif %}</button>
+    </div>
+
+    <!-- تب جستجو -->
+    <div id="tab-search" class="tab-content active">
+        <form method="get" class="search-form">
+            <input type="text" name="q" value="{{ query }}" placeholder="🔍 آیدی عددی یا نام کاربری..." autofocus>
+            <button type="submit" class="chat-send">🔍</button>
+        </form>
+
+        {% if query %}
+        <h2>نتایج جستجو</h2>
+        {% if results %}
+            {% for u in results %}
+            <div class="user-card">
+                <div class="user-avatar" {% if u[3] %}style="background-image:url('{{ u[3] }}');color:transparent;"{% endif %}>
+                    {% if not u[3] %}{{ (u[2] or u[1])[0] }}{% endif %}
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ u[2] or u[1] }}</div>
+                    <div class="user-id">🆔 #{{ u[0] }} • @{{ u[1] }}</div>
+                </div>
+                <div class="user-action">
+                    {% if u[4] == 'accepted' %}
+                        <a href="/panel/dm/{{ u[0] }}" class="user-btn user-btn-chat">💬 چت</a>
+                    {% elif u[4] == 'pending' %}
+                        <span class="user-btn user-btn-pending">⏳</span>
+                    {% else %}
+                        <form method="post" action="/panel/request/send/{{ u[0] }}" style="display:contents;">
+                            <button type="submit" class="user-btn user-btn-request">📨</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="chat-empty">کاربری پیدا نشد 🤷</div>
+        {% endif %}
+        {% else %}
+            <div class="chat-empty">
+                🔍 یه آیدی عددی یا نام کاربری وارد کن<br>
+                <small>مثلاً: <strong>2</strong> یا <strong>Maryam</strong></small>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- تب پیام همه -->
+    <div id="tab-all" class="tab-content">
+        <!-- فیلترها با محو شدن -->
+        <div class="filters-bar auto-hide" id="filtersBar">
+            <button class="filter-chip active" data-filter="all" onclick="setFilter('all', event)">
+                <span class="chip-icon">📥</span>
+                <span class="chip-label">همه</span>
+                <span class="chip-count" id="count-all">0</span>
+            </button>
+            <button class="filter-chip" data-filter="admin" onclick="setFilter('admin', event)">
+                <span class="chip-icon">👑</span>
+                <span class="chip-label">Creator 👑</span>
+                <span class="chip-count" id="count-admin">0</span>
+            </button>
+            <button class="filter-chip" data-filter="personal" onclick="setFilter('personal', event)">
+                <span class="chip-icon">💬</span>
+                <span class="chip-label">خصوصی</span>
+                <span class="chip-count" id="count-personal">0</span>
+            </button>
+            <button class="filter-chip" data-filter="group" onclick="setFilter('group', event)">
+                <span class="chip-icon">👥</span>
+                <span class="chip-label">گروه</span>
+                <span class="chip-count" id="count-group">0</span>
+            </button>
+        </div>
+
+        <!-- لیست پیام‌ها -->
+        <div id="allMessagesList" class="all-messages-list">
+            <div class="chat-loading">در حال بارگذاری...</div>
+        </div>
+    </div>
+
+    <!-- تب دوستان -->
+    <div id="tab-friends" class="tab-content">
+        {% if friends %}
+            {% for f in friends %}
+            <a href="/panel/dm/{{ f[0] }}" class="user-card user-card-link {% if f[6] > 0 %}has-unread{% endif %}">
+                <div class="user-avatar" {% if f[3] %}style="background-image:url('{{ f[3] }}');color:transparent;"{% endif %}>
+                    {% if not f[3] %}{{ (f[2] or f[1])[0] }}{% endif %}
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ f[2] or f[1] }}</div>
+                    <div class="user-last">{{ (f[4] or 'هنوز پیامی نیست')[:35] }}</div>
+                </div>
+                <div class="user-action">
+                    {% if f[6] > 0 %}<div class="user-badge">{{ f[6] }}</div>{% endif %}
+                    <div class="user-arrow">‹</div>
+                </div>
+            </a>
+            {% endfor %}
+        {% else %}
+            <div class="chat-empty">هنوز دوستی نداری 🔍</div>
+        {% endif %}
+    </div>
+
+    <!-- تب درخواست‌ها -->
+    <div id="tab-requests" class="tab-content">
+        <h2>📥 دریافتی</h2>
+        {% if incoming %}
+            {% for r in incoming %}
+            <div class="user-card">
+                <div class="user-avatar" {% if r[4] %}style="background-image:url('{{ r[4] }}');color:transparent;"{% endif %}>
+                    {% if not r[4] %}{{ (r[3] or r[2])[0] }}{% endif %}
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ r[3] or r[2] }}</div>
+                    <div class="user-id">🆔 #{{ r[1] }}</div>
+                </div>
+                <div class="user-action">
+                    <form method="post" action="/panel/request/accept/{{ r[0] }}" style="display:contents;">
+                        <button type="submit" class="user-btn user-btn-accept">✅</button>
+                    </form>
+                    <form method="post" action="/panel/request/reject/{{ r[0] }}" style="display:contents;">
+                        <button type="submit" class="user-btn user-btn-reject">❌</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="chat-empty">درخواستی نیومده</div>
+        {% endif %}
+
+        <h2 style="margin-top:24px;">📤 ارسالی</h2>
+        {% if outgoing %}
+            {% for o in outgoing %}
+            <div class="user-card {% if o[6]=='rejected' %}user-rejected{% endif %}">
+                <div class="user-avatar" {% if o[4] %}style="background-image:url('{{ o[4] }}');color:transparent;"{% endif %}>
+                    {% if not o[4] %}{{ (o[3] or o[2])[0] }}{% endif %}
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ o[3] or o[2] }}</div>
+                    <div class="user-id">
+                        {% if o[6] == 'pending' %}⏳ در انتظار
+                        {% elif o[6] == 'accepted' %}✅ پذیرفته
+                        {% elif o[6] == 'rejected' %}❌ رد شد
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="user-action">
+                    {% if o[6] == 'accepted' %}
+                        <a href="/panel/dm/{{ o[1] }}" class="user-btn user-btn-chat">💬</a>
+                    {% elif o[6] == 'pending' %}
+                        <form method="post" action="/panel/request/delete/{{ o[0] }}" style="display:contents;">
+                            <button type="submit" class="user-btn user-btn-reject">✕</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="chat-empty">درخواستی نفرستادی</div>
+        {% endif %}
+    </div>
+
+    <div class="footer-box">
+        <div class="footer-actions">
+            <a href="/panel/chat" class="btn-nav">💬 چت با Creator</a>
+        </div>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="/panel/dashboard" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></span>
+        <span class="nav-label">پنل</span>
+    </a>
+    <a href="/panel/chat" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-8a8 8 0 0 1 8-8h2a8 8 0 0 1 8 5z"/></svg></span>
+        <span class="nav-label">پشتیبانی</span>
+        {% if unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
+    </a>
+    <a href="/panel/ai" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="3"/><circle cx="9" cy="14" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.5" fill="currentColor" stroke="none"/><path d="M12 3v5"/><circle cx="12" cy="3" r="1"/></svg></span>
+        <span class="nav-label">هوش مصنوعی</span>
+    </a>
+    <a href="/panel/profile" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></span>
+        <span class="nav-label">پروفایل</span>
+    </a>
+</nav>
+
+<script>
+// ===== تب‌ها =====
+function switchTab(name, e) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    const btn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+    if (btn) btn.classList.add('active');
+    const content = document.getElementById('tab-' + name);
+    if (content) {
+        content.classList.add('active');
+        // انیمیشن ورود
+        content.style.animation = 'none';
+        setTimeout(() => content.style.animation = 'tabFadeIn 0.4s ease', 10);
+    }
+    localStorage.setItem('usersTab', name);
+
+    if (name === 'all') {
+        loadAllMessages();
+        loadCounts();
+    }
+}
+
+// ===== بارگذاری همه پیام‌ها =====
+let currentFilter = 'all';
+
+async function loadAllMessages() {
+    const list = document.getElementById('allMessagesList');
+    list.innerHTML = '<div class="chat-loading">در حال بارگذاری...</div>';
+    try {
+        const r = await fetch(`/api/all-messages?filter=${currentFilter}`);
+        const data = await r.json();
+        if (!data.conversations || data.conversations.length === 0) {
+            list.innerHTML = '<div class="chat-empty">هنوز چتی نداری 📭</div>';
+            return;
+        }
+        list.innerHTML = '';
+        data.conversations.forEach((c, i) => {
+            const div = document.createElement('div');
+            div.className = 'conv-card';
+            div.style.animationDelay = (i * 0.05) + 's';
+
+            const avatarHtml = c.avatar
+                ? `<div class="conv-avatar" style="background-image:url('${c.avatar}');"></div>`
+                : `<div class="conv-avatar conv-avatar-default">${c.icon || '💬'}</div>`;
+
+            const premiumBadge = c.type === 'admin' 
+                ? '<span class="creator-badge">👑 CREATOR</span>' 
+                : '';
+            const badgeHtml = c.unread > 0
+                ? `<div class="conv-badge">${c.unread}</div>`
+                : '';
+
+            div.innerHTML = `
+                ${avatarHtml}
+                <div class="conv-info">
+                    <div class="conv-name">${escapeHtml(c.name)} ${premiumBadge}</div>
+                    <div class="conv-last">${escapeHtml((c.last_msg || '').slice(0, 40))}${c.last_msg && c.last_msg.length > 40 ? '...' : ''}</div>
+                </div>
+                <div class="conv-meta">
+                    <div class="conv-time">${(c.last_time || '').slice(11, 16)}</div>
+                    ${badgeHtml}
+                </div>
+            `;
+
+            div.onclick = () => window.location.href = c.link;
+            list.appendChild(div);
+        });
+
+        setupAutoHideFilters();
+    } catch (e) {
+        list.innerHTML = '<div class="chat-empty">خطا در بارگذاری</div>';
+    }
+}
+
+async function loadCounts() {
+    try {
+        const r = await fetch('/api/message-counts');
+        const data = await r.json();
+        document.getElementById('count-all').textContent = data.all || 0;
+        document.getElementById('count-admin').textContent = data.admin || 0;
+        document.getElementById('count-personal').textContent = data.shopkeeper || 0;
+        document.getElementById('count-group').textContent = data.group || 0;
+    } catch (e) {}
+}
+
+// ===== فیلترها =====
+function setFilter(filter, e) {
+    if (e) e.stopPropagation();
+    currentFilter = filter;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    const chip = document.querySelector(`.filter-chip[data-filter="${filter}"]`);
+    if (chip) chip.classList.add('active');
+    loadAllMessages();
+}
+
+function escapeHtml(t) {
+    if (!t) return '';
+    const d = document.createElement('div');
+    d.textContent = t;
+    return d.innerHTML;
+}
+
+// ===== فیلترها با محو شدن خودکار =====
+let lastScrollY = 0;
+let filtersHidden = false;
+
+function setupAutoHideFilters() {
+    const tabAll = document.getElementById('tab-all');
+    const filters = document.getElementById('filtersBar');
+    if (!tabAll || !filters) return;
+
+    // حذف listener قبلی
+    if (tabAll._scrollHandler) {
+        tabAll.removeEventListener('scroll', tabAll._scrollHandler);
+    }
+    // اسکرول روی window
+    if (window._filterScroll) {
+        window.removeEventListener('scroll', window._filterScroll);
+    }
+
+    const handler = () => {
+        const scrollY = window.scrollY || document.documentElement.scrollTop;
+        if (scrollY > 80 && !filtersHidden) {
+            filters.classList.add('hidden');
+            filtersHidden = true;
+        } else if (scrollY <= 80 && filtersHidden) {
+            filters.classList.remove('hidden');
+            filtersHidden = false;
+        }
+        lastScrollY = scrollY;
+    };
+    window._filterScroll = handler;
+    window.addEventListener('scroll', handler, {passive: true});
+}
+
+// ===== بازیابی تب =====
+(function() {
+    const t = localStorage.getItem('usersTab') || 'search';
+    if (t !== 'search') {
+        const btn = document.querySelector(`.tab-btn[data-tab="${t}"]`);
+        if (btn) {
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + t).classList.add('active');
+            if (t === 'all') {
+                loadAllMessages();
+                loadCounts();
+            }
+        }
+    }
+})();
+</script>
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

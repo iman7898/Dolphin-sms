@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>QR کد من</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<script src="/static/custom-alert.js"></script>
+</head>
+<body class="matrix-bg {% if is_admin %}admin-view{% endif %}">
+<div class="container">
+
+<div class="header-bar {% if is_admin %}red-header{% endif %}">
+<div class="header-title {% if is_admin %}red-title{% endif %}">📱 QR کد {% if is_admin %}{{ user[3] or user[1] }}{% else %}من{% endif %}</div>
+</div>
+
+<div class="stats">
+<div class="stat-box">
+<span class="stat-label">کل اسکن‌ها</span>
+<span class="stat-value">{{ scan_count }}</span>
+</div>
+</div>
+
+<div class="footer-box">
+<div class="footer-title">💡 چطور استفاده کنم؟</div>
+<div style="color:#e8edf5;font-size:12.5px;line-height:1.9;text-align:right;padding:8px;">
+1️⃣ این QR رو <b>چاپ کن</b> و روی ویترین/پیشخوان مغازه بذار<br>
+2️⃣ مشتری با <b>دوربین گوشی</b> اسکن می‌کنه<br>
+3️⃣ یه صفحه باز می‌شه و <b>شماره‌ش رو وارد می‌کنه</b><br>
+4️⃣ خودکار به لیست مخاطبینت اضافه می‌شه ✅<br>
+5️⃣ پیامک خوش‌آمد هم براش می‌ره 🎉
+</div>
+</div>
+
+<div class="qr-box">
+<img src="/qr/{{ user[1] }}.png" alt="QR Code" class="qr-image">
+<div class="qr-username">@{{ user[1] }}</div>
+<div class="qr-link">
+<code>{{ request.url_root.rstrip('/') }}/register/{{ user[1] }}</code>
+</div>
+<div class="footer-actions" style="margin-top:14px;">
+<a href="/qr/{{ user[1] }}.png" download="qr_{{ user[1] }}.png" class="btn-nav" style="background:#001a33;color:#00d4ff;border-color:#00d4ff;">⬇ دانلود QR</a>
+<button type="button" class="btn-nav" onclick="copyLink()">📋 کپی لینک</button>
+</div>
+</div>
+
+{% if scans %}
+<h2>📋 آخرین اسکن‌ها</h2>
+<div class="contacts-list">
+{% for s in scans %}
+<div class="contact-card">
+<div class="contact-avatar">{{ (s[3] or 'M')[0] }}</div>
+<div class="contact-info">
+<div class="contact-name">{{ s[3] or 'مشتری' }}</div>
+<div class="contact-phone">{{ s[2] }}</div>
+</div>
+<div style="font-size:10px;color:#7a8599;">{{ s[4] }}</div>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+<div class="footer-box">
+<div class="footer-actions">
+{% if is_admin %}
+<a href="/admin/dashboard" class="btn-nav">← بازگشت به پنل</a>
+{% else %}
+<a href="/panel/dashboard" class="btn-nav">← بازگشت به پنل</a>
+{% endif %}
+</div>
+</div>
+
+</div>
+
+<nav class="bottom-nav">
+{% if is_admin %}
+<a href="/admin/dashboard" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">پنل</span></a>
+<a href="/admin/chat" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">چت</span></a>
+<a href="/admin/profile" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">پروفایل</span></a>
+{% else %}
+<a href="/panel/dashboard" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">پنل</span></a>
+<a href="/panel/contacts" class="nav-item"><span class="nav-icon">📞</span><span class="nav-label">مخاطبین</span></a>
+<a href="/panel/qr" class="nav-item active"><span class="nav-icon">📱</span><span class="nav-label">QR</span></a>
+<a href="/panel/chat" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">چت</span></a>
+<a href="/panel/profile" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">پروفایل</span></a>
+{% endif %}
+</nav>
+
+<script>
+function copyLink() {
+    var link = '{{ request.url_root.rstrip("/") }}/register/{{ user[1] }}';
+    navigator.clipboard.writeText(link).then(function() {
+        if (window.alert) window.alert('✅ لینک کپی شد');
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎯 سیستم ارجاع</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}}
+  .page-title{text-align:center;font-size:18px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px;display:flex;align-items:center;justify-content:center;gap:10px}
+
+  /* کارت کد (آبی نئون) */
+  .code-card{background:linear-gradient(135deg,rgba(0,25,40,.95),rgba(0,15,30,.98));border:2px solid #00d4ff;border-radius:20px;padding:22px 16px;text-align:center;margin-bottom:16px;box-shadow:0 0 25px rgba(0,212,255,.55);position:relative;overflow:hidden;animation:bp 4s ease-in-out infinite}
+  @keyframes bp{0%,100%{box-shadow:0 0 25px rgba(0,212,255,.55),inset 0 0 20px rgba(0,212,255,.08)}50%{box-shadow:0 0 38px rgba(0,212,255,.9),inset 0 0 28px rgba(0,212,255,.16)}}
+  .code-lbl{font-size:13px;color:#7de5ff;margin-bottom:10px}
+  .code-val{font-size:32px;font-weight:900;color:#00ff9d;direction:ltr;letter-spacing:3px;font-family:monospace;text-shadow:0 0 22px rgba(0,255,157,.95);animation:beat 3s ease-in-out infinite;padding:12px;background:rgba(0,10,8,.7);border-radius:14px;border:1px dashed rgba(0,255,157,.5);margin-bottom:12px;user-select:all}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+
+  .link-box{background:rgba(0,10,8,.8);border:1px solid rgba(0,212,255,.4);border-radius:12px;padding:10px;font-size:11px;color:#7de5ff;direction:ltr;text-align:center;word-break:break-all;margin-bottom:12px;font-family:monospace}
+
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .act-btn{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:12px;padding:14px;font-family:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 0 18px rgba(0,255,157,.6);transition:.25s;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+  .act-btn:active{transform:scale(.97)}
+  .act-btn.blue{background:linear-gradient(135deg,#00d4ff,#0088cc);color:#fff;box-shadow:0 0 18px rgba(0,212,255,.6)}
+  .act-btn.purple{background:linear-gradient(135deg,#bf00ff,#7700cc);color:#fff;box-shadow:0 0 18px rgba(191,0,255,.6)}
+
+  /* پاداش‌ها */
+  .rewards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .reward-card{border-radius:16px;padding:14px 10px;text-align:center;background:linear-gradient(135deg,rgba(0,25,20,.85),rgba(0,15,10,.9));border:1.5px solid}
+  .rw-giver{border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.35)}
+  .rw-taker{border-color:#ffd700;box-shadow:0 0 15px rgba(255,215,0,.35)}
+  .rw-ic{font-size:24px;display:block;margin-bottom:4px}
+  .rw-title{font-size:11px;color:#7dfcc7;margin-bottom:6px;font-weight:bold}
+  .rw-cash{font-size:16px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 12px rgba(0,255,157,.7)}
+  .rw-cash small{font-size:10px;color:#7dfcc7;font-weight:400}
+  .rw-pts{font-size:11px;color:#ffd700;margin-top:4px;font-weight:bold}
+
+  /* آمار */
+  .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-card{background:linear-gradient(135deg,rgba(0,25,40,.85),rgba(0,15,30,.9));border:1.5px solid rgba(0,212,255,.4);border-radius:14px;padding:14px;text-align:center}
+  .stat-v{font-size:26px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 15px rgba(0,255,157,.8)}
+  .stat-l{font-size:11px;color:#7de5ff;margin-top:4px}
+
+  /* لیست دعوت‌ها */
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:16px;box-shadow:0 0 15px rgba(0,255,157,.15)}
+  .box-title{text-align:center;font-size:14px;color:#00ff9d;margin-bottom:14px;text-shadow:0 0 10px rgba(0,255,157,.6);padding-bottom:12px;border-bottom:1px solid rgba(0,255,157,.2)}
+  .ref-item{padding:11px 6px;border-bottom:1px dashed rgba(0,255,157,.2);display:flex;justify-content:space-between;align-items:center;gap:10px;animation:tin .5s cubic-bezier(.2,.8,.2,1) both}
+  .ref-item:last-child{border:none}
+  @keyframes tin{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:none}}
+  .ref-u{font-size:13px;color:#00ff9d;font-weight:bold}
+  .ref-shop{font-size:10.5px;color:#7dfcc7;margin-top:3px}
+  .ref-date{font-size:10px;color:#6b8f80;text-align:left}
+  .empty{color:#6b8f80;text-align:center;padding:30px 0;font-size:12.5px;line-height:1.8}
+  .empty-ic{font-size:44px;display:block;margin-bottom:8px;opacity:.5}
+
+  /* QR */
+  #qrbox{text-align:center;padding:10px 0}
+  #qrbox img, #qrbox canvas{border-radius:12px;box-shadow:0 0 20px rgba(0,255,157,.5);background:#fff;padding:8px}
+
+  /* toast */
+  .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(30px);background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;padding:12px 22px;border-radius:14px;font-weight:900;font-size:13px;box-shadow:0 0 30px rgba(0,255,157,.9);opacity:0;pointer-events:none;transition:.3s;z-index:999}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* نوار پایین */
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <div class="page-title">🎯 سیستم ارجاع</div>
+
+  <div class="code-card">
+    <div class="code-lbl">🔑 کد دعوت اختصاصی شما</div>
+    <div class="code-val" id="refCode">{{ code }}</div>
+    <div class="link-box" id="refLink">{{ link }}</div>
+    <div class="btn-row">
+      <button class="act-btn" onclick="copyText(document.getElementById('refCode').textContent, 'کد کپی شد!')">📋 کپی کد</button>
+      <button class="act-btn blue" onclick="copyText(document.getElementById('refLink').textContent, 'لینک کپی شد!')">🔗 کپی لینک</button>
+    </div>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="act-btn purple" onclick="shareLink()">📤 اشتراک‌گذاری</button>
+      <a class="act-btn" href="/panel/referrals/qr" style="background:linear-gradient(135deg,#ffd700,#ff8c00);color:#001a12;box-shadow:0 0 18px rgba(255,215,0,.6)">📱 QR کد</a>
+    </div>
+  </div>
+
+  <div class="rewards-grid">
+    <div class="reward-card rw-giver">
+      <span class="rw-ic">🎁</span>
+      <div class="rw-title">شما می‌گیرید</div>
+      <div class="rw-cash">{{ "{:,}".format(bonus_cash) }} <small>ریال</small></div>
+      <div class="rw-pts">+ {{ bonus_pts }} امتیاز</div>
+    </div>
+    <div class="reward-card rw-taker">
+      <span class="rw-ic">👥</span>
+      <div class="rw-title">دوست شما می‌گیرد</div>
+      <div class="rw-cash">{{ "{:,}".format(ref_cash) }} <small>ریال</small></div>
+      <div class="rw-pts">+ {{ ref_pts }} امتیاز</div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-v">{{ count }}</div>
+      <div class="stat-l">👥 تعداد دعوت موفق</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-v">{{ "{:,}".format(count * bonus_cash) }}</div>
+      <div class="stat-l">💰 مجموع پاداش (ریال)</div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-title">📜 لیست دعوت‌شده‌ها</div>
+    {% if refs %}
+      {% for r in refs %}
+        <div class="ref-item" style="animation-delay:{{ loop.index0 * 0.05 }}s">
+          <div>
+            <div class="ref-u">👤 {{ r[1] or 'کاربر' }}</div>
+            <div class="ref-shop">🏪 {{ r[2] or '-' }}</div>
+          </div>
+          <div class="ref-date">🕐 {{ r[3] }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <span class="empty-ic">📭</span>
+        هنوز کسی رو دعوت نکردی<br>
+        کدت رو با دوستات به اشتراک بذار و پاداش بگیر!
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+    <a class="nav-item" href="/panel/loyalty"><span class="ic">🎁</span><span>وفاداری</span></a>
+    <a class="nav-item" href="/panel/wallet"><span class="ic">💰</span><span>کیف پول</span></a>
+    <a class="nav-item active" href="/panel/referrals"><span class="ic">🎯</span><span>ارجاع</span></a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+{% include "_global_bg.html" %}
+
+<script>
+function copyText(txt, msg){
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(()=>showToast(msg));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(msg);
+  }
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
+}
+function shareLink(){
+  const link = document.getElementById('refLink').textContent;
+  const text = 'با کد دعوت من توی پنل پیامکی ثبت‌نام کن و ' + '{{ "{:,}".format(ref_cash) }}' + ' ریال هدیه بگیر:\n' + link;
+  if (navigator.share){
+    navigator.share({title:'دعوت به پنل پیامکی', text:text}).catch(()=>{});
+  } else {
+    copyText(text, 'متن دعوت کپی شد!');
+  }
+}
+</script>
+</body>
+</html>

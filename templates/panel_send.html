@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>ارسال پیامک</title>
+    <link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}</style>
+<script src="/static/custom-alert.js"></script>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00ff9d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
+    });
+}
+</script>
+</head>
+<body class="matrix-bg">
+<div class="container">
+    <div class="header-bar"><div class="header-title">✉ ارسال پیامک</div></div>
+
+    <div class="stats">
+        <div class="stat-box"><span class="stat-label">پیامک باقی‌مونده</span><span class="stat-value">{{ sms_left }}</span></div>
+    </div>
+
+    <div class="footer-box">
+        <div class="footer-title">⚙ گزینه‌ها</div>
+        <div class="footer-actions">
+            <button type="button" class="btn-nav" onclick="openScheduleModal()">📅 برنامه‌ریزی پیام‌های ماهانه</button>
+        </div>
+    </div>
+
+    {% if result %}
+        <div class="{{ 'success' if result.status == 'success' else 'error' }}">
+            {% if result.status == 'success' %}✅ پیامک ثبت شد{% else %}❌ {{ result.message }}{% endif %}
+        </div>
+    {% endif %}
+
+    <div class="send-form-box">
+        <form method="post">
+            <label class="form-label">شماره گیرنده</label>
+            <input type="text" name="phone" placeholder="09123456789" required>
+            <label class="form-label">متن پیامک</label>
+            <textarea name="message" placeholder="متن..." required></textarea>
+            <button type="submit" class="btn-white">✉ ارسال</button>
+        </form>
+    </div>
+
+    {% if schedules %}
+    <h2>📅 برنامه‌های فعال</h2>
+    {% for s in schedules %}
+    <div class="schedule-card {% if s[9] == 0 %}inactive{% endif %}">
+        <div class="schedule-title">{{ s[2] or 'بدون عنوان' }}</div>
+        <div class="schedule-msg">💬 {{ s[3] }}</div>
+        <div class="schedule-dates">
+            <span>📆 از {{ s[4] }}</span>
+            <span>⏰ تا {{ s[5] }}</span>
+        </div>
+        <div class="schedule-limit">
+            📊 روزانه: <strong>{{ s[6] }}</strong> پیامک
+            {% if s[7] %} | امروز: {{ s[7] }}{% endif %}
+        </div>
+        <div class="schedule-actions">
+            <form method="post" action="/panel/schedule/toggle/{{ s[0] }}" style="display:contents;">
+                <button type="submit" class="btn-mini-wide">{% if s[9] == 1 %}⏸ غیرفعال{% else %}▶ فعال{% endif %}</button>
+            </form>
+            <form method="post" action="/panel/schedule/delete/{{ s[0] }}" style="display:contents;" onsubmit="return confirm('مطمئنی حذف بشه؟');">
+                <button type="submit" class="btn-mini-wide btn-danger">🗑 حذف</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="footer-box">
+        <div class="footer-actions">
+            <a href="/panel/dashboard" class="btn-nav">← بازگشت</a>
+        </div>
+    </div>
+</div>
+
+<!-- مودال برنامه‌ریزی -->
+<div id="scheduleModal" class="modal-overlay">
+    <div class="modal-box time-modal" style="border-color:#00d4ff;">
+        <div class="modal-glow" style="background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent 60%);"></div>
+        <div class="modal-icon clock-icon" style="color:#00d4ff; text-shadow: 0 0 25px #00d4ff;">📅</div>
+        <div class="modal-title" style="color:#00d4ff;">برنامه‌ریزی پیام ماهانه</div>
+
+        <form method="post" action="/panel/schedule/add" id="scheduleForm">
+            <label class="form-label" style="color:#00d4ff;">عنوان برنامه</label>
+            <input type="text" name="title" placeholder="مثلاً: کمپین ماه رمضان" required>
+
+            <label class="form-label" style="color:#00d4ff;">متن پیامک</label>
+            <textarea name="message" placeholder="منتظر دیدار دوباره شما هستیم..." required style="min-height:80px;"></textarea>
+
+            <div class="part-label" style="color:#80e0ff;">🕐 تاریخ شروع (سال / ماه / روز / ساعت / دقیقه)</div>
+            <div class="date-row">
+                <div class="flip-group">
+                    <input type="number" id="sy" class="flip-input" value="2026" min="2020" max="2100">
+                    <span class="flip-label">سال</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="sm" class="flip-input" value="01" min="1" max="12">
+                    <span class="flip-label">ماه</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="sd" class="flip-input" value="01" min="1" max="31">
+                    <span class="flip-label">روز</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="sh" class="flip-input" value="00" min="0" max="23">
+                    <span class="flip-label">ساعت</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="smin" class="flip-input" value="00" min="0" max="59">
+                    <span class="flip-label">دقیقه</span>
+                </div>
+            </div>
+
+            <div class="part-label" style="color:#80e0ff;">⏰ تاریخ پایان (سال / ماه / روز / ساعت / دقیقه)</div>
+            <div class="date-row">
+                <div class="flip-group">
+                    <input type="number" id="ey" class="flip-input" value="2026" min="2020" max="2100">
+                    <span class="flip-label">سال</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="em" class="flip-input" value="12" min="1" max="12">
+                    <span class="flip-label">ماه</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="ed" class="flip-input" value="31" min="1" max="31">
+                    <span class="flip-label">روز</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="eh" class="flip-input" value="23" min="0" max="23">
+                    <span class="flip-label">ساعت</span>
+                </div>
+                <div class="flip-group">
+                    <input type="number" id="emin" class="flip-input" value="59" min="0" max="59">
+                    <span class="flip-label">دقیقه</span>
+                </div>
+            </div>
+
+            <label class="form-label" style="color:#00d4ff;">محدودیت پیام روزانه</label>
+            <input type="number" name="daily_limit" value="100" min="1" placeholder="چند پیامک در روز؟">
+
+            <div class="preview-box" style="border-color:#00d4ff;">
+                <div class="preview-label">پیش‌نمایش بازه:</div>
+                <div class="preview-value" id="schedPreview" style="color:#00d4ff; text-shadow: 0 0 12px rgba(0,212,255,0.7);">-</div>
+            </div>
+
+            <input type="hidden" name="start_date" id="startDateHidden">
+            <input type="hidden" name="end_date" id="endDateHidden">
+
+            <div class="modal-actions" style="margin-top:18px;">
+                <button type="button" class="modal-btn modal-cancel" onclick="closeScheduleModal()">انصراف</button>
+                <button type="submit" class="modal-btn" style="background:#00d4ff;color:#000;border-color:#00d4ff;" onclick="return prepareSchedSubmit()">💾 ذخیره</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openScheduleModal(){
+        document.getElementById('scheduleModal').classList.add('show');
+        updateSchedPreview();
+    }
+    function closeScheduleModal(){
+        document.getElementById('scheduleModal').classList.remove('show');
+    }
+
+    function pad2(n){ return String(n).padStart(2, '0'); }
+
+    function updateSchedPreview(){
+        const sy = document.getElementById('sy').value || '2026';
+        const sm = pad2(document.getElementById('sm').value || '1');
+        const sd = pad2(document.getElementById('sd').value || '1');
+        const sh = pad2(document.getElementById('sh').value || '0');
+        const smin = pad2(document.getElementById('smin').value || '0');
+        const ey = document.getElementById('ey').value || '2026';
+        const em = pad2(document.getElementById('em').value || '12');
+        const ed = pad2(document.getElementById('ed').value || '31');
+        const eh = pad2(document.getElementById('eh').value || '23');
+        const emin = pad2(document.getElementById('emin').value || '59');
+        document.getElementById('schedPreview').textContent =
+            `${sy}-${sm}-${sd} ${sh}:${smin}  →  ${ey}-${em}-${ed} ${eh}:${emin}`;
+    }
+
+    function prepareSchedSubmit(){
+        const sy = document.getElementById('sy').value;
+        const sm = pad2(document.getElementById('sm').value);
+        const sd = pad2(document.getElementById('sd').value);
+        const sh = pad2(document.getElementById('sh').value);
+        const smin = pad2(document.getElementById('smin').value);
+        const ey = document.getElementById('ey').value;
+        const em = pad2(document.getElementById('em').value);
+        const ed = pad2(document.getElementById('ed').value);
+        const eh = pad2(document.getElementById('eh').value);
+        const emin = pad2(document.getElementById('emin').value);
+        document.getElementById('startDateHidden').value = `${sy}-${sm}-${sd} ${sh}:${smin}:00`;
+        document.getElementById('endDateHidden').value = `${ey}-${em}-${ed} ${eh}:${emin}:59`;
+        return true;
+    }
+
+    document.querySelectorAll('#scheduleModal input[type=number]').forEach(el => {
+        el.addEventListener('input', updateSchedPreview);
+    });
+</script>
+{% include "_global_bg.html" %}
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

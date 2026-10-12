@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎫 تیکت #{{ ticket[0] }}</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.12),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}}
+  .header-card{background:linear-gradient(135deg,rgba(0,25,40,.92),rgba(0,15,30,.95));border:2px solid #00d4ff;border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 0 20px rgba(0,212,255,.5)}
+  .header-title{font-size:16px;font-weight:900;color:#00ff9d;text-shadow:0 0 12px rgba(0,255,157,.7);margin-bottom:8px}
+  .header-meta{font-size:11px;color:#7de5ff;display:flex;gap:14px;flex-wrap:wrap}
+  .st{padding:3px 10px;border-radius:9px;font-size:10px;font-weight:900}
+  .st-open{background:rgba(0,212,255,.2);color:#00d4ff;border:1px solid #00d4ff}
+  .st-answered{background:rgba(0,255,157,.2);color:#00ff9d;border:1px solid #00ff9d}
+  .st-closed{background:rgba(148,163,184,.15);color:#94a3b8;border:1px solid rgba(148,163,184,.4)}
+  .chat{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+  .msg{max-width:85%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.7;animation:mIn .45s cubic-bezier(.2,.8,.2,1) both;position:relative;word-wrap:break-word}
+  .msg-user{align-self:flex-start;background:linear-gradient(135deg,rgba(0,212,255,.18),rgba(0,150,200,.1));border:1px solid rgba(0,212,255,.5);border-top-right-radius:4px}
+  .msg-admin{align-self:flex-end;background:linear-gradient(135deg,rgba(0,255,157,.2),rgba(0,180,120,.1));border:1px solid rgba(0,255,157,.55);border-top-left-radius:4px}
+  .msg-head{font-size:10.5px;font-weight:bold;margin-bottom:5px;display:flex;justify-content:space-between;gap:10px}
+  .msg-user .msg-head{color:#7de5ff}
+  .msg-admin .msg-head{color:#7dfcc7}
+  .msg-body{color:#e2e8f0;white-space:pre-wrap}
+  @keyframes mIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+  .reply-form{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1.5px solid rgba(0,255,157,.4);border-radius:18px;padding:14px;box-shadow:0 0 15px rgba(0,255,157,.15)}
+  textarea{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:13px;font-family:inherit;font-size:13.5px;min-height:100px;resize:vertical;line-height:1.7;transition:.25s}
+  textarea:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+  .row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+  .send{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:12px;padding:13px 20px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 0 18px rgba(0,255,157,.7);transition:.25s;white-space:nowrap}
+  .send:active{transform:scale(.97)}
+  .close-btn{background:linear-gradient(135deg,#ff4d6d,#c8102e);color:#fff;border:none;border-radius:12px;padding:13px 20px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 0 18px rgba(255,77,109,.6);transition:.25s;white-space:nowrap}
+  .close-btn:active{transform:scale(.97)}
+  .closed-banner{background:rgba(148,163,184,.15);border:1px solid rgba(148,163,184,.4);border-radius:14px;padding:16px;text-align:center;color:#94a3b8;font-size:13px}
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/tickets">→ تیکت‌ها</a>
+
+<div class="frame">
+
+  <div class="header-card">
+    <div class="header-title">🎫 #{{ ticket[0] }} — {{ ticket[4] }}</div>
+    <div class="header-meta">
+      <span>🕐 {{ ticket[7] }}</span>
+      {% if ticket[6] == 'open' %}<span class="st st-open">🔵 باز</span>
+      {% elif ticket[6] == 'answered' %}<span class="st st-answered">✅ پاسخ داده</span>
+      {% else %}<span class="st st-closed">🔒 بسته</span>{% endif %}
+      {% if ticket[5] == 'high' %}<span style="color:#ff4d6d;font-weight:bold">🔴 فوری</span>
+      {% elif ticket[5] == 'low' %}<span style="color:#7dfcc7">🟢 کم</span>
+      {% else %}<span style="color:#fbbf24">🟡 عادی</span>{% endif %}
+    </div>
+  </div>
+
+  <div class="chat">
+    {% for r in replies %}
+      <div class="msg {% if r[1] == 'admin' %}msg-admin{% else %}msg-user{% endif %}" style="animation-delay:{{ loop.index0 * 0.06 }}s">
+        <div class="msg-head">
+          <span>{% if r[1] == 'admin' %}👨‍💼 پشتیبانی{% else %}👤 شما{% endif %}</span>
+          <span>{{ r[3] }}</span>
+        </div>
+        <div class="msg-body">{{ r[2] }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if ticket[6] != 'closed' %}
+    <form method="POST" class="reply-form">
+      <textarea name="message" placeholder="پاسخت رو بنویس..." required></textarea>
+      <div class="row">
+        <button class="send" type="submit">📨 ارسال</button>
+      </div>
+    </form>
+    <form method="POST" action="/panel/tickets/{{ ticket[0] }}/close" style="margin-top:10px">
+      <button class="close-btn" type="submit" style="width:100%">🔒 بستن تیکت</button>
+    </form>
+  {% else %}
+    <div class="closed-banner">🔒 این تیکت بسته شده</div>
+  {% endif %}
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+    <a class="nav-item" href="/panel/ai"><span class="ic">🤖</span><span>هوش مصنوعی</span></a>
+    <a class="nav-item" href="/panel/chat"><span class="ic">💬</span><span>چت</span></a>
+    <a class="nav-item active" href="/panel/tickets"><span class="ic">🎫</span><span>تیکت‌ها</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

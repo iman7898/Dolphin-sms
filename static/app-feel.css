@@ -1,0 +1,66 @@
+/* ========== APP FEEL ========== */
+*{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+html,body{overscroll-behavior:none;-webkit-overflow-scrolling:touch}
+body{user-select:none;-webkit-user-select:none}
+input,textarea{user-select:text !important;-webkit-user-select:text !important}
+
+/* جلوگیری از زوم ناخواسته */
+@viewport{user-scalable=no;width=device-width}
+
+/* دکمه‌های اپ‌مانند */
+button,a.btn,.ni,.tab,.cat,.main-cat,.prod,.shop,.cart{
+  transition:transform .15s ease,box-shadow .3s ease;
+}
+button:active,a.btn:active,.ni:active,.tab:active,.cat:active,.main-cat:active,.prod:active,.shop:active{
+  transform:scale(.95) !important;
+}
+
+/* Skeleton Loading */
+.skeleton{background:linear-gradient(90deg,rgba(0,212,255,.05) 25%,rgba(0,212,255,.15) 50%,rgba(0,212,255,.05) 75%);
+  background-size:200% 100%;animation:skel 1.5s ease-in-out infinite;border-radius:12px;}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Splash Screen */
+#app-splash{position:fixed;inset:0;background:#0a0a0f;z-index:99999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;
+  transition:opacity .5s ease,visibility .5s ease;}
+#app-splash.hide{opacity:0;visibility:hidden}
+#app-splash .sp-logo{width:100px;height:100px;border-radius:28px;
+  background:linear-gradient(135deg,#00d4ff,#0088cc);
+  display:flex;align-items:center;justify-content:center;font-size:48px;
+  box-shadow:0 0 60px rgba(0,212,255,.8);
+  animation:spPulse 1.5s ease-in-out infinite;}
+@keyframes spPulse{0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(0,212,255,.8)}
+  50%{transform:scale(1.08);box-shadow:0 0 90px rgba(0,212,255,1)}}
+#app-splash .sp-name{font-size:18px;font-weight:900;color:#00d4ff;
+  text-shadow:0 0 20px rgba(0,212,255,.8)}
+#app-splash .sp-dots{display:flex;gap:8px;margin-top:10px}
+#app-splash .sp-dots span{width:10px;height:10px;border-radius:50%;
+  background:#00d4ff;animation:spDot 1.4s ease-in-out infinite}
+#app-splash .sp-dots span:nth-child(2){animation-delay:.2s}
+#app-splash .sp-dots span:nth-child(3){animation-delay:.4s}
+@keyframes spDot{0%,80%,100%{transform:scale(.5);opacity:.3}
+  40%{transform:scale(1.2);opacity:1}}
+
+/* Toast Notification */
+#app-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:linear-gradient(135deg,#0a1520,#0a0a0f);color:#e2e8f0;
+  padding:14px 22px;border-radius:16px;border:1.5px solid #00d4ff;
+  box-shadow:0 0 30px rgba(0,212,255,.6);font-family:Vazirmatn,Tahoma,sans-serif;
+  font-size:13.5px;font-weight:bold;z-index:99998;
+  opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  max-width:90vw;text-align:center;pointer-events:none;}
+#app-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#app-toast.error{border-color:#ff4d6d;box-shadow:0 0 30px rgba(255,77,109,.6);color:#ff8fa3}
+
+/* Pull to Refresh */
+#ptr{position:fixed;top:0;left:0;right:0;height:60px;display:flex;align-items:center;
+  justify-content:center;color:#00d4ff;font-size:24px;transform:translateY(-60px);
+  transition:transform .3s ease;z-index:9997;pointer-events:none}
+#ptr.show{transform:translateY(0)}
+#ptr.spin{animation:ptrSpin 1s linear infinite}
+@keyframes ptrSpin{from{transform:translateY(0) rotate(0)}to{transform:translateY(0) rotate(360deg)}}
+
+/* Page transition */
+.page-fade{animation:pageFade .3s ease-out}
+@keyframes pageFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}

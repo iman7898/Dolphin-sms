@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;margin:0;padding:80px 16px 40px;
+    display:flex;align-items:flex-start;justify-content:center;background:#020a08;
+    background-image:radial-gradient(circle at 20% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 80% 100%,rgba(191,0,255,.12),transparent 45%);}
+  .card{width:100%;max-width:420px;border-radius:24px;padding:28px 22px;text-align:center;
+    border:2px solid {% if ok %}#00ff9d{% else %}#ff4d6d{% endif %};
+    background:linear-gradient(135deg,rgba(0,20,15,.95),rgba(0,15,10,.98));
+    box-shadow:0 0 30px {% if ok %}rgba(0,255,157,.6){% else %}rgba(255,77,109,.6){% endif %};
+    animation:in .6s cubic-bezier(.2,.8,.2,1) both;}
+  @keyframes in{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:none}}
+  .icon{font-size:64px;line-height:1;animation:pop .6s ease both;display:inline-block}
+  @keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.15)}100%{transform:scale(1)}}
+  h1{font-size:20px;margin:14px 0 10px;color:{% if ok %}#00ff9d{% else %}#ff4d6d{% endif %};
+    text-shadow:0 0 15px {% if ok %}rgba(0,255,157,.7){% else %}rgba(255,77,109,.7){% endif %};}
+  p{font-size:14px;line-height:1.7;color:#a7f3d0;margin:8px 0}
+  .ref{background:rgba(0,10,8,.9);border:1px solid rgba(0,255,157,.35);border-radius:12px;padding:12px;margin-top:16px;
+    font-family:monospace;font-size:13px;color:#7dfcc7;direction:ltr;word-break:break-all}
+  .btns{margin-top:22px;display:grid;gap:10px}
+  a.btn{display:block;padding:14px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:14px;transition:.25s}
+  .btn-g{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;box-shadow:0 0 18px rgba(0,255,157,.6)}
+  .btn-d{background:rgba(51,65,85,.6);color:#e2e8f0;border:1px solid rgba(148,163,184,.3)}
+  .btn-g:active,.btn-d:active{transform:scale(.98)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">{% if ok %}✅{% else %}❌{% endif %}</div>
+  <h1>{{ title }}</h1>
+  <p>{{ msg }}</p>
+  {% if ok and ref_id %}
+    <div class="ref">شماره رهگیری<br>{{ ref_id }}</div>
+  {% endif %}
+  <div class="btns">
+    <a href="/panel/wallet" class="btn btn-g">💰 بازگشت به کیف پول</a>
+    <a href="/panel/dashboard" class="btn btn-d">🏠 داشبورد</a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+<script src="/static/confetti.js"></script>
+<script>
+  if ({% if ok %}true{% else %}false{% endif %} && window.confetti) {
+    setTimeout(() => window.confetti(), 200);
+  }
+</script>
+</body>
+</html>

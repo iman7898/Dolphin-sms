@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🏆 رتبه‌بندی</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(255,215,0,.15),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}}
+  .page-title{text-align:center;font-size:20px;font-weight:900;color:#ffd700;text-shadow:0 0 18px rgba(255,215,0,.9),0 0 36px rgba(255,140,0,.5);margin:0 0 16px;display:flex;align-items:center;justify-content:center;gap:10px;animation:beat 3s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+  /* من */
+  .me-card{background:linear-gradient(135deg,rgba(0,25,40,.95),rgba(0,15,30,.98));border:2px solid #00d4ff;border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 0 22px rgba(0,212,255,.55);display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .me-rank{font-size:34px;font-weight:900;color:#00ff9d;text-shadow:0 0 18px rgba(0,255,157,.9);min-width:60px;text-align:center;direction:ltr}
+  .me-lbl{font-size:11px;color:#7de5ff;margin-top:2px;text-align:center}
+  .me-info{flex:1;text-align:center}
+  .me-title{font-size:12px;color:#7de5ff;margin-bottom:6px}
+  .me-pts{font-size:22px;font-weight:900;color:#00ff9d;text-shadow:0 0 15px rgba(0,255,157,.85);direction:ltr}
+  .me-total{font-size:10.5px;color:#7de5ff;margin-top:4px}
+
+  /* فیلتر دوره */
+  .period-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:16px;background:rgba(0,10,8,.7);border-radius:14px;padding:6px;border:1px solid rgba(0,255,157,.25)}
+  .ptab{flex:1;text-align:center;padding:10px;border-radius:10px;text-decoration:none;color:#7dfcc7;font-size:12.5px;font-weight:bold;transition:.3s}
+  .ptab:hover{background:rgba(0,255,157,.08)}
+  .ptab.active{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;box-shadow:0 0 15px rgba(0,255,157,.6)}
+
+  /* podium (سکوی افتخار) */
+  .podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:end;margin-bottom:20px;padding:0 4px}
+  .podium-item{border-radius:16px;padding:14px 6px;text-align:center;position:relative;border:2px solid;animation:podiumIn .6s cubic-bezier(.2,.8,.2,1) both}
+  .podium-item:nth-child(1){animation-delay:.1s}
+  .podium-item:nth-child(2){animation-delay:0s}
+  .podium-item:nth-child(3){animation-delay:.2s}
+  @keyframes podiumIn{from{opacity:0;transform:translateY(30px) scale(.9)}to{opacity:1;transform:none}}
+  .p1{background:linear-gradient(180deg,rgba(255,215,0,.25),rgba(255,140,0,.1));border-color:#ffd700;grid-column:2;grid-row:1;box-shadow:0 0 28px rgba(255,215,0,.7);transform:translateY(-20px)}
+  .p2{background:linear-gradient(180deg,rgba(192,192,192,.2),rgba(120,120,120,.08));border-color:#c0c0c0;grid-column:1;grid-row:1;box-shadow:0 0 22px rgba(192,192,192,.5)}
+  .p3{background:linear-gradient(180deg,rgba(205,127,50,.22),rgba(150,80,20,.1));border-color:#cd7f32;grid-column:3;grid-row:1;box-shadow:0 0 22px rgba(205,127,50,.5)}
+  .p-crown{font-size:30px;line-height:1;filter:drop-shadow(0 0 12px currentColor);animation:crownFloat 3s ease-in-out infinite}
+  @keyframes crownFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-6px) rotate(5deg)}}
+  .p1 .p-crown{color:#ffd700}
+  .p2 .p-crown{color:#e8e8e8}
+  .p3 .p-crown{color:#cd7f32}
+  .p-name{font-size:11.5px;font-weight:900;margin-top:6px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .p-shop{font-size:9.5px;color:#7dfcc7;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .p-pts{font-size:15px;font-weight:900;color:#00ff9d;margin-top:6px;direction:ltr;text-shadow:0 0 10px rgba(0,255,157,.7)}
+  .p-medal{font-size:22px;margin-bottom:4px}
+
+  /* لیست رتبه‌ها */
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:14px;box-shadow:0 0 15px rgba(0,255,157,.15);margin-bottom:14px}
+  .box-title{text-align:center;font-size:14px;color:#00ff9d;margin-bottom:14px;text-shadow:0 0 10px rgba(0,255,157,.6);padding-bottom:12px;border-bottom:1px solid rgba(0,255,157,.2);display:flex;align-items:center;justify-content:center;gap:8px}
+
+  .rank-item{display:flex;justify-content:space-between;align-items:center;padding:12px;margin-bottom:8px;border-radius:12px;background:rgba(0,10,8,.6);border:1px solid rgba(0,255,157,.2);animation:tin .5s cubic-bezier(.2,.8,.2,1) both;gap:10px}
+  .rank-item:last-child{margin-bottom:0}
+  @keyframes tin{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:none}}
+  .rank-item.me{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,150,200,.06));border:2px solid #00d4ff;box-shadow:0 0 18px rgba(0,212,255,.5)}
+  .ri-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+  .ri-num{font-size:15px;font-weight:900;color:#00ff9d;min-width:28px;text-align:center;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .ri-num.gold{color:#ffd700}
+  .ri-num.silver{color:#e8e8e8}
+  .ri-num.bronze{color:#cd7f32}
+  .ri-name{font-size:13px;font-weight:bold;color:#00ff9d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ri-shop{font-size:10px;color:#7dfcc7;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ri-tier{font-size:16px;margin-right:6px}
+  .ri-right{text-align:left;min-width:70px}
+  .ri-pts{font-size:16px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .ri-lbl{font-size:9.5px;color:#7dfcc7;margin-top:2px}
+
+  .empty{color:#6b8f80;text-align:center;padding:30px 0;font-size:12.5px}
+  .empty-ic{font-size:44px;display:block;margin-bottom:8px;opacity:.5}
+
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/loyalty">→ وفاداری</a>
+
+<div class="frame">
+
+  <div class="page-title">🏆 رتبه‌بندی</div>
+
+  <!-- من -->
+  {% if my_rank %}
+  <div class="me-card">
+    <div>
+      <div class="me-rank">
+        {% if my_rank == 1 %}🥇{% elif my_rank == 2 %}🥈{% elif my_rank == 3 %}🥉{% else %}#{{ my_rank }}{% endif %}
+      </div>
+      <div class="me-lbl">رتبه شما</div>
+    </div>
+    <div class="me-info">
+      <div class="me-title">⭐ امتیاز شما در این دوره</div>
+      <div class="me-pts">{{ "{:,}".format(my_pts) }}</div>
+      <div class="me-total">از مجموع {{ total_users }} کاربر</div>
+    </div>
+    <div style="width:60px"></div>
+  </div>
+  {% endif %}
+
+  <!-- تب دوره -->
+  <div class="period-tabs">
+    <a class="ptab {% if period == 'week' %}active{% endif %}" href="?period=week">📅 هفته</a>
+    <a class="ptab {% if period == 'month' %}active{% endif %}" href="?period=month">🗓 ماه</a>
+    <a class="ptab {% if period == 'all' %}active{% endif %}" href="?period=all">⭐ کل</a>
+  </div>
+
+  <!-- پودیوم -->
+  {% if top and top|length >= 3 %}
+  <div class="podium">
+    {% for r in top[:3] %}
+      {% set rank = loop.index %}
+      <div class="podium-item p{{ rank }}">
+        <div class="p-crown">👑</div>
+        <div class="p-medal">
+          {% if rank == 1 %}🥇{% elif rank == 2 %}🥈{% else %}🥉{% endif %}
+        </div>
+        <div class="p-name">{{ r[1] }}</div>
+        <div class="p-shop">🏪 {{ r[2] or '-' }}</div>
+        <div class="p-pts">{{ "{:,}".format(r[3]) }}</div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- لیست کامل -->
+  <div class="box">
+    <div class="box-title">
+      {% if period == 'week' %}📅 برترین‌های هفته{% elif period == 'month' %}🗓 برترین‌های ماه{% else %}⭐ برترین‌های کل{% endif %}
+    </div>
+    {% if top %}
+      {% for r in top %}
+        {% set rank = loop.index %}
+        <div class="rank-item {% if r[0] == session.get('user_id') %}me{% endif %}" style="animation-delay:{{ loop.index0 * 0.04 }}s">
+          <div class="ri-left">
+            <div class="ri-num {% if rank == 1 %}gold{% elif rank == 2 %}silver{% elif rank == 3 %}bronze{% endif %}">
+              {% if rank == 1 %}🥇{% elif rank == 2 %}🥈{% elif rank == 3 %}🥉{% else %}{{ rank }}{% endif %}
+            </div>
+            <div class="ri-tier">
+              {% if r[4] == 'diamond' %}💎{% elif r[4] == 'gold' %}🥇{% elif r[4] == 'silver' %}🥈{% else %}🥉{% endif %}
+            </div>
+            <div style="flex:1;min-width:0">
+              <div class="ri-name">{{ r[1] }}</div>
+              <div class="ri-shop">🏪 {{ r[2] or '-' }}</div>
+            </div>
+          </div>
+          <div class="ri-right">
+            <div class="ri-pts">{{ "{:,}".format(r[3]) }}</div>
+            <div class="ri-lbl">امتیاز</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><span class="empty-ic">📭</span>هنوز کسی امتیازی نگرفته</div>
+    {% endif %}
+  </div>
+
+  <!-- رتبه‌بندی پیامک -->
+  {% if sms_top %}
+  <div class="box">
+    <div class="box-title">📨 بیشترین پیامک ۳۰ روز اخیر</div>
+    {% for r in sms_top %}
+      <div class="rank-item" style="animation-delay:{{ loop.index0 * 0.04 }}s">
+        <div class="ri-left">
+          <div class="ri-num">{{ loop.index }}</div>
+          <div style="flex:1;min-width:0">
+            <div class="ri-name">{{ r[1] }}</div>
+            <div class="ri-shop">🏪 {{ r[2] or '-' }}</div>
+          </div>
+        </div>
+        <div class="ri-right">
+          <div class="ri-pts">{{ "{:,}".format(r[3]) }}</div>
+          <div class="ri-lbl">پیامک</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+    <a class="nav-item" href="/panel/loyalty"><span class="ic">🎁</span><span>وفاداری</span></a>
+    <a class="nav-item" href="/panel/referrals"><span class="ic">🎯</span><span>ارجاع</span></a>
+    <a class="nav-item active" href="/panel/leaderboard"><span class="ic">🏆</span><span>رتبه‌بندی</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

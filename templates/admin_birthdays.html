@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎂 تولدها</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(255,100,150,.15),transparent 45%),radial-gradient(circle at 85% 100%,rgba(255,215,0,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16)}}
+  .page-title{text-align:center;font-size:19px;font-weight:900;color:#ff64a0;text-shadow:0 0 16px rgba(255,100,160,.9);margin:0 0 16px;animation:beat 3s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+  .today-card{background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(255,100,150,.15));border:2px solid #ffd700;border-radius:20px;padding:18px 14px;margin-bottom:16px;box-shadow:0 0 30px rgba(255,215,0,.7);text-align:center}
+  .today-title{font-size:14px;color:#ffd700;font-weight:900;margin-bottom:10px;text-shadow:0 0 12px rgba(255,215,0,.9)}
+  .today-item{background:rgba(0,10,8,.6);border-radius:14px;padding:12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .today-info{text-align:right;flex:1}
+  .today-name{font-size:14px;font-weight:900;color:#fff;text-shadow:0 0 10px rgba(255,215,0,.7)}
+  .today-shop{font-size:11px;color:#ffe9a8;margin-top:3px}
+  .gift-btn{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#001a12;border:none;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:12.5px;font-weight:900;cursor:pointer;box-shadow:0 0 18px rgba(255,215,0,.8);white-space:nowrap}
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:14px;box-shadow:0 0 15px rgba(0,255,157,.15);margin-bottom:14px}
+  .box-title{text-align:center;font-size:13.5px;color:#00ff9d;margin-bottom:14px;text-shadow:0 0 10px rgba(0,255,157,.6);padding-bottom:12px;border-bottom:1px solid rgba(0,255,157,.2)}
+  .bd-item{display:flex;justify-content:space-between;align-items:center;padding:12px;margin-bottom:8px;border-radius:14px;background:rgba(0,10,8,.6);border:1.5px solid rgba(255,100,150,.35);gap:10px;animation:tin .5s cubic-bezier(.2,.8,.2,1) both}
+  .bd-item:last-child{margin-bottom:0}
+  @keyframes tin{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:none}}
+  .bd-item.soon{border-color:#ff64a0;box-shadow:0 0 15px rgba(255,100,150,.4)}
+  .bd-left{flex:1;min-width:0}
+  .bd-name{font-size:13px;font-weight:bold;color:#ff64a0}
+  .bd-shop{font-size:10.5px;color:#7dfcc7;margin-top:3px}
+  .bd-right{text-align:left;min-width:90px}
+  .bd-day{font-size:14px;font-weight:900;color:#ffd700;direction:ltr}
+  .bd-lbl{font-size:10px;color:#7dfcc7;margin-top:3px}
+  .bd-date{font-size:9.5px;color:#6b8f80;margin-top:3px;direction:ltr}
+  .empty{color:#6b8f80;text-align:center;padding:30px 0;font-size:12.5px}
+  .empty-ic{font-size:44px;display:block;margin-bottom:8px;opacity:.5}
+  .hist-item{padding:10px 6px;border-bottom:1px dashed rgba(0,255,157,.15);display:flex;justify-content:space-between;gap:10px;font-size:11.5px}
+  .hist-item:last-child{border:none}
+  .hist-note{color:#ffd700;font-size:11px}
+  .hist-date{color:#6b8f80;font-size:9.5px;margin-top:2px}
+  .hist-pts{color:#00ff9d;font-weight:900;direction:ltr}
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85)}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/admin/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <div class="page-title">🎂 تولدهای نزدیک</div>
+
+  {% if today %}
+  <div class="today-card">
+    <div class="today-title">🎉 امروز تولد این عزیزان است!</div>
+    {% for b in today %}
+      <div class="today-item">
+        <div class="today-info">
+          <div class="today-name">🎂 {{ b.username }}</div>
+          <div class="today-shop">🏪 {{ b.shop or '-' }}</div>
+        </div>
+        <form method="POST" action="/admin/birthdays/{{ b.id }}/gift" style="margin:0">
+          <input type="hidden" name="cash" value="100000">
+          <input type="hidden" name="points" value="100">
+          <button class="gift-btn" type="submit">🎁 هدیه بده</button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="box">
+    <div class="box-title">📅 تولدهای ۷ روز آینده</div>
+    {% if birthdays %}
+      {% for b in birthdays %}
+        {% if not b.is_today %}
+          <div class="bd-item {% if b.days_left <= 2 %}soon{% endif %}" style="animation-delay:{{ loop.index0 * 0.05 }}s">
+            <div class="bd-left">
+              <div class="bd-name">👤 {{ b.username }}</div>
+              <div class="bd-shop">🏪 {{ b.shop or '-' }}</div>
+            </div>
+            <div class="bd-right">
+              <div class="bd-day">
+                {% if b.days_left == 1 %}فردا 🎈{% else %}{{ b.days_left }} روز{% endif %}
+              </div>
+              <div class="bd-lbl">تا تولد</div>
+              <div class="bd-date">🎂 {{ b.birthday }}</div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <span class="empty-ic">📭</span>
+        توی ۷ روز آینده تولدی نیست<br>
+        <span style="font-size:10.5px;color:#6b8f80;margin-top:8px;display:block">کاربران باید از پنل خودشون → وفاداری → تاریخ تولد ثبت کنن</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="box">
+    <div class="box-title">🎁 آخرین هدیه‌های تولد</div>
+    {% if history %}
+      {% for h in history %}
+        <div class="hist-item">
+          <div>
+            <div class="hist-note">{{ h[1] }}</div>
+            <div class="hist-date">🕐 {{ h[3] }}</div>
+          </div>
+          <div class="hist-pts">+{{ h[2] }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><span class="empty-ic">📭</span>هنوز هدیه‌ای داده نشده</div>
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/admin/dashboard"><span class="ic">🏠</span><span>داشبورد</span></a>
+    <a class="nav-item" href="/admin/loyalty"><span class="ic">🎁</span><span>وفاداری</span></a>
+    <a class="nav-item" href="/admin/reports"><span class="ic">📊</span><span>گزارش</span></a>
+    <a class="nav-item active" href="/admin/birthdays"><span class="ic">🎂</span><span>تولدها</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

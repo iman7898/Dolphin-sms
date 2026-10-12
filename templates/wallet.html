@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>💰 کیف پول</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+    padding:70px 14px 110px;background:#020a08;
+    background-image:
+      radial-gradient(circle at 15% 0%,rgba(0,255,157,.12),transparent 45%),
+      radial-gradient(circle at 85% 100%,rgba(0,212,255,.10),transparent 45%);
+  }
+
+  /* ===== قاب سبز درخشان ===== */
+  .frame{
+    border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;
+    box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18);
+    animation:framePulse 4s ease-in-out infinite;
+    background:rgba(0,20,15,.35);backdrop-filter:blur(6px);
+  }
+  @keyframes framePulse{
+    0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}
+    50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}
+  }
+
+  /* ===== هدر مغازه ===== */
+  .shop-header{
+    background:linear-gradient(135deg,rgba(0,40,30,.9),rgba(0,25,20,.9));
+    border:1px solid rgba(0,255,157,.35);border-radius:18px;
+    padding:14px;text-align:center;margin-bottom:16px;
+    font-size:20px;font-weight:bold;color:#00ff9d;
+    text-shadow:0 0 12px rgba(0,255,157,.7);
+    box-shadow:0 0 15px rgba(0,255,157,.2);
+  }
+
+  /* ===== کارت آبی نئون ===== */
+  .blue-card{
+    background:linear-gradient(135deg,rgba(0,25,40,.9),rgba(0,15,30,.95));
+    border:2px solid #00d4ff;border-radius:20px;
+    padding:22px 16px;margin-bottom:16px;text-align:center;
+    box-shadow:0 0 25px rgba(0,212,255,.55),inset 0 0 20px rgba(0,212,255,.08);
+    animation:bluePulse 4s ease-in-out infinite;
+    position:relative;overflow:hidden;
+  }
+  .blue-card::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 80% 20%,rgba(0,212,255,.15),transparent 60%);
+    pointer-events:none;
+  }
+  @keyframes bluePulse{
+    0%,100%{box-shadow:0 0 25px rgba(0,212,255,.55),inset 0 0 20px rgba(0,212,255,.08)}
+    50%{box-shadow:0 0 38px rgba(0,212,255,.9),inset 0 0 28px rgba(0,212,255,.16)}
+  }
+  .blue-title{
+    font-size:16px;color:#7de5ff;margin-bottom:14px;
+    text-shadow:0 0 10px rgba(0,212,255,.6);
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .blue-amount{
+    font-size:38px;font-weight:900;color:#00ff9d;
+    text-shadow:0 0 22px rgba(0,255,157,.9),0 0 44px rgba(0,255,157,.5);
+    letter-spacing:-1px;animation:beat 3s ease-in-out infinite;
+    direction:ltr;display:inline-block;
+  }
+  .blue-amount small{
+    font-size:15px;color:#7de5ff;font-weight:400;
+    margin-right:6px;text-shadow:none;opacity:.9;
+  }
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .blue-sub{
+    font-size:12px;color:#7de5ff;margin-top:12px;opacity:.85;
+    font-family:monospace;direction:ltr;
+  }
+
+  /* ===== دو کارت کوچک ===== */
+  .two-cards{display:flex;gap:12px;margin-bottom:16px}
+  .small-card{
+    flex:1;background:linear-gradient(135deg,rgba(0,25,20,.9),rgba(0,15,10,.95));
+    border:1px solid rgba(0,255,157,.35);border-radius:16px;
+    padding:16px 10px;text-align:center;
+    box-shadow:0 0 12px rgba(0,255,157,.15);
+  }
+  .small-label{font-size:12px;color:#7dfcc7;margin-bottom:10px;opacity:.9}
+  .small-value{
+    font-size:26px;font-weight:bold;color:#00ff9d;
+    text-shadow:0 0 12px rgba(0,255,157,.7);direction:ltr;
+  }
+
+  /* ===== بخش تاریخچه (مثل گزینه‌ها) ===== */
+  .options-box{
+    background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));
+    border:1px solid rgba(0,255,157,.35);border-radius:18px;
+    padding:16px 14px;box-shadow:0 0 15px rgba(0,255,157,.15);
+  }
+  .options-title{
+    text-align:center;font-size:14px;color:#00ff9d;
+    text-shadow:0 0 10px rgba(0,255,157,.5);margin-bottom:14px;
+    padding-bottom:12px;border-bottom:1px solid rgba(0,255,157,.2);
+  }
+  .tx{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px 4px;border-bottom:1px dashed rgba(0,255,157,.2);
+    animation:txIn .5s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .tx:last-child{border:none}
+  @keyframes txIn{from{opacity:0;transform:translateX(25px)}to{opacity:1;transform:none}}
+  .tx-amt{font-weight:bold;font-size:17px;display:flex;align-items:center;gap:5px}
+  .plus{color:#00ff9d;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .minus{color:#ff4d6d;text-shadow:0 0 10px rgba(255,77,109,.5)}
+  .tx-meta{font-size:11px;color:#6b8f80;margin-top:4px}
+  .tx-right{text-align:left;font-size:11px;color:#6b8f80}
+  .tx-right .bal{color:#a7f3d0;font-weight:600;font-size:12px;display:block;margin-bottom:4px}
+  .empty{color:#6b8f80;text-align:center;padding:24px 0;font-size:13px}
+  .empty-icon{font-size:42px;display:block;margin-bottom:8px;opacity:.5}
+
+  /* ===== زنگوله ===== */
+  .bell{
+    position:absolute;top:16px;right:18px;
+    width:46px;height:46px;border-radius:50%;
+    background:radial-gradient(circle,#0a2a20,#001a12);
+    border:2px solid #00ff9d;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 18px rgba(0,255,157,.7);font-size:22px;
+    cursor:pointer;text-decoration:none;
+  }
+  .bell .badge{
+    position:absolute;top:-4px;left:-4px;
+    background:#ff2e63;color:#fff;font-size:10px;
+    min-width:18px;height:18px;padding:0 4px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;font-weight:bold;
+    box-shadow:0 0 8px rgba(255,46,99,.8);
+  }
+
+  /* ===== نوار پایین ===== */
+  .nav-wrap{
+    position:fixed;bottom:14px;left:14px;right:14px;height:78px;
+    padding:2px;border-radius:40px;
+    background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);
+    box-shadow:0 0 24px rgba(0,255,157,.45);
+    z-index:100;
+    animation:navGlow 6s ease-in-out infinite;
+  }
+  @keyframes navGlow{
+    0%,100%{box-shadow:0 0 24px rgba(0,255,157,.45)}
+    50%{box-shadow:0 0 34px rgba(191,0,255,.5)}
+  }
+  .bottom-nav{
+    height:100%;border-radius:38px;
+    background:linear-gradient(180deg,#0a1f1a,#04120e);
+    display:flex;align-items:center;justify-content:space-around;
+    padding:0 6px;
+  }
+  .nav-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;color:#9aa8b2;text-decoration:none;font-size:11px;
+    transition:.3s;padding:8px 6px;border-radius:20px;
+    margin:6px 3px;
+  }
+  .nav-item .ic{
+    font-size:22px;line-height:1;color:#9aa8b2;
+    filter:grayscale(1) brightness(.85);
+    transition:.3s;
+  }
+  .nav-item span:last-child{font-size:10.5px}
+  .nav-item.active{
+    background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));
+    box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08);
+  }
+  .nav-item.active .ic{
+    filter:none;
+    color:#00ff9d;
+    text-shadow:0 0 12px #00ff9d;
+    transform:translateY(-1px);
+  }
+  .nav-item.active span:last-child{
+    color:#00ff9d;font-weight:bold;
+    text-shadow:0 0 8px rgba(0,255,157,.6);
+  }
+  .nav-item:not(.active):hover .ic{filter:none;color:#00d4ff}
+
+</style>
+</head>
+<body>
+
+<a class="bell" href="/notifications">🔔<span class="badge">1</span></a>
+
+<div class="frame">
+
+  <!-- هدر مغازه -->
+  <div class="shop-header">{% if shop %}{{ shop }} 🏪{% else %}فروشگاه من 🏪{% endif %}</div>
+
+  <!-- کارت آبی: کیف پول شما -->
+  <div class="blue-card">
+    <div class="blue-title">💰 کیف پول شما</div>
+    <div class="blue-amount">{{ "{:,}".format(balance) }} <small>ریال</small></div>
+    <div class="blue-sub">آخرین بروزرسانی: {{ last_update }}</div>
+  </div>
+
+  <!-- دو کارت کوچک -->
+  <div class="two-cards">
+    <div class="small-card">
+      <div class="small-label">اعتبار شما</div>
+      <div class="small-value">{{ "{:,}".format(balance) }}</div>
+    </div>
+    <div class="small-card">
+      <div class="small-label">تعداد تراکنش</div>
+      <div class="small-value">{{ txs|length }}</div>
+    </div>
+  </div>
+
+  <!-- تاریخچه -->
+  <a href="/panel/wallet/charge" style="display:block;margin-top:14px;text-align:center;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;text-decoration:none;font-weight:bold;padding:14px;border-radius:14px;box-shadow:0 0 20px rgba(0,255,157,.7)">💳 شارژ کیف پول</a>
+  <div class="options-box">
+    <div class="options-title">📜 تاریخچه تراکنش‌ها</div>
+    {% if txs %}
+      {% for t in txs %}
+        <div class="tx" style="animation-delay:{{ loop.index0 * 0.07 }}s">
+          <div>
+            <div class="tx-amt {% if t[1] > 0 %}plus{% else %}minus{% endif %}">
+              {% if t[1] > 0 %}⬆ +{% else %}⬇ {% endif %}{{ "{:,}".format(t[1]) }}
+            </div>
+            <div class="tx-meta">🕐 {{ t[5] }}</div>
+          </div>
+          <div class="tx-right">
+            <span class="bal">موجودی: {{ "{:,}".format(t[4]) }}</span>
+            {{ t[3] }}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <span class="empty-icon">📭</span>
+        هنوز تراکنشی ثبت نشده
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- نوار پایین -->
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/profile">
+      <span class="ic">👤</span><span>پروفایل</span>
+    </a>
+    <a class="nav-item" href="/panel/ai">
+      <span class="ic">🤖</span><span>هوش مصنوعی</span>
+    </a>
+    <a class="nav-item" href="/panel/chat">
+      <span class="ic">💬</span><span>چت</span>
+    </a>
+    <a class="nav-item active" href="/panel/dashboard">
+      <span class="ic">🏠</span><span>پنل</span>
+    </a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+
+</body>
+</html>

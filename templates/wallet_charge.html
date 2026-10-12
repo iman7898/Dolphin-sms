@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>💳 شارژ کیف پول</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;
+    min-height:100vh;padding:74px 14px 130px;
+    background:#020a08;
+    background-image:
+      radial-gradient(circle at 15% 0%,rgba(0,255,157,.16),transparent 45%),
+      radial-gradient(circle at 85% 100%,rgba(255,215,0,.14),transparent 45%);
+  }
+
+  .back-btn{
+    position:fixed;top:18px;right:18px;z-index:20;
+    background:rgba(0,255,157,.1);color:#00ff9d;
+    border:1px solid #00ff9d;border-radius:10px;
+    padding:7px 14px;font-size:12px;text-decoration:none;
+    backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4);
+    transition:.3s;
+  }
+  .back-btn:hover{background:rgba(0,255,157,.25);box-shadow:0 0 20px rgba(0,255,157,.8)}
+
+  .frame{
+    border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;
+    box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18);
+    animation:fp 4s ease-in-out infinite;
+    background:rgba(0,20,15,.35);backdrop-filter:blur(6px);
+  }
+  @keyframes fp{
+    0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}
+    50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}
+  }
+
+  /* ===== کارت موجودی ===== */
+  .balance-card{
+    background:linear-gradient(135deg,rgba(0,25,40,.95),rgba(0,15,30,.98));
+    border:2px solid #00d4ff;border-radius:20px;
+    padding:20px 16px;text-align:center;margin-bottom:16px;
+    box-shadow:0 0 25px rgba(0,212,255,.55),inset 0 0 20px rgba(0,212,255,.08);
+    animation:bp 4s ease-in-out infinite;position:relative;overflow:hidden;
+  }
+  .balance-card::before{
+    content:"";position:absolute;inset:-50%;
+    background:conic-gradient(from 0deg,transparent,rgba(0,212,255,.15),transparent 30%);
+    animation:rotate 8s linear infinite;pointer-events:none;
+  }
+  @keyframes rotate{to{transform:rotate(360deg)}}
+  @keyframes bp{
+    0%,100%{box-shadow:0 0 25px rgba(0,212,255,.55),inset 0 0 20px rgba(0,212,255,.08)}
+    50%{box-shadow:0 0 38px rgba(0,212,255,.9),inset 0 0 28px rgba(0,212,255,.16)}
+  }
+  .balance-card h2{margin:0;font-size:14px;color:#7de5ff;font-weight:500;position:relative}
+  .balance{
+    font-size:34px;font-weight:900;color:#00ff9d;margin-top:10px;
+    direction:ltr;text-shadow:0 0 22px rgba(0,255,157,.95);
+    animation:beat 3s ease-in-out infinite;position:relative;
+  }
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .balance small{font-size:13px;color:#7de5ff;font-weight:400;margin-right:4px;text-shadow:none}
+
+  /* ===== بج تست ===== */
+  .test-badge{
+    background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;
+    border-radius:12px;padding:10px 14px;font-size:11.5px;text-align:center;
+    margin-bottom:14px;box-shadow:0 0 18px rgba(245,158,11,.65);
+    animation:wobble 3s ease-in-out infinite;
+  }
+  @keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-1deg)}75%{transform:rotate(1deg)}}
+
+  /* ===== بنر پرمیوم ===== */
+  .premium-banner{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#4a1d00,#7a2e00,#4a1d00);
+    border:2px solid #ffd700;
+    border-radius:18px;
+    padding:16px 14px;
+    margin-bottom:18px;
+    text-align:center;
+    box-shadow:0 0 28px rgba(255,215,0,.6),inset 0 0 20px rgba(255,215,0,.1);
+    animation:shimmer 4s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%,100%{box-shadow:0 0 28px rgba(255,215,0,.6),inset 0 0 20px rgba(255,215,0,.1)}
+    50%{box-shadow:0 0 48px rgba(255,215,0,1),inset 0 0 30px rgba(255,215,0,.22)}
+  }
+  .premium-banner::before{
+    content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+    animation:sweep 3.5s ease-in-out infinite;
+  }
+  @keyframes sweep{0%{left:-100%}60%,100%{left:100%}}
+  .premium-title{
+    font-size:14px;font-weight:900;color:#fff;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    text-shadow:0 0 10px rgba(255,215,0,.8);
+    position:relative;
+  }
+  .premium-title .crown{font-size:22px;animation:crownBob 2s ease-in-out infinite;display:inline-block}
+  @keyframes crownBob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-4px) rotate(5deg)}}
+  .premium-discount{
+    font-size:22px;font-weight:900;color:#ffd700;
+    margin-top:8px;position:relative;
+    text-shadow:0 0 16px rgba(255,215,0,.95),0 0 32px rgba(255,140,0,.6);
+    animation:pop 3s ease-in-out infinite;
+  }
+  @keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  .premium-sub{
+    font-size:11px;color:#ffe9a8;margin-top:6px;
+    position:relative;opacity:.9;
+  }
+
+  /* ===== باکس ===== */
+  .box{
+    background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));
+    border:1px solid rgba(0,255,157,.35);border-radius:20px;
+    padding:18px 14px;box-shadow:0 0 18px rgba(0,255,157,.18);
+  }
+  .box-title{
+    text-align:center;font-size:14px;color:#00ff9d;margin-bottom:16px;
+    text-shadow:0 0 10px rgba(0,255,157,.6);padding-bottom:14px;
+    border-bottom:1px solid rgba(0,255,157,.2);
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+
+  /* ===== تیرها ===== */
+  .tiers{display:grid;gap:12px}
+  .tier{
+    position:relative;border-radius:18px;padding:16px 14px;
+    cursor:pointer;overflow:hidden;
+    background:linear-gradient(135deg,rgba(0,20,15,.95),rgba(0,15,10,.98));
+    border:2px solid rgba(148,163,184,.25);
+    transition:.35s cubic-bezier(.2,.8,.2,1);
+    animation:tierIn .55s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .tier:nth-child(1){animation-delay:0s}
+  .tier:nth-child(2){animation-delay:.08s}
+  .tier:nth-child(3){animation-delay:.16s}
+  .tier:nth-child(4){animation-delay:.24s}
+  @keyframes tierIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+  .tier::before{
+    content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+    transition:.6s;
+  }
+  .tier:hover::before{left:100%}
+  .tier:hover{transform:translateY(-3px)}
+
+  .tier-bronze{border-color:#cd7f32}
+  .tier-bronze:hover{box-shadow:0 0 25px rgba(205,127,50,.75)}
+  .tier-bronze.selected{border-color:#cd7f32;background:linear-gradient(135deg,rgba(205,127,50,.25),rgba(0,15,10,.95));box-shadow:0 0 30px rgba(205,127,50,.95)}
+
+  .tier-silver{border-color:#c0c0c0}
+  .tier-silver:hover{box-shadow:0 0 25px rgba(192,192,192,.75)}
+  .tier-silver.selected{border-color:#c0c0c0;background:linear-gradient(135deg,rgba(192,192,192,.25),rgba(0,15,10,.95));box-shadow:0 0 30px rgba(192,192,192,.95)}
+
+  .tier-gold{border-color:#ffd700}
+  .tier-gold:hover{box-shadow:0 0 28px rgba(255,215,0,.85)}
+  .tier-gold.selected{border-color:#ffd700;background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(0,15,10,.95));box-shadow:0 0 32px rgba(255,215,0,1)}
+
+  .tier-diamond{border-color:#00d4ff}
+  .tier-diamond:hover{box-shadow:0 0 30px rgba(0,212,255,.9)}
+  .tier-diamond.selected{border-color:#00d4ff;background:linear-gradient(135deg,rgba(0,212,255,.28),rgba(0,15,10,.95));box-shadow:0 0 38px rgba(0,212,255,1)}
+
+  .tier-badge{
+    position:absolute;top:8px;left:8px;
+    padding:3px 10px;border-radius:9px;
+    font-size:10px;font-weight:900;
+    background:linear-gradient(135deg,#ffd700,#ff8c00);color:#001a12;
+    box-shadow:0 0 14px rgba(255,215,0,.9);
+    animation:bounce 2s ease-in-out infinite;
+    z-index:2;
+  }
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+  .tier-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+  .tier-crown{font-size:36px;line-height:1;filter:drop-shadow(0 0 12px currentColor);animation:crownFloat 3s ease-in-out infinite}
+  .tier-bronze .tier-crown{color:#cd7f32}
+  .tier-silver .tier-crown{color:#e8e8e8}
+  .tier-gold .tier-crown{color:#ffd700}
+  .tier-diamond .tier-crown{color:#00d4ff}
+  @keyframes crownFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+
+  .tier-info{text-align:left;direction:rtl;flex:1}
+  .tier-name{font-size:13px;color:#7dfcc7;font-weight:900;margin-bottom:4px}
+  .tier-price{font-size:22px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.85);line-height:1.2}
+  .tier-price small{font-size:11.5px;color:#7dfcc7;font-weight:400;margin-right:3px;text-shadow:none}
+
+  .tier-premium-row{
+    margin-top:8px;padding:8px 10px;
+    background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.08));
+    border:1px dashed #ffd700;border-radius:11px;
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    font-size:11.5px;
+  }
+  .tier-premium-row .label{color:#ffd700;font-weight:900;display:flex;align-items:center;gap:5px}
+  .tier-premium-row .val{color:#ffd700;font-weight:900;font-size:14px;text-shadow:0 0 10px rgba(255,215,0,.8)}
+  .tier-premium-row .val small{color:#ffe9a8;font-size:10px;font-weight:400;margin-right:3px}
+
+  .tier-meta{
+    display:flex;justify-content:space-between;
+    font-size:11px;color:#6b8f80;padding-top:10px;margin-top:10px;
+    border-top:1px dashed rgba(0,255,157,.2);
+  }
+  .tier-meta b{color:#00ff9d;font-weight:900}
+  .tier-meta .chars{color:#7de5ff}
+
+  /* ===== فرم مبلغ دلخواه ===== */
+  .custom-form{margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,255,157,.2)}
+  .custom-form label{display:block;font-size:12px;color:#7dfcc7;margin-bottom:8px;text-align:center}
+  input[type=number]{
+    width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;
+    border:1.5px solid rgba(0,255,157,.35);border-radius:12px;
+    padding:14px 16px;font-family:inherit;font-size:15px;
+    direction:ltr;text-align:center;transition:.25s;min-width:0;
+  }
+  input[type=number]:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 18px rgba(0,255,157,.6)}
+
+  /* ===== دکمه پرداخت ===== */
+  .pay-btn{
+    width:100%;margin-top:16px;
+    background:linear-gradient(135deg,#00ff9d,#00b377 50%,#00ff9d);
+    background-size:200% 100%;
+    color:#001a12;border:none;border-radius:16px;padding:18px;
+    font-family:inherit;font-size:16px;font-weight:900;letter-spacing:.5px;
+    cursor:pointer;position:relative;overflow:hidden;
+    box-shadow:0 0 25px rgba(0,255,157,.7),0 6px 20px rgba(0,0,0,.4);
+    transition:.3s;animation:btnGlow 3s ease-in-out infinite;
+  }
+  @keyframes btnGlow{
+    0%,100%{box-shadow:0 0 25px rgba(0,255,157,.7),0 6px 20px rgba(0,0,0,.4);background-position:0% 50%}
+    50%{box-shadow:0 0 45px rgba(0,255,157,1),0 6px 20px rgba(0,0,0,.4);background-position:100% 50%}
+  }
+  .pay-btn:active{transform:scale(.98)}
+  .pay-btn::before{
+    content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+    animation:sweep2 3s ease-in-out infinite;
+  }
+  @keyframes sweep2{0%{left:-100%}50%,100%{left:100%}}
+
+  .hint{text-align:center;color:#6b8f80;font-size:11px;margin-top:14px;line-height:1.9}
+  .hint b{color:#7dfcc7}
+
+  /* ===== نوار پایین ===== */
+  .nav-wrap{
+    position:fixed;bottom:14px;left:14px;right:14px;height:76px;
+    padding:2px;border-radius:40px;
+    background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);
+    box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100;
+  }
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/wallet">→ کیف پول</a>
+
+<div class="frame">
+
+  <div class="balance-card">
+    <h2>💰 موجودی فعلی</h2>
+    <div class="balance">{{ "{:,}".format(balance) }} <small>ریال</small></div>
+  </div>
+
+  {% if test_mode or not has_merchant %}
+  <div class="test-badge">🧪 حالت تست فعال — پرداخت واقعی انجام نمی‌شود</div>
+  {% endif %}
+
+  <!-- بنر پرمیوم -->
+  <div class="premium-banner">
+    <div class="premium-title">
+      <span class="crown">👑</span>
+      <span>پرمیوم بگیر، تخفیف بگیر!</span>
+    </div>
+    <div class="premium-discount">۲۶,۰۰۰ تومان تخفیف</div>
+    <div class="premium-sub">روی همهٔ تیرها — فقط برای کاربران پرمیوم</div>
+  </div>
+
+  <div class="box">
+    <div class="box-title">💳 تیر خودت رو انتخاب کن</div>
+
+    <form method="POST" id="chargeForm">
+      <div class="tiers">
+
+        <!-- برنز -->
+        <div class="tier tier-bronze" data-amt="1000000">
+          <div class="tier-head">
+            <div class="tier-crown">🥉</div>
+            <div class="tier-info">
+              <div class="tier-name">🥉 تیر برنز</div>
+              <div class="tier-price">۱۰۰ <small>هزار تومان</small></div>
+            </div>
+          </div>
+          <div class="tier-premium-row">
+            <span class="label">👑 با پرمیوم</span>
+            <span class="val">۲۶,۰۰۰ <small>تومان کم کن</small></span>
+          </div>
+          <div class="tier-meta">
+            <span>📨 <b>۳,۰۰۰</b> پیامک</span>
+            <span class="chars">✍️ هر پیامک ۱۲۵ کاراکتر</span>
+          </div>
+        </div>
+
+        <!-- نقره -->
+        <div class="tier tier-silver" data-amt="2000000">
+          <div class="tier-head">
+            <div class="tier-crown">🥈</div>
+            <div class="tier-info">
+              <div class="tier-name">🥈 تیر نقره</div>
+              <div class="tier-price">۲۰۰ <small>هزار تومان</small></div>
+            </div>
+          </div>
+          <div class="tier-premium-row">
+            <span class="label">👑 با پرمیوم</span>
+            <span class="val">۳۷,۰۰۰ <small>تومان کم کن</small></span>
+          </div>
+          <div class="tier-meta">
+            <span>📨 <b>۳,۰۰۰</b> پیامک</span>
+            <span class="chars">✍️ هر پیامک ۱۲۵ کاراکتر</span>
+          </div>
+        </div>
+
+        <!-- طلا -->
+        <div class="tier tier-gold" data-amt="3000000">
+          <div class="tier-badge">⭐ محبوب</div>
+          <div class="tier-head">
+            <div class="tier-crown">🥇</div>
+            <div class="tier-info">
+              <div class="tier-name">🥇 تیر طلا</div>
+              <div class="tier-price">۳۰۰ <small>هزار تومان</small></div>
+            </div>
+          </div>
+          <div class="tier-premium-row">
+            <span class="label">👑 با پرمیوم</span>
+            <span class="val">۴۹,۰۰۰ <small>تومان کم کن</small></span>
+          </div>
+          <div class="tier-meta">
+            <span>📨 <b>۳,۰۰۰</b> پیامک</span>
+            <span class="chars">✍️ هر پیامک ۱۲۵ کاراکتر</span>
+          </div>
+        </div>
+
+        <!-- الماس -->
+        <div class="tier tier-diamond" data-amt="10000000">
+          <div class="tier-badge">💎 پیشنهاد ویژه</div>
+          <div class="tier-head">
+            <div class="tier-crown">💎</div>
+            <div class="tier-info">
+              <div class="tier-name">💎 تیر الماس</div>
+              <div class="tier-price">۱ <small>میلیون تومان</small></div>
+            </div>
+          </div>
+          <div class="tier-premium-row">
+            <span class="label">👑 با پرمیوم</span>
+            <span class="val">۸۹,۰۰۰ <small>تومان کم کن</small></span>
+          </div>
+          <div class="tier-meta">
+            <span>📨 <b>۱۰,۰۰۰</b> پیامک</span>
+            <span class="chars">✍️ هر پیامک ۱۲۵ کاراکتر</span>
+          </div>
+        </div>
+
+      </div>
+
+      <input type="hidden" name="amount" id="amountInput" value="">
+
+      <div class="custom-form">
+        <label>یا مبلغ دلخواه (تومان) وارد کن:</label>
+        <input type="number" id="customAmount" placeholder="مثلاً 150000" min="100000" step="1000">
+      </div>
+
+      <button class="pay-btn" type="submit">💳 پرداخت و شارژ کیف پول</button>
+
+      <div class="hint">
+        حداقل مبلغ: <b>۱۰۰ هزار تومان</b><br>
+        هر پیامک دارای <b>۱۲۵ کاراکتر</b><br>
+        پرداخت امن از طریق درگاه زرین‌پال
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+    <a class="nav-item" href="/panel/ai"><span class="ic">🤖</span><span>هوش مصنوعی</span></a>
+    <a class="nav-item" href="/panel/chat"><span class="ic">💬</span><span>چت</span></a>
+    <a class="nav-item active" href="/panel/wallet"><span class="ic">💰</span><span>کیف پول</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+
+<script>
+  const amountInput = document.getElementById('amountInput');
+  const customAmount = document.getElementById('customAmount');
+  const tiers = document.querySelectorAll('.tier');
+
+  tiers.forEach(t => {
+    t.addEventListener('click', () => {
+      tiers.forEach(x => x.classList.remove('selected'));
+      t.classList.add('selected');
+      amountInput.value = t.dataset.amt;
+      customAmount.value = t.dataset.amt / 100;
+    });
+  });
+
+  customAmount.addEventListener('input', () => {
+    tiers.forEach(x => x.classList.remove('selected'));
+    const toman = parseInt(customAmount.value) || 0;
+    amountInput.value = toman * 10;
+  });
+
+  document.getElementById('chargeForm').addEventListener('submit', (e) => {
+    const v = parseInt(amountInput.value) || 0;
+    if (v < 1000000) {
+      e.preventDefault();
+      alert('حداقل مبلغ شارژ ۱۰۰ هزار تومان است.');
+    }
+  });
+</script>
+</body>
+</html>

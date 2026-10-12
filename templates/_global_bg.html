@@ -1,0 +1,65 @@
+{% if current_settings and current_settings.bg %}
+<script>
+    (function() {
+        const style = document.createElement('style');
+        style.textContent = `
+            body::before {
+                content: '' !important;
+                position: fixed !important;
+                inset: 0 !important;
+                background: url('{{ current_settings.bg }}') center/cover fixed !important;
+                opacity: 0.15 !important;
+                z-index: -3 !important;
+                pointer-events: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+    })();
+</script>
+{% endif %}
+{% if current_settings and current_settings.theme and current_settings.theme != 'neon' %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.body.setAttribute('data-theme', '{{ current_settings.theme }}');
+    });
+</script>
+{% endif %}
+
+<script src="/static/custom-alert.js"></script>
+
+<!-- ============ PWA ============ -->
+<script>
+(function(){
+  // اضافه کردن manifest به head
+  if (!document.querySelector('link[rel="manifest"]')){
+    var l = document.createElement('link');
+    l.rel = 'manifest';
+    l.href = '/static/pwa/manifest.json';
+    document.head.appendChild(l);
+  }
+  // تم رنگی
+  if (!document.querySelector('meta[name="theme-color"]')){
+    var m = document.createElement('meta');
+    m.name = 'theme-color';
+    m.content = '#00d4ff';
+    document.head.appendChild(m);
+  }
+  // Apple touch icon
+  if (!document.querySelector('link[rel="apple-touch-icon"]')){
+    var a = document.createElement('link');
+    a.rel = 'apple-touch-icon';
+    a.href = '/static/pwa/icons/icon-192.png';
+    document.head.appendChild(a);
+  }
+  // رجیستر service worker
+  if ('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('/static/pwa/service-worker.js')
+        .catch(function(e){ console.log('SW error', e); });
+    });
+  }
+})();
+</script>
+
+<link rel="stylesheet" href="/static/app-feel.css">
+<script src="/static/app-feel.js" defer></script>

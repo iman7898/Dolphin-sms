@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سفارش</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(191,0,255,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(191,0,255,.15);color:#bf00ff;border:1px solid #bf00ff;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #bf00ff;border-radius:26px;padding:18px 14px;background:rgba(20,0,30,.35);max-width:500px;margin:0 auto}
+.pt{text-align:center;font-size:18px;font-weight:900;color:#bf00ff;margin:0 0 16px}
+label{display:block;font-size:12px;color:#e0b4ff;margin-bottom:6px;font-weight:bold}
+input,textarea{width:100%;background:rgba(10,0,15,.9);color:#e2e8f0;border:1.5px solid rgba(191,0,255,.4);border-radius:12px;padding:13px;font-family:inherit;font-size:14px;margin-bottom:14px}
+input:focus,textarea:focus{outline:none;border-color:#bf00ff;box-shadow:0 0 15px rgba(191,0,255,.5)}
+textarea{min-height:100px;resize:vertical;line-height:1.7}
+.btn{width:100%;background:linear-gradient(135deg,#bf00ff,#7700cc);color:#fff;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(191,0,255,.7)}
+.msg{padding:12px;border-radius:12px;margin-bottom:14px;text-align:center;font-size:13px;font-weight:bold}
+.ok{background:rgba(0,255,157,.15);border:1px solid #00ff9d;color:#00ff9d}
+.err{background:rgba(255,77,109,.15);border:1px solid #ff4d6d;color:#ff4d6d}
+</style></head><body>
+<a class="back-btn" href="/customer/shop/{{ shop[0] }}">→ بازگشت</a>
+<div class="frame">
+<div class="pt">📝 سفارش از {{ shop[2] or shop[1] }}</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for cat, m in messages %}<div class="msg {{ 'ok' if cat=='ok' else 'err' }}">{{ m }}</div>{% endfor %}
+{% endwith %}
+<form method="POST">
+<label>📌 موضوع</label>
+<input type="text" name="subject" placeholder="مثلاً: سفارش میوه" required>
+<label>💬 پیام</label>
+<textarea name="message" placeholder="توضیحات سفارش..." required></textarea>
+<label>📱 شماره تماس</label>
+<input type="tel" name="phone" value="{{ customer[1] if customer else '' }}" maxlength="11">
+<button class="btn" type="submit">📤 ارسال سفارش</button>
+</form>
+</div>
+{% include "_global_bg.html" %}
+</body></html>

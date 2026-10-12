@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>💎 پلن‌ها</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(191,0,255,.16),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #bf00ff;border-radius:26px;padding:18px 14px;background:rgba(20,0,30,.4);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(191,0,255,.55),inset 0 0 18px rgba(191,0,255,.08)}50%{box-shadow:0 0 34px rgba(191,0,255,.85),inset 0 0 24px rgba(191,0,255,.16)}}
+  .page-title{text-align:center;font-size:20px;font-weight:900;color:#bf00ff;text-shadow:0 0 18px rgba(191,0,255,.9);margin:0 0 16px}
+  .balance-bar{background:linear-gradient(135deg,rgba(0,25,40,.95),rgba(0,15,30,.98));border:2px solid #00d4ff;border-radius:16px;padding:14px;text-align:center;margin-bottom:16px;box-shadow:0 0 20px rgba(0,212,255,.5)}
+  .balance-bar .lbl{font-size:11.5px;color:#7de5ff;margin-bottom:4px}
+  .balance-bar .val{font-size:22px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 15px rgba(0,255,157,.8)}
+  .plan{background:linear-gradient(135deg,rgba(20,0,30,.85),rgba(30,0,40,.9));border:2px solid rgba(191,0,255,.4);border-radius:22px;padding:20px 16px;margin-bottom:14px;position:relative;overflow:hidden;animation:pin .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes pin{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+  .plan.combined{border-color:#ffd700;box-shadow:0 0 28px rgba(255,215,0,.5)}
+  .plan.combined::before{content:"⭐ پیشنهاد ویژه";position:absolute;top:0;right:0;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#001a12;font-size:10.5px;font-weight:900;padding:5px 14px;border-bottom-left-radius:12px}
+  .plan-icon{font-size:42px;text-align:center;display:block;margin-bottom:8px;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(191,0,255,.8))}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+  .plan-name{text-align:center;font-size:17px;font-weight:900;color:#bf00ff;text-shadow:0 0 15px rgba(191,0,255,.8);margin-bottom:6px}
+  .plan.combined .plan-name{color:#ffd700;text-shadow:0 0 15px rgba(255,215,0,.8)}
+  .plan-desc{text-align:center;font-size:12px;color:#cbd5e1;line-height:1.8;margin-bottom:14px;padding:10px;background:rgba(0,0,0,.3);border-radius:12px;border:1px dashed rgba(191,0,255,.3)}
+  .plan-price{text-align:center;font-size:26px;font-weight:900;color:#00ff9d;direction:ltr;margin-bottom:4px;text-shadow:0 0 15px rgba(0,255,157,.7)}
+  .plan-price small{font-size:12px;color:#7dfcc7;font-weight:400}
+  .plan-per{text-align:center;font-size:11px;color:#7dfcc7;margin-bottom:16px}
+  .plan-actions{display:grid;gap:8px}
+  .plan-btn{width:100%;border:none;border-radius:14px;padding:15px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+  .plan-btn:active{transform:scale(.97)}
+  .pb-buy{background:linear-gradient(135deg,#bf00ff,#7700cc);color:#fff;box-shadow:0 0 22px rgba(191,0,255,.7)}
+  .pb-buy::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:sweep 3s ease-in-out infinite}
+  .pb-trial{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#001a12;box-shadow:0 0 22px rgba(255,215,0,.7)}
+  .pb-disabled{background:rgba(80,80,80,.4);color:#94a3b8;cursor:not-allowed}
+  @keyframes sweep{0%{left:-100%}50%,100%{left:100%}}
+  .active-sub{background:linear-gradient(135deg,rgba(0,255,157,.12),rgba(0,180,120,.06));border:2px solid #00ff9d;border-radius:18px;padding:14px;text-align:center;margin-bottom:16px;box-shadow:0 0 22px rgba(0,255,157,.5)}
+  .active-sub .t{font-size:14px;font-weight:900;color:#00ff9d;margin-bottom:6px;text-shadow:0 0 12px rgba(0,255,157,.7)}
+  .active-sub .d{font-size:11.5px;color:#7dfcc7}
+  .trial-badge{background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,140,0,.1));border:1px dashed #ffd700;color:#ffd700;border-radius:12px;padding:10px 14px;text-align:center;font-size:12px;font-weight:900;margin-bottom:14px;animation:wobble 3s ease-in-out infinite}
+  @keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-.7deg)}75%{transform:rotate(.7deg)}}
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85)}
+  .nav-item.active{background:linear-gradient(135deg,rgba(191,0,255,.15),rgba(0,212,255,.06));box-shadow:0 0 18px rgba(191,0,255,.4)}
+  .nav-item.active .ic{filter:none;color:#bf00ff;text-shadow:0 0 12px #bf00ff}
+  .nav-item.active span:last-child{color:#bf00ff;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/ai-manager">→ مدیر AI</a>
+
+<div class="frame">
+  <div class="page-title">💎 پلن‌های مدیر AI</div>
+
+  <div class="balance-bar">
+    <div class="lbl">💰 موجودی کیف پول</div>
+    <div class="val">{{ "{:,}".format(balance) }} <small style="font-size:12px;color:#7de5ff">ریال</small></div>
+  </div>
+
+  {% if sub %}
+  <div class="active-sub">
+    <div class="t">✅ اشتراک فعال:
+      {% if sub.plan_code == 'recruit' %}👥 عضوآوری
+      {% elif sub.plan_code == 'content' %}📝 محتوا
+      {% else %}⚡ ترکیبی{% endif %}
+    </div>
+    <div class="d">📱 {{ sub.messenger }} | 📅 انقضا: {{ sub.end_at }}</div>
+  </div>
+  {% endif %}
+
+  {% if not used_trial %}
+  <div class="trial-badge">🎁 اولین بارت هست؟ <b style="color:#fff">۷ روز تست رایگان</b> از پلن عضوآوری!</div>
+  {% endif %}
+
+  {% for p in plans %}
+  <div class="plan {% if p[0] == 'combined' %}combined{% endif %}">
+    <span class="plan-icon">{% if p[0] == 'recruit' %}👥{% elif p[0] == 'content' %}📝{% else %}⚡{% endif %}</span>
+    <div class="plan-name">{{ p[1] }}</div>
+    <div class="plan-desc">{{ p[4] }}</div>
+    <div class="plan-price">{{ "{:,}".format(p[2]) }} <small>ریال</small></div>
+    <div class="plan-per">📅 {{ p[3] }} روز اعتبار</div>
+    <div class="plan-actions">
+      {% if balance >= p[2] %}
+      <form method="POST" action="/panel/ai-manager/subscribe/{{ p[0] }}">
+        <button class="plan-btn pb-buy" type="submit">🛒 خرید با کیف پول</button>
+      </form>
+      {% else %}
+      <button class="plan-btn pb-disabled" disabled>❌ موجودی کافی نیست</button>
+      {% endif %}
+      {% if p[5] and not used_trial %}
+      <form method="POST" action="/panel/ai-manager/subscribe/{{ p[0] }}">
+        <input type="hidden" name="trial" value="1">
+        <button class="plan-btn pb-trial" type="submit">🎁 شروع ۷ روز تست رایگان</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/ai-manager"><span class="ic">🤖</span><span>مدیر AI</span></a>
+    <a class="nav-item" href="/panel/ai-manager/settings"><span class="ic">⚙️</span><span>تنظیمات</span></a>
+    <a class="nav-item active" href="/panel/ai-manager/plans"><span class="ic">💎</span><span>پلن‌ها</span></a>
+    <a class="nav-item" href="/panel/dashboard"><span class="ic">🏠</span><span>پنل</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

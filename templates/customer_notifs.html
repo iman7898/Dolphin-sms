@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>اعلان‌ها</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,212,255,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid #00d4ff;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #00d4ff;border-radius:26px;padding:18px 14px;background:rgba(0,15,30,.35)}
+.pt{text-align:center;font-size:19px;font-weight:900;color:#00d4ff;margin:0 0 16px}
+.mark-all{display:block;text-align:center;background:rgba(0,255,157,.15);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:10px;text-decoration:none;font-size:12px;font-weight:900;margin-bottom:14px;cursor:pointer;border-width:1px;border-style:solid;width:100%;font-family:inherit}
+.n{padding:12px;border-radius:12px;background:rgba(0,10,8,.6);border:1px solid rgba(0,212,255,.25);margin-bottom:8px}
+.n.unread{border-color:#00ff9d;background:rgba(0,255,157,.05)}
+.nh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px}
+.nt{font-size:13.5px;color:#00d4ff;font-weight:bold;flex:1}
+.nb{font-size:12px;color:#cbd5e1;line-height:1.7}
+.nd{font-size:10px;color:#6b8f80;margin-top:6px;direction:ltr}
+.dot{width:8px;height:8px;border-radius:50%;background:#ff2e63;flex-shrink:0}
+.empty{text-align:center;color:#6b8f80;padding:30px 0}
+.nw{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d,#00d4ff 35%,#bf00ff 70%,#00ff9d);z-index:100}
+.bn2{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px}
+.ni .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+.ni.act{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));border-radius:20px}
+.ni.act .ic{filter:none;color:#00ff9d}.ni.act span:last-child{color:#00ff9d;font-weight:bold}
+</style></head><body>
+<a class="back-btn" href="/customer/dashboard">→ داشبورد</a>
+<div class="frame">
+<div class="pt">🔔 اعلان‌های من</div>
+
+<button class="mark-all" onclick="markAll()">✅ علامت‌گذاری همه به عنوان خوانده‌شده</button>
+
+{% if notifs %}
+{% for n in notifs %}
+<div class="n {% if not n[5] %}unread{% endif %}" {% if n[4] %}onclick="window.location='{{ n[4] }}'"{% endif %} style="cursor:pointer">
+<div class="nh">
+<div class="nt">{{ n[3] }} {{ n[1] }}</div>
+{% if not n[5] %}<div class="dot"></div>{% endif %}
+</div>
+<div class="nb">{{ n[2] }}</div>
+<div class="nd">🕐 {{ n[6] }}</div>
+</div>
+{% endfor %}
+{% else %}
+<div class="empty">📭 اعلانی نداری</div>
+{% endif %}
+</div>
+
+<script>
+function markAll() {
+  fetch('/customer/notifications/read-all', {method:'POST'}).then(function(){
+    location.reload();
+  });
+}
+</script>
+</body></html>

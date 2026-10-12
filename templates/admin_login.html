@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>ورود ادمین</title><link rel="stylesheet" href="/static/style.css"><link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}</style>
+<script src="/static/custom-alert.js"></script>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00ff9d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
+    });
+}
+</script>
+</head>
+<body class="matrix-bg">
+<div class="container login-container">
+    <div class="login-logo">👑</div>
+    <h1 class="login-title">پنل مدیریت کل</h1>
+    <p class="login-subtitle">ورود مدیر سیستم</p>
+    {% if error %}<div class="error">❌ {{ error }}</div>{% endif %}
+    <div class="login-form-box">
+        <form method="post">
+            <label class="form-label">نام کاربری</label>
+            <input type="text" name="username" placeholder="admin" required>
+            <label class="form-label">رمز عبور</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+            <button type="submit" class="btn-white">⏻ ورود</button>
+        </form>
+    </div>
+</div>
+{% include "_global_bg.html" %}
+</body></html>

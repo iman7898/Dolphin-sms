@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⚙️ تنظیمات پرداخت</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;margin:0;padding:74px 14px 40px;background:#020a08;
+    background-image:radial-gradient(circle at 20% 0%,rgba(0,212,255,.12),transparent 45%),radial-gradient(circle at 80% 100%,rgba(0,255,157,.12),transparent 45%)}
+  .back-btn{position:fixed;top:18px;right:18px;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+  .frame{border:2px solid #00ff9d;border-radius:24px;padding:18px 14px;background:rgba(0,20,15,.35);
+    box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08)}
+  h2{color:#00ff9d;font-size:16px;margin:0 0 16px;text-align:center;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:18px;padding:16px;box-shadow:0 0 15px rgba(0,255,157,.15);margin-bottom:14px}
+  label{display:block;font-size:12.5px;color:#7dfcc7;margin-bottom:6px}
+  input[type=text]{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1px solid rgba(0,255,157,.35);border-radius:12px;padding:12px;font-family:inherit;font-size:13px;direction:ltr;margin-bottom:12px;transition:.25s}
+  input[type=text]:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+  .check-row{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(0,10,8,.6);border:1px solid rgba(0,255,157,.25);border-radius:12px;margin-bottom:12px}
+  .check-row input{width:18px;height:18px;accent-color:#00ff9d}
+  .check-row span{font-size:13px;color:#a7f3d0}
+  .save-btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:15px;font-family:inherit;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 0 20px rgba(0,255,157,.7);transition:.25s}
+  .save-btn:active{transform:scale(.98)}
+  .ok-msg{background:rgba(0,255,157,.15);border:1px solid #00ff9d;color:#00ff9d;border-radius:12px;padding:12px;text-align:center;font-size:13px;margin-bottom:14px}
+  .info{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.5);border-radius:12px;padding:12px;font-size:12px;color:#7de5ff;line-height:1.7;margin-bottom:12px}
+  .info code{background:rgba(0,0,0,.4);padding:2px 6px;border-radius:5px;font-size:11px}
+  .row-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .row-links a{display:block;text-align:center;padding:12px;border-radius:12px;text-decoration:none;font-size:13px;font-weight:bold;background:rgba(0,10,8,.9);border:1px solid rgba(0,255,157,.35);color:#7dfcc7;transition:.25s}
+  .row-links a:hover{border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5);color:#00ff9d}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/admin/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <h2>⚙️ تنظیمات درگاه پرداخت</h2>
+
+  {% if saved %}<div class="ok-msg">✅ تنظیمات ذخیره شد</div>{% endif %}
+
+  <div class="info">
+    🔗 کال‌بک فعلی (خودکار تشخیص داده شد):<br>
+    <code>{{ detected_base }}/payment/callback</code><br>
+    اگه از bore.pub استفاده می‌کنی و پورت هر بار عوض می‌شه، اینجا Public URL رو دستی ست کن.
+  </div>
+
+  <form method="POST">
+    <div class="box">
+      <label>🆔 مرچنت‌کد زرین‌پال</label>
+      <input type="text" name="merchant" value="{{ merchant }}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+
+      <label>🌐 آدرس عمومی سایت (اختیاری)</label>
+      <input type="text" name="base_url" value="{{ base_url }}" placeholder="https://example.bore.pub:46808">
+
+      <div class="check-row">
+        <input type="checkbox" name="test_mode" id="tm" {% if test_mode %}checked{% endif %}>
+        <label for="tm" style="margin:0;cursor:pointer"><span>🧪 حالت تست (بدون درگاه واقعی — مستقیم شارژ می‌شود)</span></label>
+      </div>
+    </div>
+
+    <button class="save-btn" type="submit">💾 ذخیره تنظیمات</button>
+  </form>
+
+  <div class="row-links">
+    <a href="/admin/payments">📋 لیست پرداخت‌ها</a>
+    <a href="https://www.zarinpal.com" target="_blank">🌐 دریافت مرچنت</a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

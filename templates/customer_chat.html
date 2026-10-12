@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>چت</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35)}
+.pt{text-align:center;font-size:17px;font-weight:900;color:#00ff9d;margin:0 0 14px}
+.chat{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;max-height:60vh;overflow-y:auto;padding:8px}
+.msg{padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.7;max-width:85%}
+.msg.me{align-self:flex-start;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,150,200,.1));border:1px solid rgba(0,212,255,.4);border-top-right-radius:4px}
+.msg.them{align-self:flex-end;background:linear-gradient(135deg,rgba(0,255,157,.2),rgba(0,180,120,.1));border:1px solid rgba(0,255,157,.4);border-top-left-radius:4px}
+.time{font-size:9.5px;color:#6b8f80;margin-top:4px;direction:ltr}
+.form{display:flex;gap:8px;margin-top:10px}
+.form textarea{flex:1;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;min-height:60px;resize:none}
+.form textarea:focus{outline:none;border-color:#00ff9d}
+.form button{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:12px;padding:12px 20px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 0 18px rgba(0,255,157,.6)}
+.nw{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d,#00d4ff 35%,#bf00ff 70%,#00ff9d);z-index:100}
+.bn2{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px}
+.ni .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+.ni.act{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));border-radius:20px}
+.ni.act .ic{filter:none;color:#00ff9d}.ni.act span:last-child{color:#00ff9d;font-weight:bold}
+</style></head><body>
+<a class="back-btn" href="/customer/shop/{{ shop[0] }}">→ بازگشت</a>
+<div class="frame">
+<div class="pt">💬 چت با {{ shop[2] or shop[1] }}</div>
+
+<div class="chat" id="chat">
+{% for m in messages %}
+<div class="msg {% if m[0] == 'customer' %}me{% else %}them{% endif %}">
+{{ m[1] }}
+<div class="time">{{ m[2] }}</div>
+</div>
+{% endfor %}
+{% if not messages %}
+<div style="text-align:center;color:#6b8f80;padding:30px">💬 پیامت رو بنویس...</div>
+{% endif %}
+</div>
+
+<form method="POST" class="form">
+<textarea name="message" placeholder="پیام..." required></textarea>
+<button type="submit">📤</button>
+</form>
+</div>
+
+<script>
+var c = document.getElementById('chat');
+if (c) c.scrollTop = c.scrollHeight;
+</script>
+</body></html>

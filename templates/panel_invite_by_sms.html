@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📨 دعوت با پیامک</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.4);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55)}50%{box-shadow:0 0 34px rgba(0,255,157,.85)}}
+  .page-title{text-align:center;font-size:19px;font-weight:900;color:#00ff9d;text-shadow:0 0 16px rgba(0,255,157,.9);margin:0 0 16px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-card{border-radius:14px;padding:14px 10px;text-align:center;border:1.5px solid rgba(0,255,157,.4);background:rgba(0,10,8,.6)}
+  .stat-v{font-size:22px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 12px rgba(0,255,157,.8)}
+  .stat-l{font-size:11px;color:#7dfcc7;margin-top:4px}
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1.5px solid rgba(0,255,157,.35);border-radius:20px;padding:16px;margin-bottom:14px}
+  .box-title{text-align:center;font-size:13.5px;color:#00ff9d;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(0,255,157,.2)}
+  label{display:block;font-size:12px;color:#7dfcc7;margin-bottom:6px;font-weight:bold}
+  input,textarea,select{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;margin-bottom:12px}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+  textarea{min-height:100px;resize:vertical;line-height:1.8}
+  .submit-btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(0,255,157,.7);position:relative;overflow:hidden}
+  .submit-btn:active{transform:scale(.97)}
+  .submit-btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:sweep 3s ease-in-out infinite}
+  @keyframes sweep{0%{left:-100%}50%,100%{left:100%}}
+  .info{padding:12px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.4);border-radius:12px;font-size:11.5px;color:#7de5ff;line-height:1.9;margin-top:12px}
+  .info code{background:rgba(0,0,0,.4);padding:2px 6px;border-radius:5px;font-size:10.5px;color:#00ff9d;direction:ltr}
+  .result-box{padding:14px;border-radius:14px;background:rgba(0,255,157,.12);border:2px solid #00ff9d;color:#00ff9d;text-align:center;font-weight:bold;margin-bottom:14px}
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
+  .nav-item .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/ai-manager">→ مدیر AI</a>
+
+<div class="frame">
+  <div class="page-title">📨 دعوت با پیامک</div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-v">{{ contacts_count }}</div><div class="stat-l">📞 مخاطبین</div></div>
+    <div class="stat-card"><div class="stat-v">{{ groups|length }}</div><div class="stat-l">👥 گروه‌ها</div></div>
+  </div>
+
+  {% if result %}
+  <div class="result-box">
+    ✅ ارسال شد: {{ result.sent }} از {{ result.total }}<br>
+    ❌ ناموفق: {{ result.failed }}
+  </div>
+  {% endif %}
+
+  <div class="box">
+    <div class="box-title">✉️ ارسال پیامک دعوت</div>
+    <form method="POST" onsubmit="return confirm('به {{ contacts_count }} مخاطب پیامک ارسال بشه؟')">
+      <label>🔗 لینک کانال</label>
+      <input type="text" name="channel_link" placeholder="https://rubika.ir/joing/xxxxx" required>
+
+      <label>💬 متن پیامک</label>
+      <textarea name="template" placeholder="سلام {name} جان! به کانال ما بپیوند: {link}" required>سلام {name} جان!
+به کانال ما بپیوند: {link}</textarea>
+
+      <label>👥 گروه مخاطبین (اختیاری)</label>
+      <select name="group">
+        <option value="">همهٔ مخاطبین</option>
+        {% for g in groups %}
+        <option value="{{ g }}">{{ g }}</option>
+        {% endfor %}
+      </select>
+
+      <button class="submit-btn" type="submit">🚀 ارسال پیامک دعوت</button>
+    </form>
+
+    <div class="info">
+      <b>💡 متغیرها:</b><br>
+      <code>{name}</code> → نام مخاطب<br>
+      <code>{link}</code> → لینک کانال<br>
+      <br>
+      <b>⚠️ نکته:</b> این ارسال از <b>اعتبار پنل پیامکی</b> کم می‌شه.
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/ai-manager"><span class="ic">🤖</span><span>مدیر AI</span></a>
+    <a class="nav-item" href="/panel/broadcast"><span class="ic">📢</span><span>پیام انبوه</span></a>
+    <a class="nav-item" href="/panel/force-join"><span class="ic">🔗</span><span>Force-Join</span></a>
+    <a class="nav-item active" href="/panel/invite-by-sms"><span class="ic">📨</span><span>دعوت پیامکی</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

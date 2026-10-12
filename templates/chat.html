@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>چت</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}</style>
+<script src="/static/custom-alert.js"></script>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00ff9d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
+    });
+}
+</script>
+</head>
+<body class="matrix-bg">
+<div class="container chat-container">
+
+    <!-- هدر -->
+    <div class="header-bar chat-header">
+        <!-- دکمه بازگشت -->
+        <a href="{% if is_admin %}/admin/chat{% else %}/panel/users{% endif %}" class="back-btn" title="بازگشت">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <div class="header-title">💬 {% if is_admin %}{{ user[3] or user[1] }}{% else %}Creator <span class="creator-badge">👑</span>{% endif %}</div>
+
+        <button type="button" class="dots-btn" onclick="toggleDotsMenu(event)">⋮</button>
+
+        <div id="dotsMenu" class="dots-menu" style="display:none;">
+            <button onclick="openSearch(); closeDots()"><span class="dots-icon">🔍</span><span class="dots-label">جستجوی پیام</span></button>
+            <button onclick="openFontMenu(); closeDots()"><span class="dots-icon">🔤</span><span class="dots-label">اندازه فونت</span></button>
+            <button onclick="openThemeMenu(); closeDots()"><span class="dots-icon">🎨</span><span class="dots-label">تم پس‌زمینه</span></button>
+            <button onclick="scrollTop(); closeDots()"><span class="dots-icon">⬆</span><span class="dots-label">رفتن به بالا</span></button>
+            <button onclick="openClearConfirm(); closeDots()" class="dots-danger"><span class="dots-icon">🗑</span><span class="dots-label">پاک کردن همه</span></button>
+        </div>
+    </div>
+
+    <div id="searchBox" class="search-popup" style="display:none;">
+        <input type="text" id="searchInput" placeholder="جستجو در پیام‌ها..." oninput="doSearch()">
+        <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+        <div class="chat-loading" id="chatLoading">در حال بارگذاری...</div>
+    </div>
+
+    <!-- ضبط صدا -->
+    <div id="recordingBar" class="recording-bar" style="display:none;">
+        <div class="rec-dot"></div>
+        <div class="rec-time" id="recTime">0:00</div>
+        <div class="rec-text">در حال ضبط...</div>
+        <button type="button" class="rec-cancel" onclick="cancelRecording()">✕</button>
+        <button type="button" class="rec-send" onclick="stopAndSendRecording()">➤</button>
+    </div>
+
+    <!-- پیش‌نمایش ریپلای -->
+    <div id="replyPreview" class="reply-preview" style="display:none;">
+        <div class="reply-preview-bar"></div>
+        <div class="reply-preview-body">
+            <div class="reply-preview-name" id="replyName"></div>
+            <div class="reply-preview-text" id="replyText"></div>
+        </div>
+        <button type="button" class="reply-cancel" onclick="cancelReply()">✕</button>
+    </div>
+
+    <!-- فرم ارسال -->
+    <form class="chat-form" id="chatForm">
+        <button type="button" class="attach-btn" onclick="toggleAttach()">📎</button>
+        <input type="text" id="chatInput" placeholder="پیامت رو بنویس..." autocomplete="off">
+        <button type="button" class="mic-btn" id="micBtn" onclick="startRecording()">🎤</button>
+        <button type="submit" class="chat-send" id="sendBtn">➤</button>
+    </form>
+
+    <!-- منوی ضمیمه -->
+    <div id="attachMenu" class="attach-menu" style="display:none;">
+        <button onclick="pickImage()"><span>🖼</span> عکس</button>
+        <button onclick="openStickers()"><span>😀</span> استیکر</button>
+    </div>
+
+    <!-- استیکر پنل -->
+    <div id="stickerPanel" class="sticker-panel" style="display:none;">
+        <div class="sticker-title">استیکرها</div>
+        <div class="sticker-grid" id="stickerGrid"></div>
+    </div>
+
+    <!-- واکنش سریع -->
+    <div id="reactPicker" class="react-picker" style="display:none;">
+        <button onclick="addReaction('❤️')">❤️</button>
+        <button onclick="addReaction('😂')">😂</button>
+        <button onclick="addReaction('👍')">👍</button>
+        <button onclick="addReaction('😮')">😮</button>
+        <button onclick="addReaction('😢')">😢</button>
+        <button onclick="addReaction('🔥')">🔥</button>
+    </div>
+
+</div>
+
+<!-- منوی پیام -->
+<div id="msgMenu" class="msg-menu" style="display:none;">
+    <button onclick="menuReply()"><span>↩</span> ریپلای</button>
+    <button onclick="menuReact()"><span>😊</span> واکنش</button>
+    <button onclick="menuCopy()"><span>📋</span> کپی</button>
+    <button onclick="menuEdit()" id="menuEditBtn"><span>✏</span> ویرایش</button>
+    <button onclick="menuDelete()" class="menu-danger" id="menuDeleteBtn"><span>🗑</span> حذف</button>
+</div>
+
+<!-- مودال‌ها -->
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-box confirm-box">
+        <div class="modal-icon">⚠</div>
+        <div class="modal-title">پاک کردن همه پیام‌ها</div>
+        <div class="modal-text">آیا مطمئنی می‌خوای همه پیام‌ها پاک بشن؟<br>این عمل قابل بازگشت نیست.</div>
+        <div class="modal-actions">
+            <button type="button" class="modal-btn modal-cancel" onclick="closeConfirm()">انصراف</button>
+            <button type="button" class="modal-btn modal-confirm" onclick="doClear()">بله، پاک کن</button>
+        </div>
+    </div>
+</div>
+
+<div id="fontModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-icon">🔤</div>
+        <div class="modal-title">اندازه فونت</div>
+        <div class="font-options">
+            <button class="font-btn" onclick="setFont('small', event)">کوچک</button>
+            <button class="font-btn active" onclick="setFont('normal', event)">متوسط</button>
+            <button class="font-btn" onclick="setFont('large', event)">بزرگ</button>
+            <button class="font-btn" onclick="setFont('xlarge', event)">خیلی بزرگ</button>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="modal-btn modal-cancel" onclick="closeFontMenu()">بستن</button>
+        </div>
+    </div>
+</div>
+
+<div id="themeModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-icon">🎨</div>
+        <div class="modal-title">تم پس‌زمینه چت</div>
+        <div class="chat-themes">
+            <button class="theme-item" onclick="setChatTheme('dark', event)"><span>🌑</span>تاریک</button>
+            <button class="theme-item" onclick="setChatTheme('blue', event)"><span>🌊</span>آبی</button>
+            <button class="theme-item" onclick="setChatTheme('purple', event)"><span>💜</span>بنفش</button>
+            <button class="theme-item" onclick="setChatTheme('green', event)"><span>💚</span>سبز</button>
+            <button class="theme-item" onclick="setChatTheme('sunset', event)"><span>🌅</span>غروب</button>
+            <button class="theme-item" onclick="setChatTheme('neon', event)"><span>⚡</span>نئون</button>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="modal-btn modal-cancel" onclick="closeThemeMenu()">بستن</button>
+        </div>
+    </div>
+</div>
+
+<!-- ورودی مخفی فایل -->
+<input type="file" id="imageInput" accept="image/*" style="display:none;" onchange="uploadImage(this)">
+
+<nav class="bottom-nav">
+    <a href="{% if is_admin %}/admin/dashboard{% else %}/panel/dashboard{% endif %}" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></span>
+        <span class="nav-label">پنل</span>
+    </a>
+    <a href="{% if is_admin %}/admin/chat{% else %}/panel/chat{% endif %}" class="nav-item active">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-8a8 8 0 0 1 8-8h2a8 8 0 0 1 8 5z"/></svg></span>
+        <span class="nav-label">چت</span>
+    </a>
+    <a href="{% if is_admin %}/admin/ai{% else %}/panel/ai{% endif %}" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="3"/><circle cx="9" cy="14" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.5" fill="currentColor" stroke="none"/><path d="M12 3v5"/><circle cx="12" cy="3" r="1"/></svg></span>
+        <span class="nav-label">هوش مصنوعی</span>
+    </a>
+    <a href="{% if is_admin %}/admin/profile{% else %}/panel/profile{% endif %}" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></span>
+        <span class="nav-label">پروفایل</span>
+    </a>
+</nav>
+
+<script>
+const chatBox = document.getElementById('chatBox');
+const chatForm = document.getElementById('chatForm');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const USER_ID = {{ user_id }};
+const IS_ADMIN = {{ 'true' if is_admin else 'false' }};
+const MY_SENDER = IS_ADMIN ? 'admin' : 'shopkeeper';
+let lastMessageId = 0;
+let pollInterval = null;
+let activeMenuId = null;
+let activeMessage = null;
+let replyTo = null;
+let mediaRecorder = null;
+let audioChunks = [];
+let recTimer = null;
+let recSeconds = 0;
+
+// ===== سه نقطه (رفع باگ) =====
+// ===== سه نقطه =====
+let dotsOpen = false;
+
+function toggleDotsMenu(e) {
+    if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    const m = document.getElementById('dotsMenu');
+    dotsOpen = !dotsOpen;
+    if (dotsOpen) {
+        // موقعیت بر اساس دکمه
+        const btn = document.querySelector('.dots-btn');
+        const rect = btn.getBoundingClientRect();
+        m.style.top = (rect.bottom + 8) + 'px';
+        m.style.left = (rect.left - 180) + 'px';
+        if (parseInt(m.style.left) < 10) m.style.left = '10px';
+        if (rect.left + rect.width - 200 > window.innerWidth - 10) {
+            m.style.left = (window.innerWidth - 230) + 'px';
+        }
+        m.style.display = 'block';
+    } else {
+        m.style.display = 'none';
+    }
+}
+
+function closeDots() {
+    document.getElementById('dotsMenu').style.display = 'none';
+    dotsOpen = false;
+}
+
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.dots-btn')) return;
+    if (!e.target.closest('.dots-menu')) closeDots();
+    if (!e.target.closest('.attach-btn') && !e.target.closest('.attach-menu')) {
+        const am = document.getElementById('attachMenu');
+        if (am) am.style.display = 'none';
+    }
+    if (!e.target.closest('.msg-menu') && !e.target.closest('.chat-msg') && !e.target.closest('.react-picker')) {
+        if (typeof closeMsgMenu === 'function') closeMsgMenu();
+        const rp = document.getElementById('reactPicker');
+        if (rp) rp.style.display = 'none';
+    }
+});
+
+// ===== ضمیمه =====
+function toggleAttach() {
+    const m = document.getElementById('attachMenu');
+    m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+function pickImage() {
+    document.getElementById('attachMenu').style.display = 'none';
+    document.getElementById('imageInput').click();
+}
+
+async function uploadImage(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('type', 'image');
+    fd.append('user_id', USER_ID);
+    showToast('در حال ارسال...');
+    try {
+        const r = await fetch('/api/chat/upload', {method: 'POST', body: fd});
+        const data = await r.json();
+        if (data.status === 'success') {
+            appendMessage('', MY_SENDER, new Date().toTimeString().slice(0,5), data.id, null, 'image', data.path, null, {});
+            lastMessageId = Math.max(lastMessageId, data.id);
+            showToast('ارسال شد ✅');
+        } else {
+            showToast('خطا: ' + (data.message || 'ناشناخته'));
+        }
+    } catch (e) {
+        showToast('خطا در ارسال');
+    }
+    input.value = '';
+}
+
+// ===== استیکر =====
+const STICKERS = ['😀','😂','🥰','😎','🤔','😴','🥳','😭','😡','🤯','👍','👎','❤️','🔥','✨','💯','🎉','🎁','🌈','⭐','🌸','🍕','⚽','🎮','🚀','💎','👑','🍀','☀️','🌙','🎵','📱'];
+function openStickers() {
+    document.getElementById('attachMenu').style.display = 'none';
+    const panel = document.getElementById('stickerPanel');
+    const grid = document.getElementById('stickerGrid');
+    if (!grid.innerHTML) {
+        grid.innerHTML = STICKERS.map(s => `<button onclick="sendSticker('${s}')">${s}</button>`).join('');
+    }
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+async function sendSticker(emoji) {
+    document.getElementById('stickerPanel').style.display = 'none';
+    try {
+        const r = await fetch('/api/chat/send', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: emoji, user_id: USER_ID, msg_type: 'sticker'})
+        });
+        const data = await r.json();
+        if (data.id) {
+            appendMessage(emoji, MY_SENDER, new Date().toTimeString().slice(0,5), data.id, null, 'sticker', null, null, {});
+            lastMessageId = Math.max(lastMessageId, data.id);
+        }
+    } catch (e) {}
+}
+
+// ===== ضبط صدا =====
+async function startRecording() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        recSeconds = 0;
+        mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+        mediaRecorder.start();
+        document.getElementById('recordingBar').style.display = 'flex';
+        document.getElementById('chatForm').style.display = 'none';
+        recTimer = setInterval(() => {
+            recSeconds++;
+            const m = Math.floor(recSeconds / 60);
+            const s = String(recSeconds % 60).padStart(2, '0');
+            document.getElementById('recTime').textContent = `${m}:${s}`;
+        }, 1000);
+    } catch (e) {
+        showToast('دسترسی به میکروفون داده نشد');
+    }
+}
+
+function stopAndSendRecording() {
+    if (!mediaRecorder) return;
+    mediaRecorder.onstop = async () => {
+        const blob = new Blob(audioChunks, {type: 'audio/webm'});
+        const file = new File([blob], 'voice.webm', {type: 'audio/webm'});
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('type', 'voice');
+        fd.append('user_id', USER_ID);
+        fd.append('duration', recSeconds);
+        const duration = recSeconds;
+        cleanupRecording();
+        try {
+            const r = await fetch('/api/chat/upload', {method: 'POST', body: fd});
+            const data = await r.json();
+            if (data.status === 'success') {
+                appendMessage('', MY_SENDER, new Date().toTimeString().slice(0,5), data.id, null, 'voice', data.path, duration, {});
+                lastMessageId = Math.max(lastMessageId, data.id);
+            }
+        } catch (e) {}
+    };
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+}
+
+function cancelRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.onstop = null;
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(t => t.stop());
+    }
+    cleanupRecording();
+}
+
+function cleanupRecording() {
+    clearInterval(recTimer);
+    document.getElementById('recordingBar').style.display = 'none';
+    document.getElementById('chatForm').style.display = 'flex';
+    document.getElementById('recTime').textContent = '0:00';
+    mediaRecorder = null;
+    audioChunks = [];
+}
+
+// ===== واکنش =====
+function menuReact() {
+    if (!activeMessage) return;
+    const picker = document.getElementById('reactPicker');
+    const rect = activeMessage.getBoundingClientRect();
+    picker.style.display = 'flex';
+    picker.style.top = (rect.top + window.scrollY - 60) + 'px';
+    picker.style.left = (rect.left + window.scrollX) + 'px';
+    closeMsgMenu();
+}
+
+async function addReaction(emoji) {
+    document.getElementById('reactPicker').style.display = 'none';
+    if (!activeMessage) return;
+    try {
+        const r = await fetch('/api/chat/react', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({id: activeMenuId, emoji})
+        });
+        if ((await r.json()).status === 'success') {
+            showToast('واکنش ثبت شد ' + emoji);
+        }
+    } catch (e) {}
+}
+
+// ===== بارگذاری =====
+async function loadMessages() {
+    try {
+        const r = await fetch(`/api/chat/messages?user_id=${USER_ID}&after=${lastMessageId}`);
+        const data = await r.json();
+        if (data.messages && data.messages.length > 0) {
+            data.messages.forEach(m => {
+                appendMessage(m.text, m.sender, m.time, m.id, m.reply_to, m.msg_type, m.file_path, m.voice_duration, m.reactions);
+                lastMessageId = Math.max(lastMessageId, m.id);
+            });
+        }
+        document.getElementById('chatLoading')?.remove();
+    } catch (e) {}
+}
+
+function appendMessage(text, sender, time, id, replyTo, msgType, filePath, voiceDuration, reactions) {
+    msgType = msgType || 'text';
+    reactions = reactions || {};
+    const isMine = (sender === MY_SENDER);
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + (isMine ? 'from-admin' : 'from-shop');
+    div.dataset.id = id;
+    div.dataset.sender = sender;
+    div.dataset.text = text || '';
+    div.dataset.type = msgType;
+
+    let content = '';
+    if (msgType === 'image' && filePath) {
+        content = `<img src="${filePath}" class="chat-image" onclick="viewImage('${filePath}')" alt="عکس">`;
+    } else if (msgType === 'voice' && filePath) {
+        content = `<div class="voice-msg">
+            <button class="voice-play" onclick="playVoice(this, '${filePath}')">▶</button>
+            <div class="voice-wave">${Array(20).fill('<span></span>').join('')}</div>
+            <div class="voice-dur">${voiceDuration || 0}s</div>
+        </div>`;
+    } else if (msgType === 'sticker') {
+        content = `<div class="sticker-msg">${escapeHtml(text)}</div>`;
+    } else {
+        content = `<div class="chat-text">${escapeHtml(text)}</div>`;
+    }
+
+    let replyHtml = '';
+    if (replyTo && replyTo.name) {
+        replyHtml = `<div class="reply-quote">
+            <div class="reply-quote-name">${escapeHtml(replyTo.name)}</div>
+            <div class="reply-quote-text">${escapeHtml(replyTo.text || '')}</div>
+        </div>`;
+    }
+
+    let reactHtml = '';
+    if (Object.keys(reactions).length > 0) {
+        reactHtml = '<div class="reactions-bar">' +
+            Object.entries(reactions).map(([emo, cnt]) => `<span class="react-chip">${emo}${cnt > 1 ? ' ' + cnt : ''}</span>`).join('') +
+            '</div>';
+    }
+
+    div.innerHTML = `
+        <div class="swipe-reply-icon">↩</div>
+        <div class="chat-bubble">
+            ${replyHtml}
+            ${content}
+            <div class="chat-time">${time || ''}</div>
+            ${reactHtml}
+        </div>
+    `;
+
+    attachSwipe(div);
+    attachTap(div);
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function escapeHtml(t) {
+    if (!t) return '';
+    const d = document.createElement('div');
+    d.textContent = t;
+    return d.innerHTML;
+}
+
+function playVoice(btn, path) {
+    if (btn.dataset.playing === '1') {
+        btn.dataset.playing = '0';
+        btn.textContent = '▶';
+        btn._audio?.pause();
+        return;
+    }
+    if (!btn._audio) btn._audio = new Audio(path);
+    btn._audio.play();
+    btn.dataset.playing = '1';
+    btn.textContent = '⏸';
+    btn._audio.onended = () => { btn.textContent = '▶'; btn.dataset.playing = '0'; };
+}
+
+function viewImage(path) {
+    const overlay = document.createElement('div');
+    overlay.className = 'image-viewer';
+    overlay.innerHTML = `<img src="${path}"><button onclick="this.parentElement.remove()">✕</button>`;
+    document.body.appendChild(overlay);
+}
+
+// ===== swipe & tap =====
+function attachSwipe(el) {
+    const bubble = el.querySelector('.chat-bubble');
+    let startX = 0, startY = 0, currentX = 0, isHorizontal = null;
+    el.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        currentX = 0;
+        isHorizontal = null;
+        bubble.style.transition = 'none';
+    }, {passive: true});
+    el.addEventListener('touchmove', (e) => {
+        const dx = e.touches[0].clientX - startX;
+        const dy = e.touches[0].clientY - startY;
+        if (isHorizontal === null) isHorizontal = Math.abs(dx) > Math.abs(dy) + 5;
+        if (!isHorizontal) return;
+        if (dx > 0) {
+            currentX = Math.min(dx, 80);
+            bubble.style.transform = `translateX(${currentX}px)`;
+            el.classList.toggle('swiping', currentX > 40);
+        }
+    }, {passive: true});
+    el.addEventListener('touchend', () => {
+        bubble.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        if (currentX > 50) startReply(el);
+        bubble.style.transform = '';
+        el.classList.remove('swiping');
+    });
+}
+
+function attachTap(el) {
+    let tsx = 0, tsy = 0;
+    el.addEventListener('touchstart', (e) => {
+        tsx = e.touches[0].clientX;
+        tsy = e.touches[0].clientY;
+    }, {passive: true});
+    el.addEventListener('touchend', (e) => {
+        const dx = Math.abs(e.changedTouches[0].clientX - tsx);
+        const dy = Math.abs(e.changedTouches[0].clientY - tsy);
+        if (dx < 10 && dy < 10) openMsgMenu(el);
+    });
+}
+
+// ===== ریپلای =====
+function startReply(el) {
+    const id = parseInt(el.dataset.id);
+    const text = el.dataset.text || '(فایل)';
+    const sender = el.dataset.sender;
+    const name = sender === MY_SENDER ? 'خودت' : 'طرف مقابل';
+    replyTo = {id, text: text.slice(0, 60), name};
+    document.getElementById('replyName').textContent = name;
+    document.getElementById('replyText').textContent = text.slice(0, 60);
+    document.getElementById('replyPreview').style.display = 'flex';
+    chatInput.focus();
+}
+
+function cancelReply() {
+    replyTo = null;
+    document.getElementById('replyPreview').style.display = 'none';
+}
+
+// ===== منوی پیام =====
+function openMsgMenu(el) {
+    activeMenuId = parseInt(el.dataset.id);
+    activeMessage = el;
+    const isMine = el.dataset.sender === MY_SENDER;
+    const menu = document.getElementById('msgMenu');
+    document.getElementById('menuEditBtn').style.display = isMine ? 'flex' : 'none';
+    document.getElementById('menuDeleteBtn').style.display = isMine ? 'flex' : 'none';
+    const rect = el.getBoundingClientRect();
+    menu.style.display = 'flex';
+    const mr = menu.getBoundingClientRect();
+    let top = rect.top + window.scrollY - mr.height - 10;
+    if (top < 10) top = rect.bottom + window.scrollY + 10;
+    let left = rect.left + rect.width / 2 - mr.width / 2;
+    if (left < 10) left = 10;
+    if (left + mr.width > window.innerWidth - 10) left = window.innerWidth - mr.width - 10;
+    menu.style.top = top + 'px';
+    menu.style.left = left + 'px';
+}
+
+function closeMsgMenu() {
+    document.getElementById('msgMenu').style.display = 'none';
+}
+
+function menuReply() { if (activeMessage) startReply(activeMessage); closeMsgMenu(); }
+
+function menuCopy() {
+    if (activeMessage) {
+        navigator.clipboard.writeText(activeMessage.dataset.text);
+        showToast('کپی شد ✅');
+    }
+    closeMsgMenu();
+}
+
+async function menuEdit() {
+    if (!activeMessage) return;
+    const oldText = activeMessage.dataset.text;
+    closeMsgMenu();
+    showPrompt('ویرایش پیام', oldText, async (newText) => {
+        if (!newText || newText === oldText) return;
+        try {
+            const r = await fetch('/api/chat/edit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: activeMenuId, text: newText})
+            });
+            if ((await r.json()).status === 'success') {
+                activeMessage.dataset.text = newText;
+                activeMessage.querySelector('.chat-text').textContent = newText;
+                showToast('ویرایش شد ✅');
+            }
+        } catch (e) {}
+    });
+}
+
+async function menuDelete() {
+    if (!activeMessage) { closeMsgMenu(); return; }
+    const msg = activeMessage;
+    closeMsgMenu();
+    showConfirm('حذف پیام', 'این پیام برای همیشه حذف می‌شه. مطمئنی؟', '🗑', async (ok) => {
+        if (!ok) return;
+        try {
+            const r = await fetch('/api/chat/delete', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: activeMenuId})
+            });
+            if ((await r.json()).status === 'success') {
+                msg.style.transition = 'all 0.3s';
+                msg.style.opacity = '0';
+                msg.style.transform = 'scale(0.8)';
+                setTimeout(() => msg.remove(), 300);
+            }
+        } catch (e) {}
+    });
+}
+
+function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 300);
+    }, 2000);
+}
+
+// ===== ارسال متن =====
+chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+    const payload = {message: text, user_id: USER_ID};
+    if (replyTo) payload.reply_to = replyTo.id;
+    appendMessage(text, MY_SENDER, new Date().toTimeString().slice(0,5), Date.now(), replyTo ? {name: replyTo.name, text: replyTo.text} : null, 'text', null, null, {});
+    chatInput.value = '';
+    cancelReply();
+    chatInput.focus();
+    try {
+        const r = await fetch('/api/chat/send', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await r.json();
+        if (data.id) lastMessageId = Math.max(lastMessageId, data.id);
+    } catch (e) {}
+});
+
+// ===== polling =====
+function startPolling() {
+    if (pollInterval) clearInterval(pollInterval);
+    pollInterval = setInterval(() => { if (!document.hidden) loadMessages(); }, 3000);
+}
+
+loadMessages().then(() => { chatBox.scrollTop = chatBox.scrollHeight; startPolling(); });
+
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) { loadMessages(); startPolling(); }
+});
+
+chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chatForm.dispatchEvent(new Event('submit')); }
+});
+
+// ===== جستجو =====
+function openSearch() {
+    const box = document.getElementById('searchBox');
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    if (box.style.display === 'block') document.getElementById('searchInput').focus();
+}
+
+let searchTimer;
+function doSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(async () => {
+        const q = document.getElementById('searchInput').value.trim();
+        const resultsDiv = document.getElementById('searchResults');
+        if (!q) { resultsDiv.innerHTML = ''; return; }
+        try {
+            const r = await fetch(`/api/chat/search?q=${encodeURIComponent(q)}&user_id=${USER_ID}`);
+            const data = await r.json();
+            resultsDiv.innerHTML = data.results.map(m =>
+                `<div class="search-item" onclick="scrollToMsg(${m.id})">
+                    <div class="search-item-text">${escapeHtml(m.text)}</div>
+                    <div class="search-item-time">${m.time}</div>
+                </div>`
+            ).join('') || '<div class="chat-empty">نتیجه‌ای نیافتم</div>';
+        } catch (e) {}
+    }, 300);
+}
+
+function scrollToMsg(id) {
+    const el = document.querySelector(`[data-id="${id}"]`);
+    if (el) {
+        el.scrollIntoView({behavior: 'smooth', block: 'center'});
+        el.style.transition = 'all 0.5s';
+        el.style.filter = 'brightness(1.5)';
+        setTimeout(() => el.style.filter = '', 800);
+    }
+}
+
+// ===== فونت =====
+function openFontMenu() { document.getElementById('fontModal').classList.add('show'); }
+function closeFontMenu() { document.getElementById('fontModal').classList.remove('show'); }
+function setFont(size, e) {
+    const sizes = {small: '12px', normal: '14px', large: '16px', xlarge: '18px'};
+    chatBox.querySelectorAll('.chat-text').forEach(t => t.style.fontSize = sizes[size]);
+    localStorage.setItem('chatFont', size);
+    document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+}
+(function loadFont() {
+    const s = localStorage.getItem('chatFont') || 'normal';
+    const sizes = {small: '12px', normal: '14px', large: '16px', xlarge: '18px'};
+    chatBox.style.setProperty('--chat-font', sizes[s]);
+})();
+
+// ===== تم =====
+function openThemeMenu() { document.getElementById('themeModal').classList.add('show'); }
+function closeThemeMenu() { document.getElementById('themeModal').classList.remove('show'); }
+function setChatTheme(t, e) {
+    chatBox.setAttribute('data-chat-theme', t);
+    localStorage.setItem('chatTheme', t);
+    document.querySelectorAll('.theme-item').forEach(b => b.classList.remove('active'));
+    e.target.closest('.theme-item').classList.add('active');
+}
+(function loadChatTheme() {
+    const t = localStorage.getItem('chatTheme') || 'dark';
+    chatBox.setAttribute('data-chat-theme', t);
+})();
+
+// ===== پاک کردن =====
+function openClearConfirm() { document.getElementById('confirmModal').classList.add('show'); }
+function closeConfirm() { document.getElementById('confirmModal').classList.remove('show'); }
+async function doClear() {
+    closeConfirm();
+    try {
+        const r = await fetch('/api/chat/clear', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({user_id: USER_ID})
+        });
+        if ((await r.json()).status === 'success') {
+            chatBox.innerHTML = '';
+            lastMessageId = 0;
+            showToast('همه پیام‌ها پاک شد ✅');
+        }
+    } catch (e) {}
+}
+
+function scrollTop() { chatBox.scrollTop = 0; }
+</script>
+
+<!-- ===== مودال تأیید سفارشی ===== -->
+<div id="customConfirm" class="custom-modal">
+    <div class="custom-modal-box">
+        <div class="custom-modal-icon" id="confirmIcon">⚠</div>
+        <div class="custom-modal-title" id="confirmTitle">تأیید</div>
+        <div class="custom-modal-text" id="confirmText">آیا مطمئنی؟</div>
+        <div class="custom-modal-actions">
+            <button type="button" class="custom-btn custom-btn-cancel" onclick="closeCustomConfirm(false)">انصراف</button>
+            <button type="button" class="custom-btn custom-btn-ok" onclick="closeCustomConfirm(true)">تأیید</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== مودال ورودی سفارشی ===== -->
+<div id="customPrompt" class="custom-modal">
+    <div class="custom-modal-box">
+        <div class="custom-modal-icon">✏</div>
+        <div class="custom-modal-title" id="promptTitle">ویرایش</div>
+        <input type="text" id="promptInput" class="custom-modal-input" placeholder="متن جدید...">
+        <div class="custom-modal-actions">
+            <button type="button" class="custom-btn custom-btn-cancel" onclick="closeCustomPrompt(null)">انصراف</button>
+            <button type="button" class="custom-btn custom-btn-ok" onclick="submitCustomPrompt()">ذخیره</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== مودال تأیید سفارشی =====
+let confirmCallback = null;
+function showConfirm(title, text, icon, callback) {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmText').textContent = text;
+    document.getElementById('confirmIcon').textContent = icon || '⚠';
+    document.getElementById('customConfirm').classList.add('show');
+    confirmCallback = callback;
+}
+function closeCustomConfirm(result) {
+    document.getElementById('customConfirm').classList.remove('show');
+    if (confirmCallback) confirmCallback(result);
+    confirmCallback = null;
+}
+
+// ===== مودال ورودی سفارشی =====
+let promptCallback = null;
+function showPrompt(title, defaultValue, callback) {
+    document.getElementById('promptTitle').textContent = title;
+    document.getElementById('promptInput').value = defaultValue || '';
+    document.getElementById('customPrompt').classList.add('show');
+    setTimeout(() => document.getElementById('promptInput').focus(), 100);
+    promptCallback = callback;
+}
+function closeCustomPrompt(result) {
+    document.getElementById('customPrompt').classList.remove('show');
+    if (promptCallback) promptCallback(result);
+    promptCallback = null;
+}
+function submitCustomPrompt() {
+    const val = document.getElementById('promptInput').value.trim();
+    if (val) closeCustomPrompt(val);
+    else closeCustomPrompt(null);
+}
+document.getElementById('promptInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        submitCustomPrompt();
+    }
+});
+
+// بستن با کلیک بیرون
+document.querySelectorAll('.custom-modal').forEach(m => {
+    m.addEventListener('click', (e) => {
+        if (e.target === m) {
+            m.classList.remove('show');
+            if (confirmCallback) { confirmCallback(false); confirmCallback = null; }
+            if (promptCallback) { promptCallback(null); promptCallback = null; }
+        }
+    });
+});
+</script>
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

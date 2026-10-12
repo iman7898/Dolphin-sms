@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📨 تست پیامک</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16)}}
+  .page-title{text-align:center;font-size:19px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px}
+
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:18px;box-shadow:0 0 15px rgba(0,255,157,.15);margin-bottom:14px}
+  label{display:block;font-size:12.5px;color:#7dfcc7;margin-bottom:8px;font-weight:bold}
+  input,textarea{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:13px;font-family:inherit;font-size:14px;transition:.25s;margin-bottom:14px}
+  input{text-align:center;direction:ltr;letter-spacing:1px}
+  textarea{min-height:80px;resize:vertical;line-height:1.7;text-align:right;direction:rtl}
+  input:focus,textarea:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+
+  .method-tabs{display:flex;gap:6px;background:rgba(0,10,8,.7);border-radius:12px;padding:6px;border:1px solid rgba(0,255,157,.25);margin-bottom:14px}
+  .method-tab{flex:1;text-align:center;padding:10px 8px;border-radius:8px;font-size:12px;font-weight:bold;cursor:pointer;color:#7dfcc7;border:none;background:none;font-family:inherit;transition:.25s}
+  .method-tab.active{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;box-shadow:0 0 15px rgba(0,255,157,.6)}
+
+  .send-btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(0,255,157,.7);transition:.3s;position:relative;overflow:hidden}
+  .send-btn:active{transform:scale(.98)}
+  .send-btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:sweep 3s ease-in-out infinite}
+  @keyframes sweep{0%{left:-100%}50%,100%{left:100%}}
+
+  .result-box{padding:14px;border-radius:14px;margin-bottom:16px;font-size:13px;font-weight:bold;text-align:center;line-height:1.7;animation:rin .4s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes rin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+  .r-ok{background:rgba(0,255,157,.15);border:2px solid #00ff9d;color:#00ff9d;box-shadow:0 0 20px rgba(0,255,157,.5)}
+  .r-err{background:rgba(255,77,109,.15);border:2px solid #ff4d6d;color:#ff4d6d;box-shadow:0 0 20px rgba(255,77,109,.5)}
+  .r-detail{font-size:10.5px;color:#94a3b8;margin-top:8px;direction:ltr;font-family:monospace;word-break:break-all;background:rgba(0,0,0,.3);padding:8px;border-radius:8px}
+
+  .info{padding:12px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.4);border-radius:12px;font-size:11.5px;color:#ffe9a8;line-height:1.9}
+  .info b{color:#ffd700}
+  .info code{background:rgba(0,0,0,.4);padding:1px 6px;border-radius:5px;font-size:10.5px;color:#00ff9d;direction:ltr;display:inline-block;margin:0 2px}
+
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85)}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/admin/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <div class="page-title">📨 تست پیامک کاوه‌نگار</div>
+
+  {% if result %}
+  <div class="result-box {% if result.status == 'success' %}r-ok{% else %}r-err{% endif %}">
+    {% if result.status == 'success' %}
+      ✅ پیامک با موفقیت ارسال شد
+      {% if result.test_mode %}(حالت تست){% endif %}
+    {% else %}
+      ❌ خطا: {{ result.message }}
+    {% endif %}
+    {% if result.code %}<div class="r-detail">کد خطا: {{ result.code }}</div>{% endif %}
+  </div>
+  {% endif %}
+
+  <div class="box">
+    <form method="POST">
+      <div class="method-tabs">
+        <button type="button" class="method-tab {% if method != 'sms' %}active{% endif %}" onclick="setMethod('otp')">🔐 الگو (OTP)</button>
+        <button type="button" class="method-tab {% if method == 'sms' %}active{% endif %}" onclick="setMethod('sms')">💬 پیامک مستقیم</button>
+      </div>
+      <input type="hidden" name="method" id="methodInput" value="{{ method or 'otp' }}">
+
+      <label>📱 شماره موبایل</label>
+      <input type="tel" name="phone" placeholder="09xxxxxxxxx" maxlength="11" pattern="09[0-9]{9}" required>
+
+      <div id="otpFields">
+        <label>🔢 کد تست (الگو)</label>
+        <input type="text" name="code" placeholder="123456" value="123456" maxlength="6" inputmode="numeric">
+      </div>
+
+      <div id="smsFields" style="display:none">
+        <label>💬 متن پیامک</label>
+        <textarea name="message" placeholder="متن پیامک...">تست پنل پیامکی ✅</textarea>
+      </div>
+
+      <button class="send-btn" type="submit">📨 ارسال</button>
+    </form>
+  </div>
+
+  <div class="info">
+    <b>💡 راهنما:</b><br>
+    • حالت <b>الگو (OTP)</b> — بدون نیاز به خط اختصاصی کار می‌کنه، ولی فقط با اکانت <b>تأییدشده</b>.<br>
+    • حالت <b>پیامک مستقیم</b> — نیاز به <b>خط اختصاصی</b> داره.<br>
+    • حساب‌های <b>تأییدنشده</b> فقط به شماره‌ی ثبت‌نام خودشون می‌تونن پیامک بفرستن.
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/admin/dashboard"><span class="ic">🏠</span><span>داشبورد</span></a>
+    <a class="nav-item" href="/admin/reports"><span class="ic">📊</span><span>گزارش</span></a>
+    <a class="nav-item active" href="/admin/test-sms"><span class="ic">📨</span><span>تست پیامک</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+
+<script>
+function setMethod(m){
+  document.getElementById('methodInput').value = m;
+  document.querySelectorAll('.method-tab').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('otpFields').style.display = (m === 'otp') ? 'block' : 'none';
+  document.getElementById('smsFields').style.display = (m === 'sms') ? 'block' : 'none';
+}
+</script>
+</body>
+</html>

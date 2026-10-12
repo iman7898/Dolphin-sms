@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محصولات</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(255,215,0,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(255,215,0,.15);color:#ffd700;border:1px solid #ffd700;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #ffd700;border-radius:26px;padding:18px 14px;background:rgba(30,20,0,.35)}
+.pt{text-align:center;font-size:20px;font-weight:900;color:#ffd700;margin:0 0 16px;text-shadow:0 0 14px rgba(255,215,0,.8)}
+.prod{padding:12px;border-radius:12px;background:rgba(0,10,8,.6);border:1px solid rgba(255,215,0,.3);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.prod-n{font-size:14px;color:#ffd700;font-weight:bold}
+.prod-d{font-size:11px;color:#ffe9a8;margin-top:3px}
+.prod-p{font-size:15px;font-weight:900;color:#00ff9d;direction:ltr}
+.cat{font-size:13px;color:#7dfcc7;margin:14px 0 8px;font-weight:bold;border-bottom:1px dashed rgba(255,215,0,.3);padding-bottom:6px}
+.empty{text-align:center;color:#6b8f80;padding:30px 0}
+
+
+
+
+
+
+</style></head><body>
+<a class="back-btn" href="/customer/dashboard">→ داشبورد</a>
+<div class="frame">
+<div class="pt">📦 محصولات</div>
+{% if products %}
+{% set ns = namespace(last_cat='') %}
+{% for p in products %}
+{% if p[5] and p[5] != ns.last_cat %}
+<div class="cat">📂 {{ p[5] }}</div>
+{% set ns.last_cat = p[5] %}
+{% endif %}
+<div class="prod">
+<div>
+<div class="prod-n">{{ p[1] }}</div>
+{% if p[4] %}<div class="prod-d">{{ p[4] }}</div>{% endif %}
+</div>
+<div class="prod-p">{{ "{:,}".format(p[2]) }}</div>
+</div>
+{% endfor %}
+{% else %}
+<div class="empty">📭 محصولی موجود نیست</div>
+{% endif %}
+</div>
+{% include "_global_bg.html" %}
+{% with active="search" %}{% include "_customer_nav.html" %}{% endwith %}
+</body></html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پنل مشتری</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(255,77,109,.15);color:#ff4d6d;border:1px solid #ff4d6d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none}
+.frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35)}
+.pt{text-align:center;font-size:20px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.sc{border-radius:14px;padding:12px 8px;text-align:center;border:1.5px solid rgba(0,255,157,.4);background:rgba(0,10,8,.6)}
+.sv{font-size:22px;font-weight:900;color:#00ff9d;direction:ltr}
+.sl{font-size:10px;color:#7dfcc7;margin-top:4px}
+.menu{display:grid;gap:10px;margin-bottom:16px}
+.mi{display:flex;align-items:center;justify-content:space-between;background:rgba(0,10,8,.7);border:1.5px solid rgba(0,255,157,.3);border-radius:16px;padding:16px;text-decoration:none;color:#e2e8f0;font-size:15px;font-weight:bold;transition:.25s}
+.mi:hover{border-color:#00ff9d;box-shadow:0 0 20px rgba(0,255,157,.4)}
+.mi .icon{font-size:24px;margin-left:10px}
+.mi .arrow{color:#00ff9d;font-size:20px}
+.fav-item{padding:12px;border-radius:12px;background:rgba(0,10,8,.6);border:1px solid rgba(0,255,157,.25);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fav-h{font-size:14px;font-weight:900;color:#00ff9d}
+.fav-m{font-size:11px;color:#7dfcc7;margin-top:3px}
+.empty{text-align:center;color:#6b8f80;padding:20px 0;font-size:12.5px}
+.box{background:rgba(0,20,15,.7);border:1.5px solid rgba(0,255,157,.35);border-radius:20px;padding:14px;margin-bottom:14px}
+.box-t{font-size:13.5px;color:#00ff9d;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(0,255,157,.2);text-align:center;font-weight:bold}
+.nw{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d,#00d4ff 35%,#bf00ff 70%,#00ff9d);z-index:100}
+.bn2{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px}
+.ni .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+.ni.act{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));border-radius:20px}
+.ni.act .ic{filter:none;color:#00ff9d}.ni.act span:last-child{color:#00ff9d;font-weight:bold}
+</style></head><body>
+
+<a class="back-btn" href="/customer/logout">خروج 🚪</a>
+
+<div class="frame">
+<div class="pt">🛒 سلام {{ customer[2] if customer else 'مشتری' }}</div>
+
+<div class="stats">
+<div class="sc"><div class="sv">{{ points.points }}</div><div class="sl">⭐ امتیاز</div></div>
+<div class="sc"><div class="sv">{{ orders_count }}</div><div class="sl">📋 سفارش‌ها</div></div>
+<div class="sc"><div class="sv">{{ favorites|length }}</div><div class="sl">❤️ علاقه‌مندی</div></div>
+</div>
+
+<div class="menu">
+<a class="mi" href="/customer/search">
+  <span><span class="icon">🔍</span>جستجوی مغازه‌دار</span>
+  <span class="arrow">‹</span>
+</a>
+<a class="mi" href="/customer/products">
+  <span><span class="icon">📦</span>دیدن محصولات</span>
+  <span class="arrow">‹</span>
+</a>
+<a class="mi" href="/customer/orders">
+  <span><span class="icon">📋</span>سفارش‌های من</span>
+  <span class="arrow">‹</span>
+</a>
+<a class="mi" href="/customer/points">
+  <span><span class="icon">🏆</span>امتیاز من</span>
+  <span class="arrow">‹</span>
+</a>
+<a class="mi" href="/customer/notifications">
+  <span><span class="icon">🔔</span>اعلان‌های من</span>
+  <span class="arrow">‹</span>
+</a>
+<a class="mi" href="/customer/profile">
+  <span><span class="icon">👤</span>پروفایل من</span>
+  <span class="arrow">‹</span>
+</a>
+</div>
+
+{% if favorites %}
+<div class="box">
+<div class="box-t">❤️ مغازه‌های موردعلاقه</div>
+{% for f in favorites %}
+<div class="fav-item">
+<div>
+<div class="fav-h">🏪 {{ f[2] or f[1] }}</div>
+<div class="fav-m">📱 {{ f[3] or '—' }}</div>
+</div>
+<a href="/customer/shop/{{ f[0] }}" style="color:#00d4ff;text-decoration:none;font-size:12px">مشاهده ←</a>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+</div>
+
+<div class="nw"><div class="bn2">
+<a class="ni act" href="/customer/dashboard"><span class="ic">🏠</span><span>خانه</span></a>
+<a class="ni" href="/customer/search"><span class="ic">🔍</span><span>جستجو</span></a>
+<a class="ni" href="/customer/orders"><span class="ic">📋</span><span>سفارش‌ها</span></a>
+<a class="ni" href="/customer/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+</div></div>
+{% include "_global_bg.html" %}
+</body></html>

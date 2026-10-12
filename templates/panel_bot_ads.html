@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📢 تبلیغات ربات</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(191,0,255,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none}
+  .frame{border:2px solid #bf00ff;border-radius:26px;padding:18px 14px;background:rgba(20,0,30,.4);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(191,0,255,.55)}50%{box-shadow:0 0 34px rgba(191,0,255,.85)}}
+  .page-title{text-align:center;font-size:19px;font-weight:900;color:#bf00ff;text-shadow:0 0 16px rgba(191,0,255,.9);margin:0 0 16px}
+  .stat-card{background:linear-gradient(135deg,rgba(0,25,40,.95),rgba(0,15,30,.98));border:2px solid #00d4ff;border-radius:18px;padding:18px;text-align:center;margin-bottom:16px;box-shadow:0 0 22px rgba(0,212,255,.5)}
+  .stat-v{font-size:32px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 18px rgba(0,255,157,.8)}
+  .stat-l{font-size:12px;color:#7de5ff;margin-bottom:6px}
+  .box{background:linear-gradient(135deg,rgba(20,0,30,.7),rgba(30,0,40,.8));border:1.5px solid rgba(191,0,255,.4);border-radius:20px;padding:16px;margin-bottom:14px}
+  .box-title{text-align:center;font-size:13.5px;color:#bf00ff;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(191,0,255,.25)}
+  label{display:block;font-size:12px;color:#e0b4ff;margin-bottom:6px;font-weight:bold}
+  textarea{width:100%;background:rgba(10,0,15,.9);color:#e2e8f0;border:1.5px solid rgba(191,0,255,.4);border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;margin-bottom:12px;min-height:100px;resize:vertical;line-height:1.8}
+  textarea:focus{outline:none;border-color:#bf00ff;box-shadow:0 0 15px rgba(191,0,255,.5)}
+  .submit-btn{width:100%;background:linear-gradient(135deg,#bf00ff,#7700cc);color:#fff;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(191,0,255,.7)}
+  .submit-btn:active{transform:scale(.97)}
+  .hist{padding:11px;border-bottom:1px dashed rgba(191,0,255,.2);font-size:12px}
+  .hist:last-child{border:none}
+  .hist-msg{color:#cbd5e1;margin-bottom:6px;line-height:1.7;font-size:12px}
+  .hist-meta{display:flex;gap:12px;font-size:10.5px;color:#6b8f80;flex-wrap:wrap}
+  .hist-meta b{color:#00ff9d}
+  .badge{padding:2px 8px;border-radius:7px;font-size:10px;font-weight:900}
+  .b-done{background:rgba(0,255,157,.2);color:#00ff9d;border:1px solid #00ff9d}
+  .b-pend{background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid #fbbf24}
+  .empty{text-align:center;color:#6b8f80;padding:26px 0;font-size:12.5px}
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
+  .nav-item .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+  .nav-item.active{background:linear-gradient(135deg,rgba(191,0,255,.15),rgba(0,212,255,.06));box-shadow:0 0 18px rgba(191,0,255,.4)}
+  .nav-item.active .ic{filter:none;color:#bf00ff;text-shadow:0 0 12px #bf00ff}
+  .nav-item.active span:last-child{color:#bf00ff;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/ai-manager">→ مدیر AI</a>
+
+<div class="frame">
+  <div class="page-title">📢 تبلیغات ربات</div>
+
+  <div class="stat-card">
+    <div class="stat-l">👥 ممبران ربات شما</div>
+    <div class="stat-v">{{ total_members }}</div>
+  </div>
+
+  <div class="box">
+    <div class="box-title">✍️ تبلیغ جدید</div>
+    <form method="POST">
+      <label>💬 متن تبلیغ</label>
+      <textarea name="message" placeholder="مثلاً: به کانال ما بپیوندید..." required></textarea>
+      <button class="submit-btn" type="submit">📤 افزودن به صف</button>
+    </form>
+  </div>
+
+  <div class="box">
+    <div class="box-title">📜 تاریخچه</div>
+    {% if history %}
+      {% for h in history %}
+        <div class="hist">
+          <div class="hist-msg">{{ h[1][:80] }}{% if h[1]|length > 80 %}...{% endif %}</div>
+          <div class="hist-meta">
+            {% if h[4] == 'done' %}<span class="badge b-done">✅ ارسال شد</span>
+            {% else %}<span class="badge b-pend">⏳ صف</span>{% endif %}
+            <span>✅ <b>{{ h[2] }}</b></span>
+            <span>❌ <b>{{ h[3] }}</b></span>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">📭 هنوز تبلیغی نفرستادی</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/ai-manager"><span class="ic">🤖</span><span>مدیر AI</span></a>
+    <a class="nav-item active" href="/panel/bot-ads"><span class="ic">📢</span><span>تبلیغات</span></a>
+    <a class="nav-item" href="/panel/dashboard"><span class="ic">🏠</span><span>پنل</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

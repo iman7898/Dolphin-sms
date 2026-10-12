@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>امتیاز من</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(255,215,0,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(255,215,0,.15);color:#ffd700;border:1px solid #ffd700;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #ffd700;border-radius:26px;padding:18px 14px;background:rgba(30,20,0,.35)}
+.pt{text-align:center;font-size:20px;font-weight:900;color:#ffd700;margin:0 0 16px;text-shadow:0 0 14px rgba(255,215,0,.8)}
+.card{background:rgba(0,10,8,.6);border:1.5px solid rgba(255,215,0,.4);border-radius:18px;padding:20px;text-align:center;margin-bottom:14px}
+.tier{font-size:60px;line-height:1;margin-bottom:10px;filter:drop-shadow(0 0 15px rgba(255,215,0,.8))}
+.pts{font-size:48px;font-weight:900;color:#ffd700;direction:ltr;text-shadow:0 0 20px rgba(255,215,0,.9)}
+.lbl{font-size:13px;color:#ffe9a8;margin-top:8px}
+.info{background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.3);border-radius:12px;padding:12px;font-size:12px;color:#7dfcc7;line-height:1.9;margin-bottom:10px}
+.info b{color:#00ff9d}
+
+
+
+
+
+
+</style></head><body>
+<a class="back-btn" href="/customer/dashboard">→ داشبورد</a>
+<div class="frame">
+<div class="pt">🏆 امتیاز من</div>
+
+<div class="card">
+<div class="tier">
+{% if points.tier == 'diamond' %}💎
+{% elif points.tier == 'gold' %}🥇
+{% elif points.tier == 'silver' %}🥈
+{% else %}🥉{% endif %}
+</div>
+<div class="pts">{{ points.points }}</div>
+<div class="lbl">⭐ امتیاز فعلی</div>
+</div>
+
+<div class="info">
+<b>📊 وضعیت:</b><br>
+🏅 سطح: {% if points.tier == 'diamond' %}الماس{% elif points.tier == 'gold' %}طلا{% elif points.tier == 'silver' %}نقره{% else %}برنز{% endif %}<br>
+📋 تعداد سفارش‌ها: <b>{{ orders }}</b><br><br>
+<b>💡 چطور امتیاز بگیرم؟</b><br>
+• هر سفارش: ۱۰ امتیاز<br>
+• دعوت دوستان: ۵۰ امتیاز<br>
+• خریدهای بیشتر: امتیاز بیشتر
+</div>
+
+</div>
+{% include "_global_bg.html" %}
+{% with active="profile" %}{% include "_customer_nav.html" %}{% endwith %}
+</body></html>

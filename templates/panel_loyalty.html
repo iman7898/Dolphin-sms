@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎁 باشگاه مشتریان</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(255,215,0,.12),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}}
+
+  /* کارت امتیاز */
+  .points-card{background:linear-gradient(135deg,rgba(0,25,40,.95),rgba(0,15,30,.98));border:2px solid #00d4ff;border-radius:20px;padding:22px 16px;text-align:center;margin-bottom:16px;box-shadow:0 0 25px rgba(0,212,255,.55);position:relative;overflow:hidden;animation:bp 4s ease-in-out infinite}
+  @keyframes bp{0%,100%{box-shadow:0 0 25px rgba(0,212,255,.55),inset 0 0 20px rgba(0,212,255,.08)}50%{box-shadow:0 0 38px rgba(0,212,255,.9),inset 0 0 28px rgba(0,212,255,.16)}}
+  .tier-badge{font-size:52px;line-height:1;filter:drop-shadow(0 0 20px currentColor);animation:crownFloat 3s ease-in-out infinite;display:inline-block}
+  @keyframes crownFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+  .points{font-size:44px;font-weight:900;color:#00ff9d;text-shadow:0 0 22px rgba(0,255,157,.95);direction:ltr;margin-top:10px;animation:beat 3s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .points-lbl{font-size:13px;color:#7de5ff;margin-top:4px}
+  .tier-name{font-size:16px;font-weight:900;margin-top:14px;padding-top:14px;border-top:1px solid rgba(0,212,255,.25)}
+
+  /* پیشرفت */
+  .progress-box{margin-top:16px}
+  .progress-bar{height:14px;background:rgba(0,10,8,.9);border-radius:7px;overflow:hidden;border:1px solid rgba(0,255,157,.4)}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#00ff9d,#00d4ff);border-radius:7px;box-shadow:0 0 15px rgba(0,255,157,.7);transition:width 1s ease-out}
+  .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:#7dfcc7;margin-top:6px}
+
+  /* ردیف‌ها */
+  .row-card{background:linear-gradient(135deg,rgba(0,25,20,.85),rgba(0,15,10,.9));border:1.5px solid rgba(0,255,157,.3);border-radius:16px;padding:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .row-label{font-size:12px;color:#7dfcc7}
+  .row-val{font-size:18px;font-weight:900;color:#00ff9d;text-shadow:0 0 12px rgba(0,255,157,.7);direction:ltr}
+
+  /* دکمه */
+  .redeem-btn{width:100%;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#001a12;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 25px rgba(255,215,0,.7);transition:.3s;animation:shine 3s ease-in-out infinite;margin-top:10px}
+  @keyframes shine{0%,100%{box-shadow:0 0 25px rgba(255,215,0,.7)}50%{box-shadow:0 0 45px rgba(255,215,0,1)}}
+  .redeem-btn:active{transform:scale(.98)}
+  .redeem-btn:disabled{background:rgba(148,163,184,.3);color:#6b8f80;box-shadow:none;cursor:not-allowed;animation:none}
+
+  /* بج ۲x */
+  .double-badge{background:linear-gradient(135deg,#ff2e63,#bf00ff);color:#fff;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:900;text-align:center;margin-bottom:14px;box-shadow:0 0 20px rgba(255,46,99,.7);animation:bounce 2s ease-in-out infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:16px;box-shadow:0 0 15px rgba(0,255,157,.15);margin-bottom:14px}
+  .box-title{text-align:center;font-size:14px;color:#00ff9d;margin-bottom:14px;text-shadow:0 0 10px rgba(0,255,157,.6);padding-bottom:12px;border-bottom:1px solid rgba(0,255,157,.2)}
+
+  .log-item{padding:10px 4px;border-bottom:1px dashed rgba(0,255,157,.2);display:flex;justify-content:space-between;gap:10px;font-size:12px}
+  .log-item:last-child{border:none}
+  .log-note{color:#7dfcc7}
+  .log-pts{font-weight:900;direction:ltr}
+  .log-pts.plus{color:#00ff9d}
+  .log-pts.minus{color:#ff4d6d}
+  .log-date{font-size:10px;color:#6b8f80;margin-top:3px}
+  .empty{color:#6b8f80;text-align:center;padding:24px 0;font-size:12px}
+
+  .birthday-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
+  .birthday-form input{background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:10px;padding:11px;font-family:inherit;font-size:13px;direction:ltr;text-align:center}
+  .birthday-form input:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+  .birthday-form button{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:10px;padding:11px 16px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 0 15px rgba(0,255,157,.6)}
+
+  /* نوار پایین */
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/dashboard">→ داشبورد</a>
+
+<div class="frame">
+
+  {% if double_day %}
+  <div class="double-badge">🎉 امروز امتیاز ۲ برابر! (پنجشنبه/جمعه)</div>
+  {% endif %}
+
+  <div class="points-card">
+    <div class="tier-badge" style="color:{% if l.tier == 'diamond' %}#00d4ff{% elif l.tier == 'gold' %}#ffd700{% elif l.tier == 'silver' %}#e8e8e8{% else %}#cd7f32{% endif %}">
+      {% if l.tier == 'diamond' %}💎{% elif l.tier == 'gold' %}🥇{% elif l.tier == 'silver' %}🥈{% else %}🥉{% endif %}
+    </div>
+    <div class="points">{{ "{:,}".format(l.points) }}</div>
+    <div class="points-lbl">امتیاز فعلی</div>
+    <div class="tier-name" style="color:{% if l.tier == 'diamond' %}#00d4ff{% elif l.tier == 'gold' %}#ffd700{% elif l.tier == 'silver' %}#e8e8e8{% else %}#cd7f32{% endif %}">
+      سطح شما: {% if l.tier == 'diamond' %}💎 الماس{% elif l.tier == 'gold' %}🥇 طلا{% elif l.tier == 'silver' %}🥈 نقره{% else %}🥉 برنز{% endif %}
+    </div>
+
+    <div class="progress-box">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:{{ progress_pct }}%"></div>
+      </div>
+      <div class="progress-meta">
+        <span>{{ progress_pct }}/۱۰۰</span>
+        <span>{{ next_reward }} تا مونده تا ۱۰ پیامک رایگان</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-card">
+    <span class="row-label">📨 پیامک رایگان</span>
+    <span class="row-val">{{ l.free_sms }}</span>
+  </div>
+
+  <div class="row-card">
+    <span class="row-label">🏆 مجموع امتیاز (کل)</span>
+    <span class="row-val">{{ "{:,}".format(l.total_points) }}</span>
+  </div>
+
+  {% if l.points >= 100 %}
+  <form method="POST" action="/panel/loyalty/redeem">
+    <button class="redeem-btn" type="submit">🎁 دریافت ۱۰ پیامک رایگان (۱۰۰ امتیاز)</button>
+  </form>
+  {% else %}
+  <button class="redeem-btn" type="button" disabled>🎁 ۱۰۰ امتیاز لازم داری ({{ 100 - l.points }} تا مونده)</button>
+  {% endif %}
+
+  <div class="birthday-box {% if l.birthday %}locked{% endif %}">
+    {% if l.birthday %}
+      <!-- حالت قفل شده -->
+      <div class="bd-title">🎂 تاریخ تولد</div>
+      <div class="bd-locked-msg">
+        <span class="bd-locked-ic">🔒</span>
+        <div class="bd-locked-txt">شما تولد خود را تنظیم کردید</div>
+        <div class="bd-locked-date">🎂 {{ l.birthday }}</div>
+        <div class="bd-locked-sub">تاریخ تولد یک بار برای همیشه تنظیم می‌شود و قابل تغییر نیست</div>
+      </div>
+    {% else %}
+      <!-- حالت انتخاب -->
+      <div class="bd-title">🎂 تاریخ تولدت رو ثبت کن</div>
+      <div class="bd-sub">توی روز تولدت <b>۱۰۰ امتیاز + ۱۰۰,۰۰۰ ریال</b> هدیه می‌گیری 🎉</div>
+
+      <form method="POST" action="/panel/loyalty/birthday" id="bdForm">
+        <input type="hidden" name="birthday" id="bdInput" value="">
+
+        <div class="bd-picker">
+          <div class="bd-col">
+            <label>🌙 ماه تولد</label>
+            <div class="custom-select" id="monthSelect">
+              <button type="button" class="cs-trigger" id="monthTrigger">
+                <span class="cs-value" id="monthValue">انتخاب ماه</span>
+                <span class="cs-arrow">▼</span>
+              </button>
+              <div class="cs-options" id="monthOptions">
+                <div class="cs-option" data-value="01"><span>🌸</span>فروردین</div>
+                <div class="cs-option" data-value="02"><span>🌷</span>اردیبهشت</div>
+                <div class="cs-option" data-value="03"><span>🌻</span>خرداد</div>
+                <div class="cs-option" data-value="04"><span>☀️</span>تیر</div>
+                <div class="cs-option" data-value="05"><span>🏖️</span>مرداد</div>
+                <div class="cs-option" data-value="06"><span>🍂</span>شهریور</div>
+                <div class="cs-option" data-value="07"><span>🍁</span>مهر</div>
+                <div class="cs-option" data-value="08"><span>🌧️</span>آبان</div>
+                <div class="cs-option" data-value="09"><span>❄️</span>آذر</div>
+                <div class="cs-option" data-value="10"><span>🌨️</span>دی</div>
+                <div class="cs-option" data-value="11"><span>⛄</span>بهمن</div>
+                <div class="cs-option" data-value="12"><span>🌱</span>اسفند</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bd-col">
+            <label>📅 روز تولد</label>
+            <div class="custom-select" id="daySelect">
+              <button type="button" class="cs-trigger" id="dayTrigger">
+                <span class="cs-value" id="dayValue">انتخاب روز</span>
+                <span class="cs-arrow">▼</span>
+              </button>
+              <div class="cs-options" id="dayOptions"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bd-preview" id="bdPreview">
+          <span class="bd-preview-ic">🎁</span>
+          <span class="bd-preview-txt">تاریخ تولدت انتخاب کن</span>
+        </div>
+
+        <button class="bd-save" type="submit">💾 ذخیره تاریخ تولد (غیرقابل تغییر)</button>
+      </form>
+
+      <div class="bd-warn">⚠️ توجه: بعد از ذخیره، دیگه نمی‌تونی تاریخ رو تغییر بدی</div>
+    {% endif %}
+  </div>
+
+  <style>
+    .birthday-box{
+      background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,100,150,.06));
+      border:2px solid #ffd700;border-radius:22px;padding:20px 16px;
+      box-shadow:0 0 25px rgba(255,215,0,.45),inset 0 0 18px rgba(255,215,0,.08);
+      margin-top:16px;margin-bottom:14px;position:relative;
+      animation:bdPulse 4s ease-in-out infinite;
+    }
+    @keyframes bdPulse{
+      0%,100%{box-shadow:0 0 25px rgba(255,215,0,.45),inset 0 0 18px rgba(255,215,0,.08)}
+      50%{box-shadow:0 0 40px rgba(255,215,0,.75),inset 0 0 25px rgba(255,215,0,.15)}
+    }
+
+    /* ===== حالت قفل شده ===== */
+    .birthday-box.locked{
+      background:linear-gradient(135deg,rgba(60,60,60,.4),rgba(30,30,30,.35));
+      border:2px solid rgba(148,163,184,.4);
+      box-shadow:0 0 20px rgba(100,100,100,.3),inset 0 0 18px rgba(80,80,80,.1);
+      animation:none;
+      opacity:.9;
+    }
+    .birthday-box.locked .bd-title{
+      color:#94a3b8;
+      text-shadow:0 0 10px rgba(148,163,184,.4);
+    }
+    .birthday-box.locked .bd-title::before,
+    .birthday-box.locked .bd-title::after{
+      content:"🔒";animation:none;
+    }
+    .bd-locked-msg{
+      text-align:center;padding:14px 8px;
+      background:rgba(0,0,0,.3);border-radius:16px;
+      border:1.5px dashed rgba(148,163,184,.4);
+    }
+    .bd-locked-ic{
+      font-size:42px;display:block;margin-bottom:10px;
+      filter:grayscale(.5) brightness(1.1);
+      animation:lockShake 4s ease-in-out infinite;
+    }
+    @keyframes lockShake{
+      0%,90%,100%{transform:rotate(0)}
+      92%{transform:rotate(-8deg)}
+      94%{transform:rotate(8deg)}
+      96%{transform:rotate(-5deg)}
+      98%{transform:rotate(5deg)}
+    }
+    .bd-locked-txt{
+      font-size:14px;font-weight:900;color:#cbd5e1;
+      text-shadow:0 0 8px rgba(148,163,184,.5);
+      margin-bottom:12px;
+    }
+    .bd-locked-date{
+      font-size:22px;font-weight:900;color:#94a3b8;
+      direction:ltr;letter-spacing:2px;
+      text-shadow:0 0 12px rgba(148,163,184,.6);
+      padding:10px;background:rgba(0,0,0,.4);border-radius:12px;
+      border:1px solid rgba(148,163,184,.3);
+      margin-bottom:10px;
+      font-family:monospace;
+    }
+    .bd-locked-sub{
+      font-size:10.5px;color:#64748b;line-height:1.7;
+    }
+
+    /* ===== حالت انتخاب ===== */
+    .bd-title{
+      text-align:center;font-size:15px;font-weight:900;color:#ffd700;
+      text-shadow:0 0 14px rgba(255,215,0,.85);margin-bottom:6px;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .bd-title::before,.bd-title::after{
+      content:"🎉";font-size:14px;animation:crownFloat 3s ease-in-out infinite;
+    }
+    @keyframes crownFloat{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-5px) rotate(8deg)}}
+    .bd-sub{
+      text-align:center;font-size:11.5px;color:#ffe9a8;margin-bottom:16px;line-height:1.7;
+    }
+    .bd-sub b{color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.7)}
+
+    .bd-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .bd-col label{
+      display:block;font-size:11.5px;color:#ffd700;margin-bottom:6px;
+      font-weight:bold;text-align:center;text-shadow:0 0 8px rgba(255,215,0,.5);
+    }
+
+    .custom-select{position:relative}
+    .cs-trigger{
+      width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;
+      border:2px solid rgba(255,215,0,.4);border-radius:12px;
+      padding:12px 14px;font-family:inherit;font-size:13.5px;
+      font-weight:bold;cursor:pointer;transition:.25s;
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      box-shadow:0 0 12px rgba(255,215,0,.2);
+    }
+    .cs-trigger:hover{border-color:#ffd700;box-shadow:0 0 20px rgba(255,215,0,.5)}
+    .cs-trigger.open{border-color:#ffd700;box-shadow:0 0 22px rgba(255,215,0,.7);background:rgba(255,215,0,.06)}
+    .cs-value{flex:1;text-align:right;color:#ffe9a8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .cs-value.selected{color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.7)}
+    .cs-arrow{color:#ffd700;font-size:11px;transition:.3s;text-shadow:0 0 8px rgba(255,215,0,.7)}
+    .cs-trigger.open .cs-arrow{transform:rotate(180deg)}
+
+    .cs-options{
+      position:absolute;top:calc(100% + 6px);left:0;right:0;
+      background:linear-gradient(135deg,rgba(20,15,0,.98),rgba(10,8,0,.99));
+      border:2px solid #ffd700;border-radius:14px;
+      max-height:240px;overflow-y:auto;z-index:50;
+      box-shadow:0 0 30px rgba(255,215,0,.7),0 10px 40px rgba(0,0,0,.7);
+      opacity:0;transform:translateY(-10px) scale(.98);pointer-events:none;
+      transition:.25s cubic-bezier(.2,.8,.2,1);
+    }
+    .cs-options.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+    .cs-options::-webkit-scrollbar{width:6px}
+    .cs-options::-webkit-scrollbar-track{background:rgba(255,215,0,.05)}
+    .cs-options::-webkit-scrollbar-thumb{background:#ffd700;border-radius:3px}
+    .cs-option{
+      padding:11px 14px;font-size:13px;color:#e2e8f0;cursor:pointer;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;transition:.2s;border-bottom:1px solid rgba(255,215,0,.08);
+      font-weight:500;
+    }
+    .cs-option:last-child{border-bottom:none}
+    .cs-option:hover{background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(255,140,0,.1));color:#ffd700;padding-right:18px}
+    .cs-option.selected{
+      background:linear-gradient(90deg,rgba(255,215,0,.25),rgba(255,140,0,.15));
+      color:#ffd700;font-weight:900;text-shadow:0 0 10px rgba(255,215,0,.6);
+    }
+    .cs-option.selected::after{content:"✓";color:#ffd700;font-weight:900;font-size:14px;text-shadow:0 0 10px rgba(255,215,0,.9)}
+
+    .bd-preview{
+      background:rgba(0,10,8,.7);border:1.5px dashed rgba(255,215,0,.4);
+      border-radius:14px;padding:12px;text-align:center;
+      font-size:13px;color:#ffe9a8;margin-bottom:14px;transition:.3s;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .bd-preview.active{
+      border-style:solid;border-color:#ffd700;
+      background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.08));
+      color:#ffd700;font-weight:900;
+      box-shadow:0 0 18px rgba(255,215,0,.5);
+    }
+    .bd-preview-ic{font-size:18px;animation:crownFloat 2s ease-in-out infinite}
+
+    .bd-save{
+      width:100%;background:linear-gradient(135deg,#ffd700,#ff8c00);
+      color:#001a12;border:none;border-radius:14px;padding:15px;
+      font-family:inherit;font-size:14px;font-weight:900;
+      cursor:pointer;box-shadow:0 0 22px rgba(255,215,0,.7);
+      transition:.3s;position:relative;overflow:hidden;
+    }
+    .bd-save:active{transform:scale(.98);box-shadow:0 0 35px rgba(255,215,0,1)}
+    .bd-save::before{
+      content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+      animation:bdSweep 3s ease-in-out infinite;
+    }
+    @keyframes bdSweep{0%{left:-100%}50%,100%{left:100%}}
+
+    .bd-warn{
+      text-align:center;font-size:10.5px;color:#ffb4b4;
+      margin-top:10px;padding:8px;background:rgba(255,77,109,.08);
+      border-radius:10px;border:1px solid rgba(255,77,109,.3);
+    }
+  </style>
+
+  <script>
+    (function(){
+      const bdForm = document.getElementById('bdForm');
+      if (!bdForm) return; // حالت قفل شده — اسکریپت لازم نیست
+
+      const bdInput = document.getElementById('bdInput');
+      const preview = document.getElementById('bdPreview');
+      const previewTxt = preview.querySelector('.bd-preview-txt');
+
+      const monthNames = {
+        '01':'فروردین','02':'اردیبهشت','03':'خرداد','04':'تیر',
+        '05':'مرداد','06':'شهریور','07':'مهر','08':'آبان',
+        '09':'آذر','10':'دی','11':'بهمن','12':'اسفند'
+      };
+
+      let selectedMonth = '';
+      let selectedDay = '';
+
+      const monthTrigger = document.getElementById('monthTrigger');
+      const monthValue = document.getElementById('monthValue');
+      const monthOptions = document.getElementById('monthOptions');
+      const monthEl = document.getElementById('monthSelect');
+
+      monthTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeAll(monthEl);
+        monthEl.classList.toggle('open');
+        monthTrigger.classList.toggle('open');
+        monthOptions.classList.toggle('open');
+      });
+
+      monthOptions.querySelectorAll('.cs-option').forEach(o => {
+        o.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectedMonth = o.dataset.value;
+          monthValue.textContent = o.textContent.trim();
+          monthValue.classList.add('selected');
+          monthOptions.querySelectorAll('.cs-option').forEach(x => x.classList.remove('selected'));
+          o.classList.add('selected');
+          closeAll(monthEl);
+          fillDays();
+          updatePreview();
+        });
+      });
+
+      const dayTrigger = document.getElementById('dayTrigger');
+      const dayValue = document.getElementById('dayValue');
+      const dayOptions = document.getElementById('dayOptions');
+      const dayEl = document.getElementById('daySelect');
+
+      dayTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!selectedMonth){
+          previewTxt.textContent = '⚠️ اول ماه رو انتخاب کن!';
+          preview.style.borderColor = '#ff4d6d';
+          preview.style.color = '#ff4d6d';
+          setTimeout(()=>{preview.style.borderColor='';preview.style.color='';}, 2000);
+          return;
+        }
+        closeAll(dayEl);
+        dayEl.classList.toggle('open');
+        dayTrigger.classList.toggle('open');
+        dayOptions.classList.toggle('open');
+      });
+
+      function fillDays(){
+        let n = 31;
+        if (selectedMonth === '12') n = 29;
+        else if (['07','08','09','10','11'].includes(selectedMonth)) n = 30;
+
+        dayOptions.innerHTML = '';
+        for (let i=1; i<=n; i++){
+          const v = String(i).padStart(2,'0');
+          const o = document.createElement('div');
+          o.className = 'cs-option';
+          o.dataset.value = v;
+          o.innerHTML = '<span>' + (i%2===0 ? '📅' : '🎂') + '</span>' + i;
+          o.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedDay = v;
+            dayValue.textContent = i + ' ' + monthNames[selectedMonth];
+            dayValue.classList.add('selected');
+            dayOptions.querySelectorAll('.cs-option').forEach(x => x.classList.remove('selected'));
+            o.classList.add('selected');
+            closeAll(dayEl);
+            updatePreview();
+          });
+          dayOptions.appendChild(o);
+        }
+      }
+
+      function updatePreview(){
+        if (selectedMonth && selectedDay){
+          bdInput.value = selectedMonth + '-' + selectedDay;
+          previewTxt.textContent = selectedDay + ' ' + monthNames[selectedMonth];
+          preview.classList.add('active');
+        } else {
+          preview.classList.remove('active');
+          previewTxt.textContent = 'تاریخ تولدت انتخاب کن';
+        }
+      }
+
+      function closeAll(el){
+        document.querySelectorAll('.custom-select').forEach(x => {
+          if (x !== el){
+            x.classList.remove('open');
+            x.querySelector('.cs-trigger').classList.remove('open');
+            x.querySelector('.cs-options').classList.remove('open');
+          }
+        });
+      }
+
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.custom-select').forEach(x => {
+          x.classList.remove('open');
+          x.querySelector('.cs-trigger').classList.remove('open');
+          x.querySelector('.cs-options').classList.remove('open');
+        });
+      });
+
+      bdForm.addEventListener('submit', (e) => {
+        if (!selectedMonth || !selectedDay){
+          e.preventDefault();
+          previewTxt.textContent = '⚠️ ماه و روز رو انتخاب کن!';
+          preview.style.borderColor = '#ff4d6d';
+          preview.style.color = '#ff4d6d';
+          setTimeout(() => {
+            preview.style.borderColor = '';
+            preview.style.color = '';
+          }, 2000);
+          return;
+        }
+        if (!confirm('⚠️ توجه!
+
+تاریخ تولد یک بار برای همیشه ثبت می‌شود و قابل تغییر نیست.
+
+مطمئنی؟')) {
+          e.preventDefault();
+        }
+      });
+    })();
+  </script><style>
+    .birthday-box{
+      background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,100,150,.06));
+      border:2px solid #ffd700;border-radius:22px;padding:20px 16px;
+      box-shadow:0 0 25px rgba(255,215,0,.45),inset 0 0 18px rgba(255,215,0,.08);
+      margin-top:16px;margin-bottom:14px;position:relative;
+      animation:bdPulse 4s ease-in-out infinite;
+    }
+    @keyframes bdPulse{
+      0%,100%{box-shadow:0 0 25px rgba(255,215,0,.45),inset 0 0 18px rgba(255,215,0,.08)}
+      50%{box-shadow:0 0 40px rgba(255,215,0,.75),inset 0 0 25px rgba(255,215,0,.15)}
+    }
+    .bd-title{
+      text-align:center;font-size:15px;font-weight:900;color:#ffd700;
+      text-shadow:0 0 14px rgba(255,215,0,.85);margin-bottom:6px;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .bd-title::before,.bd-title::after{
+      content:"🎉";font-size:14px;animation:crownFloat 3s ease-in-out infinite;
+    }
+    @keyframes crownFloat{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-5px) rotate(8deg)}}
+    .bd-sub{
+      text-align:center;font-size:11.5px;color:#ffe9a8;margin-bottom:16px;line-height:1.7;
+    }
+    .bd-sub b{color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.7)}
+
+    .bd-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .bd-col label{
+      display:block;font-size:11.5px;color:#ffd700;margin-bottom:6px;
+      font-weight:bold;text-align:center;text-shadow:0 0 8px rgba(255,215,0,.5);
+    }
+
+    /* ===== Custom Select ===== */
+    .custom-select{position:relative}
+    .cs-trigger{
+      width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;
+      border:2px solid rgba(255,215,0,.4);border-radius:12px;
+      padding:12px 14px;font-family:inherit;font-size:13.5px;
+      font-weight:bold;cursor:pointer;transition:.25s;
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      box-shadow:0 0 12px rgba(255,215,0,.2);
+    }
+    .cs-trigger:hover{
+      border-color:#ffd700;
+      box-shadow:0 0 20px rgba(255,215,0,.5);
+    }
+    .cs-trigger.open{
+      border-color:#ffd700;
+      box-shadow:0 0 22px rgba(255,215,0,.7);
+      background:rgba(255,215,0,.06);
+    }
+    .cs-value{
+      flex:1;text-align:right;color:#ffe9a8;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .cs-value.selected{
+      color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.7);
+    }
+    .cs-arrow{
+      color:#ffd700;font-size:11px;transition:.3s;
+      text-shadow:0 0 8px rgba(255,215,0,.7);
+    }
+    .cs-trigger.open .cs-arrow{transform:rotate(180deg)}
+
+    .cs-options{
+      position:absolute;top:calc(100% + 6px);left:0;right:0;
+      background:linear-gradient(135deg,rgba(20,15,0,.98),rgba(10,8,0,.99));
+      border:2px solid #ffd700;border-radius:14px;
+      max-height:240px;overflow-y:auto;z-index:50;
+      box-shadow:0 0 30px rgba(255,215,0,.7),0 10px 40px rgba(0,0,0,.7);
+      opacity:0;transform:translateY(-10px) scale(.98);pointer-events:none;
+      transition:.25s cubic-bezier(.2,.8,.2,1);
+    }
+    .cs-options.open{
+      opacity:1;transform:translateY(0) scale(1);pointer-events:auto;
+    }
+    .cs-options::-webkit-scrollbar{width:6px}
+    .cs-options::-webkit-scrollbar-track{background:rgba(255,215,0,.05)}
+    .cs-options::-webkit-scrollbar-thumb{background:#ffd700;border-radius:3px}
+
+    .cs-option{
+      padding:11px 14px;font-size:13px;color:#e2e8f0;cursor:pointer;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;transition:.2s;border-bottom:1px solid rgba(255,215,0,.08);
+      font-weight:500;
+    }
+    .cs-option:last-child{border-bottom:none}
+    .cs-option:hover{
+      background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(255,140,0,.1));
+      color:#ffd700;
+      padding-right:18px;
+    }
+    .cs-option.selected{
+      background:linear-gradient(90deg,rgba(255,215,0,.25),rgba(255,140,0,.15));
+      color:#ffd700;font-weight:900;
+      text-shadow:0 0 10px rgba(255,215,0,.6);
+    }
+    .cs-option.selected::after{
+      content:"✓";color:#ffd700;font-weight:900;font-size:14px;
+      text-shadow:0 0 10px rgba(255,215,0,.9);
+    }
+    .cs-emoji{
+      font-size:16px;margin-left:4px;filter:drop-shadow(0 0 6px rgba(255,215,0,.5));
+    }
+
+    .bd-preview{
+      background:rgba(0,10,8,.7);border:1.5px dashed rgba(255,215,0,.4);
+      border-radius:14px;padding:12px;text-align:center;
+      font-size:13px;color:#ffe9a8;margin-bottom:14px;transition:.3s;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .bd-preview.active{
+      border-style:solid;border-color:#ffd700;
+      background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.08));
+      color:#ffd700;font-weight:900;
+      box-shadow:0 0 18px rgba(255,215,0,.5);
+    }
+    .bd-preview-ic{font-size:18px;animation:crownFloat 2s ease-in-out infinite}
+
+    .bd-save{
+      width:100%;background:linear-gradient(135deg,#ffd700,#ff8c00);
+      color:#001a12;border:none;border-radius:14px;padding:15px;
+      font-family:inherit;font-size:14px;font-weight:900;
+      cursor:pointer;box-shadow:0 0 22px rgba(255,215,0,.7);
+      transition:.3s;position:relative;overflow:hidden;
+    }
+    .bd-save:active{transform:scale(.98);box-shadow:0 0 35px rgba(255,215,0,1)}
+    .bd-save::before{
+      content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+      animation:bdSweep 3s ease-in-out infinite;
+    }
+    @keyframes bdSweep{0%{left:-100%}50%,100%{left:100%}}
+
+    .bd-current{
+      text-align:center;font-size:11.5px;color:#a7f3d0;
+      margin-top:12px;padding:8px;background:rgba(0,255,157,.08);
+      border-radius:10px;border:1px solid rgba(0,255,157,.3);
+    }
+    .bd-current b{color:#00ff9d;text-shadow:0 0 8px rgba(0,255,157,.6)}
+  </style>
+
+  <script>
+    (function(){
+      const bdInput = document.getElementById('bdInput');
+      const preview = document.getElementById('bdPreview');
+      const previewTxt = preview.querySelector('.bd-preview-txt');
+      const form = document.getElementById('bdForm');
+
+      const monthNames = {
+        '01':'فروردین','02':'اردیبهشت','03':'خرداد','04':'تیر',
+        '05':'مرداد','06':'شهریور','07':'مهر','08':'آبان',
+        '09':'آذر','10':'دی','11':'بهمن','12':'اسفند'
+      };
+
+      let selectedMonth = '';
+      let selectedDay = '';
+
+      // ===== ماه =====
+      const monthTrigger = document.getElementById('monthTrigger');
+      const monthValue = document.getElementById('monthValue');
+      const monthOptions = document.getElementById('monthOptions');
+      const monthEl = document.getElementById('monthSelect');
+
+      monthTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeAll(monthEl);
+        monthEl.classList.toggle('open');
+        monthTrigger.classList.toggle('open');
+        monthOptions.classList.toggle('open');
+      });
+
+      monthOptions.querySelectorAll('.cs-option').forEach(o => {
+        o.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectedMonth = o.dataset.value;
+          monthValue.textContent = o.textContent.trim();
+          monthValue.classList.add('selected');
+          monthOptions.querySelectorAll('.cs-option').forEach(x => x.classList.remove('selected'));
+          o.classList.add('selected');
+          closeAll(monthEl);
+          fillDays();
+          updatePreview();
+        });
+      });
+
+      // ===== روز =====
+      const dayTrigger = document.getElementById('dayTrigger');
+      const dayValue = document.getElementById('dayValue');
+      const dayOptions = document.getElementById('dayOptions');
+      const dayEl = document.getElementById('daySelect');
+
+      dayTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!selectedMonth) {
+          previewTxt.textContent = '⚠️ اول ماه رو انتخاب کن!';
+          preview.classList.remove('active');
+          preview.style.borderColor = '#ff4d6d';
+          preview.style.color = '#ff4d6d';
+          setTimeout(()=>{preview.style.borderColor='';preview.style.color='';}, 2000);
+          return;
+        }
+        closeAll(dayEl);
+        dayEl.classList.toggle('open');
+        dayTrigger.classList.toggle('open');
+        dayOptions.classList.toggle('open');
+      });
+
+      function fillDays(){
+        let n = 31;
+        if (selectedMonth === '12') n = 29;
+        else if (['07','08','09','10','11'].includes(selectedMonth)) n = 30;
+
+        dayOptions.innerHTML = '';
+        for (let i=1; i<=n; i++){
+          const v = String(i).padStart(2,'0');
+          const o = document.createElement('div');
+          o.className = 'cs-option';
+          o.dataset.value = v;
+          o.innerHTML = '<span class="cs-emoji">' + (i%2===0 ? '📅' : '🎂') + '</span>' + i;
+          o.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedDay = v;
+            dayValue.textContent = i + ' ' + monthNames[selectedMonth];
+            dayValue.classList.add('selected');
+            dayOptions.querySelectorAll('.cs-option').forEach(x => x.classList.remove('selected'));
+            o.classList.add('selected');
+            closeAll(dayEl);
+            updatePreview();
+          });
+          dayOptions.appendChild(o);
+        }
+      }
+
+      function updatePreview(){
+        if (selectedMonth && selectedDay){
+          bdInput.value = selectedMonth + '-' + selectedDay;
+          previewTxt.textContent = selectedDay + ' ' + monthNames[selectedMonth];
+          preview.classList.add('active');
+        } else {
+          preview.classList.remove('active');
+          previewTxt.textContent = 'تاریخ تولدت انتخاب کن';
+        }
+      }
+
+      function closeAll(el){
+        document.querySelectorAll('.custom-select').forEach(x => {
+          if (x !== el){
+            x.classList.remove('open');
+            x.querySelector('.cs-trigger').classList.remove('open');
+            x.querySelector('.cs-options').classList.remove('open');
+          }
+        });
+      }
+
+      // بستن با کلیک بیرون
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.custom-select').forEach(x => {
+          x.classList.remove('open');
+          x.querySelector('.cs-trigger').classList.remove('open');
+          x.querySelector('.cs-options').classList.remove('open');
+        });
+      });
+
+      // بارگذاری مقدار فعلی
+      const cur = bdInput.value;
+      if (cur){
+        const parts = cur.split('-');
+        let m = '', d = '';
+        if (parts.length === 2){ m = parts[0]; d = parts[1]; }
+        else if (parts.length === 3){ m = parts[1]; d = parts[2]; }
+        if (m){
+          const mOpt = monthOptions.querySelector(`.cs-option[data-value="${m}"]`);
+          if (mOpt){
+            selectedMonth = m;
+            monthValue.textContent = mOpt.textContent.trim();
+            monthValue.classList.add('selected');
+            mOpt.classList.add('selected');
+            fillDays();
+            if (d){
+              setTimeout(() => {
+                const dOpt = dayOptions.querySelector(`.cs-option[data-value="${d}"]`);
+                if (dOpt){
+                  selectedDay = d;
+                  dayValue.textContent = parseInt(d) + ' ' + monthNames[m];
+                  dayValue.classList.add('selected');
+                  dOpt.classList.add('selected');
+                  updatePreview();
+                }
+              }, 20);
+            }
+          }
+        }
+      }
+
+      // اعتبارسنجی موقع ارسال
+      form.addEventListener('submit', (e) => {
+        if (!selectedMonth || !selectedDay){
+          e.preventDefault();
+          previewTxt.textContent = '⚠️ ماه و روز رو انتخاب کن!';
+          preview.classList.remove('active');
+          preview.style.borderColor = '#ff4d6d';
+          preview.style.color = '#ff4d6d';
+          setTimeout(() => {
+            preview.style.borderColor = '';
+            preview.style.color = '';
+          }, 2000);
+        }
+      });
+    })();
+  </script>
+
+  
+  <div class="box" style="margin-bottom:14px">
+    <div class="box-title">📊 نمودار امتیاز ۷ روز اخیر</div>
+    <div style="position:relative;height:200px;padding:6px">
+      <canvas id="loyaltyChart"></canvas>
+    </div>
+  </div>
+
+<div class="box">
+    <div class="box-title">📜 تاریخچه امتیازها</div>
+    {% if logs %}
+      {% for log in logs %}
+        <div class="log-item">
+          <div>
+            <div class="log-note">{{ log[2] or log[0] }}</div>
+            <div class="log-date">{{ log[3] }}</div>
+          </div>
+          <div class="log-pts {% if log[1] > 0 %}plus{% else %}minus{% endif %}">
+            {% if log[1] > 0 %}+{% endif %}{{ log[1] }}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">📭 هنوز امتیازی نداری — پیامک بفرست تا امتیاز بگیری!</div>
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+    <a class="nav-item" href="/panel/ai"><span class="ic">🤖</span><span>هوش مصنوعی</span></a>
+    <a class="nav-item" href="/panel/chat"><span class="ic">💬</span><span>چت</span></a>
+    <a class="nav-item active" href="/panel/loyalty"><span class="ic">🎁</span><span>وفاداری</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+<script src="/static/confetti.js"></script>
+<script>
+  // 🎉 اگه جایزه گرفتی، جشن بگیر
+  const url = new URL(window.location.href);
+  if (url.searchParams.get("redeemed") === "1" && window.confetti) {
+    setTimeout(() => window.confetti(), 200);
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  (function(){
+    const ctx = document.getElementById('loyaltyChart');
+    if (!ctx) return;
+
+    const labels = {{ chart_labels|tojson }};
+    const values = {{ chart_values|tojson }};
+
+    const grad = ctx.getContext('2d').createLinearGradient(0, 0, 0, 200);
+    grad.addColorStop(0, 'rgba(0, 255, 157, 0.55)');
+    grad.addColorStop(1, 'rgba(0, 255, 157, 0.02)');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'امتیاز',
+          data: values,
+          borderColor: '#00ff9d',
+          backgroundColor: grad,
+          borderWidth: 3,
+          pointBackgroundColor: '#00ff9d',
+          pointBorderColor: '#001a12',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.4,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(0, 20, 15, 0.95)',
+            borderColor: '#00ff9d',
+            borderWidth: 1,
+            titleColor: '#00ff9d',
+            bodyColor: '#e2e8f0',
+            titleFont: { family: 'Vazirmatn', size: 13 },
+            bodyFont: { family: 'Vazirmatn', size: 12 },
+            displayColors: false,
+            callbacks: {
+              label: function(item) { return '⭐ ' + item.parsed.y + ' امتیاز'; }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(0, 255, 157, 0.08)', drawBorder: false },
+            ticks: {
+              color: '#7dfcc7',
+              font: { family: 'Vazirmatn', size: 11 }
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(0, 255, 157, 0.08)', drawBorder: false },
+            ticks: {
+              color: '#7dfcc7',
+              font: { family: 'Vazirmatn', size: 11 },
+              precision: 0
+            }
+          }
+        }
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>خانه</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  padding:0 0 100px;background:#0a0a0f;overflow-x:hidden;}
+.stars{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.star{position:absolute;background:#00d4ff;border-radius:50%;
+  box-shadow:0 0 6px rgba(0,212,255,.9);
+  animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:.9;transform:scale(1.2)}}
+.header{background:linear-gradient(180deg,#0a1520,#0a0a0f);
+  padding:16px 16px 12px;position:sticky;top:0;z-index:100;
+  border-bottom:1.5px solid rgba(0,212,255,.3);
+  backdrop-filter:blur(15px);box-shadow:0 5px 25px rgba(0,212,255,.15);}
+.hi{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.hi-l{display:flex;align-items:center;gap:10px}
+.hi-av{width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#00d4ff,#0088cc);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  border:2px solid #00d4ff;
+  box-shadow:0 0 25px rgba(0,212,255,.8),0 0 0 4px rgba(0,212,255,.15);
+  animation:avPulse 3s ease-in-out infinite;}
+@keyframes avPulse{0%,100%{box-shadow:0 0 25px rgba(0,212,255,.8),0 0 0 4px rgba(0,212,255,.15)}50%{box-shadow:0 0 40px rgba(0,212,255,1),0 0 0 8px rgba(0,212,255,.1)}}
+.hi-g{font-size:11px;color:#7de5ff}
+.hi-n{font-size:15px;font-weight:900;color:#fff}
+.hi-pts{background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,140,0,.1));
+  border:1.5px solid #ffd700;border-radius:12px;padding:6px 12px;
+  display:flex;align-items:center;gap:6px;font-size:13px;font-weight:900;
+  color:#ffd700;box-shadow:0 0 20px rgba(255,215,0,.6);
+  animation:ptsGlow 2.5s ease-in-out infinite;}
+@keyframes ptsGlow{0%,100%{box-shadow:0 0 20px rgba(255,215,0,.6)}50%{box-shadow:0 0 35px rgba(255,215,0,1)}}
+.srch-wrap{position:relative}
+.srch{width:100%;background:rgba(0,212,255,.06);color:#fff;
+  border:1.5px solid rgba(0,212,255,.4);border-radius:14px;
+  padding:12px 42px 12px 14px;font-family:inherit;font-size:13.5px;transition:.4s;}
+.srch::placeholder{color:rgba(125,229,255,.55)}
+.srch:focus{outline:none;border-color:#00d4ff;
+  background:rgba(0,212,255,.12);
+  box-shadow:0 0 30px rgba(0,212,255,.7),inset 0 0 15px rgba(0,212,255,.1);}
+.srch-ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  font-size:16px;color:#00d4ff;pointer-events:none;
+  animation:searchSpin 3s ease-in-out infinite;}
+@keyframes searchSpin{0%,100%{transform:translateY(-50%) rotate(0) scale(1)}25%{transform:translateY(-50%) rotate(-15deg) scale(1.1)}75%{transform:translateY(-50%) rotate(15deg) scale(1.1)}}
+.sec{padding:16px 16px 8px;display:flex;justify-content:space-between;align-items:center}
+.sec-t{font-size:16px;font-weight:900;color:#fff;display:flex;align-items:center;gap:8px;
+  text-shadow:0 0 15px rgba(0,212,255,.6);}
+.sec-more{font-size:11.5px;color:#00d4ff;text-decoration:none;
+  background:rgba(0,212,255,.12);padding:5px 12px;border-radius:10px;
+  border:1px solid rgba(0,212,255,.4);font-weight:bold;
+  transition:.4s;box-shadow:0 0 10px rgba(0,212,255,.3);}
+.sec-more:hover{box-shadow:0 0 25px rgba(0,212,255,.8);transform:scale(1.05)}
+@keyframes catFade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.main-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 16px}
+.main-cat{background:linear-gradient(135deg,#0a1520,#0a0a0f);
+  border:2px solid var(--c,#00d4ff);border-radius:16px;
+  padding:12px 6px;text-decoration:none;color:#e2e8f0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;min-height:95px;
+  transition:.4s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 25px var(--c,#00d4ff),inset 0 0 20px rgba(0,212,255,.08);
+  animation:catFade .4s ease-out both;
+  animation:catFade .4s ease-out both;
+  position:relative;overflow:hidden;}
+
+
+
+
+  50%{opacity:1;transform:scale(1.15) rotate(10deg) translateY(-8px);
+     filter:blur(0) brightness(1.6)}
+  70%{transform:scale(.95) rotate(-4deg) translateY(2px)}
+  100%{opacity:1;transform:scale(1) rotate(0) translateY(0);
+     filter:blur(0) brightness(1)}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  40%,100%{transform:rotate(25deg) translateX(500%)}
+}
+.main-cat::before{content:"";position:absolute;top:-50%;right:-50%;width:200%;height:200%;
+  background:radial-gradient(circle,var(--c,#00d4ff),transparent 60%);
+  opacity:.15;transition:.4s;}
+
+
+  50%{box-shadow:0 0 45px var(--c,#00d4ff),inset 0 0 30px rgba(0,212,255,.2)}
+}
+.main-cat:hover::before{opacity:.3}
+.main-cat:hover{transform:translateY(-3px);
+  box-shadow:0 0 20px var(--c,#00d4ff);}
+.main-cat:active{transform:scale(.95)}
+.main-cat-ic{font-size:34px;position:relative;z-index:1;
+  filter:drop-shadow(0 0 15px var(--c,#00d4ff));
+  animation:none;}
+
+
+
+  50%{transform:translateY(-4px) scale(1.1);
+    filter:drop-shadow(0 0 30px var(--c,#00d4ff)) brightness(1.4)}
+}
+.main-cat:hover .main-cat-ic{
+  animation:iconSpin .8s ease-in-out infinite;
+}
+
+  25%{transform:rotate(-12deg) scale(1.2)}
+  75%{transform:rotate(12deg) scale(1.2)}
+  100%{transform:rotate(0) scale(1.15)}
+}
+.main-cat-n{font-size:10.5px;font-weight:900;color:#fff;transition:.3s;text-align:center;
+  text-shadow:0 2px 6px rgba(0,0,0,.9),0 0 12px var(--c,#00d4ff);
+  position:relative;z-index:3;line-height:1.4;}
+.main-cat:hover .main-cat-n{letter-spacing:1px;text-shadow:0 0 20px var(--c,#00d4ff),0 0 40px var(--c,#00d4ff),0 2px 6px #000;}
+.banner{margin:16px;background:linear-gradient(135deg,#00d4ff,#0088cc,#00d4ff);
+  background-size:200% 200%;
+  border-radius:16px;padding:18px;position:relative;overflow:hidden;
+  box-shadow:0 0 40px rgba(0,212,255,.7);
+  border:1.5px solid #00d4ff;
+  animation:bannerMove 4s ease infinite;}
+@keyframes bannerMove{0%,100%{background-position:0% 50%;box-shadow:0 0 40px rgba(0,212,255,.7)}50%{background-position:100% 50%;box-shadow:0 0 60px rgba(0,212,255,1)}}
+.banner::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.4),transparent 60%);}
+.banner-t{font-size:16px;font-weight:900;color:#001a24;margin-bottom:6px;position:relative;z-index:1}
+.banner-s{font-size:12px;color:#003344;margin-bottom:12px;position:relative;z-index:1;font-weight:600}
+.banner-btn{background:#001a24;color:#00d4ff;border:none;border-radius:12px;
+  padding:10px 18px;font-family:inherit;font-size:12.5px;font-weight:900;
+  text-decoration:none;display:inline-block;position:relative;cursor:pointer;z-index:1;
+  box-shadow:0 0 15px rgba(0,212,255,.5);transition:.3s;}
+.banner-btn:hover{transform:scale(1.05);box-shadow:0 0 25px rgba(0,212,255,.9)}
+.hsl{display:flex;gap:12px;padding:8px 16px 16px;overflow-x:auto;
+  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.hsl::-webkit-scrollbar{display:none}
+.shop{flex-shrink:0;width:180px;background:linear-gradient(135deg,#0a1520,#0a0a0f);
+  border:1.5px solid rgba(0,212,255,.4);border-radius:18px;padding:14px;
+  text-decoration:none;color:#e2e8f0;scroll-snap-align:start;
+  transition:.4s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 15px rgba(0,212,255,.2);
+  animation:shopIn .6s cubic-bezier(.2,.8,.2,1) both;}
+.shop:nth-child(n){animation-delay:calc(var(--i,0) * 0.1s)}
+@keyframes shopIn{from{opacity:0;transform:translateX(40px) scale(.9)}to{opacity:1;transform:none}}
+.shop:hover{transform:translateY(-6px) scale(1.03);border-color:#00d4ff;
+  box-shadow:0 0 35px rgba(0,212,255,.8);}
+.shop-av{width:50px;height:50px;border-radius:14px;
+  background:linear-gradient(135deg,#00d4ff,#0088cc);
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  margin-bottom:10px;box-shadow:0 0 20px rgba(0,212,255,.7);
+  border:1.5px solid #00d4ff;animation:avFloat 3s ease-in-out infinite;}
+@keyframes avFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.shop-n{font-size:13.5px;font-weight:900;color:#00d4ff;
+  text-shadow:0 0 12px rgba(0,212,255,.7);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.shop-s{font-size:11px;color:#7de5ff;margin-top:4px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.shop-r{margin-top:8px;font-size:11.5px;color:#ffd700;
+  text-shadow:0 0 10px rgba(255,215,0,.6);}
+.prods{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 16px 16px}
+.prod{background:linear-gradient(135deg,#0a1520,#0a0a0f);
+  border:1.5px solid rgba(255,215,0,.4);border-radius:16px;padding:14px;
+  text-align:center;text-decoration:none;color:#e2e8f0;
+  transition:.4s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 15px rgba(255,215,0,.15);
+  animation:prodIn .6s cubic-bezier(.2,.8,.2,1) both;position:relative;overflow:hidden;}
+.prod:nth-child(n){animation-delay:calc(var(--i,0) * 0.08s)}
+@keyframes prodIn{from{opacity:0;transform:translateY(30px) scale(.85)}to{opacity:1;transform:none}}
+.prod:hover{transform:translateY(-6px) scale(1.04);border-color:#ffd700;
+  box-shadow:0 0 30px rgba(255,215,0,.7);}
+.prod-ic{font-size:34px;display:block;margin-bottom:8px;
+  filter:drop-shadow(0 0 12px rgba(255,215,0,.6));
+  animation:prodFloat 3.5s ease-in-out infinite;position:relative;z-index:1;}
+@keyframes prodFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+.prod-n{font-size:13px;font-weight:bold;color:#ffd700;margin-bottom:6px;
+  text-shadow:0 0 10px rgba(255,215,0,.6);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:relative;z-index:1;}
+.prod-p{font-size:14px;font-weight:900;color:#00d4ff;direction:ltr;
+  text-shadow:0 0 12px rgba(0,212,255,.7);position:relative;z-index:1;}
+
+
+
+
+
+
+
+/* ========== OVERRIDE: ۴ ستونه مثل عکس ========== */
+.main-cats{display:grid !important;grid-template-columns:repeat(4,1fr) !important;
+  gap:8px !important;padding:10px 12px !important;overflow:visible !important;}
+.main-cat{
+  flex-shrink:1 !important;width:auto !important;
+  background:#0a0a0f !important;
+  border:2px solid var(--c,#00d4ff) !important;
+  border-radius:16px !important;
+  padding:14px 6px !important;
+  min-height:105px !important;
+  display:flex !important;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px !important;
+  text-decoration:none !important;
+  animation:catFade .35s ease-out both !important;
+  transition:transform .2s,box-shadow .2s !important;
+  box-shadow:0 0 10px var(--c,#00d4ff),inset 0 0 15px rgba(0,212,255,.06) !important;
+  position:relative;overflow:hidden;
+}
+.main-cat::before,.main-cat::after{display:none !important;}
+.main-cat:hover{
+  transform:translateY(-3px) !important;
+  box-shadow:0 0 25px var(--c,#00d4ff),inset 0 0 20px rgba(0,212,255,.1) !important;
+}
+.main-cat-ic{
+  font-size:36px !important;
+  animation:none !important;
+  filter:drop-shadow(0 0 8px var(--c,#00d4ff)) !important;
+  transform:none !important;
+}
+.main-cat-n{
+  font-size:11px !important;
+  font-weight:900 !important;
+  color:var(--c,#00d4ff) !important;
+  text-shadow:0 0 10px var(--c,#00d4ff),0 1px 3px #000 !important;
+  letter-spacing:0 !important;
+  text-align:center;line-height:1.3;
+}
+@keyframes catFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.main-cat:nth-child(1){animation-delay:.02s}
+.main-cat:nth-child(2){animation-delay:.04s}
+.main-cat:nth-child(3){animation-delay:.06s}
+.main-cat:nth-child(4){animation-delay:.08s}
+.main-cat:nth-child(5){animation-delay:.1s}
+.main-cat:nth-child(6){animation-delay:.12s}
+.main-cat:nth-child(7){animation-delay:.14s}
+.main-cat:nth-child(8){animation-delay:.16s}
+
+/* ========== SOFT ANIMATIONS ========== */
+/* همه چیز آروم fade in بشه */
+@keyframes softUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softIn{from{opacity:0}to{opacity:1}}
+@keyframes softGlow{
+  0%,100%{box-shadow:0 0 18px rgba(0,212,255,.4)}
+  50%{box-shadow:0 0 28px rgba(0,212,255,.7)}
+}
+@keyframes softGold{
+  0%,100%{box-shadow:0 0 15px rgba(255,215,0,.5)}
+  50%{box-shadow:0 0 25px rgba(255,215,0,.9)}
+}
+@keyframes softFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
+
+/* Header - آروم fade */
+.header{animation:softIn .5s ease-out both}
+.hi{animation:softUp .5s ease-out .05s both}
+.srch-wrap{animation:softUp .5s ease-out .1s both}
+.hi-av{animation:softGlow 3s ease-in-out infinite !important}
+.hi-pts{animation:softGold 3s ease-in-out infinite !important}
+
+/* دکمهٔ بیشتر */
+.sec-more{animation:softUp .5s ease-out .15s both}
+
+/* تیتر بخش‌ها */
+.sec{animation:softUp .5s ease-out both}
+
+/* بنر - آروم نفس می‌کشه */
+.banner{animation:softGlow 4s ease-in-out infinite !important}
+.banner-t{animation:softFloat 4s ease-in-out infinite}
+.banner-btn{animation:softFloat 3s ease-in-out infinite}
+
+/* مغازه‌ها */
+.shop{animation:softUp .5s ease-out both !important}
+.shop:nth-child(1){animation-delay:.05s !important}
+.shop:nth-child(2){animation-delay:.1s !important}
+.shop:nth-child(3){animation-delay:.15s !important}
+.shop:nth-child(4){animation-delay:.2s !important}
+.shop:nth-child(5){animation-delay:.25s !important}
+.shop:nth-child(6){animation-delay:.3s !important}
+.shop:hover{transform:translateY(-3px) !important}
+
+/* محصولات */
+.prod{animation:softUp .5s ease-out both !important}
+.prod:nth-child(1){animation-delay:.05s !important}
+.prod:nth-child(2){animation-delay:.1s !important}
+.prod:nth-child(3){animation-delay:.15s !important}
+.prod:nth-child(4){animation-delay:.2s !important}
+.prod:nth-child(5){animation-delay:.25s !important}
+.prod:nth-child(6){animation-delay:.3s !important}
+.prod:nth-child(7){animation-delay:.35s !important}
+.prod:nth-child(8){animation-delay:.4s !important}
+
+/* نوار پایین */
+
+
+
+/* دکمهٔ سبد و پروفایل هم آروم */
+.ni:not(.act) .ic{transition:transform .3s}
+.ni:not(.act):hover .ic{transform:scale(1.15)}
+</style></head><body>
+
+<div class="stars" id="stars"></div>
+
+<div class="header">
+  <div class="hi">
+    <div class="hi-l">
+      <div class="hi-av">👤</div>
+      <div>
+        <div class="hi-g">سلام 👋</div>
+        <div class="hi-n">{{ customer[2] if customer else 'مشتری' }}</div>
+      </div>
+    </div>
+    <div class="hi-pts">⭐ {{ points.points }}</div>
+  </div>
+  <div class="srch-wrap">
+    <input type="text" id="liveSearch" class="srch" placeholder="جستجوی مغازه یا محصول..." autocomplete="off">
+    <span class="srch-ic">🔍</span>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-t">📂 دسته‌بندی‌های اصلی</div>
+  <a href="/customer/categories" class="sec-more">بیشتر ←</a>
+</div>
+<div class="main-cats">
+{% for c in home_cats %}
+<a href="/customer/category/{{ c[1] }}" class="main-cat" style="--c:{{ c[3] }}">
+  <div class="main-cat-ic">{{ c[2] }}</div>
+  <div class="main-cat-n">{{ c[1] }}</div>
+</a>
+{% endfor %}
+</div>
+
+<div class="banner">
+  <div class="banner-t">🎉 پیشنهاد ویژه امروز</div>
+  <div class="banner-s">با خرید بالای ۱۰۰ هزار تومان، ۲۰٪ تخفیف بگیر</div>
+  <a href="/customer/products" class="banner-btn">مشاهده محصولات</a>
+</div>
+
+<div class="sec">
+  <div class="sec-t">🏆 مغازه‌های برتر</div>
+  <a href="/customer/search" class="sec-more">همه ←</a>
+</div>
+<div class="hsl">
+{% for s in top_shops %}
+<a href="/customer/shop/{{ s[0] }}" class="shop" style="--i:{{ loop.index0 }}">
+  <div class="shop-av">🏪</div>
+  <div class="shop-n">{{ s[2] or s[1] }}</div>
+  <div class="shop-s">@{{ s[1] }}</div>
+  <div class="shop-r">⭐ {{ s[4] if s[4] else '—' }} ({{ s[5] }})</div>
+</a>
+{% endfor %}
+</div>
+
+<div class="sec">
+  <div class="sec-t">🔥 پیشنهاد ویژه</div>
+  <a href="/customer/products" class="sec-more">همه ←</a>
+</div>
+<div class="prods">
+{% for p in featured %}
+<a href="/customer/products" class="prod" style="--i:{{ loop.index0 }}">
+  <span class="prod-ic">📦</span>
+  <div class="prod-n">{{ p[1] }}</div>
+  <div class="prod-p">{{ "{:,}".format(p[2]) }}</div>
+</a>
+{% endfor %}
+</div>
+
+<script>
+(function(){
+  var s = document.getElementById('stars');
+  var html = '';
+  for (var i=0; i<50; i++){
+    var x = Math.random()*100;
+    var y = Math.random()*100;
+    var size = Math.random()*2 + 1;
+    var delay = Math.random()*3;
+    html += '<div class="star" style="left:'+x+'%;top:'+y+'%;width:'+size+'px;height:'+size+'px;animation-delay:'+delay+'s"></div>';
+  }
+  s.innerHTML = html;
+})();
+(function(){
+  var inp = document.getElementById('liveSearch');
+  if (!inp) return;
+  var timer = null;
+  inp.addEventListener('input', function(){
+    clearTimeout(timer);
+    var q = inp.value.trim();
+    if (q.length < 1) return;
+    timer = setTimeout(function(){
+      window.location = '/customer/search?q=' + encodeURIComponent(q);
+    }, 800);
+  });
+})();
+</script>
+{% with active="home" %}{% include "_customer_nav.html" %}{% endwith %}
+</body></html>

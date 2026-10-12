@@ -1,0 +1,115 @@
+nohup: ignoring input
+✅ wallet_bp registered
+✅ payment_bp registered
+✅ ticket_bp registered
+✅ loyalty_bp registered
+✅ referral_bp registered
+✅ report_bp registered
+✅ twofa_bp registered
+✅ test_bp registered
+✅ autoreply_bp registered
+✅ aimanager_bp registered
+✅ broadcast_bp registered
+✅ botads_bp registered
+✅ poster_bp registered
+admin_bots_bp OK
+members_bp OK
+url_admin_bp OK
+customer_panel OK
+customer_features OK
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://102.40.162.128:8080
+[33mPress CTRL+C to quit[0m
+100.117.170.106 - - [12/Oct/2026 17:59:11] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+100.117.170.106 - - [12/Oct/2026 17:59:11] "GET /customer/login HTTP/1.1" 200 -
+100.117.170.106 - - [12/Oct/2026 17:59:11] "GET /static/app-feel.css HTTP/1.1" 200 -
+100.117.170.106 - - [12/Oct/2026 17:59:11] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+100.117.170.106 - - [12/Oct/2026 17:59:11] "GET /static/app-feel.js HTTP/1.1" 200 -
+100.117.170.106 - - [12/Oct/2026 17:59:12] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+100.117.170.106 - - [12/Oct/2026 17:59:12] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:11] "GET /panel/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:11] "GET /static/app-feel.css HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:11] "GET /static/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:11] "GET /static/custom-alert.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:11] "GET /static/app-feel.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [12/Oct/2026 20:42:11] "GET /static/pwa/service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:12] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:42:12] "[32mGET /customer/search HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:42:12] "GET /static/pwa/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:12] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:42:12] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:30] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:57:31] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:32] "GET /static/app-feel.css HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:34] "GET /static/custom-alert.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:34] "GET /static/app-feel.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:36] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [12/Oct/2026 20:57:37] "GET /static/pwa/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:37] "GET /static/pwa/service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:37] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:39] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:57:39] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:57:45] "[36mGET /static/pwa/icons/icon-192.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 20:58:07] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:58:07] "[32mHEAD /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:58:07] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:58:08] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:08] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:08] "HEAD /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:10] "GET /static/pwa/service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:11] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:58:12] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:12] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:58:14] "GET /static/app-feel.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:14] "GET /static/custom-alert.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:14] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:14] "GET /static/app-feel.css HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:16] "GET /static/app-feel.css HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:16] "GET /static/pwa/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:16] "GET /static/custom-alert.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:16] "GET /static/app-feel.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [12/Oct/2026 20:58:16] "GET /static/pwa/service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:17] "GET /static/pwa/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:17] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:18] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [12/Oct/2026 20:58:18] "GET /static/pwa/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:18] "[32mGET /customer/search HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:58:18] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:18] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 20:58:22] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:22] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:22] "[36mGET /static/pwa/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 20:58:23] "HEAD /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:23] "HEAD /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:23] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:24] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:24] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:26] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:27] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:29] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 20:58:29] "GET /static/pwa/icons/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:00:28] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:00:32] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:00:35] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:00:36] "GET /static/pwa/icons/icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:00:39] "GET /static/pwa/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:02:35] "[33mGET /.well-known/assetlinks.json HTTP/1.1[0m" 404 -
+127.0.0.1 - - [12/Oct/2026 21:03:04] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 21:03:04] "[33mGET /.well-known/assetlinks.json HTTP/1.1[0m" 404 -
+127.0.0.1 - - [12/Oct/2026 21:03:07] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:03:08] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 21:03:09] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 21:03:18] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 21:03:22] "[36mGET /static/pwa/service-worker.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 21:03:22] "[36mGET /static/pwa/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 21:03:23] "[32mGET /customer/home HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 21:03:25] "[32mGET /customer/search HTTP/1.1[0m" 302 -
+127.0.0.1 - - [12/Oct/2026 21:03:25] "[36mGET /static/pwa/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [12/Oct/2026 21:03:26] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 21:03:27] "GET /customer/login HTTP/1.1" 200 -

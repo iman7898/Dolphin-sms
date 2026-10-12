@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎁 وفاداری کاربران</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(255,215,0,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.12),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}}
+  .page-title{text-align:center;font-size:17px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 14px}
+
+  /* آمار سطح‌ها */
+  .tier-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+  .tier-stat{border-radius:14px;padding:12px 6px;text-align:center;background:rgba(0,10,8,.7);border:1.5px solid}
+  .ts-diamond{border-color:#00d4ff;box-shadow:0 0 15px rgba(0,212,255,.5)}
+  .ts-gold{border-color:#ffd700;box-shadow:0 0 15px rgba(255,215,0,.5)}
+  .ts-silver{border-color:#c0c0c0;box-shadow:0 0 15px rgba(192,192,192,.4)}
+  .ts-bronze{border-color:#cd7f32;box-shadow:0 0 15px rgba(205,127,50,.4)}
+  .tier-stat .ic{font-size:22px;display:block}
+  .tier-stat .n{font-size:18px;font-weight:900;color:#00ff9d;margin-top:4px}
+  .tier-stat .lbl{font-size:10px;color:#7dfcc7;margin-top:2px}
+
+  .user-item{background:linear-gradient(135deg,rgba(0,25,20,.85),rgba(0,15,10,.9));border:1.5px solid rgba(0,255,157,.3);border-radius:16px;padding:14px;margin-bottom:12px;animation:tin .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes tin{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+  .user-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:10px;margin-bottom:10px;border-bottom:1px dashed rgba(0,255,157,.25)}
+  .u-name{font-size:14px;font-weight:bold;color:#00ff9d;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .u-shop{font-size:11px;color:#7dfcc7;margin-top:3px}
+  .u-tier{font-size:20px}
+  .user-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+  .stat{padding:8px;border-radius:10px;background:rgba(0,10,8,.6);text-align:center}
+  .stat-v{font-size:16px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .stat-l{font-size:10px;color:#7dfcc7;margin-top:2px}
+
+  .add-row{display:grid;grid-template-columns:80px 1fr auto auto;gap:6px}
+  .add-row input{background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:10px;padding:9px;font-family:inherit;font-size:12.5px}
+  .add-row input:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 12px rgba(0,255,157,.5)}
+  .add-btn{border:none;border-radius:10px;padding:9px 12px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap}
+  .b-plus{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;box-shadow:0 0 14px rgba(0,255,157,.55)}
+  .b-minus{background:linear-gradient(135deg,#ff4d6d,#c8102e);color:#fff;box-shadow:0 0 14px rgba(255,77,109,.5)}
+
+  .empty{color:#6b8f80;text-align:center;padding:30px 0;font-size:13px}
+
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/admin/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <div class="page-title">🎁 باشگاه مشتریان</div>
+
+  <div class="tier-stats">
+    <div class="tier-stat ts-diamond"><span class="ic">💎</span><div class="n">{{ tiers.get('diamond', 0) }}</div><div class="lbl">الماس</div></div>
+    <div class="tier-stat ts-gold"><span class="ic">🥇</span><div class="n">{{ tiers.get('gold', 0) }}</div><div class="lbl">طلا</div></div>
+    <div class="tier-stat ts-silver"><span class="ic">🥈</span><div class="n">{{ tiers.get('silver', 0) }}</div><div class="lbl">نقره</div></div>
+    <div class="tier-stat ts-bronze"><span class="ic">🥉</span><div class="n">{{ tiers.get('bronze', 0) }}</div><div class="lbl">برنز</div></div>
+  </div>
+
+  {% if rows %}
+    {% for r in rows %}
+      <div class="user-item" style="animation-delay:{{ loop.index0 * 0.05 }}s">
+        <div class="user-head">
+          <div>
+            <div class="u-name">👤 {{ r[1] }}</div>
+            <div class="u-shop">🏪 {{ r[2] or '-' }}</div>
+          </div>
+          <div class="u-tier">
+            {% if r[5] == 'diamond' %}💎{% elif r[5] == 'gold' %}🥇{% elif r[5] == 'silver' %}🥈{% else %}🥉{% endif %}
+          </div>
+        </div>
+        <div class="user-stats">
+          <div class="stat"><div class="stat-v">{{ r[3] }}</div><div class="stat-l">امتیاز فعلی</div></div>
+          <div class="stat"><div class="stat-v">{{ "{:,}".format(r[4]) }}</div><div class="stat-l">کل</div></div>
+          <div class="stat"><div class="stat-v">{{ r[6] }}</div><div class="stat-l">رایگان</div></div>
+        </div>
+        <form method="POST" action="/admin/loyalty/{{ r[0] }}/add" class="add-row">
+          <input type="number" name="points" placeholder="امتیاز" value="50" required>
+          <input type="text" name="note" placeholder="توضیح (اختیاری)">
+          <button class="add-btn b-plus" type="submit">+ بده</button>
+        </form>
+        <form method="POST" action="/admin/loyalty/{{ r[0] }}/add" class="add-row" style="margin-top:6px">
+          <input type="number" name="points" placeholder="امتیاز" value="50" required>
+          <input type="text" name="note" placeholder="توضیح (اختیاری)">
+          <input type="hidden" name="neg" value="1">
+          <button class="add-btn b-minus" type="submit">− کم کن</button>
+        </form>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty">📭 هنوز کاربری نداره</div>
+  {% endif %}
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/admin/dashboard"><span class="ic">🏠</span><span>داشبورد</span></a>
+    <a class="nav-item" href="/admin/stats"><span class="ic">📊</span><span>آمار</span></a>
+    <a class="nav-item" href="/admin/wallets"><span class="ic">💰</span><span>کیف پول</span></a>
+    <a class="nav-item active" href="/admin/loyalty"><span class="ic">🎁</span><span>وفاداری</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

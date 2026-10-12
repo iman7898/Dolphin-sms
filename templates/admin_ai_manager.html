@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🤖 مدیر AI - ادمین</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(191,0,255,.16),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none}
+  .frame{border:2px solid #bf00ff;border-radius:26px;padding:18px 14px;background:rgba(20,0,30,.4);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(191,0,255,.55)}50%{box-shadow:0 0 34px rgba(191,0,255,.85)}}
+  .page-title{text-align:center;font-size:19px;font-weight:900;color:#bf00ff;text-shadow:0 0 16px rgba(191,0,255,.9);margin:0 0 16px}
+  .stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+  .stat-card{border-radius:14px;padding:14px 8px;text-align:center;border:1.5px solid rgba(191,0,255,.4);background:rgba(0,10,8,.6)}
+  .stat-v{font-size:22px;font-weight:900;color:#bf00ff;direction:ltr;text-shadow:0 0 12px rgba(191,0,255,.8)}
+  .stat-l{font-size:10px;color:#7dfcc7;margin-top:4px}
+  .box{background:linear-gradient(135deg,rgba(20,0,30,.7),rgba(30,0,40,.8));border:1.5px solid rgba(191,0,255,.4);border-radius:20px;padding:14px;margin-bottom:14px}
+  .box-title{text-align:center;font-size:13.5px;color:#bf00ff;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(191,0,255,.25)}
+  .sub-item{padding:12px;border-radius:12px;background:rgba(0,10,8,.6);border:1px solid rgba(191,0,255,.2);margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;font-size:12px;animation:tin .4s ease both}
+  @keyframes tin{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:none}}
+  .sub-item:last-child{margin-bottom:0}
+  .si-left{flex:1}
+  .si-user{color:#bf00ff;font-weight:bold;font-size:13px}
+  .si-meta{color:#7dfcc7;font-size:10.5px;margin-top:3px}
+  .si-right{text-align:left}
+  .badge{padding:3px 9px;border-radius:8px;font-size:10px;font-weight:900}
+  .b-on{background:rgba(0,255,157,.2);color:#00ff9d;border:1px solid #00ff9d}
+  .b-trial{background:rgba(255,215,0,.2);color:#ffd700;border:1px solid #ffd700}
+  .b-off{background:rgba(148,163,184,.2);color:#94a3b8;border:1px solid #94a3b8}
+  .empty{text-align:center;color:#6b8f80;padding:30px 0}
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
+  .nav-item .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+  .nav-item.active{background:linear-gradient(135deg,rgba(191,0,255,.15),rgba(0,212,255,.06));box-shadow:0 0 18px rgba(191,0,255,.4)}
+  .nav-item.active .ic{filter:none;color:#bf00ff;text-shadow:0 0 12px #bf00ff}
+  .nav-item.active span:last-child{color:#bf00ff;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/admin/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <div class="page-title">🤖 مدیریت AI</div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-v">{{ stats.active_subs }}</div><div class="stat-l">فعال</div></div>
+    <div class="stat-card"><div class="stat-v">{{ stats.trials }}</div><div class="stat-l">تست رایگان</div></div>
+    <div class="stat-card"><div class="stat-v">{{ stats.total_subs }}</div><div class="stat-l">کل</div></div>
+    <div class="stat-card"><div class="stat-v">{{ stats.pending_tasks }}</div><div class="stat-l">صف</div></div>
+    <div class="stat-card"><div class="stat-v">{{ stats.done_tasks }}</div><div class="stat-l">انجام‌شده</div></div>
+    <div class="stat-card"><div class="stat-v">{{ subs|length }}</div><div class="stat-l">آخرین</div></div>
+  </div>
+
+  <div class="box">
+    <div class="box-title">📋 اشتراک‌های اخیر</div>
+    {% if subs %}
+      {% for s in subs %}
+        <div class="sub-item">
+          <div class="si-left">
+            <div class="si-user">👤 {{ s[2] or 'کاربر' }} #{{ s[1] }}</div>
+            <div class="si-meta">📦 {{ s[4] }} | 📱 {{ s[6] or '—' }}</div>
+            <div class="si-meta">📅 {{ s[7] }} → {{ s[8] }}</div>
+          </div>
+          <div class="si-right">
+            {% if not s[9] %}<span class="badge b-off">غیرفعال</span>
+            {% elif s[5] %}<span class="badge b-trial">🎁 تست</span>
+            {% else %}<span class="badge b-on">✅ فعال</span>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">📭 هنوز اشتراکی نیست</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/admin/dashboard"><span class="ic">🏠</span><span>داشبورد</span></a>
+    <a class="nav-item" href="/admin/reports"><span class="ic">📊</span><span>گزارش</span></a>
+    <a class="nav-item active" href="/admin/ai-manager"><span class="ic">🤖</span><span>AI</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

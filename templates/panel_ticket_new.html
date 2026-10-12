@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎫 تیکت جدید</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(191,0,255,.12),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}}
+  .page-title{text-align:center;font-size:18px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px}
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:18px;box-shadow:0 0 15px rgba(0,255,157,.15)}
+  label{display:block;font-size:12.5px;color:#7dfcc7;margin-bottom:8px;font-weight:bold}
+  input[type=text],textarea,select{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;transition:.25s;margin-bottom:14px}
+  input[type=text]:focus,textarea:focus,select:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+  textarea{min-height:140px;resize:vertical;line-height:1.7}
+  select{cursor:pointer}
+  .send-btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(0,255,157,.7);transition:.25s;position:relative;overflow:hidden}
+  .send-btn:active{transform:scale(.98);box-shadow:0 0 35px rgba(0,255,157,1)}
+  .send-btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:sw 3s ease-in-out infinite}
+  @keyframes sw{0%{left:-100%}50%,100%{left:100%}}
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/tickets">→ تیکت‌ها</a>
+
+<div class="frame">
+  <div class="page-title">🎫 ارسال تیکت جدید</div>
+
+  <div class="box">
+    <form method="POST">
+      <label>📝 موضوع</label>
+      <input type="text" name="subject" placeholder="مثلاً: مشکل در شارژ کیف پول" required>
+
+      <label>⚠️ اولویت</label>
+      <select name="priority">
+        <option value="low">🟢 کم</option>
+        <option value="normal" selected>🟡 عادی</option>
+        <option value="high">🔴 فوری</option>
+      </select>
+
+      <label>💬 پیام</label>
+      <textarea name="message" placeholder="مشکل یا سوالت رو کامل توضیح بده..." required></textarea>
+
+      <button class="send-btn" type="submit">📨 ارسال تیکت</button>
+    </form>
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+    <a class="nav-item" href="/panel/ai"><span class="ic">🤖</span><span>هوش مصنوعی</span></a>
+    <a class="nav-item" href="/panel/chat"><span class="ic">💬</span><span>چت</span></a>
+    <a class="nav-item active" href="/panel/tickets"><span class="ic">🎫</span><span>تیکت‌ها</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

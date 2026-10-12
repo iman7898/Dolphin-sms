@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📋 پرداخت‌ها</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;margin:0;padding:74px 14px 40px;background:#020a08;
+    background-image:radial-gradient(circle at 20% 0%,rgba(0,212,255,.12),transparent 45%),radial-gradient(circle at 80% 100%,rgba(0,255,157,.12),transparent 45%)}
+  .back-btn{position:fixed;top:18px;right:18px;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+  .frame{border:2px solid #00ff9d;border-radius:24px;padding:18px 14px;background:rgba(0,20,15,.35);box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08)}
+  h2{color:#00ff9d;font-size:16px;margin:0 0 16px;text-align:center;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .pay-item{background:linear-gradient(135deg,rgba(0,25,20,.85),rgba(0,15,10,.9));border:1px solid rgba(0,255,157,.3);border-radius:14px;padding:14px;margin-bottom:10px}
+  .pay-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .pay-user{color:#00ff9d;font-weight:bold;font-size:14px}
+  .pay-amt{color:#00ff9d;font-weight:900;font-size:16px;direction:ltr;text-shadow:0 0 10px rgba(0,255,157,.7)}
+  .pay-meta{font-size:11px;color:#7dfcc7;margin-top:4px}
+  .badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10.5px;font-weight:bold;margin-top:6px}
+  .b-verified{background:rgba(0,255,157,.2);color:#00ff9d;border:1px solid #00ff9d}
+  .b-pending{background:rgba(245,158,11,.2);color:#fbbf24;border:1px solid #fbbf24}
+  .b-failed{background:rgba(255,77,109,.2);color:#ff4d6d;border:1px solid #ff4d6d}
+  .empty{text-align:center;color:#6b8f80;padding:40px 0}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/admin/payment">→ تنظیمات</a>
+
+<div class="frame">
+  <h2>📋 لیست پرداخت‌ها</h2>
+
+  {% if payments %}
+    {% for p in payments %}
+      <div class="pay-item">
+        <div class="pay-head">
+          <div>
+            <div class="pay-user">👤 {{ p[2] or 'کاربر #' ~ p[1] }}</div>
+            <div class="pay-meta">🕐 {{ p[6] }} | ID: #{{ p[0] }}</div>
+          </div>
+          <div style="text-align:left">
+            <div class="pay-amt">{{ "{:,}".format(p[3]) }} <small style="font-size:10px;color:#7dfcc7;font-weight:400">ریال</small></div>
+            {% if p[4] == 'verified' %}<span class="badge b-verified">✅ موفق</span>
+            {% elif p[4] == 'pending' %}<span class="badge b-pending">⏳ در انتظار</span>
+            {% else %}<span class="badge b-failed">❌ ناموفق</span>{% endif %}
+          </div>
+        </div>
+        {% if p[5] %}<div class="pay-meta" style="margin-top:8px;direction:ltr">Ref: {{ p[5] }}</div>{% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty">📭 هنوز پرداختی ثبت نشده</div>
+  {% endif %}
+</div>
+
+{% include "_global_bg.html" %}
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<script src="/static/custom-alert.js"></script>
+<script src="/static/premium-modal.js"></script>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00ff9d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
+    });
+}
+</script>
+</head>
+<body class="matrix-bg">
+<div class="container chat-container">
+<div class="header-bar"><div class="header-title">دستیار هوشمند</div></div>
+
+<div class="ai-status">
+<div class="ai-status-item">
+<span class="ai-label">استفاده امروز</span>
+<span class="ai-value" id="usageValue">{{ usage.daily_count }}/{% if usage.is_premium %}∞{% else %}10{% endif %}</span>
+</div>
+<div class="ai-status-item">
+<span class="ai-label">وضعیت</span>
+<span class="ai-value {% if usage.is_premium %}premium{% endif %}">
+{% if usage.is_premium %}⭐ پرمیوم{% else %}رایگان{% endif %}
+</span>
+</div>
+</div>
+
+{% if not usage.is_premium %}
+<div class="premium-box">
+<div class="premium-title">⭐ ارتقاء به پرمیوم</div>
+<div class="premium-desc">سوال نامحدود + پاسخ سریع‌تر</div>
+<button type="button" class="btn-white" onclick="openPremiumModal()">💳 خرید پرمیوم</button>
+</div>
+{% endif %}
+
+<div class="ai-chat-box" id="aiChatBox">
+<div class="chat-msg from-admin">
+<div class="chat-bubble"><div class="chat-text">سلام! هر سوالی داری بپرس 🤖</div></div>
+</div>
+</div>
+
+<form class="chat-form" id="aiForm">
+<input type="text" id="aiInput" placeholder="سوالت رو بنویس..." autocomplete="off">
+<button type="submit" class="chat-send" id="aiSendBtn">➤</button>
+</form>
+</div>
+
+<nav class="bottom-nav">
+<a href="/panel/dashboard" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">پنل</span></a>
+<a href="/panel/chat" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">چت</span>
+{% if unread_chat and unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
+</a>
+<a href="/panel/ai" class="nav-item active"><span class="nav-icon">🤖</span><span class="nav-label">هوش مصنوعی</span></a>
+<a href="/panel/profile" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">پروفایل</span></a>
+</nav>
+
+<script>
+var busy = false;
+function addBubble(text, who, isLoading) {
+var div = document.createElement('div');
+div.className = 'chat-msg ' + (who === 'admin' ? 'from-admin' : 'from-shop');
+var inner = isLoading ? '<div class="typing"><span></span><span></span><span></span></div>' : '<div class="chat-text">' + escapeHtml(text) + '</div>';
+div.innerHTML = '<div class="chat-bubble">' + inner + '</div>';
+document.getElementById('aiChatBox').appendChild(div);
+document.getElementById('aiChatBox').scrollTop = 99999;
+return div;
+}
+function escapeHtml(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function updateBubble(el, text){el.querySelector('.chat-bubble').innerHTML = '<div class="chat-text">' + escapeHtml(text) + '</div>';}
+document.getElementById('aiForm').addEventListener('submit', async function(e){
+e.preventDefault();
+if(busy) return;
+var q = document.getElementById('aiInput').value.trim();
+if(!q) return;
+busy = true;
+addBubble(q, 'shopkeeper');
+document.getElementById('aiInput').value = '';
+var loading = addBubble('', 'admin', true);
+try {
+var r = await fetch('/panel/ai/ask', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({q: q})});
+var data = await r.json();
+if(data.status === 'success'){
+updateBubble(loading, data.answer);
+if(data.used !== undefined) document.getElementById('usageValue').textContent = data.used + '/' + (data.limit === 999 ? '∞' : data.limit);
+} else { updateBubble(loading, '⚠ ' + (data.message || 'خطا')); }
+} catch(err){ updateBubble(loading, '⚠ CONNECTION_خطا'); }
+busy = false;
+});
+</script>
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

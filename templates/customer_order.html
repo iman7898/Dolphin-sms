@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سفارش</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:0 0 40px;background:#0a0a0f;color:#e2e8f0;font-family:Vazirmatn,Tahoma,sans-serif;overflow-x:hidden;min-height:100vh}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{box-shadow:0 0 15px rgba(0,212,255,.5)}50%{box-shadow:0 0 30px rgba(0,212,255,.9)}}
+@keyframes shine{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes softFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+.topbar{padding:12px 14px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#0a1520,#0a0a0f);border-bottom:1.5px solid rgba(0,212,255,.3);position:sticky;top:0;z-index:50;backdrop-filter:blur(15px)}
+.back{width:38px;height:38px;border-radius:12px;background:rgba(0,212,255,.12);border:1.5px solid rgba(0,212,255,.5);color:#00d4ff;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px;font-weight:bold;transition:.3s}
+.back:active{transform:scale(.95);background:rgba(0,212,255,.3)}
+.topbar-title{font-size:15px;font-weight:900;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,.7);flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.frame{margin:16px;background:linear-gradient(135deg,#0a1520,#0a0a0f);border:2px solid #00d4ff;border-radius:22px;padding:20px 18px;
+  box-shadow:0 0 30px rgba(0,212,255,.4),inset 0 0 20px rgba(0,212,255,.05);
+  animation:fadeUp .5s ease-out both,glow 4s ease-in-out 1s infinite;}
+
+.pt{font-size:18px;font-weight:900;color:#00d4ff;text-align:center;margin-bottom:20px;
+  text-shadow:0 0 15px rgba(0,212,255,.8),0 0 30px rgba(0,212,255,.5);
+  animation:softFloat 3s ease-in-out infinite;}
+
+.msg{padding:12px 14px;border-radius:12px;margin-bottom:14px;text-align:center;font-size:13px;font-weight:bold;
+  animation:fadeUp .4s ease-out both}
+.msg.ok{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,136,204,.08));
+  border:1.5px solid #00d4ff;color:#00d4ff;text-shadow:0 0 10px rgba(0,212,255,.6);
+  box-shadow:0 0 20px rgba(0,212,255,.4)}
+.msg.err{background:rgba(255,77,109,.12);border:1.5px solid #ff4d6d;color:#ff4d6d;
+  box-shadow:0 0 20px rgba(255,77,109,.3)}
+
+label{display:block;font-size:12.5px;color:#7de5ff;margin-bottom:8px;font-weight:900;
+  text-shadow:0 0 8px rgba(0,212,255,.4);animation:fadeUp .4s ease-out both}
+label:nth-of-type(1){animation-delay:.05s}
+label:nth-of-type(2){animation-delay:.1s}
+label:nth-of-type(3){animation-delay:.15s}
+
+input,textarea{width:100%;background:rgba(0,212,255,.04);color:#fff;
+  border:1.5px solid rgba(0,212,255,.4);border-radius:14px;
+  padding:14px;font-family:inherit;font-size:14px;margin-bottom:16px;
+  transition:.3s;animation:fadeUp .4s ease-out both}
+input:nth-of-type(1){animation-delay:.08s}
+input:nth-of-type(2){animation-delay:.13s}
+input:nth-of-type(3){animation-delay:.18s}
+input::placeholder,textarea::placeholder{color:rgba(125,229,255,.45)}
+input:focus,textarea:focus{outline:none;border-color:#00d4ff;background:rgba(0,212,255,.1);
+  box-shadow:0 0 25px rgba(0,212,255,.6),inset 0 0 15px rgba(0,212,255,.1)}
+textarea{min-height:110px;resize:vertical;line-height:1.7}
+
+.btn{width:100%;background:linear-gradient(135deg,#00d4ff,#0088cc);color:#fff;
+  border:none;border-radius:16px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;
+  cursor:pointer;transition:.3s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 25px rgba(0,212,255,.7),inset 0 0 20px rgba(255,255,255,.15);
+  position:relative;overflow:hidden;animation:fadeUp .4s ease-out .25s both;
+  margin-top:8px}
+.btn::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  background-size:200% 100%;animation:shine 3s linear infinite}
+.btn:hover{transform:translateY(-3px) scale(1.02);
+  box-shadow:0 0 45px rgba(0,212,255,1),inset 0 0 25px rgba(255,255,255,.25)}
+.btn:active{transform:scale(.97)}
+</style></head><body>
+
+<div class="topbar">
+  <a href="/customer/shop/{{ shop[0] }}" class="back">→</a>
+  <div class="topbar-title">📝 سفارش از {{ shop[2] or shop[1] }}</div>
+  <div style="width:38px"></div>
+</div>
+
+<div class="frame">
+  <div class="pt">📝 ثبت سفارش</div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% for cat, m in messages %}
+  <div class="msg {{ 'ok' if cat=='ok' else 'err' }}">{{ m }}</div>
+  {% endfor %}
+  {% endwith %}
+
+  <form method="POST">
+    <label>📌 موضوع</label>
+    <input type="text" name="subject" placeholder="مثلاً: سفارش میوه" required>
+
+    <label>💬 پیام</label>
+    <textarea name="message" placeholder="توضیحات سفارش..." required></textarea>
+
+    <label>📱 شماره تماس</label>
+    <input type="tel" name="phone" value="{{ customer[1] if customer else '' }}" maxlength="11">
+
+    <button class="btn" type="submit">📤 ارسال سفارش</button>
+  </form>
+</div>
+
+{% include "_global_bg.html" %}
+</body></html>

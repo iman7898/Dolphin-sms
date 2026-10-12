@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>کاربران ربات</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none}
+.frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.4)}
+.pt{text-align:center;font-size:19px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.sc{border-radius:14px;padding:12px 8px;text-align:center;border:1.5px solid rgba(0,255,157,.4);background:rgba(0,10,8,.6)}
+.sv{font-size:20px;font-weight:900;color:#00ff9d;direction:ltr}
+.sl{font-size:10px;color:#7dfcc7;margin-top:4px}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+select,input{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:11px;font-family:inherit;font-size:13px}
+.btn{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:12px;padding:11px;font-family:inherit;font-size:13px;font-weight:900;cursor:pointer;width:100%;margin-bottom:12px}
+.btn-r{background:linear-gradient(135deg,#ff4d6d,#c8102e);color:#fff}
+.bx{background:rgba(0,20,15,.7);border:1.5px solid rgba(0,255,157,.35);border-radius:20px;padding:14px;margin-bottom:14px}
+.bx-t{text-align:center;font-size:14px;color:#00ff9d;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(0,255,157,.2)}
+.mem{padding:14px;border-radius:14px;background:rgba(0,10,8,.6);border:1.5px solid rgba(0,255,157,.25);margin-bottom:10px}
+.mem.r{border-color:rgba(191,0,255,.6)}
+.mem.s{border-color:rgba(0,212,255,.6)}
+.mem-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.mem-name{font-size:15px;font-weight:900;color:#00ff9d;direction:ltr}
+.mem.r .mem-name{color:#bf00ff}.mem.s .mem-name{color:#00d4ff}
+.mem-badge{padding:3px 10px;border-radius:8px;font-size:10px;font-weight:900}
+.b-r{background:rgba(191,0,255,.2);color:#bf00ff;border:1px solid #bf00ff}
+.b-s{background:rgba(0,212,255,.2);color:#00d4ff;border:1px solid #00d4ff}
+.mem-info{padding:8px;background:rgba(0,0,0,.4);border-radius:8px;margin-bottom:6px}
+.mem-row{font-size:11px;color:#7dfcc7;direction:ltr;word-break:break-all;font-family:monospace;line-height:1.6}
+.mem-row b{color:#00ff9d;font-family:Vazirmatn;margin-left:6px}
+.mem-date{font-size:10px;color:#6b8f80;direction:ltr;margin-top:6px}
+.mem-act{display:flex;gap:8px;margin-top:10px}
+.btn-sm{flex:1;border:none;border-radius:10px;padding:10px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer}
+.btn-copy{background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid #00d4ff}
+.btn-del{background:rgba(255,77,109,.15);color:#ff4d6d;border:1px solid #ff4d6d}
+.empty{text-align:center;color:#6b8f80;padding:30px 0;font-size:13px}
+.nw{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d,#00d4ff 35%,#bf00ff 70%,#00ff9d);z-index:100}
+.bn2{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px}
+.ni .ic{font-size:22px;filter:grayscale(1) brightness(.85)}
+.ni.act{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));border-radius:20px}
+.ni.act .ic{filter:none;color:#00ff9d}.ni.act span:last-child{color:#00ff9d;font-weight:bold}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(30px);background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;padding:12px 22px;border-radius:14px;font-weight:900;font-size:13px;box-shadow:0 0 30px rgba(0,255,157,.9);opacity:0;pointer-events:none;transition:.3s;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head><body>
+<a class="back-btn" href="/admin/dashboard">→ داشبورد</a>
+<div class="frame">
+<div class="pt">👥 کاربران ربات‌ها</div>
+<div class="stats">
+<div class="sc"><div class="sv">{{ total }}</div><div class="sl">کل</div></div>
+<div class="sc"><div class="sv">{{ today }}</div><div class="sl">امروز</div></div>
+<div class="sc"><div class="sv">{{ week }}</div><div class="sl">۷ روز</div></div>
+</div>
+<div class="bx">
+<div class="bx-t">🔍 فیلتر</div>
+<form method="GET">
+<div class="filters">
+<select name="messenger">
+<option value="">همه</option>
+<option value="rubika" {% if filter_m == 'rubika' %}selected{% endif %}>🟣 روبیکا</option>
+<option value="soroush" {% if filter_m == 'soroush' %}selected{% endif %}>🔷 سروش</option>
+</select>
+<input type="text" name="q" placeholder="جستجو..." value="{{ q }}">
+</div>
+<button class="btn" type="submit">🔍 اعمال</button>
+</form>
+</div>
+<div class="bx">
+<div class="bx-t">📊 {{ members|length }} کاربر</div>
+{% if members %}
+{% for m in members %}
+<div class="mem {% if m[1] == 'rubika' %}r{% elif m[1] == 'soroush' %}s{% endif %}">
+<div class="mem-head">
+<div class="mem-name">@{{ m[3] or 'بدون-نام' }}</div>
+<span class="mem-badge {% if m[1] == 'rubika' %}b-r{% elif m[1] == 'soroush' %}b-s{% endif %}">
+{% if m[1] == 'rubika' %}🟣{% elif m[1] == 'soroush' %}🔷{% endif %} {{ m[1] }}
+</span>
+</div>
+<div class="mem-info">
+<div class="mem-row"><b>👤 نام:</b>{{ m[4] or '—' }}</div>
+<div class="mem-row"><b>💬 Chat ID:</b>{{ m[2] }}</div>
+</div>
+<div class="mem-date">📅 {{ m[5] }}</div>
+<div class="mem-act">
+<button class="btn-sm btn-copy" onclick="copyId('{{ m[3] or m[2] }}')">📋 کپی</button>
+<form method="POST" action="/admin/bot-members/{{ m[0] }}/delete" style="flex:1;margin:0" onsubmit="return confirm('حذف بشه؟')">
+<button class="btn-sm btn-del" type="submit">🗑 حذف</button>
+</form>
+</div>
+</div>
+{% endfor %}
+{% else %}
+<div class="empty">📭 کاربری نیست<br><small>منتظر بمان تا کاربران ربات رو استارت بزنن</small></div>
+{% endif %}
+</div>
+<div class="bx">
+<div class="bx-t">⚠️ پاک کردن همه</div>
+<form method="POST" action="/admin/bot-members/clear" onsubmit="return confirm('همه کاربران پاک بشن؟')">
+<select name="messenger">
+<option value="">همه</option>
+<option value="rubika">فقط روبیکا</option>
+<option value="soroush">فقط سروش</option>
+</select>
+<button class="btn btn-r" type="submit">🗑 پاک کردن</button>
+</form>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="nw"><div class="bn2">
+<a class="ni" href="/admin/dashboard"><span class="ic">🏠</span><span>داشبورد</span></a>
+<a class="ni" href="/admin/bots"><span class="ic">🤖</span><span>ربات‌ها</span></a>
+<a class="ni act" href="/admin/bot-members"><span class="ic">👥</span><span>کاربران</span></a>
+</div></div>
+<script>
+function copyId(txt){
+    if (navigator.clipboard){
+        navigator.clipboard.writeText(txt).then(function(){ showToast('✅ کپی شد'); });
+    } else {
+        var ta = document.createElement('textarea');
+        ta.value = txt;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✅ کپی شد');
+    }
+}
+function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2000);
+}
+</script>
+{% include "_global_bg.html" %}
+</body></html>

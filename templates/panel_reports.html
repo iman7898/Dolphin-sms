@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📊 گزارش‌های من</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
+    background-image:radial-gradient(circle at 15% 0%,rgba(0,212,255,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,255,157,.12),transparent 45%);}
+  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
+  .frame{border:2px solid #00ff9d;border-radius:26px;padding:18px 14px;background:rgba(0,20,15,.35);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
+  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(0,255,157,.55),inset 0 0 18px rgba(0,255,157,.08),0 0 70px rgba(0,255,157,.18)}50%{box-shadow:0 0 34px rgba(0,255,157,.85),inset 0 0 24px rgba(0,255,157,.16),0 0 100px rgba(0,255,157,.28)}}
+  .page-title{text-align:center;font-size:18px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 16px;display:flex;align-items:center;justify-content:center;gap:10px}
+
+  /* آمار بالای صفحه */
+  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-card{border-radius:16px;padding:14px 10px;text-align:center;border:1.5px solid}
+  .sc-green{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,180,120,.06));border-color:#00ff9d;box-shadow:0 0 18px rgba(0,255,157,.4)}
+  .sc-blue{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,150,200,.06));border-color:#00d4ff;box-shadow:0 0 18px rgba(0,212,255,.4)}
+  .sc-gold{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.06));border-color:#ffd700;box-shadow:0 0 18px rgba(255,215,0,.4)}
+  .sc-red{background:linear-gradient(135deg,rgba(255,77,109,.15),rgba(200,16,46,.06));border-color:#ff4d6d;box-shadow:0 0 18px rgba(255,77,109,.4)}
+  .stat-v{font-size:22px;font-weight:900;color:#00ff9d;direction:ltr;text-shadow:0 0 12px rgba(0,255,157,.7)}
+  .sc-blue .stat-v{color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,.7)}
+  .sc-gold .stat-v{color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,.7)}
+  .sc-red .stat-v{color:#ff4d6d;text-shadow:0 0 12px rgba(255,77,109,.7)}
+  .stat-l{font-size:11px;color:#7dfcc7;margin-top:5px}
+
+  /* تب‌ها */
+  .tabs{display:flex;gap:6px;background:rgba(0,10,8,.7);border-radius:14px;padding:6px;border:1px solid rgba(0,255,157,.25);margin-bottom:16px;overflow-x:auto}
+  .tab{flex:1;text-align:center;padding:10px 8px;border-radius:10px;text-decoration:none;color:#7dfcc7;font-size:12px;font-weight:bold;transition:.3s;white-space:nowrap;cursor:pointer;border:none;background:none;font-family:inherit}
+  .tab:hover{background:rgba(0,255,157,.08)}
+  .tab.active{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;box-shadow:0 0 15px rgba(0,255,157,.6)}
+
+  /* فیلتر دوره */
+  .period-tabs{display:flex;gap:6px;margin-bottom:14px}
+  .ptab{flex:1;text-align:center;padding:8px;border-radius:10px;text-decoration:none;color:#7dfcc7;font-size:11.5px;font-weight:bold;background:rgba(0,10,8,.7);border:1px solid rgba(0,255,157,.25);transition:.3s}
+  .ptab.active{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border-color:#00ff9d}
+
+  /* جستجو */
+  .search-form{display:flex;gap:6px;margin-bottom:12px}
+  .search-form input{flex:1;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:10px;padding:11px;font-family:inherit;font-size:13px;direction:ltr}
+  .search-form input:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 12px rgba(0,255,157,.5)}
+  .search-form button{background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:10px;padding:11px 16px;font-family:inherit;font-size:13px;font-weight:900;cursor:pointer}
+
+  /* باکس */
+  .box{background:linear-gradient(135deg,rgba(0,20,15,.9),rgba(0,25,20,.95));border:1px solid rgba(0,255,157,.35);border-radius:20px;padding:14px;box-shadow:0 0 15px rgba(0,255,157,.15);margin-bottom:14px;display:none}
+  .box.active{display:block}
+  .box-title{text-align:center;font-size:14px;color:#00ff9d;margin-bottom:14px;text-shadow:0 0 10px rgba(0,255,157,.6);padding-bottom:12px;border-bottom:1px solid rgba(0,255,157,.2);display:flex;align-items:center;justify-content:center;gap:8px}
+
+  /* آیتم‌ها */
+  .item{display:flex;justify-content:space-between;align-items:center;padding:12px;margin-bottom:8px;border-radius:12px;background:rgba(0,10,8,.6);border:1px solid rgba(0,255,157,.2);gap:10px;animation:tin .5s cubic-bezier(.2,.8,.2,1) both}
+  .item:last-child{margin-bottom:0}
+  @keyframes tin{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:none}}
+  .i-left{flex:1;min-width:0}
+  .i-title{font-size:13px;font-weight:bold;color:#00ff9d;direction:ltr;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .i-sub{font-size:10.5px;color:#7dfcc7;margin-top:4px;line-height:1.5}
+  .i-right{text-align:left;min-width:80px}
+  .i-val{font-size:14px;font-weight:900;direction:ltr}
+  .plus{color:#00ff9d;text-shadow:0 0 10px rgba(0,255,157,.6)}
+  .minus{color:#ff4d6d;text-shadow:0 0 10px rgba(255,77,109,.5)}
+  .i-date{font-size:10px;color:#6b8f80;margin-top:4px;direction:ltr}
+
+  .status-badge{display:inline-block;padding:2px 8px;border-radius:7px;font-size:10px;font-weight:bold;margin-top:4px}
+  .s-ok{background:rgba(0,255,157,.2);color:#00ff9d;border:1px solid #00ff9d}
+  .s-fail{background:rgba(255,77,109,.2);color:#ff4d6d;border:1px solid #ff4d6d}
+  .s-pending{background:rgba(245,158,11,.2);color:#fbbf24;border:1px solid #fbbf24}
+
+  .empty{color:#6b8f80;text-align:center;padding:30px 0;font-size:12.5px}
+  .empty-ic{font-size:44px;display:block;margin-bottom:8px;opacity:.5}
+
+  /* نمودار */
+  .chart-box{position:relative;height:200px;padding:8px 4px}
+
+  /* نوار پایین */
+  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
+  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px;transition:.3s}
+  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85);transition:.3s}
+  .nav-item.active{background:linear-gradient(135deg,rgba(0,255,157,.15),rgba(0,200,140,.06));box-shadow:0 0 18px rgba(0,255,157,.4),inset 0 0 14px rgba(0,255,157,.08)}
+  .nav-item.active .ic{filter:none;color:#00ff9d;text-shadow:0 0 12px #00ff9d}
+  .nav-item.active span:last-child{color:#00ff9d;font-weight:bold}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="/panel/dashboard">→ داشبورد</a>
+
+<div class="frame">
+  <div class="page-title">📊 گزارش‌های من {% if shop %}<span style="font-size:12px;color:#7dfcc7;font-weight:normal">({{ shop }})</span>{% endif %}</div>
+
+  <!-- آمار کلی -->
+  <div class="stats-grid">
+    <div class="stat-card sc-green">
+      <div class="stat-v">{{ "{:,}".format(sms_count) }}</div>
+      <div class="stat-l">📨 کل پیامک‌ها</div>
+    </div>
+    <div class="stat-card sc-blue">
+      <div class="stat-v">{{ "{:,}".format(sms_ok) }}</div>
+      <div class="stat-l">✅ موفق</div>
+    </div>
+    <div class="stat-card sc-red">
+      <div class="stat-v">{{ "{:,}".format(sms_fail) }}</div>
+      <div class="stat-l">❌ ناموفق</div>
+    </div>
+    <div class="stat-card sc-gold">
+      <div class="stat-v">{{ "{:,}".format(balance) }}</div>
+      <div class="stat-l">💰 موجودی (ریال)</div>
+    </div>
+  </div>
+
+  <!-- نمودار پیامک هفتگی -->
+  <div class="box active" style="margin-bottom:14px">
+    <div class="box-title">📈 پیامک‌های ۷ روز اخیر</div>
+    <div class="chart-box">
+      <canvas id="smsChart"></canvas>
+    </div>
+  </div>
+
+  <!-- تب‌ها -->
+  <div class="tabs">
+    <button class="tab active" data-tab="sms">📨 پیامک‌ها</button>
+    <button class="tab" data-tab="trans">💰 تراکنش‌ها</button>
+    <button class="tab" data-tab="premium">⭐ پرمیوم</button>
+    <button class="tab" data-tab="pay">💳 پرداخت‌ها</button>
+  </div>
+
+  <!-- فیلتر دوره (فقط برای پیامک) -->
+  <div class="period-tabs" id="periodTabs">
+    <a class="ptab {% if period == 'today' %}active{% endif %}" href="?period=today&phone={{ phone }}">امروز</a>
+    <a class="ptab {% if period == 'week' %}active{% endif %}" href="?period=week&phone={{ phone }}">هفته</a>
+    <a class="ptab {% if period == 'month' %}active{% endif %}" href="?period=month&phone={{ phone }}">ماه</a>
+    <a class="ptab {% if period == 'all' %}active{% endif %}" href="?period=all&phone={{ phone }}">همه</a>
+  </div>
+
+  <!-- جستجو (فقط پیامک) -->
+  <form class="search-form" method="GET" id="searchForm">
+    <input type="hidden" name="period" value="{{ period }}">
+    <input type="text" name="phone" placeholder="🔍 جستجوی شماره..." value="{{ phone }}">
+    <button type="submit">🔍</button>
+  </form>
+
+  <!-- بخش پیامک‌ها -->
+  <div class="box active" data-box="sms">
+    <div class="box-title">📨 تاریخچه پیامک‌ها</div>
+    {% if sms_list %}
+      {% for s in sms_list %}
+        <div class="item" style="animation-delay:{{ loop.index0 * 0.02 }}s">
+          <div class="i-left">
+            <div class="i-title">{{ s[1] }}</div>
+            <div class="i-sub">{{ s[2][:60] }}{% if s[2]|length > 60 %}...{% endif %}</div>
+            {% if s[3] == 'success' or s[3] == 'sent' or s[3] == 'ok' %}
+              <span class="status-badge s-ok">✅ موفق</span>
+            {% elif s[3] == 'failed' or s[3] == 'error' %}
+              <span class="status-badge s-fail">❌ ناموفق</span>
+            {% else %}
+              <span class="status-badge s-pending">{{ s[3] }}</span>
+            {% endif %}
+          </div>
+          <div class="i-right">
+            <div class="i-date">🕐 {{ s[4] }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><span class="empty-ic">📭</span>پیامکی پیدا نشد</div>
+    {% endif %}
+  </div>
+
+  <!-- بخش تراکنش‌ها -->
+  <div class="box" data-box="trans">
+    <div class="box-title">💰 تاریخچه تراکنش‌های کیف پول</div>
+    {% if transactions %}
+      {% for t in transactions %}
+        <div class="item" style="animation-delay:{{ loop.index0 * 0.03 }}s">
+          <div class="i-left">
+            <div class="i-title">
+              {% if t[2] == 'charge' %}💳 شارژ
+              {% elif t[2] == 'deduct' %}✂️ کسر
+              {% elif t[2] == 'refund' %}↩️ برگشت
+              {% elif t[2] == 'premium' %}⭐ پرمیوم
+              {% else %}{{ t[2] }}{% endif %}
+            </div>
+            <div class="i-sub">{{ t[3] }}</div>
+          </div>
+          <div class="i-right">
+            <div class="i-val {% if t[1] > 0 %}plus{% else %}minus{% endif %}">
+              {% if t[1] > 0 %}+{% endif %}{{ "{:,}".format(t[1]) }}
+            </div>
+            <div class="i-date">🕐 {{ t[5] }}</div>
+            <div class="i-date" style="color:#7dfcc7">موجودی: {{ "{:,}".format(t[4]) }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><span class="empty-ic">📭</span>تراکنشی نیست</div>
+    {% endif %}
+  </div>
+
+  <!-- بخش پرمیوم -->
+  <div class="box" data-box="premium">
+    <div class="box-title">⭐ تاریخچه خرید پرمیوم</div>
+    {% if premiums %}
+      {% for p in premiums %}
+        <div class="item">
+          <div class="i-left">
+            <div class="i-title">⭐ پرمیوم</div>
+            <div class="i-sub">{{ p[3] }}</div>
+          </div>
+          <div class="i-right">
+            <div class="i-val minus">{{ "{:,}".format(p[1]) }}</div>
+            <div class="i-date">🕐 {{ p[5] }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><span class="empty-ic">⭐</span>هنوز پرمیوم نخریدی</div>
+    {% endif %}
+  </div>
+
+  <!-- بخش پرداخت‌ها -->
+  <div class="box" data-box="pay">
+    <div class="box-title">💳 پرداخت‌های آنلاین</div>
+    {% if payments %}
+      {% for p in payments %}
+        <div class="item">
+          <div class="i-left">
+            <div class="i-title">{{ "{:,}".format(p[1]) }} ریال</div>
+            <div class="i-sub">
+              {% if p[2] == 'verified' %}<span class="status-badge s-ok">✅ موفق</span>
+              {% elif p[2] == 'pending' %}<span class="status-badge s-pending">⏳ در انتظار</span>
+              {% else %}<span class="status-badge s-fail">❌ ناموفق</span>{% endif %}
+            </div>
+            {% if p[3] %}<div class="i-sub" style="direction:ltr">Ref: {{ p[3] }}</div>{% endif %}
+          </div>
+          <div class="i-right">
+            <div class="i-date">🕐 {{ p[4] }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><span class="empty-ic">💳</span>پرداختی نیست</div>
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="nav-wrap">
+  <div class="bottom-nav">
+    <a class="nav-item" href="/panel/dashboard"><span class="ic">🏠</span><span>پنل</span></a>
+    <a class="nav-item" href="/panel/wallet"><span class="ic">💰</span><span>کیف پول</span></a>
+    <a class="nav-item" href="/panel/tickets"><span class="ic">🎫</span><span>تیکت</span></a>
+    <a class="nav-item active" href="/panel/reports"><span class="ic">📊</span><span>گزارش</span></a>
+  </div>
+</div>
+
+{% include "_global_bg.html" %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  // تب‌ها
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      const name = t.dataset.tab;
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      document.querySelectorAll('.box[data-box]').forEach(b => {
+        b.classList.toggle('active', b.dataset.box === name);
+      });
+      const pt = document.getElementById('periodTabs');
+      const sf = document.getElementById('searchForm');
+      const showFilter = (name === 'sms');
+      if (pt) pt.style.display = showFilter ? 'flex' : 'none';
+      if (sf) sf.style.display = showFilter ? 'flex' : 'none';
+    });
+  });
+
+  // نمودار
+  (function(){
+    const ctx = document.getElementById('smsChart');
+    if (!ctx) return;
+    const labels = {{ chart_labels|tojson }};
+    const values = {{ chart_values|tojson }};
+    const grad = ctx.getContext('2d').createLinearGradient(0,0,0,200);
+    grad.addColorStop(0,'rgba(0,255,157,.55)');
+    grad.addColorStop(1,'rgba(0,255,157,.02)');
+    new Chart(ctx, {
+      type:'line',
+      data:{labels, datasets:[{
+        label:'پیامک', data:values,
+        borderColor:'#00ff9d', backgroundColor:grad, borderWidth:3,
+        pointBackgroundColor:'#00ff9d', pointBorderColor:'#001a12', pointBorderWidth:2,
+        pointRadius:4, tension:0.4, fill:true
+      }]},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}, tooltip:{
+          backgroundColor:'rgba(0,20,15,.95)', borderColor:'#00ff9d', borderWidth:1,
+          titleColor:'#00ff9d', bodyColor:'#e2e8f0',
+          titleFont:{family:'Vazirmatn',size:12}, bodyFont:{family:'Vazirmatn',size:11},
+          displayColors:false, callbacks:{label:i=>'📨 '+i.parsed.y+' پیامک'}
+        }},
+        scales:{
+          x:{grid:{color:'rgba(0,255,157,.08)'}, ticks:{color:'#7dfcc7',font:{family:'Vazirmatn',size:10}}},
+          y:{beginAtZero:true, grid:{color:'rgba(0,255,157,.08)'}, ticks:{color:'#7dfcc7',font:{family:'Vazirmatn',size:10},precision:0}}
+        }
+      }
+    });
+  })();
+</script>
+</body>
+</html>

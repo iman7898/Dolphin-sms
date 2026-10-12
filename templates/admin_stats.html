@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>آمار و نمودار</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+.chart-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 20px 0; }
+.chart-box {
+    background: rgba(0,30,20,0.6);
+    border: 2px solid rgba(255,0,110,0.3);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 0 20px rgba(255,0,110,0.2);
+}
+.chart-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: #ff006e;
+    text-shadow: 0 0 10px rgba(255,0,110,0.6);
+    margin-bottom: 14px;
+    text-align: center;
+}
+.chart-box canvas { max-height: 280px; }
+.stats-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+.mini-stat {
+    background: rgba(0,30,20,0.6);
+    border: 1px solid rgba(255,0,110,0.3);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+}
+.mini-stat-label { font-size: 11px; color: #7a8599; display: block; margin-bottom: 6px; }
+.mini-stat-value { font-size: 24px; font-weight: 900; color: #ff006e; text-shadow: 0 0 12px rgba(255,0,110,0.7); }
+</style>
+</head>
+<body class="matrix-bg admin-view">
+<div class="container">
+
+<div class="header-bar red-header">
+<div class="header-title red-title">📊 آمار و نمودار</div>
+</div>
+
+<div class="stats-mini-grid">
+<div class="mini-stat">
+<span class="mini-stat-label">کل پیامک‌ها</span>
+<span class="mini-stat-value" id="totalSms">0</span>
+</div>
+<div class="mini-stat">
+<span class="mini-stat-label">کاربران فعال</span>
+<span class="mini-stat-value" id="totalUsers">0</span>
+</div>
+</div>
+
+<div class="chart-grid">
+
+<div class="chart-box">
+<div class="chart-title">📅 پیامک‌های ۷ روز اخیر</div>
+<canvas id="dailyChart"></canvas>
+</div>
+
+<div class="chart-box">
+<div class="chart-title">🕐 پیامک‌ها بر اساس ساعت</div>
+<canvas id="hourlyChart"></canvas>
+</div>
+
+<div class="chart-box">
+<div class="chart-title">🏆 پرمصرف‌ترین مغازه‌ها</div>
+<canvas id="topUsersChart"></canvas>
+</div>
+
+<div class="chart-box">
+<div class="chart-title">📊 وضعیت ارسال</div>
+<canvas id="statusChart"></canvas>
+</div>
+
+</div>
+
+<div class="footer-box">
+<div class="footer-actions">
+<a href="/admin/dashboard" class="btn-nav">← بازگشت به داشبورد</a>
+<a href="/admin/logs" class="btn-nav" style="background:#001a33;color:#00d4ff;border-color:#00d4ff;">📋 لاگ‌ها</a>
+</div>
+</div>
+</div>
+
+<nav class="bottom-nav">
+<a href="/admin/dashboard" class="nav-item">
+<span class="nav-icon">🏠</span><span class="nav-label">پنل</span>
+</a>
+<a href="/admin/stats" class="nav-item active">
+<span class="nav-icon">📊</span><span class="nav-label">آمار</span>
+</a>
+<a href="/admin/chat" class="nav-item">
+<span class="nav-icon">💬</span><span class="nav-label">چت</span>
+{% if unread_chat and unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
+</a>
+<a href="/admin/ai" class="nav-item">
+<span class="nav-icon">🤖</span><span class="nav-label">AI</span>
+</a>
+<a href="/admin/profile" class="nav-item">
+<span class="nav-icon">👤</span><span class="nav-label">پروفایل</span>
+</a>
+</nav>
+
+<script>
+var COLORS = {
+    pink: 'rgba(255,0,110,0.8)',
+    pinkBorder: '#ff006e',
+    gold: 'rgba(255,190,11,0.8)',
+    goldBorder: '#ffbe0b',
+    cyan: 'rgba(0,212,255,0.8)',
+    cyanBorder: '#00d4ff',
+    green: 'rgba(0,255,157,0.8)',
+    greenBorder: '#00ff9d'
+};
+
+fetch('/api/stats/data').then(r => r.json()).then(data => {
+    let total = 0;
+    data.daily.forEach(d => total += d.count);
+    document.getElementById('totalSms').textContent = total;
+    document.getElementById('totalUsers').textContent = data.top_users.length;
+
+    Chart.defaults.font.family = 'Vazirmatn';
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = '#fff';
+
+    // ===== ۱. نمودار خطی - Gradient =====
+    var ctx1 = document.getElementById('dailyChart').getContext('2d');
+    var grad1 = ctx1.createLinearGradient(0, 0, 0, 300);
+    grad1.addColorStop(0, 'rgba(255,0,110,0.6)');
+    grad1.addColorStop(1, 'rgba(255,0,110,0.02)');
+
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: data.daily.map(d => d.date.slice(5)),
+            datasets: [{
+                label: 'پیامک',
+                data: data.daily.map(d => d.count),
+                borderColor: '#ff006e',
+                backgroundColor: grad1,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#ff006e',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 10,
+                pointHoverBackgroundColor: '#ff006e',
+                pointHoverBorderColor: '#fff',
+                pointHoverBorderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: { duration: 1500, easing: 'easeOutQuart' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    titleColor: '#ff006e',
+                    bodyColor: '#fff',
+                    borderColor: '#ff006e',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(c) { return ' ' + c.parsed.y + ' پیامک'; }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255,0,110,0.1)', drawBorder: false },
+                    ticks: { color: '#fff', padding: 8 }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#fff', padding: 8 }
+                }
+            }
+        }
+    });
+
+    // ===== ۲. نمودار میله‌ای ساعتی - رنگ متنوع =====
+    var barColors = data.hourly.map(h => {
+        var intensity = h.count > 0 ? Math.min(1, h.count / 5) : 0.2;
+        return 'rgba(255,190,11,' + (0.3 + intensity * 0.7) + ')';
+    });
+
+    new Chart(document.getElementById('hourlyChart'), {
+        type: 'bar',
+        data: {
+            labels: data.hourly.map(h => h.hour + ''),
+            datasets: [{
+                label: 'پیامک',
+                data: data.hourly.map(h => h.count),
+                backgroundColor: barColors,
+                borderColor: '#ffbe0b',
+                borderWidth: 1,
+                borderRadius: 8,
+                borderSkipped: false,
+                hoverBackgroundColor: '#ffbe0b',
+                hoverBorderColor: '#fff',
+                hoverBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: { duration: 1500, easing: 'easeOutQuart', delay: (ctx) => ctx.dataIndex * 40 },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    titleColor: '#ffbe0b',
+                    bodyColor: '#fff',
+                    borderColor: '#ffbe0b',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: false,
+                    callbacks: {
+                        title: function(c) { return 'ساعت ' + c[0].label + ':00'; },
+                        label: function(c) { return ' ' + c.parsed.y + ' پیامک'; }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255,190,11,0.1)', drawBorder: false },
+                    ticks: { color: '#fff', padding: 8 }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#fff', font: { size: 10 }, padding: 4 }
+                }
+            }
+        }
+    });
+
+    // ===== ۳. پرمصرف‌ترین کاربران - Gradient افقی =====
+    var ctx3 = document.getElementById('topUsersChart').getContext('2d');
+    var grad3 = ctx3.createLinearGradient(0, 0, 400, 0);
+    grad3.addColorStop(0, '#00d4ff');
+    grad3.addColorStop(1, '#8338ec');
+
+    new Chart(ctx3, {
+        type: 'bar',
+        data: {
+            labels: data.top_users.map(u => u.shop || u.username),
+            datasets: [{
+                label: 'تعداد پیامک',
+                data: data.top_users.map(u => u.count),
+                backgroundColor: grad3,
+                borderColor: '#00d4ff',
+                borderWidth: 2,
+                borderRadius: 10,
+                borderSkipped: false,
+                hoverBackgroundColor: '#00d4ff',
+                hoverBorderColor: '#fff',
+                hoverBorderWidth: 2
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            animation: { duration: 1500, easing: 'easeOutQuart', delay: (ctx) => ctx.dataIndex * 150 },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    titleColor: '#00d4ff',
+                    bodyColor: '#fff',
+                    borderColor: '#00d4ff',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(c) { return ' ' + c.parsed.x + ' پیامک'; }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,212,255,0.1)', drawBorder: false },
+                    ticks: { color: '#fff', padding: 8 }
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: { color: '#fff', font: { size: 12, weight: 'bold' }, padding: 8 }
+                }
+            }
+        }
+    });
+
+    // ===== ۴. وضعیت ارسال - دایره‌ای زیبا =====
+    var statusColors = {
+        'success': '#00ff9d',
+        'failed': '#ff006e',
+        'unknown': '#ffbe0b',
+        'pending': '#00d4ff'
+    };
+    var statusGradients = data.statuses.map(s => statusColors[s.status] || '#7a8599');
+    var totalCount = data.statuses.reduce((a, b) => a + b.count, 0);
+
+    new Chart(document.getElementById('statusChart'), {
+        type: 'doughnut',
+        data: {
+            labels: data.statuses.map(s => s.status + ' (' + s.count + ')'),
+            datasets: [{
+                data: data.statuses.map(s => s.count),
+                backgroundColor: statusGradients,
+                borderColor: '#0a0a0a',
+                borderWidth: 4,
+                hoverOffset: 15,
+                hoverBorderColor: '#fff',
+                hoverBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '65%',
+            animation: { animateRotate: true, animateScale: true, duration: 1500, easing: 'easeOutQuart' },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#fff',
+                        font: { size: 13, family: 'Vazirmatn' },
+                        padding: 15,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    titleColor: '#ff006e',
+                    bodyColor: '#fff',
+                    borderColor: '#ff006e',
+                    borderWidth: 2,
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            var val = context.parsed;
+                            var pct = totalCount > 0 ? ((val / totalCount) * 100).toFixed(1) : 0;
+                            return ' ' + val + ' پیامک (' + pct + '%)';
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [{
+            id: 'centerText',
+            beforeDraw: function(chart) {
+                var width = chart.width;
+                var height = chart.height;
+                var ctx = chart.ctx;
+                ctx.restore();
+                var fontSize = (height / 180).toFixed(2);
+                ctx.font = 'bold ' + fontSize + 'em Vazirmatn';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#ff006e';
+                ctx.shadowColor = '#ff006e';
+                ctx.shadowBlur = 15;
+                var text = totalCount.toString();
+                var textX = Math.round((width - ctx.measureText(text).width) / 2);
+                var textY = height / 2 - 10;
+                ctx.fillText(text, textX, textY);
+                ctx.font = 'normal ' + (fontSize * 0.4) + 'em Vazirmatn';
+                ctx.fillStyle = '#7a8599';
+                ctx.shadowBlur = 0;
+                var label = 'کل پیامک';
+                var labelX = Math.round((width - ctx.measureText(label).width) / 2);
+                ctx.fillText(label, labelX, textY + 30);
+                ctx.save();
+            }
+        }]
+    });
+}).catch(e => {
+    console.error('Stats error:', e);
+    document.getElementById('totalSms').textContent = 'خطا';
+});
+</script>
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

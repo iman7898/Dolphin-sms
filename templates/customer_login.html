@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ورود مشتری</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:30px 14px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(0,255,157,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.frame{max-width:450px;margin:0 auto;border:2px solid #00ff9d;border-radius:26px;padding:26px 20px;background:rgba(0,20,15,.5)}
+.pt{text-align:center;font-size:22px;font-weight:900;color:#00ff9d;text-shadow:0 0 14px rgba(0,255,157,.8);margin:0 0 22px}
+label{display:block;font-size:12px;color:#7dfcc7;margin-bottom:6px;font-weight:bold}
+input{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(0,255,157,.35);border-radius:12px;padding:13px;font-family:inherit;font-size:14px;margin-bottom:14px;transition:.25s}
+input:focus{outline:none;border-color:#00ff9d;box-shadow:0 0 15px rgba(0,255,157,.5)}
+.btn{width:100%;background:linear-gradient(135deg,#00ff9d,#00b377);color:#001a12;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;margin-top:6px;box-shadow:0 0 22px rgba(0,255,157,.7)}
+.btn:active{transform:scale(.98)}
+.link{display:block;text-align:center;margin-top:16px;color:#7dfcc7;font-size:13px;text-decoration:none}
+.link:hover{color:#00ff9d}
+.err{background:rgba(255,77,109,.15);border:1px solid #ff4d6d;color:#ff4d6d;padding:12px;border-radius:12px;margin-bottom:14px;text-align:center;font-size:13px;font-weight:bold}
+</style></head><body>
+<div class="frame">
+<div class="pt">🛒 ورود مشتری</div>
+{% if error %}<div class="err">{{ error }}</div>{% endif %}
+<form method="POST">
+<label>📱 شماره موبایل</label>
+<input type="tel" name="phone" placeholder="09xxxxxxxxx" maxlength="11" pattern="09[0-9]{9}" required autofocus>
+<label>🔒 رمز عبور</label>
+<input type="password" name="password" required>
+<button class="btn" type="submit">ورود</button>
+</form>
+<a class="link" href="/customer/register">حساب نداری؟ ثبت‌نام کن</a>
+</div>
+{% include "_global_bg.html" %}
+</body></html>

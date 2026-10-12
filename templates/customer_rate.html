@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نظرسنجی</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;margin:0;background:#020a08;background-image:radial-gradient(circle at 15% 0%,rgba(255,215,0,.14),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%)}
+.back-btn{position:fixed;top:18px;right:18px;background:rgba(255,215,0,.15);color:#ffd700;border:1px solid #ffd700;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;z-index:20}
+.frame{border:2px solid #ffd700;border-radius:26px;padding:22px 18px;background:rgba(30,20,0,.4);max-width:500px;margin:0 auto}
+.pt{text-align:center;font-size:19px;font-weight:900;color:#ffd700;margin:0 0 16px}
+label{display:block;font-size:12px;color:#ffe9a8;margin-bottom:8px;font-weight:bold}
+.stars{display:flex;gap:10px;justify-content:center;margin-bottom:18px;direction:ltr}
+.star{font-size:42px;cursor:pointer;transition:.2s;filter:grayscale(1) opacity(.4)}
+.star.on{filter:none;opacity:1;text-shadow:0 0 15px rgba(255,215,0,.8)}
+textarea{width:100%;background:rgba(0,10,8,.9);color:#e2e8f0;border:1.5px solid rgba(255,215,0,.35);border-radius:12px;padding:13px;font-family:inherit;font-size:14px;margin-bottom:14px;min-height:100px;resize:vertical}
+textarea:focus{outline:none;border-color:#ffd700;box-shadow:0 0 15px rgba(255,215,0,.5)}
+.btn{width:100%;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#001a12;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(255,215,0,.7)}
+input[type=hidden]{display:none}
+</style></head><body>
+<a class="back-btn" href="/customer/shop/{{ shop[0] }}">→ بازگشت</a>
+<div class="frame">
+<div class="pt">⭐ نظرسنجی از {{ shop[2] or shop[1] }}</div>
+<form method="POST">
+<input type="hidden" name="stars" id="starsIn" value="{{ my_rating[0] if my_rating else 5 }}">
+<label>امتیاز شما:</label>
+<div class="stars" id="starsRow">
+<span class="star {% if my_rating and my_rating[0] >= 1 %}on{% elif not my_rating %}on{% endif %}" data-s="1">⭐</span>
+<span class="star {% if my_rating and my_rating[0] >= 2 %}on{% elif not my_rating %}on{% endif %}" data-s="2">⭐</span>
+<span class="star {% if my_rating and my_rating[0] >= 3 %}on{% elif not my_rating %}on{% endif %}" data-s="3">⭐</span>
+<span class="star {% if my_rating and my_rating[0] >= 4 %}on{% elif not my_rating %}on{% endif %}" data-s="4">⭐</span>
+<span class="star {% if my_rating and my_rating[0] >= 5 %}on{% elif not my_rating %}on{% endif %}" data-s="5">⭐</span>
+</div>
+<label>نظر شما (اختیاری):</label>
+<textarea name="comment" placeholder="تجربه‌ت رو بنویس...">{{ my_rating[1] if my_rating else '' }}</textarea>
+<button class="btn" type="submit">📤 ثبت نظر</button>
+</form>
+</div>
+<script>
+document.querySelectorAll('.star').forEach(function(s){
+  s.onclick = function(){
+    var n = parseInt(s.dataset.s);
+    document.getElementById('starsIn').value = n;
+    document.querySelectorAll('.star').forEach(function(x){
+      x.classList.toggle('on', parseInt(x.dataset.s) <= n);
+    });
+  };
+});
+</script>
+</body></html>

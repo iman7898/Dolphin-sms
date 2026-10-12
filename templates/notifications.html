@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>اعلان‌ها</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<script src="/static/custom-alert.js"></script>
+</head>
+<body class="matrix-bg {% if is_admin %}admin-view{% endif %}">
+<div class="container">
+
+<div class="header-bar {% if is_admin %}red-header{% endif %}">
+<div class="header-title {% if is_admin %}red-title{% endif %}">🔔 اعلان‌ها</div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+        <div class="{{ 'success' if cat=='success' else 'error' }}">{{ msg }}</div>
+    {% endfor %}
+{% endwith %}
+
+{% if is_admin %}
+<div class="footer-box">
+<div class="footer-actions">
+<button type="button" class="btn-nav" onclick="openSendModal()">📤 ارسال اعلان به کاربران</button>
+<button type="button" class="btn-nav" style="background:#330000;color:#ff006e;border-color:#ff006e;" onclick="clearAllNotifs()">🗑 پاک کردن همه</button>
+</div>
+</div>
+{% else %}
+<div class="footer-box">
+<div class="footer-actions">
+<button type="button" class="btn-nav" style="background:#330000;color:#ff006e;border-color:#ff006e;" onclick="clearAllNotifs()">🗑 پاک کردن همه</button>
+</div>
+</div>
+{% endif %}
+
+<h2>📬 اعلان‌ها</h2>
+
+<div class="notif-list">
+{% if notifications %}
+{% for n in notifications %}
+<div class="notif-item" id="notif-{{ n[0] }}" data-link="{{ n[5] or '' }}">
+<div class="notif-icon">{{ n[4] or '🔔' }}</div>
+<div class="notif-body">
+<div class="notif-title">{{ n[2] }}</div>
+<div class="notif-text">{{ n[3] }}</div>
+<div class="notif-time">🕐 {{ n[7] }}</div>
+</div>
+<button type="button" class="notif-del" onclick="deleteNotif({{ n[0] }}, event)">✕</button>
+</div>
+{% endfor %}
+{% else %}
+<div class="chat-empty">هنوز اعلانی نداری 🔕</div>
+{% endif %}
+</div>
+
+<div class="footer-box">
+<div class="footer-actions">
+{% if is_admin %}
+<a href="/admin/dashboard" class="btn-nav">← بازگشت به پنل</a>
+{% else %}
+<a href="/panel/dashboard" class="btn-nav">← بازگشت به پنل</a>
+{% endif %}
+</div>
+</div>
+
+</div>
+
+{% if is_admin %}
+<div id="sendModal" class="modal-overlay">
+<div class="modal-box">
+<div class="modal-icon">📤</div>
+<div class="modal-title">ارسال اعلان</div>
+<form method="post" action="/admin/notif/send">
+<label class="form-label">عنوان</label>
+<input type="text" name="title" required placeholder="مثلاً تبریک عید">
+<label class="form-label">متن</label>
+<textarea name="body" required placeholder="متن اعلان..."></textarea>
+<label class="form-label">آیکون (ایموجی)</label>
+<input type="text" name="icon" value="🔔" maxlength="4">
+<label class="form-label">لینک (اختیاری)</label>
+<input type="text" name="link" placeholder="/panel/...">
+<input type="hidden" name="target" value="all">
+<div class="modal-actions" style="margin-top:15px;">
+<button type="button" class="modal-btn modal-cancel" onclick="closeModal('sendModal')">انصراف</button>
+<button type="submit" class="modal-btn modal-confirm">ارسال</button>
+</div>
+</form>
+</div>
+</div>
+{% endif %}
+
+<nav class="bottom-nav">
+{% if is_admin %}
+<a href="/admin/dashboard" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">پنل</span></a>
+<a href="/admin/notifications" class="nav-item active"><span class="nav-icon">🔔</span><span class="nav-label">اعلان‌ها</span></a>
+<a href="/admin/chat" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">چت</span></a>
+<a href="/admin/profile" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">پروفایل</span></a>
+{% else %}
+<a href="/panel/dashboard" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">پنل</span></a>
+<a href="/notifications" class="nav-item active"><span class="nav-icon">🔔</span><span class="nav-label">اعلان‌ها</span></a>
+<a href="/panel/chat" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">چت</span></a>
+<a href="/panel/profile" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">پروفایل</span></a>
+{% endif %}
+</nav>
+
+<script>
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function openSendModal() { var m = document.getElementById('sendModal'); if (m) m.classList.add('show'); }
+function deleteNotif(id, e) {
+    e.stopPropagation();
+    fetch('/api/notif/delete/' + id, {method: 'POST'}).then(function() {
+        var el = document.getElementById('notif-' + id);
+        if (el) {
+            el.style.transition = 'all 0.3s';
+            el.style.opacity = '0';
+            el.style.transform = 'translateX(30px)';
+            setTimeout(function() { el.remove(); }, 300);
+        }
+    });
+}
+function clearAllNotifs() {
+    if (!confirm('همه اعلان‌ها پاک بشن؟')) return;
+    fetch('/api/notif/clear', {method: 'POST'}).then(function() { location.reload(); });
+}
+document.querySelectorAll('.notif-item').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+        if (e.target.classList.contains('notif-del')) return;
+        var link = this.dataset.link;
+        if (link) window.location.href = link;
+    });
+});
+document.querySelectorAll('.modal-overlay').forEach(function(m) {
+    m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('show'); });
+});
+</script>
+</body>
+</html>
