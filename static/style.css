@@ -7140,3 +7140,41 @@ body.admin-view .import-select:focus {
     border-color: #ff006e;
     box-shadow: 0 0 15px rgba(255, 0, 110, 0.4);
 }
+
+/* ══════════════════════════════════════
+   🐛 FIX نهایی: bottom nav overlap
+   ══════════════════════════════════════ */
+html {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-y: auto !important;
+}
+body {
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-bottom: 180px !important;
+  margin-bottom: 0 !important;
+  position: relative !important;
+}
+.container {
+  padding-bottom: 180px !important;
+  margin-bottom: 0 !important;
+}
+/* نوار پایین شناور */
+.bottom-nav {
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  max-width: calc(100% - 40px) !important;
+}
+/* کارت آخر */
+.container > *:last-child,
+.card:last-child,
+.section:last-child {
+  margin-bottom: 180px !important;
+}
