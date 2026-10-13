@@ -25,8 +25,6 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://192.168.113.232:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [13/Oct/2026 11:34:39] "GET /customer/login HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 11:34:47] "GET /customer/register HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 11:34:54] "GET /customer/home HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 11:35:03] "GET /customer/login HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 11:35:07] "GET /customer/register HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 11:39:15] "GET /customer/register HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 11:39:18] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 11:39:28] "POST /customer/login HTTP/1.1" 200 -

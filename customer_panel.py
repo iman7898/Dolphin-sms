@@ -24,6 +24,29 @@ def customer_root():
     return redirect('/customer/home')
 
 
+
+
+def _try_shop_login(identifier, password):
+    """اگه کاربر مغازه‌دار بود، لاگین کن و True برگردون"""
+    try:
+        from database import get_user_by_username_or_phone as _getu, is_user_active as _act
+        from app import _verify_password as _vp
+    except Exception:
+        return False, None
+    user = _getu(identifier)
+    if not user:
+        return False, None
+    try:
+        if not _vp(user[2], password):
+            return False, None
+    except Exception:
+        if user[2] != password:
+            return False, None
+    if not _act(user[0]):
+        return True, 'expired'
+    return True, 'ok'
+
+
 @customer_panel_bp.route('/customer/login', methods=['GET', 'POST'])
 def customer_login():
     if _cid():
@@ -36,16 +59,40 @@ def customer_login():
             error = 'شماره و رمز رو وارد کن'
         else:
             cust = get_customer_by_login(phone)
-            if not cust:
-                error = 'شماره ثبت نشده. اول ثبت‌نام کن'
-            elif cust[3] != password:
-                error = 'رمز اشتباهه'
-            else:
+            if cust and cust[3] == password:
                 session['customer_id'] = cust[0]
                 session['customer_name'] = cust[2]
                 session['customer_phone'] = cust[1]
-                update_last_login(cust[0])
-                return redirect('/customer/dashboard')
+                try:
+                    update_last_login(cust[0])
+                except Exception:
+                    pass
+                return redirect('/customer/home')
+            # چک مغازه‌دار
+            is_shop, status = _try_shop_login(phone, password)
+            if is_shop:
+                if status == 'expired':
+                    error = 'اشتراک یا اعتبار پیامک شما به پایان رسیده'
+                else:
+                    try:
+                        from database import get_user_by_username_or_phone as _getu
+                        u = _getu(phone)
+                    except Exception:
+                        u = None
+                    if u:
+                        session.clear()
+                        session['user_id'] = u[0]
+                        session['username'] = u[1]
+                        try:
+                            from database import log_login as _ll, get_client_ip as _gip
+                            _ll(u[1], _gip(), 'shop-login-via-customer', user_id=u[0], status='success')
+                        except Exception:
+                            pass
+                        return redirect('/panel/dashboard')
+                    else:
+                        error = 'خطا در ورود'
+            else:
+                error = 'شماره/نام کاربری یا رمز اشتباهه' 
     return render_template('customer_login.html', error=error, current_settings=_cs())
 
 
