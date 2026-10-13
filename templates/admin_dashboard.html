@@ -193,48 +193,65 @@ if ('serviceWorker' in navigator) {
 
 
 <!-- 🐛 FORCE SCROLL FIX v3 -->
-<style id="scroll-fix-v3">
-html{
-  overflow:auto !important;
-  overflow-y:scroll !important;
-  height:auto !important;
-  max-height:none !important;
+
+
+<style id="nuclear-fix">
+html, body {
+  overflow: visible !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  position: static !important;
 }
-body{
-  overflow:auto !important;
-  overflow-y:scroll !important;
-  height:auto !important;
-  max-height:none !important;
-  min-height:100vh !important;
-  display:block !important;
-  padding-bottom:0 !important;
-  margin-bottom:0 !important;
-}
-body > *, body > * > *{
-  max-height:none !important;
-  height:auto !important;
-}
-.container, .container-fluid, #app, #root, main, .main, .wrap, .content{
-  display:block !important;
-  overflow:visible !important;
-  height:auto !important;
-  max-height:none !important;
-  padding-bottom:0 !important;
-  margin-bottom:0 !important;
-}
-.bottom-nav{
-  position:fixed !important;
-  bottom:12px !important;
-  z-index:99999 !important;
-}
-/* فاصله انتهایی خیلی بزرگ */
-.last-spacer{
-  display:block !important;
-  width:100% !important;
-  height:220px !important;
-  pointer-events:none !important;
+#nuclear-spacer {
+  display: block !important;
+  height: 250px !important;
+  width: 100% !important;
+  clear: both !important;
 }
 </style>
+<script>
+(function(){
+  function KILL_SCROLL_BLOCKERS(){
+    var html = document.documentElement;
+    var body = document.body;
+    [html, body].forEach(function(el){
+      if (!el) return;
+      el.style.setProperty('overflow', 'visible', 'important');
+      el.style.setProperty('overflow-y', 'auto', 'important');
+      el.style.setProperty('overflow-x', 'hidden', 'important');
+      el.style.setProperty('height', 'auto', 'important');
+      el.style.setProperty('max-height', 'none', 'important');
+      el.style.setProperty('min-height', '100vh', 'important');
+      el.style.setProperty('position', 'static', 'important');
+    });
+    // همه والدها رو چک کن
+    document.querySelectorAll('*').forEach(function(el){
+      var cs = window.getComputedStyle(el);
+      if (cs.overflow === 'hidden' || cs.overflowY === 'hidden'){
+        if (el.scrollHeight > el.clientHeight + 50){
+          el.style.setProperty('overflow-y', 'auto', 'important');
+        }
+      }
+      if (cs.maxHeight && cs.maxHeight !== 'none' && el.scrollHeight > 200){
+        el.style.setProperty('max-height', 'none', 'important');
+      }
+    });
+    // spacer اگه نیست اضافه کن
+    if (!document.getElementById('nuclear-spacer')){
+      var sp = document.createElement('div');
+      sp.id = 'nuclear-spacer';
+      document.body.appendChild(sp);
+    }
+  }
+  KILL_SCROLL_BLOCKERS();
+  setTimeout(KILL_SCROLL_BLOCKERS, 300);
+  setTimeout(KILL_SCROLL_BLOCKERS, 1000);
+  setTimeout(KILL_SCROLL_BLOCKERS, 2000);
+})();
+</script>
 </head>
 
 <body class="matrix-bg">
