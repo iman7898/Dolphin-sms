@@ -1,5 +1,6 @@
 nohup: ignoring input
 ✅ SMS: Amoot فعال (token len=40)
+✅ Gzip دستی فعال شد
 ✅ wallet_bp registered
 ✅ payment_bp registered
 ✅ ticket_bp registered
@@ -25,6 +26,3 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://192.168.113.232:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [13/Oct/2026 17:55:06] "GET /customer/home HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 17:55:07] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 17:55:09] "GET /customer/login HTTP/1.1" 200 -
