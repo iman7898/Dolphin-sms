@@ -218,127 +218,42 @@ if ('serviceWorker' in navigator) {
 
 
 
-<style id="final-fix">
-.nw, .bottom-nav {
-  position: fixed !important;
-  bottom: 12px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  z-index: 9999 !important;
-  width: calc(100% - 40px) !important;
-  max-width: 500px !important;
-  margin: 0 !important;
-}
-.container { padding-bottom: 100px !important; }
 
-/* 💀 هر چیز اضافی */
-.section, .section-head, .cards, .card, .stats, .stat-box {
-  min-height: 0 !important;
-  max-height: none !important;
-  height: auto !important;
-}
-.section::before, .section::after,
-.cards::before, .cards::after,
-.section-head::before, .section-head::after {
-  display: none !important;
-  content: none !important;
-}
 
-.section {
-  display: block !important;
-  margin: 6px 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-}
-.section-head {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  margin: 0 0 4px 0 !important;
-  padding: 0 4px !important;
-  line-height: 1.2 !important;
-}
-
-/* 🎯 flexbox به جای grid - فاصله خالی نمی‌سازه */
-.cards {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 6px !important;
-  align-items: stretch !important;
-  align-content: flex-start !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  height: auto !important;
-  min-height: 0 !important;
-}
-.cards > * {
-  flex: 1 1 calc(50% - 3px) !important;
-  max-width: calc(50% - 3px) !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-}
-.cards > *[style*="grid-column"],
-.cards > .card-full {
-  flex: 1 1 100% !important;
-  max-width: 100% !important;
-}
-
-/* کارت */
-.card {
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  padding: 10px !important;
-  margin: 0 !important;
-  border-radius: 14px !important;
-  background: linear-gradient(135deg, rgba(10,21,32,.95), rgba(20,0,30,.85)) !important;
-  border: 1.5px solid var(--c, rgba(0,212,255,.3)) !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,.4) !important;
-  text-decoration: none !important;
-  color: #e2e8f0 !important;
-  transition: all .3s !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-.card::before {
-  content: "" !important;
-  position: absolute !important;
-  top: 0; right: 0; left: 0 !important;
-  height: 2px !important;
-  background: linear-gradient(90deg, transparent, var(--c, #00d4ff), transparent) !important;
-  opacity: .6 !important;
-}
-.card:hover {
-  transform: translateY(-3px) !important;
-  border-color: var(--c, #00d4ff) !important;
-  box-shadow: 0 8px 25px var(--c, rgba(0,212,255,.5)) !important;
-}
-.card-ic {
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  border-radius: 12px !important;
-  font-size: 20px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(0,0,0,.4) !important;
-  border: 1.5px solid var(--c, #00d4ff) !important;
-  box-shadow: 0 0 12px var(--c, rgba(0,212,255,.4)) !important;
-  color: var(--c, #00d4ff) !important;
-}
-.card-t {
-  font-size: 12px !important;
-  font-weight: 900 !important;
-  color: #fff !important;
-  line-height: 1.3 !important;
-}
-.card-s {
-  font-size: 9.5px !important;
-  color: #7de5ff !important;
-  line-height: 1.2 !important;
-}
+<style id="js-fix">
+.nw,.bottom-nav{position:fixed!important;bottom:12px!important;left:50%!important;transform:translateX(-50%)!important;z-index:9999!important;width:calc(100% - 40px)!important;max-width:500px!important;margin:0!important}
+.container{padding-bottom:100px!important}
 </style>
+<script>
+window.addEventListener('load', function(){
+  var c = document.querySelector('.container');
+  if (!c) return;
+  // همه عناصر رو بگرد
+  var all = c.querySelectorAll('*');
+  all.forEach(function(el){
+    // اگه div خالی با ارتفاع زیاده → حذف کن
+    var r = el.getBoundingClientRect();
+    var t = (el.textContent||'').trim();
+    if (el.tagName === 'DIV' && t === '' && r.height > 15){
+      el.remove();
+      return;
+    }
+    // فاصله‌های margin/padding بالا پایین رو صفر کن
+    var cs = getComputedStyle(el);
+    ['marginTop','marginBottom','paddingTop','paddingBottom'].forEach(function(p){
+      var v = parseFloat(cs[p]) || 0;
+      if (v > 8){
+        el.style.setProperty(p.replace(/[A-Z]/g, function(m){return '-'+m.toLowerCase();}), '0', 'important');
+      }
+    });
+  });
+  // اسکرول رو آزاد کن
+  document.documentElement.style.setProperty('overflow-y','auto','important');
+  document.body.style.setProperty('overflow-y','auto','important');
+  document.documentElement.style.setProperty('height','auto','important');
+  document.body.style.setProperty('height','auto','important');
+});
+</script>
 </head>
 
 <body class="matrix-bg">
