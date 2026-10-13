@@ -189,7 +189,50 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <link rel="stylesheet" href="/static/navbar-fix.css">
+
+<style id="force-scroll-fix">
+/* 💪 FIX قطعی */
+html, body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  position: static !important;
+}
+body {
+  padding-bottom: 200px !important;
+  display: block !important;
+}
+.container, .container-fluid, .main, main, .wrap, .content {
+  display: block !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-bottom: 200px !important;
+  margin-bottom: 0 !important;
+}
+/* آخرین کارت فاصله اضافه */
+.section:last-child,
+.section:last-of-type {
+  margin-bottom: 200px !important;
+}
+.section:last-child .cards,
+.section:last-of-type .cards {
+  margin-bottom: 200px !important;
+}
+/* نوار پایین */
+.bottom-nav {
+  position: fixed !important;
+  bottom: 12px !important;
+  z-index: 99999 !important;
+}
+/* اسکرول نرم */
+* { -webkit-overflow-scrolling: touch; }
+</style>
 </head>
+
 <body class="matrix-bg">
 <div class="galaxy" id="galaxy">
   <div class="nebula b1"></div>
