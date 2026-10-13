@@ -21,9 +21,7 @@ def _cs():
 # ============ ورود ============
 @customer_panel_bp.route('/customer', methods=['GET'])
 def customer_root():
-    if _cid():
-        return redirect('/customer/dashboard')
-    return redirect('/customer/login')
+    return redirect('/customer/home')
 
 
 @customer_panel_bp.route('/customer/login', methods=['GET', 'POST'])
@@ -90,9 +88,6 @@ def customer_logout():
 # ============ داشبورد ============
 @customer_panel_bp.route('/customer/dashboard')
 def customer_dashboard():
-    cid = _cid()
-    if not cid:
-        return redirect('/customer/login')
     return redirect('/customer/home')
 
 
@@ -222,8 +217,7 @@ def customer_profile():
 @customer_panel_bp.route('/customer/home')
 def customer_home():
     cid = _cid()
-    if not cid:
-        return redirect('/customer/login')
+    is_guest = not cid
     from customer_db import (get_top_shops, get_featured_products)
     from database import get_user_settings as _gs
     import sqlite3 as _sq
@@ -233,16 +227,22 @@ def customer_home():
                  ORDER BY is_main DESC, sort_order LIMIT 8""")
     home_cats = c.fetchall()
     conn.close()
-    cust = get_customer_by_id(cid)
     top_shops = get_top_shops(6)
     featured = get_featured_products(8)
-    favs = get_favorites(cid)
-    points = get_points(cid)
-    fav_ids = [f[0] for f in favs]
+    if cid:
+        cust = get_customer_by_id(cid)
+        favs = get_favorites(cid)
+        points = get_points(cid)
+        fav_ids = [f[0] for f in favs]
+    else:
+        cust = None
+        points = {'points': 0}
+        fav_ids = []
     return render_template('customer_home.html',
         home_cats=home_cats,
         top_shops=top_shops, featured=featured,
-        points=points, fav_ids=fav_ids,
+        points=points, fav_ids=fav_ids, customer=cust,
+        is_guest=is_guest,
         current_settings=_cs())
 
 

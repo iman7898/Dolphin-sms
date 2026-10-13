@@ -318,13 +318,25 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
 <div class="header">
   <div class="hi">
     <div class="hi-l">
+      {% if is_guest %}
+      <div class="hi-av" style="background:linear-gradient(135deg,#666,#333);border-color:#555;box-shadow:0 0 15px rgba(120,120,120,.5)">👤</div>
+      <div>
+        <div class="hi-g">سلام 👋 مهمان</div>
+        <div class="hi-n">خوش آمدید</div>
+      </div>
+      {% else %}
       <div class="hi-av">👤</div>
       <div>
         <div class="hi-g">سلام 👋</div>
         <div class="hi-n">{{ customer[2] if customer else 'مشتری' }}</div>
       </div>
+      {% endif %}
     </div>
+    {% if is_guest %}
+    <a href="/customer/login" class="hi-pts" style="text-decoration:none;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,136,204,.1));border-color:#00d4ff;color:#00d4ff">🔑 ورود / ثبت‌نام</a>
+    {% else %}
     <div class="hi-pts">⭐ {{ points.points }}</div>
+    {% endif %}
   </div>
   <div class="srch-wrap">
     <input type="text" id="liveSearch" class="srch" placeholder="جستجوی مغازه یا محصول..." autocomplete="off">
