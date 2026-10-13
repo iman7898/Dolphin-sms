@@ -203,26 +203,6 @@ if ('serviceWorker' in navigator) {
 
 
 
-<style id="overflow-fix">
-/* 🎯 ریشه: overflow-x:hidden روی body باعث overflow-y:hidden هم می‌شه */
-html {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  height: auto !important;
-  max-height: none !important;
-}
-body {
-  overflow: visible !important;   /* 👈 نکته اصلی */
-  overflow-x: clip !important;    /* 👈 به جای hidden */
-  overflow-y: visible !important;
-  height: auto !important;
-  max-height: none !important;
-  min-height: 100vh !important;
-}
-.container {
-  overflow: visible !important;
-}
-</style>
 
 
 
@@ -232,7 +212,12 @@ body {
 
 
 
-<style id="kill-gap-fix">
+
+
+
+
+<style id="beauty-fix">
+/* نوار پایین شناور */
 .nw, .bottom-nav {
   position: fixed !important;
   bottom: 12px !important;
@@ -244,63 +229,136 @@ body {
   margin: 0 !important;
 }
 .container{padding-bottom: 100px !important;}
+
+.section{
+  display: block !important;
+  padding: 0 !important;
+  margin: 6px 0 !important;
+}
+.section-head{
+  padding: 4px !important;
+  margin: 0 0 4px 0 !important;
+}
+.cards{
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 🎨 کارت‌های قشنگ‌تر */
+.card{
+  position: relative;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px 12px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, rgba(10,21,32,.95), rgba(20,0,30,.85)) !important;
+  border: 1.5px solid var(--c, rgba(0,212,255,.3)) !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05) !important;
+  transition: all .3s cubic-bezier(.2,.8,.2,1) !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+  color: #e2e8f0 !important;
+  margin: 0 !important;
+}
+.card::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 100% 0%, var(--c, rgba(0,212,255,.15)) 0%, transparent 60%);
+  opacity: .5;
+  pointer-events: none;
+}
+.card:hover{
+  transform: translateY(-4px) scale(1.02) !important;
+  border-color: var(--c, #00d4ff) !important;
+  box-shadow: 0 8px 30px var(--c, rgba(0,212,255,.5)), 0 0 0 1px var(--c, rgba(0,212,255,.4)) !important;
+}
+.card:active{transform: scale(.97) !important;}
+
+.card-ic{
+  position: relative;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  border-radius: 12px !important;
+  font-size: 22px !important;
+  background: linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.6)) !important;
+  border: 1.5px solid var(--c, rgba(0,212,255,.4)) !important;
+  box-shadow: 0 0 15px var(--c, rgba(0,212,255,.4)), inset 0 0 10px rgba(0,0,0,.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--c, #00d4ff) !important;
+  z-index: 1;
+}
+.card:hover .card-ic{
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 0 25px var(--c, #00d4ff), inset 0 0 15px rgba(0,0,0,.3) !important;
+}
+
+.card > div:not(.card-ic){
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+}
+.card-t{
+  font-size: 12.5px !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  line-height: 1.3 !important;
+  margin-bottom: 2px;
+  text-shadow: 0 0 10px var(--c, rgba(0,212,255,.3));
+}
+.card-s{
+  font-size: 9.5px !important;
+  color: #7de5ff !important;
+  line-height: 1.2 !important;
+  opacity: .8;
+}
+
+/* کارت full-width قشنگ‌تر */
+.card[style*="grid-column"]{
+  padding: 14px 12px !important;
+}
+.card[style*="grid-column"] .card-ic{
+  width: 46px !important;
+  height: 46px !important;
+  font-size: 24px !important;
+}
+
+/* خط نئون بالای کارت */
+.card::after{
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--c, #00d4ff), transparent);
+  opacity: .6;
+}
+
+/* پالس ظریف */
+@keyframes cardPulse{
+  0%,100%{box-shadow: 0 4px 15px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05)}
+  50%{box-shadow: 0 4px 20px var(--c, rgba(0,212,255,.3)), inset 0 1px 0 rgba(255,255,255,.05)}
+}
+.card{
+  animation: cardPulse 3s ease-in-out infinite;
+}
+.card:nth-child(2n){animation-delay: .5s}
+.card:nth-child(3n){animation-delay: 1s}
+
+/* کارت‌های رنگی مخصوص */
+.card[href*="wallets"] .card-ic{background: linear-gradient(135deg, rgba(0,255,157,.15), rgba(0,0,0,.7)) !important;}
+.card[href*="logs"] .card-ic{background: linear-gradient(135deg, rgba(191,0,255,.15), rgba(0,0,0,.7)) !important;}
+.card[href*="birthdays"] .card-ic{background: linear-gradient(135deg, rgba(255,100,160,.15), rgba(0,0,0,.7)) !important;}
 </style>
-<script id="kill-gap-js">
-(function(){
-  function kill(){
-    var nav = document.querySelector('.nw, .bottom-nav');
-    // پیدا کردن همه عناصر داخل کانتینر (بجز نوار)
-    var container = document.querySelector('.container');
-    if (!container) return;
-
-    var all = container.querySelectorAll('*');
-    all.forEach(function(el){
-      if (nav && nav.contains(el)) return;
-      if (el === nav) return;
-      // چک: عنصر خالی با ارتفاع زیاد؟
-      var rect = el.getBoundingClientRect();
-      var text = (el.textContent || '').trim();
-      var kids = el.children.length;
-      var tag = el.tagName;
-      // اگه div خالی با ارتفاع زیاد
-      if (tag === 'DIV' && text === '' && kids === 0 && rect.height > 20){
-        el.style.setProperty('display', 'none', 'important');
-        return;
-      }
-      // اگه فاصلهٔ margin-bottom زیاد
-      var cs = window.getComputedStyle(el);
-      var mb = parseFloat(cs.marginBottom) || 0;
-      var mt = parseFloat(cs.marginTop) || 0;
-      var pb = parseFloat(cs.paddingBottom) || 0;
-      var pt = parseFloat(cs.paddingTop) || 0;
-      if (mb > 10) el.style.setProperty('margin-bottom', '4px', 'important');
-      if (mt > 10) el.style.setProperty('margin-top', '4px', 'important');
-      if (pb > 20) el.style.setProperty('padding-bottom', '4px', 'important');
-      if (pt > 20) el.style.setProperty('padding-top', '4px', 'important');
-    });
-
-    // حذف فاصلهٔ بین sections
-    var sections = container.querySelectorAll('.section');
-    sections.forEach(function(sec, i){
-      sec.style.setProperty('margin', '4px 0', 'important');
-      sec.style.setProperty('padding', '0', 'important');
-      if (i > 0){
-        // بررسی gap بین این section و قبلی
-        var prev = sections[i-1];
-        var gap = sec.getBoundingClientRect().top - prev.getBoundingClientRect().bottom;
-        if (gap > 10){
-          prev.style.setProperty('margin-bottom', '0', 'important');
-          sec.style.setProperty('margin-top', '4px', 'important');
-        }
-      }
-    });
-  }
-  kill();
-  setTimeout(kill, 200);
-  setTimeout(kill, 800);
-  setTimeout(kill, 2000);
-})();
-</script>
 </head>
 
 <body class="matrix-bg">
