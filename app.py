@@ -9,7 +9,47 @@ from functools import wraps
 import hashlib, hmac, os, secrets, time
 from werkzeug.utils import secure_filename
 
+app = Flask(__name__)app = Flask(__name__)
+
+# ⚡ Gzip Compression دستی
+import gzip as _gz
+from io import BytesIO as _BIO
+
+@app.after_request
+def _gzip_response(response):
+    try:
+        accept = request.headers.get('Accept-Encoding', '')
+        if 'gzip' not in accept.lower():
+            return response
+        if response.status_code < 200 or response.status_code >= 300:
+            return response
+        if response.direct_passthrough:
+            return response
+        ct = response.content_type or ''
+        if not (ct.startswith('text/') or 'json' in ct or 'javascript' in ct or 'css' in ct or 'xml' in ct or 'svg' in ct):
+            return response
+        data = response.get_data()
+        if len(data) < 500:
+            return response
+        buf = _BIO()
+        with _gz.GzipFile(fileobj=buf, mode='wb', compresslevel=6) as gz:
+            gz.write(data)
+        compressed = buf.getvalue()
+        if len(compressed) >= len(data):
+            return response
+        response.set_data(compressed)
+        response.headers['Content-Encoding'] = 'gzip'
+        response.headers['Content-Length'] = str(len(compressed))
+        response.headers['Vary'] = 'Accept-Encoding'
+    except Exception:
+        pass
+    return response
+
+print("✅ Gzip دستی فعال شد")
 app = Flask(__name__)
+
+
+
 app.secret_key = SECRET_KEY
 
 # ===== توابع امنیتی =====

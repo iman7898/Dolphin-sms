@@ -775,17 +775,37 @@ def clear_login_attempts(ip):
     conn.commit()
     conn.close()
 
+_SETTINGS_CACHE = {}
+_SETTINGS_CACHE_TIME = {}
+
 def get_user_settings(user_id):
+    """⚡ نسخه کش‌شده - 60 ثانیه اعتبار"""
+    import time
+    now = time.time()
+    if user_id in _SETTINGS_CACHE and (now - _SETTINGS_CACHE_TIME.get(user_id, 0)) < 60:
+        return _SETTINGS_CACHE[user_id]
     conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
     c = conn.cursor()
-    c.execute("SELECT * FROM user_settings WHERE user_id=?", (user_id,))
-    row = c.fetchone()
-    if not row:
-        c.execute("INSERT INTO user_settings (user_id) VALUES (?)", (user_id,))
-        conn.commit()
-        row = (user_id, None, None, 'neon')
+    try:
+        c.execute("SELECT * FROM user_settings WHERE user_id=?", (user_id,))
+        row = c.fetchone()
+    except Exception:
+        row = None
     conn.close()
-    return {"avatar": row[1], "bg": row[2], "theme": row[3]}
+    _SETTINGS_CACHE[user_id] = row
+    _SETTINGS_CACHE_TIME[user_id] = now
+    return row
+
+def clear_settings_cache(user_id=None):
+    global _SETTINGS_CACHE, _SETTINGS_CACHE_TIME
+    if user_id:
+        _SETTINGS_CACHE.pop(user_id, None)
+        _SETTINGS_CACHE_TIME.pop(user_id, None)
+    else:
+        _SETTINGS_CACHE = {}
+        _SETTINGS_CACHE_TIME = {}
+
 
 def update_user_avatar(user_id, path):
     conn = sqlite3.connect(DB_PATH)
