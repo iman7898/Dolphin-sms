@@ -131,7 +131,7 @@ body{background:#0a0a0f !important;color:#e2e8f0;
   position:relative;z-index:1}
 .card-s{font-size:10px;color:#7de5ff;margin-top:2px;
   position:relative;z-index:1}
-.card-full{grid-column:1 / -1}
+.card-full{}
 
 /* جدول مغازه‌ها */
 h2{font-size:17px;font-weight:900;color:#00d4ff;
@@ -252,37 +252,163 @@ window.addEventListener('load', function(){
 });
 </script>
 
-<style id="clean">
-/* اسکرول */
-html, body {
-  overflow-y: auto !important;
+
+
+<style id="final-clean">
+* { box-sizing: border-box !important; }
+
+html {
   overflow-x: hidden !important;
+  overflow-y: auto !important;
   height: auto !important;
+  max-height: none !important;
 }
-body { padding-bottom: 110px !important; }
+body {
+  overflow: visible !important;
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100vh !important;
+  padding: 12px 12px 130px 12px !important;
+  margin: 0 !important;
+}
+.container, main, .wrap {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-bottom: 20px !important;
+}
 
 /* نوار پایین شناور */
-.bottom-nav, .nw {
+.nw, .bottom-nav, .nav-wrap {
   position: fixed !important;
   bottom: 10px !important;
   left: 50% !important;
+  right: auto !important;
   transform: translateX(-50%) !important;
-  z-index: 9999 !important;
+  z-index: 99999 !important;
   width: calc(100% - 30px) !important;
   max-width: 500px !important;
+  margin: 0 !important;
 }
 
-/* کارت‌ها */
+/* بخش‌ها */
+.section {
+  margin: 10px 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  display: block !important;
+}
+.section-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 0 6px 0 !important;
+  padding: 0 2px !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* کارت‌ها - گرید ۲ ستونه */
 .cards {
   display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+  grid-template-columns: repeat(2, 1fr) !important;
   gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
 }
-.card[style*="grid-column"] {
-  grid-column: 1 / -1 !important;
+.cards > * {
+  min-width: 0 !important;
+  width: 100% !important;
 }
-.section {
+.card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, rgba(10,21,32,.95), rgba(20,0,30,.85)) !important;
+  border: 1.5px solid var(--c, rgba(0,212,255,.3)) !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.4) !important;
+  text-decoration: none !important;
+  color: #e2e8f0 !important;
+  transition: all .3s !important;
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+.card::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0; right: 0; left: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, var(--c, #00d4ff), transparent) !important;
+  opacity: .6 !important;
+}
+.card:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--c, #00d4ff) !important;
+  box-shadow: 0 8px 25px var(--c, rgba(0,212,255,.5)) !important;
+}
+.card-ic {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  border-radius: 12px !important;
+  font-size: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0,0,0,.4) !important;
+  border: 1.5px solid var(--c, #00d4ff) !important;
+  box-shadow: 0 0 12px var(--c, rgba(0,212,255,.4)) !important;
+  color: var(--c, #00d4ff) !important;
+}
+.card-t {
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+}
+.card-s {
+  font-size: 9.5px !important;
+  color: #7de5ff !important;
+  line-height: 1.2 !important;
+  margin: 2px 0 0 0 !important;
+}
+.card > div:not(.card-ic) {
+  min-width: 0 !important;
+  flex: 1 !important;
+  overflow: hidden !important;
+}
+
+/* آمار */
+.stats {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px !important;
   margin: 8px 0 !important;
+  padding: 0 !important;
+}
+.stat-box {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 10px 6px !important;
+  margin: 0 !important;
+}
+
+/* هدر */
+.header-bar {
+  margin: 0 0 8px 0 !important;
+  padding: 14px !important;
+  min-height: 0 !important;
 }
 </style>
 </head>
@@ -316,7 +442,7 @@ body { padding-bottom: 110px !important; }
     <div class="section-count">۵ گزینه</div>
   </div>
   <div class="cards">
-    <button type="button" class="card" style="--c:#00d4ff;background:transparent;cursor:pointer;text-align:right;font-family:inherit;border-color:rgba(0,212,255,.3)" onclick="openAddModal()">
+    <button type="button" class="card" style="--c:#00d4ff;background:transparent;cursor:pointer;text-align:right;font-family:inherit" onclick="openAddModal()">
       <div class="card-ic" style="color:#00d4ff">➕</div>
       <div><div class="card-t">افزودن مغازه</div><div class="card-s">کاربر جدید بساز</div></div>
     </button>
@@ -332,7 +458,7 @@ body { padding-bottom: 110px !important; }
       <div class="card-ic" style="color:#ff64a0">🎂</div>
       <div><div class="card-t">تولدها</div><div class="card-s">مشتریان امروز</div></div>
     </a>
-    <a href="/admin/stats" class="card" style="--c:#ffbe0b;grid-column:1/-1">
+    <a href="/admin/stats" class="card" style="--c:#ffbe0b;">
       <div class="card-ic" style="color:#ffbe0b">📊</div>
       <div><div class="card-t">آمار کلی</div><div class="card-s">نمودار و آمار کامل سیستم</div></div>
     </a>
@@ -354,7 +480,7 @@ body { padding-bottom: 110px !important; }
       <div class="card-ic" style="color:#ff8c00">💳</div>
       <div><div class="card-t">پرداخت‌ها</div><div class="card-s">تراکنش‌های زرین‌پال</div></div>
     </a>
-    <a href="/admin/payment" class="card" style="--c:#facc15;grid-column:1/-1">
+    <a href="/admin/payment" class="card" style="--c:#facc15;">
       <div class="card-ic" style="color:#facc15">⚙️</div>
       <div><div class="card-t">تنظیمات پرداخت</div><div class="card-s">درگاه و کلیدها</div></div>
     </a>
@@ -384,7 +510,7 @@ body { padding-bottom: 110px !important; }
       <div class="card-ic" style="color:#00ff9d">📨</div>
       <div><div class="card-t">تست پیامک</div><div class="card-s">ارسال آزمایشی</div></div>
     </a>
-    <a href="/admin/ai-manager" class="card" style="--c:#bf00ff;grid-column:1/-1">
+    <a href="/admin/ai-manager" class="card" style="--c:#bf00ff;">
       <div class="card-ic" style="color:#bf00ff">🤖</div>
       <div><div class="card-t">مدیر AI</div><div class="card-s">پلن و تنظیمات هوش مصنوعی</div></div>
     </a>
@@ -406,7 +532,7 @@ body { padding-bottom: 110px !important; }
       <div class="card-ic" style="color:#00ff9d">👥</div>
       <div><div class="card-t">کاربران ربات</div><div class="card-s">اعضای ربات‌ها</div></div>
     </a>
-    <a href="/admin/bot-ads" class="card" style="--c:#ff00ff;grid-column:1/-1">
+    <a href="/admin/bot-ads" class="card" style="--c:#ff00ff;">
       <div class="card-ic" style="color:#ff00ff">📢</div>
       <div><div class="card-t">تبلیغات ربات</div><div class="card-s">کمپین‌های تبلیغاتی</div></div>
     </a>
@@ -446,7 +572,7 @@ body { padding-bottom: 110px !important; }
       <div class="card-ic" style="color:#00ff9d">🌐</div>
       <div><div class="card-t">آدرس عمومی</div><div class="card-s">URL های سرور</div></div>
     </a>
-    <button type="button" class="card btn-logout" style="--c:#ff4d6d;grid-column:1/-1;background:transparent;cursor:pointer;font-family:inherit;text-align:right;border-color:rgba(255,77,109,.5)" onclick="openExitModal()">
+    <button type="button" class="card btn-logout" style="--c:#ff4d6d;background:transparent;cursor:pointer;font-family:inherit;text-align:right;border-color:rgba(255,77,109,.5)" onclick="openExitModal()">
       <div class="card-ic" style="color:#ff4d6d">🚪</div>
       <div><div class="card-t">خروج از پنل</div><div class="card-s">پایان جلسه</div></div>
     </button>
