@@ -190,46 +190,50 @@ if ('serviceWorker' in navigator) {
 </script>
 <link rel="stylesheet" href="/static/navbar-fix.css">
 
-<style id="force-scroll-fix">
-/* 💪 FIX قطعی */
-html, body {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  height: auto !important;
-  min-height: 100vh !important;
-  max-height: none !important;
-  position: static !important;
+
+
+<!-- 🐛 FORCE SCROLL FIX v3 -->
+<style id="scroll-fix-v3">
+html{
+  overflow:auto !important;
+  overflow-y:scroll !important;
+  height:auto !important;
+  max-height:none !important;
 }
-body {
-  padding-bottom: 200px !important;
-  display: block !important;
+body{
+  overflow:auto !important;
+  overflow-y:scroll !important;
+  height:auto !important;
+  max-height:none !important;
+  min-height:100vh !important;
+  display:block !important;
+  padding-bottom:0 !important;
+  margin-bottom:0 !important;
 }
-.container, .container-fluid, .main, main, .wrap, .content {
-  display: block !important;
-  height: auto !important;
-  min-height: auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-  padding-bottom: 200px !important;
-  margin-bottom: 0 !important;
+body > *, body > * > *{
+  max-height:none !important;
+  height:auto !important;
 }
-/* آخرین کارت فاصله اضافه */
-.section:last-child,
-.section:last-of-type {
-  margin-bottom: 200px !important;
+.container, .container-fluid, #app, #root, main, .main, .wrap, .content{
+  display:block !important;
+  overflow:visible !important;
+  height:auto !important;
+  max-height:none !important;
+  padding-bottom:0 !important;
+  margin-bottom:0 !important;
 }
-.section:last-child .cards,
-.section:last-of-type .cards {
-  margin-bottom: 200px !important;
+.bottom-nav{
+  position:fixed !important;
+  bottom:12px !important;
+  z-index:99999 !important;
 }
-/* نوار پایین */
-.bottom-nav {
-  position: fixed !important;
-  bottom: 12px !important;
-  z-index: 99999 !important;
+/* فاصله انتهایی خیلی بزرگ */
+.last-spacer{
+  display:block !important;
+  width:100% !important;
+  height:220px !important;
+  pointer-events:none !important;
 }
-/* اسکرول نرم */
-* { -webkit-overflow-scrolling: touch; }
 </style>
 </head>
 
