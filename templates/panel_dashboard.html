@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>پنل من</title><link rel="stylesheet" href="/static/style.css"><link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}</style>
+    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}
+/* ==== FIX: Bottom nav overlap ==== */
+body, .container, .wrap, main {
+  padding-bottom: 130px !important;
+}
+.bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9000 !important;
+}
+</style>
 <script src="/static/custom-alert.js"></script>
 <link rel="manifest" href="/static/manifest.json">
 <meta name="theme-color" content="#00ff9d">
