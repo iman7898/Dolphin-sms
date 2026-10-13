@@ -1,7 +1,13 @@
 import os
 import requests
 
-AMOOT_TOKEN = os.environ.get('AMOOT_TOKEN', '')
+AMOOT_TOKEN = os.environ.get('AMOOT_TOKEN', '').strip()
+if not AMOOT_TOKEN:
+    try:
+        from config import AMOOT_TOKEN as _t
+        AMOOT_TOKEN = (_t or '').strip()
+    except ImportError:
+        pass
 AMOOT_URL = 'https://portal.amootsms.com/rest/SendSimple'
 
 def send_sms(mobile, message):
