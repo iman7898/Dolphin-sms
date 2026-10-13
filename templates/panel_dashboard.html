@@ -2,16 +2,32 @@
 <html lang="fa" dir="rtl">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>پنل من</title><link rel="stylesheet" href="/static/style.css"><link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}
-/* ==== FIX: Bottom nav overlap ==== */
-body, .container, .wrap, main {
-  padding-bottom: 130px !important;
+
+
+/* ==== FIX v2: Bottom nav overlap ==== */
+html, body {
+  padding-bottom: 200px !important;
+  margin-bottom: 0 !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+}
+main, .container, .wrap, .content, .page, .main-content {
+  padding-bottom: 200px !important;
+  margin-bottom: 0 !important;
 }
 .bottom-nav {
   position: fixed !important;
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
+  margin: 0 !important;
   z-index: 9000 !important;
+}
+/* اطمینان از اینکه محتوا زیر نوار نمیره */
+*, *::before, *::after {
+  box-sizing: border-box !important;
 }
 </style>
 <script src="/static/custom-alert.js"></script>
