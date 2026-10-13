@@ -3,7 +3,7 @@ from flask import (Flask, request, render_template, redirect, url_for,
 from database import *
 from database import (find_user_by_ref_code, process_referral,
                       get_or_create_referral_code)
-from adapters.mci_adapter import send_sms, check_balance
+from adapters.sms_adapter import send_sms, check_balance
 from config import SECRET_KEY, ADMIN_USERNAME, ADMIN_PASSWORD
 from functools import wraps
 import hashlib, hmac, os, secrets, time
