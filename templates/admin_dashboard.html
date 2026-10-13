@@ -195,23 +195,7 @@ if ('serviceWorker' in navigator) {
 <!-- 🐛 FORCE SCROLL FIX v3 -->
 
 
-<style id="nuclear-fix">
-html, body {
-  overflow: visible !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  height: auto !important;
-  min-height: 100vh !important;
-  max-height: none !important;
-  position: static !important;
-}
-#nuclear-spacer {
-  display: block !important;
-  height: 250px !important;
-  width: 100% !important;
-  clear: both !important;
-}
-</style>
+
 <script>
 (function(){
   function KILL_SCROLL_BLOCKERS(){
@@ -250,6 +234,55 @@ html, body {
   setTimeout(KILL_SCROLL_BLOCKERS, 300);
   setTimeout(KILL_SCROLL_BLOCKERS, 1000);
   setTimeout(KILL_SCROLL_BLOCKERS, 2000);
+})();
+</script>
+
+<style id="real-fix">
+/* فقط نوار پایین ثابت بمونه */
+.nw, .bottom-nav { position: fixed !important; }
+</style>
+<script>
+(function(){
+  function cleanBlockers(){
+    var all = document.querySelectorAll('body *');
+    var nav = document.querySelector('.nw, .bottom-nav');
+    var removed = [];
+    all.forEach(function(el){
+      if (el === nav || (nav && nav.contains(el))) return;
+      var cs = window.getComputedStyle(el);
+      var rect = el.getBoundingClientRect();
+      var isFullscreen = rect.width >= window.innerWidth * 0.9 && rect.height >= window.innerHeight * 0.8;
+      var isFixed = cs.position === 'fixed' || cs.position === 'absolute';
+      var zHigh = parseInt(cs.zIndex) > 100 || cs.zIndex === 'auto';
+      // اگه fixed + تمام صفحه + روی محتوا = مسدودکننده
+      if (isFixed && isFullscreen && zHigh && el.children.length === 0){
+        // فقط لایه‌های بدون محتوا
+        if (el.textContent.trim() === '' && el.tagName !== 'HEADER' && el.tagName !== 'NAV'){
+          el.style.pointerEvents = 'none';
+          removed.push(el.className || el.tagName);
+        }
+      }
+    });
+    if (removed.length) console.log('Unblocked:', removed);
+
+    // چک کن اسکرول می‌شه
+    var canScroll = document.documentElement.scrollHeight > window.innerHeight + 50;
+    if (!canScroll){
+      // اگه نه، یه spacer اضافه کن
+      if (!document.getElementById('force-spacer')){
+        var sp = document.createElement('div');
+        sp.id = 'force-spacer';
+        sp.style.cssText = 'height:400px;width:100%;display:block;';
+        document.body.appendChild(sp);
+      }
+    }
+  }
+  cleanBlockers();
+  setTimeout(cleanBlockers, 500);
+  setTimeout(cleanBlockers, 1500);
+  // کلیک/لمس رو تست کن
+  document.body.style.touchAction = 'pan-y';
+  document.documentElement.style.touchAction = 'pan-y';
 })();
 </script>
 </head>
