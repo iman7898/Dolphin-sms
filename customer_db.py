@@ -6,10 +6,11 @@ def _db():
 
 
 # ============ اطلاعات مشتری ============
-def add_customer(phone, name, password):
+def add_customer(phone, name, password, username=None):
     conn = _db(); c = conn.cursor()
     try:
-        c.execute("INSERT INTO customers (phone, name, password) VALUES (?, ?, ?)", (phone, name, password))
+        c.execute("INSERT INTO customers (phone, name, password, username) VALUES (?, ?, ?, ?)",
+                  (phone, name, password, username))
         cid = c.lastrowid
         conn.commit(); conn.close()
         return cid
@@ -23,6 +24,29 @@ def get_customer(phone):
     c.execute("SELECT id, phone, name, password, created_at FROM customers WHERE phone=?", (phone,))
     row = c.fetchone(); conn.close()
     return row
+
+
+def get_customer_by_username(username):
+    conn = _db(); c = conn.cursor()
+    c.execute("SELECT * FROM customers WHERE username=?", (username,))
+    row = c.fetchone(); conn.close()
+    return row
+
+
+def get_customer_by_login(identifier):
+    """اول با username بعد با phone"""
+    ident = (identifier or '').strip()
+    if not ident:
+        return None
+    # اگه شماره بود
+    if ident.startswith('09') and len(ident) == 11:
+        return get_customer(ident)
+    # با username
+    r = get_customer_by_username(ident)
+    if r:
+        return r
+    # با شماره
+    return get_customer(ident)
 
 
 def get_customer_by_id(cid):

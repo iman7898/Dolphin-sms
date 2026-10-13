@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, session, flash
-from customer_db import (add_customer, get_customer, get_customer_by_id, search_products,
+from customer_db import (add_customer, get_customer, get_customer_by_id, get_customer_by_login, search_products,
                          update_last_login, get_all_shops, search_shops,
                          get_shop, get_shop_info, get_products,
                          add_favorite, remove_favorite, get_favorites, is_favorite,
@@ -35,7 +35,7 @@ def customer_login():
         if not phone or not password:
             error = 'شماره و رمز رو وارد کن'
         else:
-            cust = get_customer(phone)
+            cust = get_customer_by_login(phone)
             if not cust:
                 error = 'شماره ثبت نشده. اول ثبت‌نام کن'
             elif cust[3] != password:
@@ -59,14 +59,19 @@ def customer_register():
         phone = (request.form.get('phone') or '').strip()
         name = (request.form.get('name') or '').strip()
         password = (request.form.get('password') or '').strip()
+        username = (request.form.get('username') or '').strip().lower()
         if not phone or len(phone) != 11 or not phone.startswith('09'):
             error = 'شماره موبایل معتبر وارد کن'
         elif not name:
             error = 'نام الزامی است'
+        elif not username or len(username) < 4:
+            error = 'نام کاربری حداقل ۴ کاراکتر'
+        elif not username.replace('_', '').isalnum():
+            error = 'نام کاربری فقط حروف انگلیسی، عدد و _'
         elif len(password) < 4:
             error = 'رمز حداقل ۴ کاراکتر'
         else:
-            cid = add_customer(phone, name, password)
+            cid = add_customer(phone, name, password, username)
             if cid:
                 session['customer_id'] = cid
                 session['customer_name'] = name
