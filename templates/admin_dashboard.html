@@ -224,7 +224,9 @@ body {
 }
 </style>
 
-<style id="nav-float-fix">
+
+
+<style id="compact-fix">
 /* نوار پایین شناور */
 .nw, .bottom-nav {
   position: fixed !important;
@@ -241,24 +243,65 @@ body {
   from{transform:translateX(-50%) translateY(100px);opacity:0}
   to{transform:translateX(-50%) translateY(0);opacity:1}
 }
-/* فاصله انتهایی که آخرین کارت زیر نوار نره */
 .container{
-  padding-bottom: 130px !important;
+  padding-bottom: 100px !important;
 }
-/* فاصله گذینه‌ها صفر */
+
+/* 🎯 فاصله‌ها رو خیلی کم کن */
+.section{
+  margin: 6px 0 !important;
+  padding: 0 !important;
+}
+.section-head{
+  margin-bottom: 6px !important;
+  padding: 0 4px !important;
+  min-height: auto !important;
+}
+.section-icon{
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 16px !important;
+  border-radius: 10px !important;
+}
+.section-title{
+  font-size: 14px !important;
+}
+.section-count{
+  font-size: 10px !important;
+  padding: 3px 8px !important;
+}
 .cards{
-  gap: 0 !important;
+  gap: 6px !important;
 }
 .card{
   margin: 0 !important;
-  border-radius: 14px !important;
+  padding: 10px 10px !important;
+  border-radius: 12px !important;
 }
-/* اگه کاربر خواست، کارت‌ها فاصله کمتر */
-.cards > .card + .card{
-  margin-top: 6px !important;
+.card-ic{
+  width: 36px !important;
+  height: 36px !important;
+  font-size: 18px !important;
+  border-radius: 10px !important;
 }
-.section{
-  margin: 12px 0 !important;
+.card-t{
+  font-size: 12px !important;
+}
+.card-s{
+  font-size: 9.5px !important;
+}
+
+/* حذف فاصلهٔ خالی اضافی */
+.stats{
+  margin-bottom: 8px !important;
+}
+.header-bar{
+  margin: 10px 0 !important;
+  padding: 14px !important;
+}
+h2{
+  margin: 10px 4px 6px !important;
+  font-size: 15px !important;
 }
 </style>
 </head>
