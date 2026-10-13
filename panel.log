@@ -26,28 +26,17 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://192.168.113.232:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [13/Oct/2026 19:19:18] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:19:21] "GET /admin/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:19:21] "GET /admin/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "GET /admin/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[36mGET /static/navbar-fix.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 19:19:22] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "GET /admin/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[36mGET /static/navbar-fix.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 19:19:29] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 19:19:59] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 19:20:29] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 19:21:51] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[36mGET /static/navbar-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 19:21:59] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 19:22:29] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 19:22:59] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 19:23:29] "GET /api/notif/count HTTP/1.1" 200 -

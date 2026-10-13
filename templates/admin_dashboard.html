@@ -216,8 +216,9 @@ if ('serviceWorker' in navigator) {
 
 
 
-<style id="beauty-fix">
-/* نوار پایین شناور */
+
+
+<style id="final-fix">
 .nw, .bottom-nav {
   position: fixed !important;
   bottom: 12px !important;
@@ -228,136 +229,115 @@ if ('serviceWorker' in navigator) {
   max-width: 500px !important;
   margin: 0 !important;
 }
-.container{padding-bottom: 100px !important;}
+.container { padding-bottom: 100px !important; }
 
-.section{
+/* 💀 هر چیز اضافی */
+.section, .section-head, .cards, .card, .stats, .stat-box {
+  min-height: 0 !important;
+  max-height: none !important;
+  height: auto !important;
+}
+.section::before, .section::after,
+.cards::before, .cards::after,
+.section-head::before, .section-head::after {
+  display: none !important;
+  content: none !important;
+}
+
+.section {
   display: block !important;
-  padding: 0 !important;
   margin: 6px 0 !important;
-}
-.section-head{
-  padding: 4px !important;
-  margin: 0 0 4px 0 !important;
-}
-.cards{
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 6px !important;
   padding: 0 !important;
-  margin: 0 !important;
+  border: 0 !important;
+}
+.section-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 0 4px 0 !important;
+  padding: 0 4px !important;
+  line-height: 1.2 !important;
 }
 
-/* 🎨 کارت‌های قشنگ‌تر */
-.card{
-  position: relative;
+/* 🎯 flexbox به جای grid - فاصله خالی نمی‌سازه */
+.cards {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  align-items: stretch !important;
+  align-content: flex-start !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+.cards > * {
+  flex: 1 1 calc(50% - 3px) !important;
+  max-width: calc(50% - 3px) !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+.cards > *[style*="grid-column"],
+.cards > .card-full {
+  flex: 1 1 100% !important;
+  max-width: 100% !important;
+}
+
+/* کارت */
+.card {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
-  padding: 12px 12px !important;
-  border-radius: 16px !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  border-radius: 14px !important;
   background: linear-gradient(135deg, rgba(10,21,32,.95), rgba(20,0,30,.85)) !important;
   border: 1.5px solid var(--c, rgba(0,212,255,.3)) !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05) !important;
-  transition: all .3s cubic-bezier(.2,.8,.2,1) !important;
-  overflow: hidden !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.4) !important;
   text-decoration: none !important;
   color: #e2e8f0 !important;
-  margin: 0 !important;
+  transition: all .3s !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
-.card::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 100% 0%, var(--c, rgba(0,212,255,.15)) 0%, transparent 60%);
-  opacity: .5;
-  pointer-events: none;
+.card::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0; right: 0; left: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, var(--c, #00d4ff), transparent) !important;
+  opacity: .6 !important;
 }
-.card:hover{
-  transform: translateY(-4px) scale(1.02) !important;
+.card:hover {
+  transform: translateY(-3px) !important;
   border-color: var(--c, #00d4ff) !important;
-  box-shadow: 0 8px 30px var(--c, rgba(0,212,255,.5)), 0 0 0 1px var(--c, rgba(0,212,255,.4)) !important;
+  box-shadow: 0 8px 25px var(--c, rgba(0,212,255,.5)) !important;
 }
-.card:active{transform: scale(.97) !important;}
-
-.card-ic{
-  position: relative;
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
+.card-ic {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
   border-radius: 12px !important;
-  font-size: 22px !important;
-  background: linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.6)) !important;
-  border: 1.5px solid var(--c, rgba(0,212,255,.4)) !important;
-  box-shadow: 0 0 15px var(--c, rgba(0,212,255,.4)), inset 0 0 10px rgba(0,0,0,.3) !important;
+  font-size: 20px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  background: rgba(0,0,0,.4) !important;
+  border: 1.5px solid var(--c, #00d4ff) !important;
+  box-shadow: 0 0 12px var(--c, rgba(0,212,255,.4)) !important;
   color: var(--c, #00d4ff) !important;
-  z-index: 1;
 }
-.card:hover .card-ic{
-  transform: scale(1.1) rotate(-5deg);
-  box-shadow: 0 0 25px var(--c, #00d4ff), inset 0 0 15px rgba(0,0,0,.3) !important;
-}
-
-.card > div:not(.card-ic){
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  min-width: 0;
-}
-.card-t{
-  font-size: 12.5px !important;
+.card-t {
+  font-size: 12px !important;
   font-weight: 900 !important;
   color: #fff !important;
   line-height: 1.3 !important;
-  margin-bottom: 2px;
-  text-shadow: 0 0 10px var(--c, rgba(0,212,255,.3));
 }
-.card-s{
+.card-s {
   font-size: 9.5px !important;
   color: #7de5ff !important;
   line-height: 1.2 !important;
-  opacity: .8;
 }
-
-/* کارت full-width قشنگ‌تر */
-.card[style*="grid-column"]{
-  padding: 14px 12px !important;
-}
-.card[style*="grid-column"] .card-ic{
-  width: 46px !important;
-  height: 46px !important;
-  font-size: 24px !important;
-}
-
-/* خط نئون بالای کارت */
-.card::after{
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--c, #00d4ff), transparent);
-  opacity: .6;
-}
-
-/* پالس ظریف */
-@keyframes cardPulse{
-  0%,100%{box-shadow: 0 4px 15px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05)}
-  50%{box-shadow: 0 4px 20px var(--c, rgba(0,212,255,.3)), inset 0 1px 0 rgba(255,255,255,.05)}
-}
-.card{
-  animation: cardPulse 3s ease-in-out infinite;
-}
-.card:nth-child(2n){animation-delay: .5s}
-.card:nth-child(3n){animation-delay: 1s}
-
-/* کارت‌های رنگی مخصوص */
-.card[href*="wallets"] .card-ic{background: linear-gradient(135deg, rgba(0,255,157,.15), rgba(0,0,0,.7)) !important;}
-.card[href*="logs"] .card-ic{background: linear-gradient(135deg, rgba(191,0,255,.15), rgba(0,0,0,.7)) !important;}
-.card[href*="birthdays"] .card-ic{background: linear-gradient(135deg, rgba(255,100,160,.15), rgba(0,0,0,.7)) !important;}
 </style>
 </head>
 
