@@ -1,0 +1,31 @@
+/* 🐛 Fix bottom nav overlap - global */
+html, body {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+body {
+  padding-bottom: 140px !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  max-height: none !important;
+  position: relative !important;
+}
+.container, .wrap, main, .content, .main-content {
+  padding-bottom: 140px !important;
+}
+.bottom-nav {
+  position: fixed !important;
+  bottom: 12px !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+}
+/* فاصله انتهایی برای اینکه آخرین آیتم زیر نوار نره */
+body::after {
+  content: "";
+  display: block;
+  height: 140px;
+  width: 100%;
+  pointer-events: none;
+}

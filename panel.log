@@ -26,46 +26,89 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://192.168.113.232:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [13/Oct/2026 18:24:31] "GET /customer/home HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:24:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 18:24:36] "GET /customer/login HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:24:47] "GET /customer/register HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:24:53] "[32mPOST /customer/login HTTP/1.1[0m" 302 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "GET /panel/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 18:24:54] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:11] "GET /panel/send HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:11] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:11] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:11] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:11] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:11] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:31] "POST /panel/send HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:31] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:31] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:31] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:31] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:31] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:36] "GET /panel/send HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:36] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:38] "GET /panel/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:38] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:38] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:38] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:38] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:38] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:40] "GET /panel/chat HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:40] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-[2026-10-13 18:25:40,954] ERROR in app: Exception on /api/chat/messages [GET]
+127.0.0.1 - - [13/Oct/2026 18:29:45] "GET /customer/home HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:29:45] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:29:46] "GET /customer/home HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:29:47] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:29:56] "[32mPOST /customer/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:29:57] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:30:01] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:30:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:01] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:01] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:01] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:01] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:30:01] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:31] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:30:50] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+127.0.0.1 - - [13/Oct/2026 18:30:50] "GET /admin/login HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:30:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:51] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:51] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:51] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:51] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:30:51] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:30:51] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:30:59] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:31:00] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:31:01] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:05] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:05] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:05] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:05] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:05] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:06] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:06] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:31:06] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:31:18] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:31:48] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:53] "GET /admin/payments HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:31:53] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:53] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:53] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:54] "[36mGET /static/pwa/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:54] "[36mGET /static/pwa/icons/icon-192.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:54] "[36mGET /static/pwa/icons/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:31:59] "GET /admin/payment HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:32:00] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:00] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:00] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:00] "[36mGET /static/pwa/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:00] "[36mGET /static/pwa/icons/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:32:02] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+[2026-10-13 18:32:05,759] ERROR in app: Exception on /admin/reports [GET]
 Traceback (most recent call last):
   File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
     response = self.full_dispatch_request()
@@ -76,73 +119,15 @@ Traceback (most recent call last):
   File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 979, in api_chat_messages
-    c.execute("""SELECT id, sender, message, created_at,
-    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                        reply_to_name, reply_to_text,
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<2 lines>...
-                 WHERE user_id=? AND id > ?
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-                 ORDER BY id ASC LIMIT 100""", (user_id, after))
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-sqlite3.OperationalError: no such column: reply_to_name
-127.0.0.1 - - [13/Oct/2026 18:25:40] "[35m[1mGET /api/chat/messages?user_id=1&after=0 HTTP/1.1[0m" 500 -
-127.0.0.1 - - [13/Oct/2026 18:25:40] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:40] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-[2026-10-13 18:25:43,992] ERROR in app: Exception on /api/chat/messages [GET]
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 979, in api_chat_messages
-    c.execute("""SELECT id, sender, message, created_at,
-    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                        reply_to_name, reply_to_text,
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<2 lines>...
-                 WHERE user_id=? AND id > ?
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-                 ORDER BY id ASC LIMIT 100""", (user_id, after))
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-sqlite3.OperationalError: no such column: reply_to_name
-127.0.0.1 - - [13/Oct/2026 18:25:43] "[35m[1mGET /api/chat/messages?user_id=1&after=0 HTTP/1.1[0m" 500 -
-127.0.0.1 - - [13/Oct/2026 18:25:45] "GET /panel/ai HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:45] "[36mGET /static/premium-modal.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:45] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:45] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:45] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-[2026-10-13 18:25:47,168] ERROR in app: Exception on /panel/profile [GET]
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 186, in decorated
-    return f(*args, **kwargs)
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 797, in panel_profile
-    settings["premium"] = premium_status["active"]
-    ~~~~~~~~^^^^^^^^^^^
-TypeError: 'sqlite3.Row' object does not support item assignment
-127.0.0.1 - - [13/Oct/2026 18:25:47] "[35m[1mGET /panel/profile HTTP/1.1[0m" 500 -
-127.0.0.1 - - [13/Oct/2026 18:25:49] "GET /panel/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:49] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:49] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:49] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:25:49] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:25:49] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
-127.0.0.1 - - [13/Oct/2026 18:26:19] "GET /api/notif/count HTTP/1.1" 200 -
-127.0.0.1 - - [13/Oct/2026 18:26:49] "GET /api/notif/count HTTP/1.1" 200 -
+  File "/data/data/com.termux/files/home/otp_panel/report_routes.py", line 70, in admin_reports
+    overview = get_admin_overview()
+  File "/data/data/com.termux/files/home/otp_panel/database.py", line 2749, in get_admin_overview
+    c.execute("SELECT COUNT(*) FROM referrals")
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: referrals
+127.0.0.1 - - [13/Oct/2026 18:32:05] "[35m[1mGET /admin/reports HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Oct/2026 18:32:07] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 18:32:07] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [13/Oct/2026 18:32:07] "[33mGET /static/icon-512.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:32:07] "[33mGET /static/icon-192.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [13/Oct/2026 18:32:37] "GET /api/notif/count HTTP/1.1" 200 -
