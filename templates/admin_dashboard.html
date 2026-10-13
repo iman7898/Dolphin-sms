@@ -226,7 +226,9 @@ body {
 
 
 
-<style id="compact-fix">
+
+
+<style id="tight-fix">
 /* نوار پایین شناور */
 .nw, .bottom-nav {
   position: fixed !important;
@@ -237,71 +239,83 @@ body {
   width: calc(100% - 40px) !important;
   max-width: 500px !important;
   margin: 0 !important;
-  animation: navFloat 0.6s ease both !important;
-}
-@keyframes navFloat{
-  from{transform:translateX(-50%) translateY(100px);opacity:0}
-  to{transform:translateX(-50%) translateY(0);opacity:1}
 }
 .container{
   padding-bottom: 100px !important;
 }
 
-/* 🎯 فاصله‌ها رو خیلی کم کن */
-.section{
-  margin: 6px 0 !important;
+/* 🎯 حذف کامل فاصله‌های خالی */
+.section {
+  margin: 4px 0 !important;
   padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  display: block !important;
+  gap: 0 !important;
 }
-.section-head{
-  margin-bottom: 6px !important;
+.section-head {
+  margin: 0 0 4px 0 !important;
   padding: 0 4px !important;
-  min-height: auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  line-height: 1 !important;
 }
-.section-icon{
+.section-icon {
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 15px !important;
+}
+.section-title {
+  font-size: 13px !important;
+}
+.cards {
+  gap: 5px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  grid-auto-rows: min-content !important;
+  align-content: start !important;
+}
+.card {
+  margin: 0 !important;
+  padding: 8px 10px !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+.card-ic {
   width: 32px !important;
   height: 32px !important;
   font-size: 16px !important;
-  border-radius: 10px !important;
 }
-.section-title{
-  font-size: 14px !important;
-}
-.section-count{
-  font-size: 10px !important;
-  padding: 3px 8px !important;
-}
-.cards{
-  gap: 6px !important;
-}
-.card{
-  margin: 0 !important;
-  padding: 10px 10px !important;
-  border-radius: 12px !important;
-}
-.card-ic{
-  width: 36px !important;
-  height: 36px !important;
-  font-size: 18px !important;
-  border-radius: 10px !important;
-}
-.card-t{
-  font-size: 12px !important;
-}
-.card-s{
-  font-size: 9.5px !important;
+.card-t { font-size: 11.5px !important; }
+.card-s { font-size: 9px !important; }
+
+/* کارت‌های full-width رو هم جمع کن */
+.card-full, .card[style*="grid-column"] {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 8px 10px !important;
 }
 
-/* حذف فاصلهٔ خالی اضافی */
-.stats{
-  margin-bottom: 8px !important;
+.stats {
+  margin: 6px 0 !important;
+  gap: 6px !important;
 }
-.header-bar{
-  margin: 10px 0 !important;
-  padding: 14px !important;
+.stat-box {
+  padding: 10px 6px !important;
+  min-height: 0 !important;
 }
-h2{
-  margin: 10px 4px 6px !important;
-  font-size: 15px !important;
+.header-bar {
+  margin: 6px 0 !important;
+  padding: 12px !important;
+}
+h2 {
+  margin: 8px 4px 4px !important;
+  font-size: 14px !important;
+}
+
+/* فاصله بین بخشی صفر */
+.section + .section {
+  margin-top: 4px !important;
 }
 </style>
 </head>
