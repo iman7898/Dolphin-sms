@@ -251,6 +251,40 @@ window.addEventListener('load', function(){
   document.body.style.setProperty('height','auto','important');
 });
 </script>
+
+<style id="clean">
+/* اسکرول */
+html, body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+}
+body { padding-bottom: 110px !important; }
+
+/* نوار پایین شناور */
+.bottom-nav, .nw {
+  position: fixed !important;
+  bottom: 10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  width: calc(100% - 30px) !important;
+  max-width: 500px !important;
+}
+
+/* کارت‌ها */
+.cards {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+}
+.card[style*="grid-column"] {
+  grid-column: 1 / -1 !important;
+}
+.section {
+  margin: 8px 0 !important;
+}
+</style>
 </head>
 
 <body class="matrix-bg">
