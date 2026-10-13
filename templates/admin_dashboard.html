@@ -201,23 +201,33 @@ if ('serviceWorker' in navigator) {
 
 
 
-<style id="simple-fix">
-/* نوار پایین بجای شناور، بیاد آخر صفحه */
+
+
+<style id="overflow-fix">
+/* 🎯 ریشه: overflow-x:hidden روی body باعث overflow-y:hidden هم می‌شه */
+html {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+body {
+  overflow: visible !important;   /* 👈 نکته اصلی */
+  overflow-x: clip !important;    /* 👈 به جای hidden */
+  overflow-y: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100vh !important;
+}
+.container {
+  overflow: visible !important;
+}
+/* نوار پایین غیر شناور */
 .nw, .bottom-nav {
   position: static !important;
-  margin: 30px auto 20px auto !important;
-  width: calc(100% - 20px) !important;
-  max-width: 500px !important;
-  bottom: auto !important;
-  left: auto !important;
-  right: auto !important;
+  margin: 30px auto 20px !important;
   transform: none !important;
   animation: none !important;
-}
-/* فاصله انتهایی حذف شد */
-body, .container {
-  padding-bottom: 20px !important;
-  margin-bottom: 0 !important;
 }
 </style>
 </head>
@@ -526,22 +536,6 @@ body, .container {
 </script>
 
 
-<script>
-(function(){
-  var g = document.getElementById('galaxy');
-  if (!g) return;
-  var colors = ['', 'blue', 'purple', 'green'];
-  for (var i = 0; i < 100; i++){
-    var st = document.createElement('div');
-    st.className = 'star ' + colors[Math.floor(Math.random()*colors.length)];
-    var size = Math.random() * 3 + 1;
-    st.style.width = size + 'px'; st.style.height = size + 'px';
-    st.style.left = Math.random() * 100 + '%';
-    st.style.top = Math.random() * 100 + '%';
-    st.style.animationDelay = (Math.random() * 3) + 's';
-    g.appendChild(st);
-  }
-})();
-</script>
-</body>
+
+<div id="admin-end-spacer" style="height:80px"></div></body>
 </html>
