@@ -15,9 +15,14 @@ def send_sms(mobile, message):
     if not AMOOT_TOKEN:
         return {"status": "error", "message": "توکن آموت تنظیم نشده"}
     try:
+        # 🎯 اصلاح فرمت شماره
+        mob = (mobile or '').strip().replace(' ', '').replace('-', '')
+        if mob.startswith('+98'): mob = '0' + mob[3:]
+        elif mob.startswith('98') and len(mob) == 12: mob = '0' + mob[2:]
+        elif mob.startswith('9') and len(mob) == 10: mob = '0' + mob
         payload = {
             'token': AMOOT_TOKEN,
-            'Mobiles': mobile,
+            'Mobiles': mob,
             'SendDateTime': '0',
             'SMSMessageText': message,
             'LineNumber': 'Public',
