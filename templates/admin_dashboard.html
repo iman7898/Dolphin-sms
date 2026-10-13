@@ -188,7 +188,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 </script>
-<link rel="stylesheet" href="/static/navbar-fix.css">
+
 
 
 
@@ -257,7 +257,29 @@ window.addEventListener('load', function(){
 
 
 
-<style id="s">html{overflow-y:auto!important;height:auto!important}body{overflow-x:clip!important;overflow-y:auto!important;height:auto!important;max-height:none!important}</style></head>
+<style id="f">
+html,body{overflow-y:auto!important;height:auto!important;max-height:none!important}
+body{overflow-x:clip!important;padding-bottom:110px!important}
+.bottom-nav,.nw,.nav-wrap{position:fixed!important;bottom:10px!important;left:50%!important;transform:translateX(-50%)!important;z-index:9999!important;width:calc(100% - 30px)!important;max-width:500px!important}
+</style>
+<script>
+// 🔥 پاکسازی خودکار service worker قدیمی
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    regs.forEach(function(r){ r.update(); });
+  });
+}
+// پاک کردن کش قدیمی
+if ('caches' in window) {
+  caches.keys().then(function(keys){
+    keys.forEach(function(k){
+      if (k.indexOf('otp-panel') !== -1 || k.indexOf('dolphin') === -1){
+        caches.delete(k);
+      }
+    });
+  });
+}
+</script></head>
 
 <body class="matrix-bg">
 <div class="galaxy" id="galaxy">

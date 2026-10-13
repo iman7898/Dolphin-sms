@@ -1,38 +1,33 @@
-var CACHE_NAME = 'otp-panel-v1';
-var urlsToCache = [
-  '/static/style.css',
-  '/static/custom-alert.js',
-  '/static/premium-modal.js',
-  '/static/manifest.json'
-];
+// Dolphin SMS Service Worker - v3
+const CACHE = 'dolphin-v3';
 
-self.addEventListener('install', function(event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(urlsToCache).catch(function(){});
-    })
-  );
+self.addEventListener('install', function(e){
   self.skipWaiting();
 });
 
-self.addEventListener('activate', function(event) {
-  event.waitUntil(
-    caches.keys().then(function(names) {
+self.addEventListener('activate', function(e){
+  e.waitUntil(
+    caches.keys().then(function(keys){
       return Promise.all(
-        names.map(function(name) {
-          if (name !== CACHE_NAME) return caches.delete(name);
-        })
+        keys.filter(function(k){ return k !== CACHE; })
+            .map(function(k){ return caches.delete(k); })
       );
-    })
+    }).then(function(){ return self.clients.claim(); })
   );
-  self.clients.claim();
 });
 
-self.addEventListener('fetch', function(event) {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(
-    fetch(event.request).catch(function() {
-      return caches.match(event.request);
+self.addEventListener('fetch', function(e){
+  // فقط فایل‌های استاتیک کش
+  var url = e.request.url;
+  if (e.request.method !== 'GET') return;
+  if (url.indexOf('/static/') === -1) return; // HTML هرگز کش نشه
+  e.respondWith(
+    caches.match(e.request).then(function(r){
+      return r || fetch(e.request).then(function(res){
+        var copy = res.clone();
+        caches.open(CACHE).then(function(c){ c.put(e.request, copy); });
+        return res;
+      });
     })
   );
 });
