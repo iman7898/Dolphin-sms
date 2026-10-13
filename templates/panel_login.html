@@ -1,39 +1,223 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>ورود مغازه</title><link rel="stylesheet" href="/static/style.css"><link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}</style>
-<script src="/static/custom-alert.js"></script>
-<link rel="manifest" href="/static/manifest.json">
-<meta name="theme-color" content="#00ff9d">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
-<link rel="apple-touch-icon" href="/static/icon-192.png">
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
-    });
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ورود مغازه‌دار</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{
+  font-family:Vazirmatn,Tahoma,sans-serif;
+  background:#0a0a0f;color:#e2e8f0;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px 16px;
+  position:relative;
 }
-</script>
-</head>
-<body class="matrix-bg">
-<div class="container login-container">
-    <div class="login-logo">🏪</div>
-    <h1 class="login-title">پنل مغازه‌دار</h1>
-    <p class="login-subtitle">خوش آمدید</p>
-    {% if expired %}<div class="error">⛔ اشتراک شما به پایان رسیده</div>{% endif %}
-    {% if error %}<div class="error">❌ {{ error }}</div>{% endif %}
-    <div class="login-form-box">
-        <form method="post">
-            <label class="form-label">نام کاربری</label>
-            <input type="text" name="username" required>
-            <label class="form-label">رمز عبور</label>
-            <input type="password" name="password" required>
-            <button type="submit" class="btn-white">⏻ ورود</button>
-        </form>
-    </div>
+
+/* ========== کهکشان ستاره‌ای ========== */
+.galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;
+  background:radial-gradient(ellipse at 20% 0%,rgba(0,212,255,.15),transparent 50%),
+             radial-gradient(ellipse at 80% 100%,rgba(191,0,255,.15),transparent 50%),
+             radial-gradient(ellipse at 50% 50%,rgba(0,100,200,.08),transparent 70%),
+             #0a0a0f;}
+.star{position:absolute;background:#fff;border-radius:50%;
+  box-shadow:0 0 6px currentColor;
+  animation:twinkle 3s ease-in-out infinite}
+.star.blue{color:#00d4ff;background:#00d4ff;box-shadow:0 0 10px #00d4ff}
+.star.purple{color:#bf00ff;background:#bf00ff;box-shadow:0 0 10px #bf00ff}
+@keyframes twinkle{
+  0%,100%{opacity:.15;transform:scale(.5)}
+  50%{opacity:1;transform:scale(1.4)}
+}
+@keyframes floatStar{
+  0%{transform:translateY(0) translateX(0)}
+  100%{transform:translateY(-100vh) translateX(30px)}
+}
+
+/* حباب نئون */
+.nebula{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;
+  animation:nebulaMove 20s ease-in-out infinite}
+.nebula.b1{width:300px;height:300px;background:#00d4ff;top:10%;left:-100px}
+.nebula.b2{width:250px;height:250px;background:#bf00ff;bottom:10%;right:-80px;animation-delay:-5s}
+.nebula.b3{width:200px;height:200px;background:#00ff9d;top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:-10s;opacity:.25}
+@keyframes nebulaMove{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(50px,-50px) scale(1.2)}
+}
+.nebula.b3{animation:nebulaPulse 8s ease-in-out infinite}
+@keyframes nebulaPulse{
+  0%,100%{opacity:.2;transform:translate(-50%,-50%) scale(1)}
+  50%{opacity:.4;transform:translate(-50%,-50%) scale(1.3)}
+}
+
+/* ========== محتوای اصلی ========== */
+.wrap{width:100%;max-width:420px;position:relative;z-index:1;
+  animation:fadeUp 1s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+/* لوگو */
+.logo{width:110px;height:110px;margin:0 auto 20px;
+  background:linear-gradient(135deg,#00d4ff,#0088cc,#bf00ff);
+  background-size:200% 200%;
+  border-radius:32px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;
+  box-shadow:0 0 60px rgba(0,212,255,.8),0 0 100px rgba(191,0,255,.5),inset 0 0 30px rgba(255,255,255,.2);
+  animation:logoPulse 2.5s ease-in-out infinite,gradientShift 4s ease infinite;
+  position:relative;
+}
+.logo::before{content:"";position:absolute;inset:-3px;border-radius:35px;
+  background:conic-gradient(from 0deg,#00d4ff,#bf00ff,#00ff9d,#00d4ff);
+  z-index:-1;animation:rotateBorder 3s linear infinite;filter:blur(6px);opacity:.8}
+@keyframes logoPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+}
+@keyframes gradientShift{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+@keyframes rotateBorder{
+  from{transform:rotate(0deg)}to{transform:rotate(360deg)}
+}
+
+/* عنوان */
+h1{font-size:26px;font-weight:900;color:#fff;text-align:center;margin:0 0 8px;
+  text-shadow:0 0 25px rgba(0,212,255,.9),0 0 50px rgba(191,0,255,.5);
+  animation:fadeUp 1s cubic-bezier(.34,1.56,.64,1) .1s both}
+.sub{font-size:13px;color:#7de5ff;text-align:center;margin:0 0 28px;
+  animation:fadeUp 1s cubic-bezier(.34,1.56,.64,1) .2s both}
+.sub::after{content:"";display:block;width:60px;height:3px;margin:10px auto 0;
+  background:linear-gradient(90deg,transparent,#00d4ff,transparent);border-radius:3px;
+  box-shadow:0 0 12px #00d4ff}
+
+/* فرم */
+.form{background:rgba(10,21,32,.55);border:2px solid rgba(0,212,255,.4);
+  border-radius:24px;padding:24px 20px;backdrop-filter:blur(20px);
+  box-shadow:0 0 40px rgba(0,212,255,.3),inset 0 0 30px rgba(0,212,255,.05);
+  animation:fadeUp 1s cubic-bezier(.34,1.56,.64,1) .3s both;
+  position:relative;overflow:hidden}
+.form::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent 0%,rgba(0,212,255,.15) 25%,transparent 50%);
+  animation:rotateBorder 6s linear infinite;pointer-events:none}
+
+.form label{display:block;font-size:12.5px;color:#7de5ff;font-weight:900;
+  margin-bottom:8px;text-shadow:0 0 8px rgba(0,212,255,.5);
+  position:relative;z-index:1}
+.form input{width:100%;padding:14px 16px;margin-bottom:16px;
+  background:rgba(0,212,255,.05);color:#fff;
+  border:1.5px solid rgba(0,212,255,.35);border-radius:14px;
+  font-family:inherit;font-size:14px;
+  transition:.3s;position:relative;z-index:1}
+.form input::placeholder{color:rgba(125,229,255,.4)}
+.form input:focus{outline:none;border-color:#00d4ff;background:rgba(0,212,255,.12);
+  box-shadow:0 0 25px rgba(0,212,255,.6),inset 0 0 15px rgba(0,212,255,.1)}
+
+.btn-login{width:100%;padding:16px;border:none;border-radius:16px;
+  background:linear-gradient(135deg,#00d4ff,#0088cc,#bf00ff);
+  background-size:200% 200%;
+  color:#fff;font-family:inherit;font-size:16px;font-weight:900;
+  cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 0 30px rgba(0,212,255,.7),inset 0 0 20px rgba(255,255,255,.15);
+  animation:gradientShift 3s ease infinite;
+  transition:.3s;z-index:1}
+.btn-login:hover{transform:translateY(-3px) scale(1.02);
+  box-shadow:0 0 50px rgba(0,212,255,1),0 0 80px rgba(191,0,255,.6)}
+.btn-login:active{transform:scale(.97)}
+.btn-login::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+  background-size:200% 100%;
+  animation:shine 3s linear infinite}
+@keyframes shine{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* خطا */
+.error{padding:12px 16px;border-radius:14px;text-align:center;font-size:13px;
+  font-weight:900;margin-bottom:16px;
+  background:rgba(255,77,109,.15);border:1.5px solid #ff4d6d;color:#ff8fa3;
+  animation:shake .5s ease both}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  75%{transform:translateX(8px)}
+}
+
+/* ثبت‌نام */
+.register-box{margin-top:20px;text-align:center;
+  animation:fadeUp 1s cubic-bezier(.34,1.56,.64,1) .4s both}
+.register-box p{font-size:12.5px;color:#7de5ff;margin:0 0 12px}
+.btn-register{display:inline-block;padding:12px 28px;
+  background:transparent;color:#00d4ff;text-decoration:none;
+  border:2px solid #00d4ff;border-radius:14px;
+  font-size:13px;font-weight:900;
+  box-shadow:0 0 20px rgba(0,212,255,.4);
+  animation:registerPulse 2.5s ease-in-out infinite;
+  transition:.3s}
+.btn-register:hover{background:rgba(0,212,255,.15);transform:translateY(-2px);
+  box-shadow:0 0 40px rgba(0,212,255,.8)}
+@keyframes registerPulse{
+  0%,100%{box-shadow:0 0 20px rgba(0,212,255,.4)}
+  50%{box-shadow:0 0 35px rgba(0,212,255,.9)}
+}
+
+/* پایین */
+.foot{margin-top:30px;text-align:center;font-size:11px;color:rgba(125,229,255,.5);
+  animation:fadeUp 1s cubic-bezier(.34,1.56,.64,1) .5s both}
+.foot b{color:#00d4ff}
+</style></head><body>
+
+<div class="galaxy" id="galaxy">
+  <div class="nebula b1"></div>
+  <div class="nebula b2"></div>
+  <div class="nebula b3"></div>
 </div>
-{% include "_global_bg.html" %}
+
+<div class="wrap">
+
+  <div class="logo">🏪</div>
+
+  <h1>پنل مغازه‌دار</h1>
+  <p class="sub">خوش آمدید به پنل هوشمند</p>
+
+  {% if expired %}<div class="error">⛔ اشتراک شما به پایان رسیده</div>{% endif %}
+  {% if error %}<div class="error">❌ {{ error }}</div>{% endif %}
+
+  <div class="form">
+    <form method="post" autocomplete="on">
+      <label>👤 نام کاربری</label>
+      <input type="text" name="username" placeholder="نام کاربری خود را وارد کنید" required autocomplete="username">
+
+      <label>🔒 رمز عبور</label>
+      <input type="password" name="password" placeholder="رمز عبور" required autocomplete="current-password">
+
+      <button type="submit" class="btn-login">🚀 ورود به پنل</button>
+    </form>
+  </div>
+
+  <div class="register-box">
+    <p>هنوز حساب نداری؟</p>
+    <a href="/public/register" class="btn-register">📝 ثبت‌نام مغازه‌دار</a>
+  </div>
+
+  <div class="foot">Dolphin SMS © <b>2026</b></div>
+
+</div>
+
+<script>
+// ساخت ستاره‌ها
+(function(){
+  var g = document.getElementById('galaxy');
+  var colors = ['', 'blue', 'purple'];
+  for (var i = 0; i < 120; i++){
+    var s = document.createElement('div');
+    s.className = 'star ' + colors[Math.floor(Math.random()*colors.length)];
+    var size = Math.random() * 3 + 1;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 3) + 's';
+    g.appendChild(s);
+  }
+})();
+</script>
 </body></html>
