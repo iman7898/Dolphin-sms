@@ -1,0 +1,13 @@
+{
+  "appId": "com.dolphin.sms",
+  "appName": "Dolphin SMS",
+  "webDir": "www",
+  "server": {
+    "url": "https://dolphin-sms.onrender.com/customer/home",
+    "cleartext": true,
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}
