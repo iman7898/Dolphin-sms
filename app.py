@@ -344,7 +344,11 @@ def panel_login():
             log_login(u or "unknown", ip, ua, user_id=None, status="rate_limited")
             return render_template("panel_login.html", error=error, expired=expired)
 
-        user = get_user_by_username(u)
+        try:
+            from database import get_user_by_username_or_phone as _getu
+            user = _getu(u)
+        except Exception:
+            user = get_user_by_username(u)
         if user and _verify_password(user[2], p):
             user_id = user[0]
             if not is_user_active(user_id):

@@ -98,6 +98,34 @@ def get_user_by_username(username):
     conn.close()
     return row
 
+def get_user_by_phone(phone):
+    """جستجو با شماره موبایل (با یا بدون ۰)"""
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    p = (phone or '').strip()
+    variants = [p]
+    if p.startswith('0'):
+        variants.append(p[1:])
+        variants.append('98' + p[1:])
+    else:
+        variants.append('0' + p)
+        variants.append('98' + p)
+    for v in variants:
+        c.execute("SELECT * FROM users WHERE phone=?", (v,))
+        row = c.fetchone()
+        if row:
+            conn.close()
+            return row
+    conn.close()
+    return None
+
+def get_user_by_username_or_phone(identifier):
+    """اول با username بعد با phone"""
+    u = get_user_by_username(identifier)
+    if u:
+        return u
+    return get_user_by_phone(identifier)
+
 def get_all_users():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
