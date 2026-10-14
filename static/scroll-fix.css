@@ -1,0 +1,46 @@
+/* 🔓 اسکرول رو کاملاً آزاد کن */
+html {
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100% !important;
+}
+body {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100vh !important;
+  position: relative !important;
+}
+.container,
+.container-fluid,
+.wrap,
+main,
+.content,
+#app,
+#root {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-bottom: 120px !important;
+  margin-bottom: 0 !important;
+}
+/* هیچ لایه‌ای روی همه نباشه */
+body::before,
+body::after {
+  pointer-events: none !important;
+}
+/* نوار پایین ثابت */
+.bottom-nav,
+.nw,
+.nav-wrap {
+  position: fixed !important;
+  bottom: 10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  max-width: calc(100% - 30px) !important;
+}
