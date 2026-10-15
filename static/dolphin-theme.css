@@ -258,3 +258,120 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 .back-btn, .footer-title, .stat-label, .box-title {
   color: #90e0ef !important;
 }
+
+/* 🎨 طراحی کاملاً جدید دکمه‌ها - کارت‌های دریا */
+.btn-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  padding: 16px 18px !important;
+  margin-bottom: 10px !important;
+  border-radius: 20px !important;
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all .4s cubic-bezier(.2,.8,.2,1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(150,210,240,.25) !important;
+  background:
+    linear-gradient(135deg, rgba(0,50,90,.5) 0%, rgba(0,30,60,.35) 100%) !important;
+  color: #e0f4ff !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow:
+    0 3px 15px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+/* هایلایت رنگی بالا */
+.btn-nav::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0; right: 0; left: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, var(--c, #5db8e8), transparent) !important;
+  opacity: .7 !important;
+  animation: none !important;
+  transform: none !important;
+  background-size: auto !important;
+}
+
+/* نقطه درخشان سمت راست */
+.btn-nav::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  right: 14px !important;
+  transform: translateY(-50%) !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: var(--c, #5db8e8) !important;
+  box-shadow: 0 0 12px var(--c, #5db8e8), 0 0 20px var(--c, #5db8e8) !important;
+  animation: dotPulse 2.5s ease-in-out infinite !important;
+}
+@keyframes dotPulse {
+  0%,100% { opacity: .5; transform: translateY(-50%) scale(.8); }
+  50% { opacity: 1; transform: translateY(-50%) scale(1.2); }
+}
+
+.btn-nav:hover {
+  transform: translateY(-3px) !important;
+  background: linear-gradient(135deg, rgba(0,80,130,.7) 0%, rgba(0,50,90,.5) 100%) !important;
+  border-color: var(--c, #5db8e8) !important;
+  box-shadow:
+    0 8px 30px var(--c, rgba(93,184,232,.5)),
+    inset 0 1px 0 rgba(255,255,255,.15) !important;
+}
+
+/* آیکن - کاملاً جدید */
+.btn-ic {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 22px !important;
+  background: linear-gradient(135deg, var(--c, #5db8e8) 0%, rgba(0,40,80,.4) 100%) !important;
+  border: 1px solid rgba(180,230,255,.3) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 3px 10px rgba(0,0,0,.3) !important;
+  color: #fff !important;
+  text-shadow: 0 0 8px rgba(0,0,0,.5) !important;
+  transition: all .35s !important;
+  animation: none !important;
+  opacity: .9;
+}
+.btn-nav:hover .btn-ic {
+  transform: rotate(-8deg) scale(1.1) !important;
+  animation: none !important;
+  opacity: 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.3),
+    0 5px 20px var(--c, rgba(93,184,232,.6)) !important;
+}
+
+/* رنگ هر دکمه */
+.btn-nav[href*="/panel/send"] { --c: #06d6a0; }
+.btn-nav[href*="/panel/contacts"] { --c: #a78bfa; }
+.btn-nav[href*="/panel/templates"] { --c: #4cc9f0; }
+.btn-nav[href*="/panel/wallet"] { --c: #ffd60a; }
+.btn-nav[href*="/panel/qr"] { --c: #06ffa5; }
+.btn-nav[href*="/panel/tickets"] { --c: #ff6b9d; }
+.btn-nav[href*="/panel/loyalty"] { --c: #ffd60a; }
+.btn-nav[href*="/panel/referrals"] { --c: #c77dff; }
+.btn-nav[href*="/panel/leaderboard"] { --c: #ffd60a; }
+.btn-nav[href*="/panel/reports"] { --c: #4cc9f0; }
+.btn-nav[href*="/panel/auto-reply"] { --c: #4cc9f0; }
+.btn-nav[href*="/panel/ai-manager"] { --c: #c77dff; }
+.btn-nav[href*="/panel/bot-ads"] { --c: #ff6b9d; }
+.btn-nav[href*="/panel/posters"] { --c: #ffd60a; }
+.btn-nav[href*="/panel/invite-by-sms"] { --c: #06d6a0; }
+.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; }
+.btn-nav[href*="/panel/broadcast"] { --c: #ff6b9d; }
+.btn-nav[href*="/panel/logout"], .btn-nav.btn-logout { --c: #ff4d6d; }
