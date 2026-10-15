@@ -9,7 +9,43 @@ from functools import wraps
 import hashlib, hmac, os, secrets, time
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+app = Flask(__name__)app = Flask(__name__)
+
+# ⚡ Cache + Gzip
+import gzip as _gz
+from io import BytesIO as _BIO
+
+@app.after_request
+def _cache_response(response):
+    # Gzip
+    try:
+        accept = request.headers.get('Accept-Encoding', '')
+        if 'gzip' in accept.lower() and response.status_code == 200:
+            if not response.direct_passthrough:
+                ct = response.content_type or ''
+                if any(x in ct for x in ['text/', 'json', 'javascript', 'css', 'xml', 'svg']):
+                    data = response.get_data()
+                    if len(data) > 500:
+                        buf = _BIO()
+                        with _gz.GzipFile(fileobj=buf, mode='wb', compresslevel=6) as gz:
+                            gz.write(data)
+                        comp = buf.getvalue()
+                        if len(comp) < len(data):
+                            response.set_data(comp)
+                            response.headers['Content-Encoding'] = 'gzip'
+                            response.headers['Content-Length'] = str(len(comp))
+                            response.headers['Vary'] = 'Accept-Encoding'
+    except Exception:
+        pass
+    # Cache استاتیک
+    try:
+        if request.path.startswith('/static/'):
+            response.headers['Cache-Control'] = 'public, max-age=86400'
+    except Exception:
+        pass
+    return response
+
+
 app = Flask(__name__)
 
 # ⚡ Gzip Compression دستی
@@ -2144,6 +2180,15 @@ try:
     print("customer_features OK")
 except Exception as e:
     print("customer_features err:", e)
+
+# 🔄 Keep-alive (فقط روی Render)
+try:
+    import os as _os
+    if _os.environ.get('RENDER') or _os.environ.get('RENDER_EXTERNAL_URL'):
+        from keep_alive import start as _ka_start
+        _ka_start()
+except Exception as _e:
+    pass
 
 if __name__ == "__main__":
     init_db()

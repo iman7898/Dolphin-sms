@@ -90,6 +90,40 @@ def get_user(user_id):
     conn.close()
     return row
 
+_CACHE = {}
+_CACHE_TIME = {}
+CACHE_TTL = 120  # ۲ دقیقه
+
+def get_user_settings(user_id):
+    """⚡ نسخه کش‌شده - 120 ثانیه اعتبار"""
+    import time
+    now = time.time()
+    key = f'settings_{user_id}'
+    if key in _CACHE and (now - _CACHE_TIME.get(key, 0)) < CACHE_TTL:
+        return _CACHE[key]
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    try:
+        c.execute("SELECT * FROM user_settings WHERE user_id=?", (user_id,))
+        row = c.fetchone()
+    except Exception:
+        row = None
+    conn.close()
+    _CACHE[key] = row
+    _CACHE_TIME[key] = now
+    return row
+
+def clear_settings_cache(user_id=None):
+    global _CACHE, _CACHE_TIME
+    if user_id:
+        _CACHE.pop(f'settings_{user_id}', None)
+        _CACHE_TIME.pop(f'settings_{user_id}', None)
+    else:
+        _CACHE = {}
+        _CACHE_TIME = {}
+
+
 def get_user_by_username(username):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -774,37 +808,6 @@ def clear_login_attempts(ip):
     c.execute("DELETE FROM login_attempts WHERE ip=?", (ip,))
     conn.commit()
     conn.close()
-
-_SETTINGS_CACHE = {}
-_SETTINGS_CACHE_TIME = {}
-
-def get_user_settings(user_id):
-    """⚡ نسخه کش‌شده - 60 ثانیه اعتبار"""
-    import time
-    now = time.time()
-    if user_id in _SETTINGS_CACHE and (now - _SETTINGS_CACHE_TIME.get(user_id, 0)) < 60:
-        return _SETTINGS_CACHE[user_id]
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-    try:
-        c.execute("SELECT * FROM user_settings WHERE user_id=?", (user_id,))
-        row = c.fetchone()
-    except Exception:
-        row = None
-    conn.close()
-    _SETTINGS_CACHE[user_id] = row
-    _SETTINGS_CACHE_TIME[user_id] = now
-    return row
-
-def clear_settings_cache(user_id=None):
-    global _SETTINGS_CACHE, _SETTINGS_CACHE_TIME
-    if user_id:
-        _SETTINGS_CACHE.pop(user_id, None)
-        _SETTINGS_CACHE_TIME.pop(user_id, None)
-    else:
-        _SETTINGS_CACHE = {}
-        _SETTINGS_CACHE_TIME = {}
 
 
 def update_user_avatar(user_id, path):

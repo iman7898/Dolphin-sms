@@ -50,3 +50,4 @@ customer_features OK
 127.0.0.1 - - [15/Oct/2026 17:35:13] "GET /api/notif/count HTTP/1.1" 200 -
 127.0.0.1 - - [15/Oct/2026 17:35:43] "GET /api/notif/count HTTP/1.1" 200 -
 127.0.0.1 - - [15/Oct/2026 17:35:53] "GET /customer/home HTTP/1.1" 200 -
+127.0.0.1 - - [15/Oct/2026 18:11:47] "GET /customer/home HTTP/1.1" 200 -
