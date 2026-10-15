@@ -1,7 +1,6 @@
-/* 🌊 دریای واقعی با CSS خالص */
+/* 🌊 دریای خالص */
 body.dolphin-cosmic, body.matrix-bg {
-  background: #04101c !important;
-  position: relative;
+  background: #021a2e !important;
 }
 body.dolphin-cosmic::before, body.matrix-bg::before {
   content: "" !important;
@@ -10,72 +9,67 @@ body.dolphin-cosmic::before, body.matrix-bg::before {
   z-index: -3 !important;
   pointer-events: none !important;
   background: linear-gradient(180deg,
-    #87ceeb 0%,
-    #4db8e8 8%,
-    #2a9dd4 15%,
-    #1a7fb8 25%,
-    #0d6096 35%,
-    #065183 50%,
-    #04446f 65%,
-    #03385c 80%,
-    #022a48 100%) !important;
+    #1a4a6e 0%,
+    #1e5a80 12%,
+    #1d6a95 25%,
+    #186a99 40%,
+    #0e5a85 55%,
+    #084a72 70%,
+    #043a5c 85%,
+    #022740 100%) !important;
 }
-/* خورشید */
-body.dolphin-cosmic::after, body.matrix-bg::after {
-  content: "" !important;
-  position: fixed !important;
-  top: 5% !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 200px !important;
-  height: 200px !important;
-  border-radius: 50% !important;
-  background: radial-gradient(circle, #fff7d6 0%, #ffe4a0 15%, rgba(255,200,120,.6) 35%, rgba(255,180,80,.25) 55%, transparent 75%) !important;
-  box-shadow: 0 0 80px rgba(255,220,150,.8), 0 0 150px rgba(255,200,120,.5) !important;
-  animation: sunGlow 6s ease-in-out infinite !important;
-  z-index: -2 !important;
-  pointer-events: none !important;
-}
-@keyframes sunGlow { 0%,100% { transform: translateX(-50%) scale(1); opacity: .85; } 50% { transform: translateX(-50%) scale(1.1); opacity: 1; } }
+/* خورشید حذف */
+body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 
-/* موج‌ها */
+/* موج‌های دریا */
 .ocean-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.ocean-bg .wave-svg { position: absolute; left: 0; width: 200%; height: 200px; }
-.ocean-bg .w1 { bottom: 35%; opacity: .5; animation: wA 22s linear infinite; }
-.ocean-bg .w2 { bottom: 20%; opacity: .6; animation: wA 28s linear infinite reverse; }
-.ocean-bg .w3 { bottom: 5%; opacity: .75; animation: wA 34s linear infinite; }
+.ocean-bg .wave-svg { position: absolute; left: 0; width: 200%; height: 180px; }
+.ocean-bg .w1 { bottom: 40%; opacity: .35; animation: wA 25s linear infinite; }
+.ocean-bg .w2 { bottom: 22%; opacity: .5; animation: wA 30s linear infinite reverse; }
+.ocean-bg .w3 { bottom: 8%; opacity: .7; animation: wA 38s linear infinite; }
+.ocean-bg .w4 { bottom: -10px; opacity: .85; animation: wA 44s linear infinite; }
 @keyframes wA { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 .ocean-bg .sun { display: none; }
 
-/* ماهی‌ها */
-.fish { position: fixed; font-size: 30px; z-index: 0; pointer-events: none; filter: drop-shadow(0 0 12px rgba(255,255,255,.9)); animation: fishSwim linear infinite; }
-.fish.f1 { top: 22%; animation-duration: 32s; }
-.fish.f2 { top: 48%; font-size: 22px; animation-duration: 42s; animation-delay: 6s; }
-.fish.f3 { top: 68%; font-size: 34px; animation-duration: 38s; animation-delay: 12s; }
+/* 🌊 نور زیر آب */
+.ocean-glow {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(120,220,255,.15), transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(80,200,230,.1), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(0,120,180,.25), transparent 60%);
+}
+
+/* 🐟 ماهی‌ها - روی قاب */
+.fish { position: fixed; font-size: 30px; z-index: 5; pointer-events: none; filter: drop-shadow(0 0 12px rgba(200,240,255,1)); animation: fishSwim linear infinite; }
+.fish.f1 { top: 18%; animation-duration: 36s; }
+.fish.f2 { top: 42%; font-size: 22px; animation-duration: 46s; animation-delay: 8s; }
+.fish.f3 { top: 65%; font-size: 34px; animation-duration: 40s; animation-delay: 14s; }
+.fish.f4 { top: 80%; font-size: 20px; animation-duration: 50s; animation-delay: 20s; }
 @keyframes fishSwim { 0% { transform: translateX(-100px); } 100% { transform: translateX(calc(100vw + 100px)); } }
 
-/* حباب‌ها */
-.bubble { position: fixed; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(200,240,255,.3) 60%, transparent); border: 1px solid rgba(200,240,255,.6); z-index: 0; pointer-events: none; animation: bubbleRise 16s linear infinite; }
+/* 🫧 حباب‌ها - روی قاب */
+.bubble { position: fixed; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(200,240,255,.3) 60%, transparent); border: 1px solid rgba(200,240,255,.6); z-index: 5; pointer-events: none; animation: bubbleRise 18s linear infinite; }
 @keyframes bubbleRise { 0% { transform: translateY(100vh) scale(.5); opacity: 0; } 10% { opacity: .9; } 90% { opacity: .9; } 100% { transform: translateY(-100px) scale(1.3); opacity: 0; } }
 
-/* 🔮 قاب شیشه‌ای - دریا از پشتش دیده بشه */
+/* 🔮 قاب کاملاً شفاف */
 .container {
-  background: rgba(5,20,35,.4) !important;
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important;
-  border: 1px solid rgba(180,240,255,.45) !important;
-  box-shadow: 0 8px 60px rgba(0,0,0,.4), inset 0 0 40px rgba(180,240,255,.08) !important;
+  background: rgba(0,20,40,.12) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  border: 1px solid rgba(180,240,255,.35) !important;
+  box-shadow: 0 8px 60px rgba(0,20,40,.3) !important;
 }
 .container::before, .container::after { display: none !important; }
 
-/* هدر */
+/* 🐬 هدر */
 .dolphin-header {
   display: flex; align-items: center; justify-content: center; gap: 14px;
   padding: 22px 18px; margin: -12px -12px 18px -12px;
-  background: linear-gradient(135deg, rgba(0,40,80,.65), rgba(0,90,140,.5));
-  border-bottom: 1.5px solid rgba(180,240,255,.5);
+  background: linear-gradient(135deg, rgba(0,40,80,.55), rgba(0,90,140,.35));
+  border-bottom: 1.5px solid rgba(180,240,255,.4);
   position: relative; overflow: hidden; border-radius: 24px 24px 0 0;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
 }
 .dolphin-logo {
   width: 52px; height: 52px; border-radius: 16px;
@@ -97,7 +91,7 @@ body.dolphin-cosmic::after, body.matrix-bg::after {
 @keyframes grdMove { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 .dolphin-sub { font-size: 10px; color: #c8f0ff; text-align: right; letter-spacing: 3px; text-transform: uppercase; opacity: .9; }
 
-/* دکمه‌ها */
+/* ✨ دکمه‌ها - شفاف */
 .btn-nav {
   display: flex !important; align-items: center !important; justify-content: flex-start !important;
   gap: 14px !important; padding: 14px 16px !important; margin-bottom: 10px !important;
@@ -106,109 +100,62 @@ body.dolphin-cosmic::after, body.matrix-bg::after {
   transition: all .4s cubic-bezier(.2,.8,.2,1) !important;
   position: relative !important; overflow: hidden !important;
   border: 1px solid !important;
-  background: linear-gradient(135deg, rgba(0,30,55,.7), rgba(0,50,80,.5)) !important;
-  color: #fff !important; backdrop-filter: blur(10px);
+  background: rgba(0,30,55,.35) !important;
+  color: #fff !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
 }
-.btn-nav:hover { transform: translateY(-3px) !important; background: linear-gradient(135deg, rgba(0,60,100,.85), rgba(0,90,130,.65)) !important; box-shadow: 0 8px 30px rgba(77,208,255,.5) !important; }
+.btn-nav:hover { transform: translateY(-3px) !important; background: rgba(0,60,100,.55) !important; box-shadow: 0 8px 30px rgba(77,208,255,.5) !important; }
 .btn-nav:active { transform: scale(.98) !important; }
 .btn-ic {
   width: 42px; height: 42px; min-width: 42px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center; font-size: 22px;
-  background: linear-gradient(135deg, rgba(77,208,255,.3), rgba(125,255,212,.2));
-  border: 1.5px solid rgba(180,240,255,.55);
-  box-shadow: inset 0 0 20px rgba(77,208,255,.25), 0 0 15px rgba(77,208,255,.4);
+  background: rgba(77,208,255,.2);
+  border: 1.5px solid rgba(180,240,255,.5);
+  box-shadow: inset 0 0 20px rgba(77,208,255,.2);
   transition: all .4s; animation: icBob 3.5s ease-in-out infinite;
 }
 @keyframes icBob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-4px) rotate(3deg); } }
-.btn-nav:hover .btn-ic { transform: scale(1.15) rotate(-8deg); box-shadow: inset 0 0 30px rgba(77,208,255,.5), 0 0 25px var(--c, #4dd0ff); }
+.btn-nav:hover .btn-ic { transform: scale(1.15) rotate(-8deg); box-shadow: inset 0 0 30px rgba(77,208,255,.4), 0 0 25px var(--c, #4dd0ff); }
 .btn-nav:nth-child(2n) .btn-ic { animation-delay: .5s; }
 .btn-nav:nth-child(3n) .btn-ic { animation-delay: 1s; }
 .btn-nav::after {
   content: ""; position: absolute; top: 14px; bottom: 14px; right: 0;
-  width: 4px; border-radius: 4px; background: var(--c, #4dd0ff);
-  box-shadow: 0 0 12px var(--c, #4dd0ff), 0 0 24px var(--c, #4dd0ff);
+  width: 3px; border-radius: 3px; background: var(--c, #4dd0ff);
+  box-shadow: 0 0 10px var(--c, #4dd0ff);
 }
-.btn-nav[href*="/panel/send"] { --c: #00ff9d; border-color: rgba(0,255,157,.5) !important; }
-.btn-nav[href*="/panel/contacts"] { --c: #bf7dff; border-color: rgba(191,125,255,.5) !important; }
-.btn-nav[href*="/panel/templates"] { --c: #4dd0ff; border-color: rgba(77,208,255,.5) !important; }
-.btn-nav[href*="/panel/wallet"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
-.btn-nav[href*="/panel/qr"] { --c: #7dffd4; border-color: rgba(125,255,212,.5) !important; }
-.btn-nav[href*="/panel/tickets"] { --c: #ff5588; border-color: rgba(255,85,136,.5) !important; }
-.btn-nav[href*="/panel/loyalty"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
-.btn-nav[href*="/panel/referrals"] { --c: #bf7dff; border-color: rgba(191,125,255,.5) !important; }
-.btn-nav[href*="/panel/leaderboard"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
-.btn-nav[href*="/panel/reports"] { --c: #4dd0ff; border-color: rgba(77,208,255,.5) !important; }
-.btn-nav[href*="/panel/auto-reply"] { --c: #4dd0ff; border-color: rgba(77,208,255,.5) !important; }
-.btn-nav[href*="/panel/ai-manager"] { --c: #bf7dff; border-color: rgba(191,125,255,.5) !important; }
-.btn-nav[href*="/panel/bot-ads"] { --c: #ff7dff; border-color: rgba(255,125,255,.5) !important; }
-.btn-nav[href*="/panel/posters"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
-.btn-nav[href*="/panel/invite-by-sms"] { --c: #00ff9d; border-color: rgba(0,255,157,.5) !important; }
-.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; border-color: rgba(255,184,77,.5) !important; }
+.btn-nav[href*="/panel/send"] { --c: #00ff9d; border-color: rgba(0,255,157,.45) !important; }
+.btn-nav[href*="/panel/contacts"] { --c: #bf7dff; border-color: rgba(191,125,255,.45) !important; }
+.btn-nav[href*="/panel/templates"] { --c: #4dd0ff; border-color: rgba(77,208,255,.45) !important; }
+.btn-nav[href*="/panel/wallet"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
+.btn-nav[href*="/panel/qr"] { --c: #7dffd4; border-color: rgba(125,255,212,.45) !important; }
+.btn-nav[href*="/panel/tickets"] { --c: #ff5588; border-color: rgba(255,85,136,.45) !important; }
+.btn-nav[href*="/panel/loyalty"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
+.btn-nav[href*="/panel/referrals"] { --c: #bf7dff; border-color: rgba(191,125,255,.45) !important; }
+.btn-nav[href*="/panel/leaderboard"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
+.btn-nav[href*="/panel/reports"] { --c: #4dd0ff; border-color: rgba(77,208,255,.45) !important; }
+.btn-nav[href*="/panel/auto-reply"] { --c: #4dd0ff; border-color: rgba(77,208,255,.45) !important; }
+.btn-nav[href*="/panel/ai-manager"] { --c: #bf7dff; border-color: rgba(191,125,255,.45) !important; }
+.btn-nav[href*="/panel/bot-ads"] { --c: #ff7dff; border-color: rgba(255,125,255,.45) !important; }
+.btn-nav[href*="/panel/posters"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
+.btn-nav[href*="/panel/invite-by-sms"] { --c: #00ff9d; border-color: rgba(0,255,157,.45) !important; }
+.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; border-color: rgba(255,184,77,.45) !important; }
 
 .footer-title { font-size: 15px !important; color: #c8f0ff !important; text-align: center !important; padding: 12px !important; margin: 18px 0 12px !important; text-shadow: 0 0 15px rgba(180,240,255,.9) !important; letter-spacing: 2px; }
 
 .stat-box {
-  background: linear-gradient(135deg, rgba(0,30,55,.6), rgba(0,45,75,.4)) !important;
-  border: 1px solid rgba(180,240,255,.5) !important;
-  border-radius: 18px !important; backdrop-filter: blur(10px);
+  background: rgba(0,30,55,.4) !important;
+  border: 1px solid rgba(180,240,255,.45) !important;
+  border-radius: 18px !important;
+  backdrop-filter: blur(8px) !important;
 }
 .stat-value { background: linear-gradient(135deg, #c8f0ff, #7dffd4, #4dd0ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900 !important; }
 .stat-label { color: #c8f0ff !important; }
 
 .card-credit {
-  background: linear-gradient(135deg, rgba(0,30,55,.65), rgba(0,50,80,.45)) !important;
-  border: 1.5px solid rgba(180,240,255,.55) !important;
-  box-shadow: 0 0 30px rgba(77,208,255,.4), inset 0 0 30px rgba(77,208,255,.12) !important;
-  border-radius: 20px !important; backdrop-filter: blur(15px) !important;
+  background: rgba(0,30,55,.45) !important;
+  border: 1.5px solid rgba(180,240,255,.5) !important;
+  box-shadow: 0 0 30px rgba(77,208,255,.3), inset 0 0 30px rgba(77,208,255,.1) !important;
+  border-radius: 20px !important;
+  backdrop-filter: blur(10px) !important;
 }
-
-/* 🎯 اصلاح: شفاف‌تر + z-index درست */
-body.dolphin-cosmic::before, body.matrix-bg::before { z-index: -3 !important; }
-body.dolphin-cosmic::after, body.matrix-bg::after { z-index: -2 !important; }
-.ocean-bg { z-index: -1 !important; }
-.fish, .bubble { z-index: -1 !important; }
-
-.container {
-  background: rgba(0,15,30,.15) !important;
-  backdrop-filter: blur(3px) !important;
-  -webkit-backdrop-filter: blur(3px) !important;
-  border: 1px solid rgba(180,240,255,.5) !important;
-  box-shadow: 0 8px 60px rgba(0,0,0,.3), inset 0 0 40px rgba(180,240,255,.1) !important;
-}
-
-/* خورشید بالاتر از قاب دیده بشه */
-body.dolphin-cosmic::after, body.matrix-bg::after {
-  z-index: 1 !important;
-  opacity: .95 !important;
-}
-
-/* 🎯 خورشید کوچیک و بالا */
-body.dolphin-cosmic::after, body.matrix-bg::after {
-  top: -40px !important;
-  width: 130px !important;
-  height: 130px !important;
-  opacity: 1 !important;
-  box-shadow: 0 0 60px rgba(255,220,150,.6), 0 0 120px rgba(255,200,120,.35) !important;
-}
-
-/* 🐟 ماهی‌ها روی قاب */
-.fish {
-  z-index: 5 !important;
-  opacity: .95 !important;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,1)) !important;
-}
-.fish.f1 { top: 18% !important; }
-.fish.f2 { top: 45% !important; }
-.fish.f3 { top: 62% !important; }
-
-/* 🫧 حباب‌ها روی قاب */
-.bubble {
-  z-index: 5 !important;
-  opacity: .9 !important;
-}
-
-/* 🌊 موج‌ها واضح */
-.ocean-bg .wave-svg { z-index: 2 !important; }
-.ocean-bg .w1 { opacity: .5 !important; }
-.ocean-bg .w2 { opacity: .65 !important; }
-.ocean-bg .w3 { opacity: .8 !important; }
