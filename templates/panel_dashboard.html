@@ -1,583 +1,260 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>پنل من</title><link rel="stylesheet" href="/static/style.css"><link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dolphin SMS</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html{overflow-x:hidden}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;
+  min-height:100vh;padding-bottom:120px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a 0%,#0f3f5f 40%,#0a3e5e 70%,#051f33 100%);
+  background-attachment:scroll}
 
+/* 🌊 هدر دلفین */
+.dolphin-header{display:flex;align-items:center;justify-content:center;gap:14px;
+  padding:20px 18px;margin:0 0 16px 0;
+  background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
+  border-bottom:1.5px solid rgba(150,210,240,.4);
+  position:relative;overflow:hidden}
+.dolphin-header::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(144,224,239,.15),transparent);
+  background-size:200% 100%;animation:hdrShine 6s linear infinite;pointer-events:none}
+@keyframes hdrShine{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.dolphin-logo{width:48px;height:48px;border-radius:14px;
+  background:linear-gradient(135deg,#5db8e8,#0077b6,#90e0ef);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  border:1.5px solid rgba(180,230,255,.7);
+  box-shadow:0 0 25px rgba(93,184,232,.7),0 0 50px rgba(144,224,239,.3);
+  animation:logoFloat 4s ease-in-out infinite;position:relative;z-index:1}
+@keyframes logoFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-5px) rotate(4deg)}}
+.dolphin-title{font-size:21px;font-weight:900;
+  background:linear-gradient(90deg,#e0f4ff,#90e0ef,#caf0f8,#e0f4ff);
+  background-size:200% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;letter-spacing:1.5px;
+  animation:grdMove 5s linear infinite;filter:drop-shadow(0 0 8px rgba(144,224,239,.6));
+  position:relative;z-index:1}
+@keyframes grdMove{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.dolphin-sub{font-size:9.5px;color:#90e0ef;letter-spacing:3px;
+  text-transform:uppercase;opacity:.8;margin-top:2px;position:relative;z-index:1}
 
+.container{padding:0 14px;max-width:600px;margin:0 auto}
 
+/* 💎 کارت اشتراک */
+.card-credit{background:linear-gradient(135deg,rgba(0,50,90,.65),rgba(0,30,60,.45));
+  border:1.5px solid rgba(150,210,240,.5);border-radius:20px;
+  padding:20px;margin-bottom:14px;backdrop-filter:blur(15px);
+  box-shadow:0 4px 25px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.1);
+  position:relative;overflow:hidden;text-align:center;
+  animation:cardGlow 5s ease-in-out infinite}
+@keyframes cardGlow{0%,100%{box-shadow:0 4px 25px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.1)}
+  50%{box-shadow:0 4px 35px rgba(93,184,232,.4),inset 0 1px 0 rgba(255,255,255,.15)}}
+.credit-title{font-size:13px;color:#90e0ef;font-weight:800;margin-bottom:8px;letter-spacing:1px}
+.credit-days{font-size:32px;font-weight:900;
+  background:linear-gradient(135deg,#e0f4ff,#90e0ef);-webkit-background-clip:text;
+  background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.credit-sub{font-size:11px;color:#a8c8e0;margin-top:6px}
+.credit-expired{color:#ff8fab !important;background:none !important;
+  -webkit-text-fill-color:#ff8fab !important}
 
-/* ==== FIX FINAL ==== */
-html, body {
-  height: auto !important;
-  min-height: 100vh !important;
-  max-height: none !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  padding-bottom: 130px !important;
-  position: relative !important;
-}
-.bottom-nav {
-  position: fixed !important;
-  bottom: 16px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  z-index: 9999 !important;
-}
-</style>
-<script src="/static/custom-alert.js"></script>
-<link rel="manifest" href="/static/manifest.json">
-<meta name="theme-color" content="#00ff9d">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
-<link rel="apple-touch-icon" href="/static/icon-192.png">
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
-    });
-}
-</script>
+/* 📊 کارت‌های آمار */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-box{background:linear-gradient(135deg,rgba(0,40,80,.55),rgba(0,25,50,.4));
+  border:1px solid rgba(150,210,240,.35);border-radius:16px;padding:14px 10px;
+  text-align:center;backdrop-filter:blur(10px);
+  transition:.3s;position:relative;overflow:hidden}
+.stat-box:hover{transform:translateY(-2px);border-color:rgba(144,224,239,.6)}
+.stat-label{font-size:11px;color:#a8c8e0;margin-bottom:6px;display:block}
+.stat-value{font-size:22px;font-weight:900;display:block;
+  background:linear-gradient(135deg,#e0f4ff,#90e0ef);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 
-<link rel="stylesheet" href="/static/scroll-fix.css">
+/* 🎯 عنوان */
+.footer-title{font-size:14px;color:#90e0ef;text-align:center;
+  padding:12px 0;margin:18px 0 12px;font-weight:900;letter-spacing:2px;
+  text-shadow:0 0 12px rgba(144,224,239,.5);position:relative}
+.footer-title::before,.footer-title::after{content:"~";display:inline-block;
+  vertical-align:middle;font-size:18px;margin:0 12px;opacity:.6;
+  animation:titleWave 4s ease-in-out infinite}
+.footer-title::after{animation-delay:2s}
+@keyframes titleWave{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-2px);opacity:.8}}
 
+/* ✨ دکمه‌ها */
+.btn-nav{display:flex;align-items:center;gap:12px;
+  padding:14px 16px;margin-bottom:9px;border-radius:16px;
+  text-decoration:none;color:#fff;font-weight:800;font-size:13.5px;
+  background:linear-gradient(135deg,rgba(0,50,90,.55),rgba(0,30,60,.4));
+  border:1px solid var(--c, rgba(93,184,232,.4));
+  backdrop-filter:blur(10px);
+  box-shadow:0 3px 15px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08);
+  transition:all .35s cubic-bezier(.2,.8,.2,1);
+  position:relative;overflow:hidden}
+.btn-nav:hover{transform:translateY(-3px);
+  background:linear-gradient(135deg,rgba(0,70,120,.7),rgba(0,50,90,.5));
+  box-shadow:0 8px 30px var(--c, rgba(93,184,232,.5)),
+    inset 0 1px 0 rgba(255,255,255,.15)}
+.btn-nav:active{transform:scale(.98)}
+.btn-ic{width:42px;height:42px;min-width:42px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;font-size:21px;
+  background:linear-gradient(135deg,var(--c, #5db8e8),rgba(0,40,80,.6));
+  border:1px solid rgba(180,230,255,.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 0 12px var(--c, rgba(93,184,232,.4));
+  animation:icAlive 3s ease-in-out infinite}
+@keyframes icAlive{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.05)}}
+.btn-nav:hover .btn-ic{transform:rotate(-8deg) scale(1.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 0 25px var(--c, #5db8e8)}
+.btn-nav:nth-child(2n) .btn-ic{animation-delay:.4s}
+.btn-nav:nth-child(3n) .btn-ic{animation-delay:.8s}
+.btn-label{flex:1;text-align:right}
 
+/* 🎨 رنگ هر دکمه */
+.btn-nav[href*="/panel/send"]{--c:#06d6a0;border-color:rgba(6,214,160,.5)}
+.btn-nav[href*="/panel/contacts"]{--c:#a78bfa;border-color:rgba(167,139,250,.5)}
+.btn-nav[href*="/panel/templates"]{--c:#4cc9f0;border-color:rgba(76,201,240,.5)}
+.btn-nav[href*="/panel/wallet"]{--c:#ffd60a;border-color:rgba(255,214,10,.5)}
+.btn-nav[href*="/panel/qr"]{--c:#06ffa5;border-color:rgba(6,255,165,.5)}
+.btn-nav[href*="/panel/messages"]{--c:#4cc9f0;border-color:rgba(76,201,240,.5)}
+.btn-nav[href*="/panel/tickets"]{--c:#ff6b9d;border-color:rgba(255,107,157,.5)}
+.btn-nav[href*="/panel/loyalty"]{--c:#ffd60a;border-color:rgba(255,214,10,.5)}
+.btn-nav[href*="/panel/referrals"]{--c:#c77dff;border-color:rgba(199,125,255,.5)}
+.btn-nav[href*="/panel/leaderboard"]{--c:#ffd60a;border-color:rgba(255,214,10,.5)}
+.btn-nav[href*="/panel/reports"]{--c:#4cc9f0;border-color:rgba(76,201,240,.5)}
+.btn-nav[href*="/panel/auto-reply"]{--c:#4cc9f0;border-color:rgba(76,201,240,.5)}
+.btn-nav[href*="/panel/ai-manager"]{--c:#c77dff;border-color:rgba(199,125,255,.5)}
+.btn-nav[href*="/panel/bot-ads"]{--c:#ff6b9d;border-color:rgba(255,107,157,.5)}
+.btn-nav[href*="/panel/posters"]{--c:#ffd60a;border-color:rgba(255,214,10,.5)}
+.btn-nav[href*="/panel/invite-by-sms"]{--c:#06d6a0;border-color:rgba(6,214,160,.5)}
+.btn-nav[href*="/panel/force-join"]{--c:#ffb84d;border-color:rgba(255,184,77,.5)}
+.btn-nav.btn-logout{--c:#ff4d6d;border-color:rgba(255,77,109,.5);background:rgba(255,77,109,.1)}
 
+/* 🌊 نوار پایین */
+.nw{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 30px);max-width:500px;height:66px;
+  background:rgba(10,25,45,.9);backdrop-filter:blur(20px);
+  border:1px solid rgba(150,210,240,.25);border-radius:20px;
+  display:flex;align-items:center;justify-content:space-around;
+  z-index:9999;box-shadow:0 -4px 30px rgba(0,0,0,.5)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#6b8aa3;text-decoration:none;font-size:10px;padding:8px 4px;border-radius:14px}
+.ni .ic{font-size:20px;filter:grayscale(.5) brightness(.85)}
+.ni.act{background:rgba(93,184,232,.15)}
+.ni.act .ic{filter:none;color:#90e0ef;transform:scale(1.1)}
+.ni.act span:last-child{color:#90e0ef;font-weight:bold}
 
+.notif-bell{position:fixed;top:16px;right:16px;width:46px;height:46px;
+  border-radius:50%;background:rgba(93,184,232,.15);
+  border:2px solid rgba(144,224,239,.6);display:flex;align-items:center;
+  justify-content:center;font-size:22px;text-decoration:none;z-index:1000;
+  box-shadow:0 0 20px rgba(93,184,232,.5);animation:bellPulse 3s ease-in-out infinite}
+@keyframes bellPulse{0%,100%{box-shadow:0 0 20px rgba(93,184,232,.5)}
+  50%{box-shadow:0 0 30px rgba(93,184,232,.9)}}
+.notif-badge-bell{position:absolute;top:-4px;right:-4px;
+  background:linear-gradient(135deg,#5db8e8,#0077b6);color:#fff;
+  font-size:10px;font-weight:900;min-width:18px;height:18px;
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  padding:0 4px;box-shadow:0 0 10px rgba(93,184,232,.9)}
+</style></head><body>
 
+<a href="/notifications" class="notif-bell" id="notifBellLink" title="اعلان‌ها">
+  🔔<span class="notif-bell" id="notifBadge" style="display:none"></span>
+</a>
 
-
-
-
-
-<div class="wave w1"></div>
-<div class="wave w2"></div>
-
-
-
-
-
-
-
-<style id="ocean-theme">
-
-/* 🌊 قاب دریا با موج SVG */
-.container {
-  border: none !important;
-  background: linear-gradient(135deg, rgba(0,20,40,.82), rgba(0,35,55,.65)) !important;
-  border-radius: 26px !important;
-  position: relative !important;
-  overflow: visible !important;
-  box-shadow:
-    0 0 60px rgba(77,208,255,.25),
-    0 0 120px rgba(125,255,212,.1),
-    inset 0 0 40px rgba(77,208,255,.05) !important;
-}
-.container::before,
-.container::after { display: none !important; }
-
-/* موج بالای قاب */
-.ocean-frame {
-  position: absolute;
-  inset: -4px;
-  border-radius: 30px;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.ocean-frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 30px;
-  padding: 2px;
-  background: linear-gradient(135deg, #4dd0ff, #7dffd4, #4dd0ff);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: .6;
-  animation: borderFlow 8s linear infinite;
-  background-size: 200% 100%;
-}
-@keyframes borderFlow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-
-/* موج‌های شناور زیر قاب */
-.wave-line {
-  position: absolute;
-  left: -5%; right: -5%;
-  height: 40px;
-  pointer-events: none;
-  z-index: 1;
-  opacity: .55;
-}
-.wave-line.w-top { top: -20px; }
-.wave-line.w-bot { bottom: -20px; transform: rotate(180deg); }
-.wave-line svg { width: 100%; height: 100%; }
-.wave-line svg path {
-  fill: none;
-  stroke: url(#waveGrad);
-  stroke-width: 2;
-  filter: drop-shadow(0 0 6px #4dd0ff);
-}
-
-/* انیمیشن موج داخل SVG */
-@keyframes waveMove {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* پس‌زمینه دریا */
-body.dolphin-cosmic, body.matrix-bg {
-  background: #050a15 !important;
-  background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(0,180,255,.15), transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(0,255,200,.1), transparent 55%),
-    linear-gradient(180deg, #050a15 0%, #061525 50%, #050a15 100%) !important;
-}
-
-/* ✨ ستاره‌های کهکشانی */
-.stars-dolphin { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.star-d {
-  position: absolute; background: #fff; border-radius: 50%;
-  animation: starTwk 4s ease-in-out infinite;
-}
-.star-d.b { background: #7de5ff; box-shadow: 0 0 8px #7de5ff, 0 0 16px rgba(125,229,255,.5); }
-.star-d.c { background: #a8e8ff; box-shadow: 0 0 10px #a8e8ff; }
-.star-d.g { background: #7dffd4; box-shadow: 0 0 8px #7dffd4, 0 0 16px rgba(125,255,212,.5); }
-.star-d.w { background: #fff; box-shadow: 0 0 6px #fff, 0 0 12px rgba(255,255,255,.5); }
-.star-d.big { animation: starTwk 5s ease-in-out infinite, starGlow 3s ease-in-out infinite; }
-@keyframes starTwk {
-  0%,100% { opacity: .25; transform: scale(.7); }
-  50% { opacity: 1; transform: scale(1.3); }
-}
-@keyframes starGlow {
-  0%,100% { filter: brightness(1); }
-  50% { filter: brightness(2); }
-}
-
-/* کره‌های درخشان */
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(1px);
-}
-.orb.o1 {
-  background: radial-gradient(circle at 30% 30%, #a8e8ff, #4dd0ff 40%, #0088cc 70%, transparent 100%);
-  width: 6px; height: 6px;
-  box-shadow: 0 0 20px #4dd0ff, 0 0 40px rgba(77,208,255,.6);
-  animation: orbFloat 12s ease-in-out infinite;
-}
-.orb.o2 {
-  background: radial-gradient(circle at 30% 30%, #d4fff0, #7dffd4 40%, #00aa88 70%, transparent 100%);
-  width: 5px; height: 5px;
-  box-shadow: 0 0 15px #7dffd4, 0 0 30px rgba(125,255,212,.6);
-  animation: orbFloat 15s ease-in-out infinite reverse;
-}
-@keyframes orbFloat {
-  0%,100% { transform: translate(0,0); opacity: .6; }
-  50% { transform: translate(30px,-40px); opacity: 1; }
-}
-
-/* 🐬 هدر */
-.dolphin-header {
-  display: flex; align-items: center; justify-content: center;
-  gap: 14px;
-  padding: 22px 18px 18px;
-  margin: -12px -12px 18px -12px;
-  background: linear-gradient(135deg, rgba(0,30,50,.9), rgba(0,60,90,.5), rgba(0,30,50,.9));
-  border-bottom: 1px solid rgba(125,255,212,.35);
-  position: relative; overflow: hidden;
-  border-radius: 24px 24px 0 0;
-}
-.dolphin-header::before {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(125,255,212,.12), transparent);
-  background-size: 200% 100%;
-  animation: hdrShine 7s linear infinite;
-}
-@keyframes hdrShine {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-.dolphin-logo {
-  width: 52px; height: 52px; border-radius: 16px;
-  background: linear-gradient(135deg, #4dd0ff, #0088cc, #7dffd4);
-  background-size: 200% 200%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-  border: 1.5px solid rgba(168,232,255,.6);
-  box-shadow: 0 0 20px rgba(77,208,255,.6), 0 0 40px rgba(125,255,212,.25), inset 0 0 15px rgba(255,255,255,.15);
-  animation: dolphinFloat 4s ease-in-out infinite, grdMove 8s ease infinite;
-  position: relative; z-index: 1;
-}
-@keyframes dolphinFloat {
-  0%,100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-4px) rotate(3deg); }
-}
-@keyframes grdMove {
-  0%,100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-.dolphin-title {
-  font-family: 'Vazirmatn', sans-serif;
-  font-size: 23px; font-weight: 900;
-  background: linear-gradient(90deg, #a8e8ff, #7dffd4, #4dd0ff, #a8e8ff);
-  background-size: 200% 100%;
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 1.5px;
-  animation: grdMove 6s linear infinite;
-  position: relative; z-index: 1;
-}
-.dolphin-sub {
-  font-size: 10px; color: #7de5ff; text-align: right;
-  letter-spacing: 3px; text-transform: uppercase;
-  margin-top: 3px; opacity: .75;
-  position: relative; z-index: 1;
-}
-
-/* 💎 کارت اعتبار - پالس آروم */
-.card-credit {
-  background: linear-gradient(135deg, rgba(0,30,50,.85), rgba(0,45,70,.6)) !important;
-  border: 1.5px solid rgba(125,255,212,.4) !important;
-  box-shadow:
-    0 0 25px rgba(77,208,255,.25),
-    inset 0 0 25px rgba(77,208,255,.06) !important;
-  border-radius: 20px !important;
-  animation: creditPulse 6s ease-in-out infinite !important;
-}
-@keyframes creditPulse {
-  0%,100% { box-shadow: 0 0 25px rgba(77,208,255,.25), inset 0 0 25px rgba(77,208,255,.06); }
-  50% { box-shadow: 0 0 40px rgba(77,208,255,.45), inset 0 0 35px rgba(77,208,255,.12); }
-}
-.card-credit::before { display: none !important; }
-
-/* ✨ دکمه‌ها - شیک با آیکن */
-.btn-nav {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 12px !important;
-  padding: 14px 16px !important;
-  margin-bottom: 10px !important;
-  border-radius: 16px !important;
-  font-family: inherit !important;
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  cursor: pointer !important;
-  text-decoration: none !important;
-  transition: all .35s cubic-bezier(.2,.8,.2,1) !important;
-  position: relative !important;
-  overflow: hidden !important;
-  border: 1px solid !important;
-  background: linear-gradient(135deg, rgba(0,25,45,.85), rgba(0,40,60,.6)) !important;
-  min-height: 0 !important;
-  box-shadow: 0 3px 15px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06) !important;
-  backdrop-filter: blur(10px);
-  color: #fff !important;
-}
-.btn-nav::before {
-  content: ""; position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
-  background-size: 200% 100%;
-  transform: translateX(-200%);
-  transition: transform .8s;
-}
-.btn-nav:hover::before { transform: translateX(200%); }
-.btn-nav:hover {
-  transform: translateY(-3px) !important;
-  background: linear-gradient(135deg, rgba(0,45,75,.95), rgba(0,65,95,.75)) !important;
-}
-.btn-nav:active { transform: scale(.98) !important; }
-
-/* آیکن دکمه‌ها */
-.btn-ic {
-  width: 40px; height: 40px;
-  min-width: 40px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  background: linear-gradient(135deg, rgba(77,208,255,.15), rgba(125,255,212,.08));
-  border: 1px solid rgba(125,255,212,.3);
-  box-shadow: inset 0 0 15px rgba(77,208,255,.08);
-  transition: all .4s;
-}
-.btn-nav:hover .btn-ic {
-  transform: scale(1.08) rotate(-4deg);
-  box-shadow: inset 0 0 25px rgba(77,208,255,.2), 0 0 15px var(--c, #4dd0ff);
-}
-
-/* نوار رنگی ملایم */
-.btn-nav::after {
-  content: ""; position: absolute;
-  top: 12px; bottom: 12px; right: 0;
-  width: 3px; border-radius: 3px;
-  background: var(--c, #4dd0ff);
-  box-shadow: 0 0 8px var(--c, #4dd0ff);
-  opacity: .7;
-}
-
-/* رنگ هر دکمه */
-.btn-nav[href*="/panel/send"] { --c: #00ff9d; border-color: rgba(0,255,157,.35) !important; }
-.btn-nav[href*="/panel/contacts"] { --c: #bf7dff; border-color: rgba(191,125,255,.35) !important; }
-.btn-nav[href*="/panel/templates"] { --c: #4dd0ff; border-color: rgba(77,208,255,.35) !important; }
-.btn-nav[href*="/panel/wallet"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
-.btn-nav[href*="/panel/qr"] { --c: #7dffd4; border-color: rgba(125,255,212,.35) !important; }
-.btn-nav[href*="/panel/tickets"] { --c: #ff5588; border-color: rgba(255,85,136,.35) !important; }
-.btn-nav[href*="/panel/loyalty"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
-.btn-nav[href*="/panel/referrals"] { --c: #bf7dff; border-color: rgba(191,125,255,.35) !important; }
-.btn-nav[href*="/panel/leaderboard"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
-.btn-nav[href*="/panel/reports"] { --c: #4dd0ff; border-color: rgba(77,208,255,.35) !important; }
-.btn-nav[href*="/panel/auto-reply"] { --c: #4dd0ff; border-color: rgba(77,208,255,.35) !important; }
-.btn-nav[href*="/panel/ai-manager"] { --c: #bf7dff; border-color: rgba(191,125,255,.35) !important; }
-.btn-nav[href*="/panel/bot-ads"] { --c: #ff7dff; border-color: rgba(255,125,255,.35) !important; }
-.btn-nav[href*="/panel/posters"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
-.btn-nav[href*="/panel/invite-by-sms"] { --c: #00ff9d; border-color: rgba(0,255,157,.35) !important; }
-.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; border-color: rgba(255,184,77,.35) !important; }
-
-/* عنوان گزینه‌ها */
-.footer-title {
-  font-size: 15px !important;
-  color: #7dffd4 !important;
-  text-align: center !important;
-  padding: 12px !important;
-  margin: 18px 0 12px !important;
-  text-shadow: 0 0 12px rgba(125,255,212,.5) !important;
-  letter-spacing: 2px;
-  position: relative;
-}
-.footer-title::before, .footer-title::after {
-  content: ""; display: inline-block; vertical-align: middle;
-  width: 40px; height: 1px;
-  background: linear-gradient(90deg, transparent, #4dd0ff);
-  margin: 0 10px;
-  box-shadow: 0 0 6px #4dd0ff;
-}
-.footer-title::after { background: linear-gradient(90deg, #4dd0ff, transparent); }
-
-/* آمار */
-.stat-box {
-  background: linear-gradient(135deg, rgba(0,25,45,.8), rgba(0,35,55,.6)) !important;
-  border: 1px solid rgba(125,255,212,.3) !important;
-  box-shadow: 0 0 18px rgba(77,208,255,.15), inset 0 0 20px rgba(77,208,255,.04) !important;
-  transition: all .4s !important;
-  border-radius: 16px !important;
-}
-.stat-box:hover {
-  transform: translateY(-3px) !important;
-  box-shadow: 0 0 28px rgba(77,208,255,.4) !important;
-}
-.stat-value {
-  background: linear-gradient(135deg, #7dffd4, #4dd0ff);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 900 !important;
-}
-.stat-label { color: #a8e8ff !important; }
-</style>
-
-<!-- SVG gradient for waves -->
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#4dd0ff" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#7dffd4" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#4dd0ff" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-</svg>
-
-<div class="stars-dolphin" id="starsD"></div>
-<div class="orb o1" style="top:15%;left:10%"></div>
-<div class="orb o2" style="top:60%;right:15%"></div>
-<div class="orb o1" style="top:40%;left:70%;animation-delay:-3s"></div>
-
-<script>
-(function(){
-  var b = document.getElementById('starsD');
-  if (!b) return;
-  var colors = ['b', 'c', 'g', 'w'];
-  for (var i = 0; i < 80; i++){
-    var s = document.createElement('div');
-    var cls = 'star-d ' + colors[Math.floor(Math.random()*colors.length)];
-    if (Math.random() > 0.85) cls += ' big';
-    s.className = cls;
-    var sz = Math.random() * 3 + 1;
-    s.style.width = sz + 'px';
-    s.style.height = sz + 'px';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.animationDelay = (Math.random() * 4) + 's';
-    b.appendChild(s);
-  }
-})();
-</script>
-<link rel="stylesheet" href="/static/dolphin-theme.css"><link rel="icon" type="image/png" href="/static/icons/icon-192.png"><link rel="apple-touch-icon" href="/static/apple-touch-icon.png"></head>
-<div class="ocean-bg"><svg class="wave-svg w1" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,100 C200,50 400,150 600,100 C800,50 1000,150 1200,100 L1200,200 L0,200 Z" fill="rgba(125,220,255,.15)"/></svg><svg class="wave-svg w2" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,100 C200,150 400,50 600,100 C800,150 1000,50 1200,100 L1200,200 L0,200 Z" fill="rgba(90,200,240,.2)"/></svg></div><body class="dolphin-cosmic">
-<div class="container"><div class="dolphin-header">
+<div class="dolphin-header">
   <div class="dolphin-logo">🐬</div>
   <div>
     <div class="dolphin-title">Dolphin SMS</div>
     <div class="dolphin-sub">Shop Panel</div>
   </div>
 </div>
-<div class="ocean-frame"></div>
-<div class="wave-line w-top">
-  <svg preserveAspectRatio="none" viewBox="0 0 1200 40">
-    <path d="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20">
-      <animate attributeName="d" dur="6s" repeatCount="indefinite"
-        values="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
-                M0,20 Q100,35 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
-                M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20"/>
-    </path>
-  </svg>
-</div>
-<div class="wave-line w-bot">
-  <svg preserveAspectRatio="none" viewBox="0 0 1200 40">
-    <path d="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20">
-      <animate attributeName="d" dur="8s" repeatCount="indefinite"
-        values="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
-                M0,20 Q100,35 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
-                M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20"/>
-    </path>
-  </svg>
-</div>
 
+<div class="container">
 
-
-
-
-    <div class="header-bar"><div class="header-title">🏪 {{ user[3] or user[1] }}</div></div>
-
-    <!-- باکس زمان اشتراک (فقط نمایش) -->
-    <div class="time-box {% if time_left.expired %}expired{% endif %}">
-        {% if time_left.expired %}
-            <!-- کارت اعتبار کیف پول -->
-  <div class="card-credit" style="background:linear-gradient(135deg,rgba(0,30,20,.92),rgba(0,20,10,.95));border:2px solid #00ff9d;border-radius:20px;padding:18px;margin-bottom:14px;text-align:center;box-shadow:0 0 20px rgba(0,255,157,.4);animation:framePulse 4s ease-in-out infinite">
-    <div style="font-size:14px;color:#7dfcc7;margin-bottom:8px">💰 اعتبار شما</div>
-    <div style="font-size:32px;font-weight:900;color:#00ff9d;text-shadow:0 0 20px rgba(0,255,157,.9);direction:ltr">{{ "{:,}".format(wallet_balance) }} <small style="font-size:13px;color:#7dfcc7;font-weight:400">ریال</small></div>
-    <div style="font-size:12px;color:#7dfcc7;margin-top:8px">معادل <b style="color:#00ff9d;font-size:14px">{{ (wallet_balance // sms_price)|int }}</b> پیامک</div>
+  <div class="card-credit">
+    <div class="credit-title">⏳ زمان باقیمانده اشتراک</div>
+    <div class="credit-days {% if time_left.expired %}credit-expired{% endif %}">
+      {% if time_left.expired %}منقضی شده{% else %}{{ days_left }} روز{% endif %}
+    </div>
+    <div class="credit-sub">
+      {% if time_left.expired %}اشتراک شما به پایان رسیده{% else %}تا پایان اشتراک{% endif %}
+    </div>
   </div>
 
-  <div class="time-title">⛔ اشتراک شما تمام شده است</div>
-            <div class="time-text">برای تمدید با پشتیبانی تماس بگیرید</div>
-        {% else %}
-            <div class="time-title">⏳ اشتراک شما</div>
-            <div class="time-count">
-                <span class="time-num">{{ time_left.days }}</span> روز
-                <span class="time-num">{{ time_left.hours }}</span> ساعت
-                <span class="time-num">{{ time_left.minutes }}</span> دقیقه
-            </div>
-            <div class="time-end">پایان: {{ time_left.end_date }}</div>
-        {% endif %}
+  <div class="stats">
+    <div class="stat-box">
+      <span class="stat-label">📩 پیامک باقیمانده</span>
+      <span class="stat-value">{{ sms_left }}</span>
     </div>
+    <div class="stat-box">
+      <span class="stat-label">💰 موجودی کیف پول</span>
+      <span class="stat-value">{{ "{:,}".format(wallet_balance) }}</span>
+    </div>
+  </div>
 
-    <div class="stats">
-        <div class="stat-box"><span class="stat-label">روز اشتراک</span><span class="stat-value">{{ days_left }}</span></div>
-        <div class="stat-box"><span class="stat-label">پیامک باقی‌مونده</span><span class="stat-value">{{ sms_left }}</span></div>
-        
-    </div>
+  <div class="footer-title">گزینه‌ها</div>
 
-    <div class="footer-box">
-        <div class="footer-title">⚙ گزینه‌ها</div>
-        <div class="footer-actions">
-            <a href="/panel/send" class="btn-nav"><span class="btn-ic">✉</span><span class="btn-label">ارسال پیامک</span></a>
-<a href="/panel/contacts" class="btn-nav"><span class="btn-ic">📞</span><span class="btn-label">مخاطبین</span></a>
-<a href="/panel/templates" class="btn-nav"><span class="btn-ic">✉</span><span class="btn-label">قالب‌ها</span></a>
-<a href="/panel/messages" class="btn-nav" style="background:rgba(0,20,40,.4);color:#4cc9f0;border-color:#4cc9f0;"><span class="btn-ic">📨</span><span class="btn-label">گزارش پیام ها</span></a>
-<a href="/panel/wallet" class="btn-nav"><span class="btn-ic">💰</span><span class="btn-label">کیف پول</span></a>
-            <a href="/panel/qr" class="btn-nav"><span class="btn-ic">📱</span><span class="btn-label">QR کد من</span></a>
-            <a href="/panel/tickets" class="btn-nav"><span class="btn-ic">🎫</span><span class="btn-label">تیکت پشتیبانی</span></a>
-            <a href="/panel/loyalty" class="btn-nav"><span class="btn-ic">🎁</span><span class="btn-label">باشگاه مشتریان</span></a>
-            <a href="/panel/referrals" class="btn-nav"><span class="btn-ic">🎯</span><span class="btn-label">دعوت دوستان</span></a>
-            <a href="/panel/leaderboard" class="btn-nav"><span class="btn-ic">🏆</span><span class="btn-label">رتبه‌بندی</span></a>
-            <a href="/panel/reports" class="btn-nav"><span class="btn-ic">📊</span><span class="btn-label">گزارش‌های من</span></a>
-            <a href="/panel/auto-reply" class="btn-nav"><span class="btn-ic">💬</span><span class="btn-label">پاسخ خودکار</span></a>
-            <a href="/panel/ai-manager" class="btn-nav"><span class="btn-ic">🤖</span><span class="btn-label">مدیر AI</span></a>
-            <a href="/panel/bot-ads" class="btn-nav"><span class="btn-ic">📢</span><span class="btn-label">تبلیغات ربات</span></a>
-            <a href="/panel/posters" class="btn-nav"><span class="btn-ic">🎨</span><span class="btn-label">قالب‌های پوستر</span></a>
-            <a href="/panel/invite-by-sms" class="btn-nav"><span class="btn-ic">📨</span><span class="btn-label">دعوت پیامکی</span></a>
-            <a href="/panel/force-join" class="btn-nav"><span class="btn-ic">🔗</span><span class="btn-label">Force-Join</span></a>
-            <a href="/panel/broadcast" class="btn-nav"><span class="btn-ic">📢</span><span class="btn-label">پیام انبوه</span></a>
-            <a href="/panel/logout" class="btn-nav btn-logout">⏻ خروج</a>
-        </div>
-    </div>
+  <a href="/panel/send" class="btn-nav"><span class="btn-ic">✉</span><span class="btn-label">ارسال پیامک</span></a>
+  <a href="/panel/contacts" class="btn-nav"><span class="btn-ic">📞</span><span class="btn-label">مخاطبین</span></a>
+  <a href="/panel/templates" class="btn-nav"><span class="btn-ic">📄</span><span class="btn-label">قالب‌های پیامک</span></a>
+  <a href="/panel/messages" class="btn-nav"><span class="btn-ic">📨</span><span class="btn-label">گزارش پیام‌ها</span></a>
+  <a href="/panel/wallet" class="btn-nav"><span class="btn-ic">💰</span><span class="btn-label">کیف پول</span></a>
+  <a href="/panel/qr" class="btn-nav"><span class="btn-ic">📱</span><span class="btn-label">QR کد من</span></a>
+  <a href="/panel/tickets" class="btn-nav"><span class="btn-ic">🎫</span><span class="btn-label">تیکت پشتیبانی</span></a>
+  <a href="/panel/loyalty" class="btn-nav"><span class="btn-ic">🎁</span><span class="btn-label">باشگاه مشتریان</span></a>
+  <a href="/panel/referrals" class="btn-nav"><span class="btn-ic">🎯</span><span class="btn-label">دعوت دوستان</span></a>
+  <a href="/panel/leaderboard" class="btn-nav"><span class="btn-ic">🏆</span><span class="btn-label">رتبه‌بندی</span></a>
+  <a href="/panel/reports" class="btn-nav"><span class="btn-ic">📊</span><span class="btn-label">گزارش‌های من</span></a>
+  <a href="/panel/auto-reply" class="btn-nav"><span class="btn-ic">💬</span><span class="btn-label">پاسخ خودکار</span></a>
+  <a href="/panel/ai-manager" class="btn-nav"><span class="btn-ic">🤖</span><span class="btn-label">مدیر AI</span></a>
+  <a href="/panel/bot-ads" class="btn-nav"><span class="btn-ic">📢</span><span class="btn-label">تبلیغات ربات</span></a>
+  <a href="/panel/posters" class="btn-nav"><span class="btn-ic">🎨</span><span class="btn-label">قالب‌های پوستر</span></a>
+  <a href="/panel/invite-by-sms" class="btn-nav"><span class="btn-ic">📨</span><span class="btn-label">دعوت پیامکی</span></a>
+  <a href="/panel/force-join" class="btn-nav"><span class="btn-ic">🔗</span><span class="btn-label">Force-Join</span></a>
+  <a href="/panel/chat" class="btn-nav"><span class="btn-ic">💬</span><span class="btn-label">چت با کاربران</span></a>
+  <a href="/panel/broadcast" class="btn-nav"><span class="btn-ic">📣</span><span class="btn-label">پیام انبوه</span></a>
+  <a href="/panel/logout" class="btn-nav btn-logout"><span class="btn-ic">🚪</span><span class="btn-label">خروج</span></a>
 
-    <h2>📨 پیامک‌های من</h2>
-    <div class="table-wrap">
-        <table>
-            <tr><th>ID</th><th>شماره</th><th>متن</th><th>وضعیت</th><th>زمان</th></tr>
-            {% for row in sms_list %}
-            <tr><td>{{ row[0] }}</td><td>{{ row[2] }}</td><td>{{ row[3] }}</td><td>{{ row[4] }}</td><td>{{ row[5] }}</td></tr>
-            {% endfor %}
-        </table>
-    </div>
 </div>
-<nav class="bottom-nav">
-    <a href="/panel/dashboard" class="nav-item active">
-        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></span>
-        <span class="nav-label">پنل</span>
-    </a>
-    <a href="/panel/chat" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-8a8 8 0 0 1 8-8h2a8 8 0 0 1 8 5z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span>
-        <span class="nav-label">چت</span>
-        {% if unread_chat and unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
-    </a>
-    <a href="/panel/ai" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="3"/><circle cx="9" cy="14" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.5" fill="currentColor" stroke="none"/><path d="M12 3v5"/><circle cx="12" cy="3" r="1"/></svg></span>
-        <span class="nav-label">هوش مصنوعی</span>
-    </a>
-    <a href="/panel/profile" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></span>
-        <span class="nav-label">پروفایل</span>
-    </a>
-</nav>
 
-{% include "_global_bg.html" %}
-
-<!-- زنگوله اعلان‌ها -->
-<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
-🔔
-<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
-</a>
-<script>
-(function() {
-    if (window.__notif_loaded) return;
-    window.__notif_loaded = true;
-    function updateNotifCount() {
-        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
-            var badge = document.getElementById('notifBadge');
-            if (!badge) return;
-            if (data.count > 0) {
-                badge.textContent = data.count > 99 ? '99+' : data.count;
-                badge.style.display = 'block';
-            } else {
-                badge.style.display = 'none';
-            }
-        }).catch(function() {});
-    }
-    updateNotifCount();
-    setInterval(updateNotifCount, 30000);
-})();
-</script>
-
+<div class="nw">
+  <a class="ni act" href="/panel/dashboard"><span class="ic">🏠</span><span>خانه</span></a>
+  <a class="ni" href="/panel/send"><span class="ic">📤</span><span>ارسال</span></a>
+  <a class="ni" href="/panel/messages"><span class="ic">📨</span><span>گزارش</span></a>
+  <a class="ni" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+</div>
 
 <script>
-(function() {
-    var bell = document.getElementById('notifBellLink');
-    if (bell) {
-        if (window.location.pathname.indexOf('/admin/') === 0) {
-            bell.href = '/admin/notifications';
-        } else {
-            bell.href = '/notifications';
-        }
-    }
+(function(){
+  if (window.__notif_loaded) return;
+  window.__notif_loaded = true;
+  function updateNotifCount(){
+    fetch('/api/notif/count').then(r=>r.json()).then(data=>{
+      var b = document.getElementById('notifBadge');
+      if (!b) return;
+      if (data.count > 0){
+        b.textContent = data.count > 99 ? '99+' : data.count;
+        b.style.display = 'flex';
+        b.style.position = 'absolute';
+        b.style.top = '-4px';
+        b.style.right = '-4px';
+        b.style.background = 'linear-gradient(135deg,#5db8e8,#0077b6)';
+        b.style.color = '#fff';
+        b.style.fontSize = '10px';
+        b.style.fontWeight = '900';
+        b.style.minWidth = '18px';
+        b.style.height = '18px';
+        b.style.borderRadius = '9px';
+        b.style.alignItems = 'center';
+        b.style.justifyContent = 'center';
+        b.style.padding = '0 4px';
+        b.style.boxShadow = '0 0 10px rgba(93,184,232,.9)';
+      } else {
+        b.style.display = 'none';
+      }
+    }).catch(()=>{});
+  }
+  updateNotifCount();
+  setInterval(updateNotifCount, 30000);
 })();
 </script>
 
