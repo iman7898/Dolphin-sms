@@ -1,4 +1,6 @@
-/* 🌊 دریای خالص */
+/* 🌊 تم کامل دریای خواب */
+
+/* پس‌زمینه دریا */
 body.dolphin-cosmic, body.matrix-bg {
   background: #021a2e !important;
 }
@@ -18,10 +20,9 @@ body.dolphin-cosmic::before, body.matrix-bg::before {
     #043a5c 85%,
     #022740 100%) !important;
 }
-/* خورشید حذف */
 body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 
-/* موج‌های دریا */
+/* موج‌ها */
 .ocean-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
 .ocean-bg .wave-svg { position: absolute; left: 0; width: 200%; height: 180px; }
 .ocean-bg .w1 { bottom: 40%; opacity: .35; animation: wA 25s linear infinite; }
@@ -29,9 +30,7 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 .ocean-bg .w3 { bottom: 8%; opacity: .7; animation: wA 38s linear infinite; }
 .ocean-bg .w4 { bottom: -10px; opacity: .85; animation: wA 44s linear infinite; }
 @keyframes wA { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.ocean-bg .sun { display: none; }
 
-/* 🌊 نور زیر آب */
 .ocean-glow {
   position: fixed; inset: 0; z-index: -2; pointer-events: none;
   background:
@@ -40,7 +39,7 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
     radial-gradient(ellipse at 50% 100%, rgba(0,120,180,.25), transparent 60%);
 }
 
-/* 🐟 ماهی‌ها - روی قاب */
+/* ماهی‌ها */
 .fish { position: fixed; font-size: 30px; z-index: 5; pointer-events: none; filter: drop-shadow(0 0 12px rgba(200,240,255,1)); animation: fishSwim linear infinite; }
 .fish.f1 { top: 18%; animation-duration: 36s; }
 .fish.f2 { top: 42%; font-size: 22px; animation-duration: 46s; animation-delay: 8s; }
@@ -48,17 +47,18 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 .fish.f4 { top: 80%; font-size: 20px; animation-duration: 50s; animation-delay: 20s; }
 @keyframes fishSwim { 0% { transform: translateX(-100px); } 100% { transform: translateX(calc(100vw + 100px)); } }
 
-/* 🫧 حباب‌ها - روی قاب */
+/* حباب‌ها */
 .bubble { position: fixed; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(200,240,255,.3) 60%, transparent); border: 1px solid rgba(200,240,255,.6); z-index: 5; pointer-events: none; animation: bubbleRise 18s linear infinite; }
 @keyframes bubbleRise { 0% { transform: translateY(100vh) scale(.5); opacity: 0; } 10% { opacity: .9; } 90% { opacity: .9; } 100% { transform: translateY(-100px) scale(1.3); opacity: 0; } }
 
-/* 🔮 قاب کاملاً شفاف */
+/* 🔮 قاب شیشه‌ای */
 .container {
-  background: rgba(0,20,40,.12) !important;
-  backdrop-filter: blur(2px) !important;
-  -webkit-backdrop-filter: blur(2px) !important;
+  background: rgba(0,20,40,.15) !important;
+  backdrop-filter: blur(3px) !important;
+  -webkit-backdrop-filter: blur(3px) !important;
   border: 1px solid rgba(180,240,255,.35) !important;
   box-shadow: 0 8px 60px rgba(0,20,40,.3) !important;
+  border-radius: 24px !important;
 }
 .container::before, .container::after { display: none !important; }
 
@@ -91,90 +91,190 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 @keyframes grdMove { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 .dolphin-sub { font-size: 10px; color: #c8f0ff; text-align: right; letter-spacing: 3px; text-transform: uppercase; opacity: .9; }
 
-/* ✨ دکمه‌ها - شفاف */
+/* ✨ دکمه‌ها - کامل شفاف با گرادیانت */
 .btn-nav {
   display: flex !important; align-items: center !important; justify-content: flex-start !important;
-  gap: 14px !important; padding: 14px 16px !important; margin-bottom: 10px !important;
+  gap: 14px !important; padding: 14px 18px !important; margin-bottom: 10px !important;
   border-radius: 18px !important; font-size: 14px !important; font-weight: 900 !important;
   cursor: pointer !important; text-decoration: none !important;
   transition: all .4s cubic-bezier(.2,.8,.2,1) !important;
   position: relative !important; overflow: hidden !important;
-  border: 1px solid !important;
-  background: rgba(0,30,55,.35) !important;
+  border: 1.5px solid !important;
+  background: linear-gradient(135deg,
+    rgba(0,60,100,.5) 0%,
+    rgba(0,80,130,.35) 50%,
+    rgba(0,50,90,.5) 100%) !important;
   color: #fff !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -1px 0 rgba(0,0,0,.2) !important;
 }
-.btn-nav:hover { transform: translateY(-3px) !important; background: rgba(0,60,100,.55) !important; box-shadow: 0 8px 30px rgba(77,208,255,.5) !important; }
+.btn-nav::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.2) 50%, transparent 70%) !important;
+  background-size: 250% 100% !important;
+  animation: btnShine 5s ease-in-out infinite !important;
+  pointer-events: none;
+}
+@keyframes btnShine {
+  0%,100% { background-position: 100% 0; }
+  50% { background-position: -100% 0; }
+}
+.btn-nav:hover {
+  transform: translateY(-4px) scale(1.01) !important;
+  background: linear-gradient(135deg,
+    rgba(0,100,160,.7) 0%,
+    rgba(0,130,190,.5) 50%,
+    rgba(0,80,140,.7) 100%) !important;
+  border-color: var(--c, #4dd0ff) !important;
+  box-shadow:
+    0 10px 40px var(--c, rgba(77,208,255,.6)),
+    inset 0 1px 0 rgba(255,255,255,.2) !important;
+}
 .btn-nav:active { transform: scale(.98) !important; }
-.btn-ic {
-  width: 42px; height: 42px; min-width: 42px; border-radius: 14px;
-  display: flex; align-items: center; justify-content: center; font-size: 22px;
-  background: rgba(77,208,255,.2);
-  border: 1.5px solid rgba(180,240,255,.5);
-  box-shadow: inset 0 0 20px rgba(77,208,255,.2);
-  transition: all .4s; animation: icBob 3.5s ease-in-out infinite;
-}
-@keyframes icBob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-4px) rotate(3deg); } }
-.btn-nav:hover .btn-ic { transform: scale(1.15) rotate(-8deg); box-shadow: inset 0 0 30px rgba(77,208,255,.4), 0 0 25px var(--c, #4dd0ff); }
-.btn-nav:nth-child(2n) .btn-ic { animation-delay: .5s; }
-.btn-nav:nth-child(3n) .btn-ic { animation-delay: 1s; }
+
+/* نوار رنگی سمت راست */
 .btn-nav::after {
-  content: ""; position: absolute; top: 14px; bottom: 14px; right: 0;
-  width: 3px; border-radius: 3px; background: var(--c, #4dd0ff);
-  box-shadow: 0 0 10px var(--c, #4dd0ff);
+  content: ""; position: absolute;
+  top: 12px; bottom: 12px; right: 0;
+  width: 4px; border-radius: 4px;
+  background: var(--c, #4dd0ff);
+  box-shadow: 0 0 12px var(--c, #4dd0ff), 0 0 24px var(--c, #4dd0ff);
 }
-.btn-nav[href*="/panel/send"] { --c: #00ff9d; border-color: rgba(0,255,157,.45) !important; }
-.btn-nav[href*="/panel/contacts"] { --c: #bf7dff; border-color: rgba(191,125,255,.45) !important; }
-.btn-nav[href*="/panel/templates"] { --c: #4dd0ff; border-color: rgba(77,208,255,.45) !important; }
-.btn-nav[href*="/panel/wallet"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
-.btn-nav[href*="/panel/qr"] { --c: #7dffd4; border-color: rgba(125,255,212,.45) !important; }
-.btn-nav[href*="/panel/tickets"] { --c: #ff5588; border-color: rgba(255,85,136,.45) !important; }
-.btn-nav[href*="/panel/loyalty"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
-.btn-nav[href*="/panel/referrals"] { --c: #bf7dff; border-color: rgba(191,125,255,.45) !important; }
-.btn-nav[href*="/panel/leaderboard"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
-.btn-nav[href*="/panel/reports"] { --c: #4dd0ff; border-color: rgba(77,208,255,.45) !important; }
-.btn-nav[href*="/panel/auto-reply"] { --c: #4dd0ff; border-color: rgba(77,208,255,.45) !important; }
-.btn-nav[href*="/panel/ai-manager"] { --c: #bf7dff; border-color: rgba(191,125,255,.45) !important; }
-.btn-nav[href*="/panel/bot-ads"] { --c: #ff7dff; border-color: rgba(255,125,255,.45) !important; }
-.btn-nav[href*="/panel/posters"] { --c: #ffd700; border-color: rgba(255,215,0,.45) !important; }
-.btn-nav[href*="/panel/invite-by-sms"] { --c: #00ff9d; border-color: rgba(0,255,157,.45) !important; }
-.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; border-color: rgba(255,184,77,.45) !important; }
 
-.footer-title { font-size: 15px !important; color: #c8f0ff !important; text-align: center !important; padding: 12px !important; margin: 18px 0 12px !important; text-shadow: 0 0 15px rgba(180,240,255,.9) !important; letter-spacing: 2px; }
+/* آیکن‌های انیمیشن‌دار */
+.btn-ic {
+  width: 44px; height: 44px; min-width: 44px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  background: linear-gradient(135deg, rgba(77,208,255,.25), rgba(125,255,212,.15));
+  border: 1.5px solid rgba(180,240,255,.5);
+  box-shadow: inset 0 0 20px rgba(77,208,255,.2), 0 0 12px rgba(77,208,255,.3);
+  transition: all .4s;
+  animation: icBob 3s ease-in-out infinite, icGlow 4s ease-in-out infinite;
+  position: relative;
+}
+@keyframes icBob {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+}
+@keyframes icGlow {
+  0%,100% { box-shadow: inset 0 0 20px rgba(77,208,255,.2), 0 0 12px rgba(77,208,255,.3); }
+  50% { box-shadow: inset 0 0 30px rgba(125,255,212,.4), 0 0 25px rgba(125,255,212,.6); }
+}
+.btn-nav:hover .btn-ic {
+  animation: icSpin 0.6s ease-in-out infinite !important;
+  box-shadow: inset 0 0 30px rgba(125,255,212,.5), 0 0 30px var(--c, #4dd0ff) !important;
+}
+@keyframes icSpin {
+  0% { transform: scale(1.2) rotate(0deg); }
+  25% { transform: scale(1.25) rotate(-12deg); }
+  75% { transform: scale(1.25) rotate(12deg); }
+  100% { transform: scale(1.2) rotate(0deg); }
+}
+.btn-nav:nth-child(2n) .btn-ic { animation-delay: .3s, .5s; }
+.btn-nav:nth-child(3n) .btn-ic { animation-delay: .7s, 1s; }
+.btn-nav:nth-child(5n) .btn-ic { animation-delay: 1.1s, 1.5s; }
 
+/* رنگ هر دکمه */
+.btn-nav[href*="/panel/send"] { --c: #00ffd4; border-color: rgba(0,255,212,.5) !important; }
+.btn-nav[href*="/panel/contacts"] { --c: #7db8ff; border-color: rgba(125,184,255,.5) !important; }
+.btn-nav[href*="/panel/templates"] { --c: #4dd0ff; border-color: rgba(77,208,255,.5) !important; }
+.btn-nav[href*="/panel/wallet"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
+.btn-nav[href*="/panel/qr"] { --c: #7dffd4; border-color: rgba(125,255,212,.5) !important; }
+.btn-nav[href*="/panel/tickets"] { --c: #ff5588; border-color: rgba(255,85,136,.5) !important; }
+.btn-nav[href*="/panel/loyalty"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
+.btn-nav[href*="/panel/referrals"] { --c: #c87dff; border-color: rgba(200,125,255,.5) !important; }
+.btn-nav[href*="/panel/leaderboard"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
+.btn-nav[href*="/panel/reports"] { --c: #4dd0ff; border-color: rgba(77,208,255,.5) !important; }
+.btn-nav[href*="/panel/auto-reply"] { --c: #4dd0ff; border-color: rgba(77,208,255,.5) !important; }
+.btn-nav[href*="/panel/ai-manager"] { --c: #c87dff; border-color: rgba(200,125,255,.5) !important; }
+.btn-nav[href*="/panel/bot-ads"] { --c: #ff7dff; border-color: rgba(255,125,255,.5) !important; }
+.btn-nav[href*="/panel/posters"] { --c: #ffd700; border-color: rgba(255,215,0,.5) !important; }
+.btn-nav[href*="/panel/invite-by-sms"] { --c: #00ffd4; border-color: rgba(0,255,212,.5) !important; }
+.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; border-color: rgba(255,184,77,.5) !important; }
+
+/* عنوان گزینه‌ها */
+.footer-title {
+  font-size: 16px !important; color: #c8f0ff !important;
+  text-align: center !important; padding: 14px !important;
+  margin: 20px 0 14px !important;
+  text-shadow: 0 0 20px rgba(180,240,255,.9) !important;
+  letter-spacing: 2px;
+  position: relative;
+}
+.footer-title::before, .footer-title::after {
+  content: "~"; display: inline-block; vertical-align: middle;
+  font-size: 24px; color: #7de5ff;
+  margin: 0 12px;
+  opacity: .7;
+  animation: titleWave 3s ease-in-out infinite;
+}
+.footer-title::after { animation-delay: 1.5s; }
+@keyframes titleWave {
+  0%,100% { transform: translateY(0); opacity: .5; }
+  50% { transform: translateY(-3px); opacity: 1; }
+}
+
+/* آمار */
 .stat-box {
-  background: rgba(0,30,55,.4) !important;
-  border: 1px solid rgba(180,240,255,.45) !important;
+  background: linear-gradient(135deg, rgba(0,40,80,.5), rgba(0,60,100,.35)) !important;
+  border: 1.5px solid rgba(180,240,255,.4) !important;
   border-radius: 18px !important;
-  backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.1) !important;
+  transition: all .4s !important;
 }
-.stat-value { background: linear-gradient(135deg, #c8f0ff, #7dffd4, #4dd0ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900 !important; }
+.stat-box:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 0 30px rgba(77,208,255,.5) !important;
+}
+.stat-value {
+  background: linear-gradient(135deg, #c8f0ff, #7dffd4, #4dd0ff);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  font-weight: 900 !important;
+}
 .stat-label { color: #c8f0ff !important; }
 
+/* کارت اعتبار */
 .card-credit {
-  background: rgba(0,30,55,.45) !important;
+  background: linear-gradient(135deg, rgba(0,50,90,.55), rgba(0,70,110,.4)) !important;
   border: 1.5px solid rgba(180,240,255,.5) !important;
-  box-shadow: 0 0 30px rgba(77,208,255,.3), inset 0 0 30px rgba(77,208,255,.1) !important;
-  border-radius: 20px !important;
-  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 0 30px rgba(77,208,255,.4), inset 0 0 30px rgba(77,208,255,.12) !important;
+  border-radius: 22px !important;
+  backdrop-filter: blur(15px) !important;
+  position: relative;
+  overflow: hidden;
+}
+.card-credit::before {
+  content: ""; position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(125,255,212,.15), transparent 50%);
+  animation: cardWave 8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes cardWave {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(20px,-20px); }
 }
 
-/* 🎯 حذف سبز نئون - جایگزین با آبی فیروزه */
-.frame, .header-bar, .footer-box, .box, .card-credit, .stat-box {
-  border-color: rgba(125,220,255,.5) !important;
-  box-shadow: 0 0 30px rgba(77,208,255,.3), inset 0 0 30px rgba(77,208,255,.08) !important;
-}
-.back-btn, .footer-title, .stat-label, .box-title {
-  color: #7de5ff !important;
-  text-shadow: 0 0 12px rgba(125,229,255,.7) !important;
-}
-/* نوار پایین - آبی */
-.nw, .bottom-nav {
+/* 💧 نوار پایین آبی */
+.nw, .bottom-nav, .nav-wrap {
   background: linear-gradient(90deg, #4dd0ff, #7dffd4, #4dd0ff) !important;
+  background-size: 200% 100% !important;
+  animation: navFlow 5s linear infinite !important;
   box-shadow: 0 0 30px rgba(77,208,255,.6), 0 0 60px rgba(125,255,212,.3) !important;
 }
-.bn2, .bottom-nav {
+@keyframes navFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.bn2, .bottom-nav > * {
   background: linear-gradient(180deg, #0a1a2f, #051020) !important;
 }
 .ni.act {
@@ -187,45 +287,12 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 }
 .ni.act span:last-child { color: #7de5ff !important; }
 
-/* ✨ انیمیشن آیکن‌ها */
-.btn-ic {
-  animation: icBob 3s ease-in-out infinite, icGlow 4s ease-in-out infinite !important;
+/* حذف سبزهای باقیمونده */
+.frame, .header-bar, .footer-box, .box {
+  border-color: rgba(125,220,255,.5) !important;
+  box-shadow: 0 0 30px rgba(77,208,255,.3), inset 0 0 30px rgba(77,208,255,.08) !important;
 }
-@keyframes icGlow {
-  0%,100% { box-shadow: inset 0 0 20px rgba(77,208,255,.2), 0 0 12px rgba(77,208,255,.3); }
-  50% { box-shadow: inset 0 0 30px rgba(125,255,212,.4), 0 0 25px rgba(125,255,212,.6); }
-}
-.btn-nav:hover .btn-ic {
-  animation: icSpin 0.6s ease-in-out infinite !important;
-}
-@keyframes icSpin {
-  0% { transform: scale(1.2) rotate(0deg); }
-  25% { transform: scale(1.25) rotate(-12deg); }
-  75% { transform: scale(1.25) rotate(12deg); }
-  100% { transform: scale(1.2) rotate(0deg); }
-}
-
-/* 🎨 دکمه‌ها قشنگ‌تر */
-.btn-nav {
-  position: relative;
-  border-radius: 20px !important;
-  padding: 16px 18px !important;
-}
-.btn-nav::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  border-radius: 20px;
-  background: linear-gradient(135deg, transparent 0%, rgba(125,220,255,.1) 50%, transparent 100%) !important;
-  background-size: 200% 100% !important;
-  animation: btnShine 4s ease-in-out infinite !important;
-  pointer-events: none;
-}
-@keyframes btnShine {
-  0%,100% { background-position: -100% 0; }
-  50% { background-position: 200% 0; }
-}
-.btn-nav:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 10px 40px var(--c, rgba(77,208,255,.5)), inset 0 1px 0 rgba(255,255,255,.15) !important;
+.back-btn, .footer-title, .stat-label, .box-title {
+  color: #7de5ff !important;
+  text-shadow: 0 0 12px rgba(125,229,255,.7) !important;
 }
