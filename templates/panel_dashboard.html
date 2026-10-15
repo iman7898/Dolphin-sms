@@ -50,88 +50,138 @@ if ('serviceWorker' in navigator) {
 
 
 
-<div class="stars-dolphin" id="starsD"></div>
+
 <div class="wave w1"></div>
 <div class="wave w2"></div>
-<script>
-(function(){
-  var b = document.getElementById('starsD');
-  if (!b) return;
-  var colors = ['b', 'c', 'g', 'w'];
-  for (var i = 0; i < 120; i++){
-    var s = document.createElement('div');
-    s.className = 'star-d ' + colors[Math.floor(Math.random()*colors.length)];
-    var sz = Math.random() * 3 + 1;
-    s.style.width = sz + 'px'; s.style.height = sz + 'px';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.animationDelay = (Math.random() * 3) + 's';
-    b.appendChild(s);
-  }
-})();
-</script>
+
+
+
+
+
+
 
 <style id="ocean-theme">
-/* 🌊 پس‌زمینه دریا */
+
+/* 🌊 قاب دریا با موج SVG */
+.container {
+  border: none !important;
+  background: linear-gradient(135deg, rgba(0,20,40,.82), rgba(0,35,55,.65)) !important;
+  border-radius: 26px !important;
+  position: relative !important;
+  overflow: visible !important;
+  box-shadow:
+    0 0 60px rgba(77,208,255,.25),
+    0 0 120px rgba(125,255,212,.1),
+    inset 0 0 40px rgba(77,208,255,.05) !important;
+}
+.container::before,
+.container::after { display: none !important; }
+
+/* موج بالای قاب */
+.ocean-frame {
+  position: absolute;
+  inset: -4px;
+  border-radius: 30px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.ocean-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  padding: 2px;
+  background: linear-gradient(135deg, #4dd0ff, #7dffd4, #4dd0ff);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: .6;
+  animation: borderFlow 8s linear infinite;
+  background-size: 200% 100%;
+}
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* موج‌های شناور زیر قاب */
+.wave-line {
+  position: absolute;
+  left: -5%; right: -5%;
+  height: 40px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .55;
+}
+.wave-line.w-top { top: -20px; }
+.wave-line.w-bot { bottom: -20px; transform: rotate(180deg); }
+.wave-line svg { width: 100%; height: 100%; }
+.wave-line svg path {
+  fill: none;
+  stroke: url(#waveGrad);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px #4dd0ff);
+}
+
+/* انیمیشن موج داخل SVG */
+@keyframes waveMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* پس‌زمینه دریا */
 body.dolphin-cosmic, body.matrix-bg {
   background: #050a15 !important;
   background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(0,180,255,.18), transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(0,255,200,.12), transparent 55%),
-    radial-gradient(ellipse at 50% 50%, rgba(0,100,180,.1), transparent 70%),
+    radial-gradient(ellipse at 20% 0%, rgba(0,180,255,.15), transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(0,255,200,.1), transparent 55%),
     linear-gradient(180deg, #050a15 0%, #061525 50%, #050a15 100%) !important;
 }
 
-/* ذرات شناور */
+/* ✨ ستاره‌های کهکشانی */
 .stars-dolphin { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
 .star-d {
   position: absolute; background: #fff; border-radius: 50%;
-  box-shadow: 0 0 6px currentColor;
-  animation: bubbleUp 8s ease-in-out infinite;
+  animation: starTwk 4s ease-in-out infinite;
 }
-.star-d.b { background: #4dd0ff; color: #4dd0ff; box-shadow: 0 0 12px #4dd0ff; }
-.star-d.c { background: #a8e8ff; color: #a8e8ff; box-shadow: 0 0 12px #a8e8ff; }
-.star-d.g { background: #7dffd4; color: #7dffd4; box-shadow: 0 0 12px #7dffd4; }
-@keyframes bubbleUp {
-  0% { opacity: 0; transform: translateY(20px) scale(.5); }
-  20% { opacity: .9; }
-  80% { opacity: .9; }
-  100% { opacity: 0; transform: translateY(-100vh) scale(1.1); }
+.star-d.b { background: #7de5ff; box-shadow: 0 0 8px #7de5ff, 0 0 16px rgba(125,229,255,.5); }
+.star-d.c { background: #a8e8ff; box-shadow: 0 0 10px #a8e8ff; }
+.star-d.g { background: #7dffd4; box-shadow: 0 0 8px #7dffd4, 0 0 16px rgba(125,255,212,.5); }
+.star-d.w { background: #fff; box-shadow: 0 0 6px #fff, 0 0 12px rgba(255,255,255,.5); }
+.star-d.big { animation: starTwk 5s ease-in-out infinite, starGlow 3s ease-in-out infinite; }
+@keyframes starTwk {
+  0%,100% { opacity: .25; transform: scale(.7); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+@keyframes starGlow {
+  0%,100% { filter: brightness(1); }
+  50% { filter: brightness(2); }
 }
 
-/* 🌊 قاب دریا - جایگزین نوار سبز */
-.container {
-  border: 2px solid transparent !important;
-  background-image:
-    linear-gradient(135deg, rgba(0,20,40,.85), rgba(0,30,50,.7)) ,
-    linear-gradient(135deg, #4dd0ff, #7dffd4, #4dd0ff) !important;
-  background-origin: border-box !important;
-  background-clip: padding-box, border-box !important;
-  box-shadow:
-    0 0 40px rgba(77,208,255,.35),
-    0 0 80px rgba(125,255,212,.15),
-    inset 0 0 30px rgba(77,208,255,.05) !important;
-  border-radius: 24px !important;
-  position: relative;
-  overflow: hidden !important;
-  animation: oceanGlow 5s ease-in-out infinite !important;
+/* کره‌های درخشان */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(1px);
 }
-@keyframes oceanGlow {
-  0%,100% { box-shadow: 0 0 40px rgba(77,208,255,.35), 0 0 80px rgba(125,255,212,.15), inset 0 0 30px rgba(77,208,255,.05); }
-  50% { box-shadow: 0 0 60px rgba(77,208,255,.55), 0 0 100px rgba(125,255,212,.25), inset 0 0 40px rgba(77,208,255,.1); }
+.orb.o1 {
+  background: radial-gradient(circle at 30% 30%, #a8e8ff, #4dd0ff 40%, #0088cc 70%, transparent 100%);
+  width: 6px; height: 6px;
+  box-shadow: 0 0 20px #4dd0ff, 0 0 40px rgba(77,208,255,.6);
+  animation: orbFloat 12s ease-in-out infinite;
 }
-/* حذف نور چرخان قدیمی */
-.container::after { display: none !important; }
-.container::before { display: none !important; }
-
-/* حذف نوار سبز سراسری */
-body.admin-view .container {
-  border-color: transparent !important;
-  box-shadow:
-    0 0 40px rgba(77,208,255,.35),
-    0 0 80px rgba(125,255,212,.15) !important;
+.orb.o2 {
+  background: radial-gradient(circle at 30% 30%, #d4fff0, #7dffd4 40%, #00aa88 70%, transparent 100%);
+  width: 5px; height: 5px;
+  box-shadow: 0 0 15px #7dffd4, 0 0 30px rgba(125,255,212,.6);
+  animation: orbFloat 15s ease-in-out infinite reverse;
 }
-body.admin-view .container::after { display: none !important; }
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0); opacity: .6; }
+  50% { transform: translate(30px,-40px); opacity: 1; }
+}
 
 /* 🐬 هدر */
 .dolphin-header {
@@ -140,15 +190,15 @@ body.admin-view .container::after { display: none !important; }
   padding: 22px 18px 18px;
   margin: -12px -12px 18px -12px;
   background: linear-gradient(135deg, rgba(0,30,50,.9), rgba(0,60,90,.5), rgba(0,30,50,.9));
-  border-bottom: 1px solid rgba(125,255,212,.4);
+  border-bottom: 1px solid rgba(125,255,212,.35);
   position: relative; overflow: hidden;
-  box-shadow: 0 5px 40px rgba(77,208,255,.3);
+  border-radius: 24px 24px 0 0;
 }
 .dolphin-header::before {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(125,255,212,.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(125,255,212,.12), transparent);
   background-size: 200% 100%;
-  animation: hdrShine 5s linear infinite;
+  animation: hdrShine 7s linear infinite;
 }
 @keyframes hdrShine {
   0% { background-position: -200% 0; }
@@ -160,14 +210,14 @@ body.admin-view .container::after { display: none !important; }
   background-size: 200% 200%;
   display: flex; align-items: center; justify-content: center;
   font-size: 28px;
-  border: 1.5px solid rgba(168,232,255,.7);
-  box-shadow: 0 0 25px rgba(77,208,255,.7), 0 0 50px rgba(125,255,212,.3), inset 0 0 15px rgba(255,255,255,.15);
-  animation: dolphinFloat 3.5s ease-in-out infinite, grdMove 6s ease infinite;
+  border: 1.5px solid rgba(168,232,255,.6);
+  box-shadow: 0 0 20px rgba(77,208,255,.6), 0 0 40px rgba(125,255,212,.25), inset 0 0 15px rgba(255,255,255,.15);
+  animation: dolphinFloat 4s ease-in-out infinite, grdMove 8s ease infinite;
   position: relative; z-index: 1;
 }
 @keyframes dolphinFloat {
-  0%,100% { transform: translateY(0) rotate(-4deg); }
-  50% { transform: translateY(-5px) rotate(4deg); }
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
 }
 @keyframes grdMove {
   0%,100% { background-position: 0% 50%; }
@@ -181,7 +231,7 @@ body.admin-view .container::after { display: none !important; }
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: 1.5px;
-  animation: grdMove 5s linear infinite;
+  animation: grdMove 6s linear infinite;
   position: relative; z-index: 1;
 }
 .dolphin-sub {
@@ -191,29 +241,29 @@ body.admin-view .container::after { display: none !important; }
   position: relative; z-index: 1;
 }
 
-/* 💎 کارت اعتبار - سبک و آبی */
+/* 💎 کارت اعتبار - پالس آروم */
 .card-credit {
-  background: linear-gradient(135deg, rgba(0,25,45,.85), rgba(0,40,60,.6)) !important;
-  border: 1.5px solid rgba(125,255,212,.5) !important;
+  background: linear-gradient(135deg, rgba(0,30,50,.85), rgba(0,45,70,.6)) !important;
+  border: 1.5px solid rgba(125,255,212,.4) !important;
   box-shadow:
-    0 0 25px rgba(77,208,255,.35),
-    inset 0 0 25px rgba(77,208,255,.08) !important;
+    0 0 25px rgba(77,208,255,.25),
+    inset 0 0 25px rgba(77,208,255,.06) !important;
   border-radius: 20px !important;
-  animation: creditPulse 4s ease-in-out infinite !important;
+  animation: creditPulse 6s ease-in-out infinite !important;
 }
 @keyframes creditPulse {
-  0%,100% { box-shadow: 0 0 25px rgba(77,208,255,.35), inset 0 0 25px rgba(77,208,255,.08); }
-  50% { box-shadow: 0 0 45px rgba(77,208,255,.6), inset 0 0 35px rgba(77,208,255,.15); }
+  0%,100% { box-shadow: 0 0 25px rgba(77,208,255,.25), inset 0 0 25px rgba(77,208,255,.06); }
+  50% { box-shadow: 0 0 40px rgba(77,208,255,.45), inset 0 0 35px rgba(77,208,255,.12); }
 }
 .card-credit::before { display: none !important; }
 
-/* ✨ دکمه‌ها - کهکشانی اما سبک */
+/* ✨ دکمه‌ها - شیک با آیکن */
 .btn-nav {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
   gap: 12px !important;
-  padding: 15px 18px !important;
+  padding: 14px 16px !important;
   margin-bottom: 10px !important;
   border-radius: 16px !important;
   font-family: inherit !important;
@@ -225,65 +275,80 @@ body.admin-view .container::after { display: none !important; }
   position: relative !important;
   overflow: hidden !important;
   border: 1px solid !important;
-  background: linear-gradient(135deg, rgba(0,20,40,.75), rgba(0,40,60,.5)) !important;
+  background: linear-gradient(135deg, rgba(0,25,45,.85), rgba(0,40,60,.6)) !important;
   min-height: 0 !important;
-  box-shadow:
-    0 3px 15px rgba(0,0,0,.35),
-    inset 0 1px 0 rgba(255,255,255,.06) !important;
+  box-shadow: 0 3px 15px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06) !important;
   backdrop-filter: blur(10px);
   color: #fff !important;
 }
 .btn-nav::before {
   content: ""; position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
   background-size: 200% 100%;
   transform: translateX(-200%);
-  transition: transform .7s;
+  transition: transform .8s;
 }
 .btn-nav:hover::before { transform: translateX(200%); }
 .btn-nav:hover {
   transform: translateY(-3px) !important;
-  background: linear-gradient(135deg, rgba(0,40,70,.9), rgba(0,60,90,.7)) !important;
+  background: linear-gradient(135deg, rgba(0,45,75,.95), rgba(0,65,95,.75)) !important;
 }
 .btn-nav:active { transform: scale(.98) !important; }
 
-/* نوار رنگی ملایم سمت راست */
+/* آیکن دکمه‌ها */
+.btn-ic {
+  width: 40px; height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  background: linear-gradient(135deg, rgba(77,208,255,.15), rgba(125,255,212,.08));
+  border: 1px solid rgba(125,255,212,.3);
+  box-shadow: inset 0 0 15px rgba(77,208,255,.08);
+  transition: all .4s;
+}
+.btn-nav:hover .btn-ic {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: inset 0 0 25px rgba(77,208,255,.2), 0 0 15px var(--c, #4dd0ff);
+}
+
+/* نوار رنگی ملایم */
 .btn-nav::after {
   content: ""; position: absolute;
   top: 12px; bottom: 12px; right: 0;
   width: 3px; border-radius: 3px;
   background: var(--c, #4dd0ff);
-  box-shadow: 0 0 10px var(--c, #4dd0ff);
-  opacity: .9;
+  box-shadow: 0 0 8px var(--c, #4dd0ff);
+  opacity: .7;
 }
 
-/* 🎨 رنگ هر دکمه - ملایم */
-.btn-nav[href*="/panel/send"] { --c: #00ff9d; border-color: rgba(0,255,157,.4) !important; }
-.btn-nav[href*="/panel/contacts"] { --c: #bf7dff; border-color: rgba(191,125,255,.4) !important; }
-.btn-nav[href*="/panel/templates"] { --c: #4dd0ff; border-color: rgba(77,208,255,.4) !important; }
-.btn-nav[href*="/panel/wallet"] { --c: #ffd700; border-color: rgba(255,215,0,.4) !important; }
-.btn-nav[href*="/panel/qr"] { --c: #7dffd4; border-color: rgba(125,255,212,.4) !important; }
-.btn-nav[href*="/panel/tickets"] { --c: #ff5588; border-color: rgba(255,85,136,.4) !important; }
-.btn-nav[href*="/panel/loyalty"] { --c: #ffd700; border-color: rgba(255,215,0,.4) !important; }
-.btn-nav[href*="/panel/referrals"] { --c: #bf7dff; border-color: rgba(191,125,255,.4) !important; }
-.btn-nav[href*="/panel/leaderboard"] { --c: #ffd700; border-color: rgba(255,215,0,.4) !important; }
-.btn-nav[href*="/panel/reports"] { --c: #4dd0ff; border-color: rgba(77,208,255,.4) !important; }
-.btn-nav[href*="/panel/auto-reply"] { --c: #4dd0ff; border-color: rgba(77,208,255,.4) !important; }
-.btn-nav[href*="/panel/ai-manager"] { --c: #bf7dff; border-color: rgba(191,125,255,.4) !important; }
-.btn-nav[href*="/panel/bot-ads"] { --c: #ff7dff; border-color: rgba(255,125,255,.4) !important; }
-.btn-nav[href*="/panel/posters"] { --c: #ffd700; border-color: rgba(255,215,0,.4) !important; }
-.btn-nav[href*="/panel/invite-by-sms"] { --c: #00ff9d; border-color: rgba(0,255,157,.4) !important; }
-.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; border-color: rgba(255,184,77,.4) !important; }
+/* رنگ هر دکمه */
+.btn-nav[href*="/panel/send"] { --c: #00ff9d; border-color: rgba(0,255,157,.35) !important; }
+.btn-nav[href*="/panel/contacts"] { --c: #bf7dff; border-color: rgba(191,125,255,.35) !important; }
+.btn-nav[href*="/panel/templates"] { --c: #4dd0ff; border-color: rgba(77,208,255,.35) !important; }
+.btn-nav[href*="/panel/wallet"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
+.btn-nav[href*="/panel/qr"] { --c: #7dffd4; border-color: rgba(125,255,212,.35) !important; }
+.btn-nav[href*="/panel/tickets"] { --c: #ff5588; border-color: rgba(255,85,136,.35) !important; }
+.btn-nav[href*="/panel/loyalty"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
+.btn-nav[href*="/panel/referrals"] { --c: #bf7dff; border-color: rgba(191,125,255,.35) !important; }
+.btn-nav[href*="/panel/leaderboard"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
+.btn-nav[href*="/panel/reports"] { --c: #4dd0ff; border-color: rgba(77,208,255,.35) !important; }
+.btn-nav[href*="/panel/auto-reply"] { --c: #4dd0ff; border-color: rgba(77,208,255,.35) !important; }
+.btn-nav[href*="/panel/ai-manager"] { --c: #bf7dff; border-color: rgba(191,125,255,.35) !important; }
+.btn-nav[href*="/panel/bot-ads"] { --c: #ff7dff; border-color: rgba(255,125,255,.35) !important; }
+.btn-nav[href*="/panel/posters"] { --c: #ffd700; border-color: rgba(255,215,0,.35) !important; }
+.btn-nav[href*="/panel/invite-by-sms"] { --c: #00ff9d; border-color: rgba(0,255,157,.35) !important; }
+.btn-nav[href*="/panel/force-join"] { --c: #ffb84d; border-color: rgba(255,184,77,.35) !important; }
 
-/* ✨ عنوان گزینه‌ها */
+/* عنوان گزینه‌ها */
 .footer-title {
   font-size: 15px !important;
   color: #7dffd4 !important;
   text-align: center !important;
   padding: 12px !important;
   margin: 18px 0 12px !important;
-  text-shadow: 0 0 15px rgba(125,255,212,.6) !important;
+  text-shadow: 0 0 12px rgba(125,255,212,.5) !important;
   letter-spacing: 2px;
   position: relative;
 }
@@ -292,24 +357,21 @@ body.admin-view .container::after { display: none !important; }
   width: 40px; height: 1px;
   background: linear-gradient(90deg, transparent, #4dd0ff);
   margin: 0 10px;
-  box-shadow: 0 0 8px #4dd0ff;
+  box-shadow: 0 0 6px #4dd0ff;
 }
 .footer-title::after { background: linear-gradient(90deg, #4dd0ff, transparent); }
 
 /* آمار */
 .stat-box {
-  background: linear-gradient(135deg, rgba(0,20,40,.8), rgba(0,30,50,.6)) !important;
-  border: 1px solid rgba(125,255,212,.35) !important;
-  box-shadow:
-    0 0 20px rgba(77,208,255,.2),
-    inset 0 0 20px rgba(77,208,255,.04) !important;
-  transition: all .3s !important;
+  background: linear-gradient(135deg, rgba(0,25,45,.8), rgba(0,35,55,.6)) !important;
+  border: 1px solid rgba(125,255,212,.3) !important;
+  box-shadow: 0 0 18px rgba(77,208,255,.15), inset 0 0 20px rgba(77,208,255,.04) !important;
+  transition: all .4s !important;
   border-radius: 16px !important;
-  backdrop-filter: blur(10px);
 }
 .stat-box:hover {
   transform: translateY(-3px) !important;
-  box-shadow: 0 0 30px rgba(77,208,255,.5) !important;
+  box-shadow: 0 0 28px rgba(77,208,255,.4) !important;
 }
 .stat-value {
   background: linear-gradient(135deg, #7dffd4, #4dd0ff);
@@ -320,20 +382,38 @@ body.admin-view .container::after { display: none !important; }
 .stat-label { color: #a8e8ff !important; }
 </style>
 
+<!-- SVG gradient for waves -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4dd0ff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#7dffd4" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#4dd0ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
 <div class="stars-dolphin" id="starsD"></div>
+<div class="orb o1" style="top:15%;left:10%"></div>
+<div class="orb o2" style="top:60%;right:15%"></div>
+<div class="orb o1" style="top:40%;left:70%;animation-delay:-3s"></div>
+
 <script>
 (function(){
   var b = document.getElementById('starsD');
   if (!b) return;
-  var colors = ['b', 'c', 'g'];
-  for (var i = 0; i < 70; i++){
+  var colors = ['b', 'c', 'g', 'w'];
+  for (var i = 0; i < 80; i++){
     var s = document.createElement('div');
-    s.className = 'star-d ' + colors[Math.floor(Math.random()*colors.length)];
-    var sz = Math.random() * 4 + 2;
-    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    var cls = 'star-d ' + colors[Math.floor(Math.random()*colors.length)];
+    if (Math.random() > 0.85) cls += ' big';
+    s.className = cls;
+    var sz = Math.random() * 3 + 1;
+    s.style.width = sz + 'px';
+    s.style.height = sz + 'px';
     s.style.left = Math.random() * 100 + '%';
-    s.style.top = (Math.random() * 100 + 20) + '%';
-    s.style.animationDelay = (Math.random() * 8) + 's';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
     b.appendChild(s);
   }
 })();
@@ -341,13 +421,29 @@ body.admin-view .container::after { display: none !important; }
 </head>
 <body class="dolphin-cosmic">
 <div class="container">
-<div class="dolphin-header">
-  <div class="dolphin-logo">🐬</div>
-  <div>
-    <div class="dolphin-title">Dolphin SMS</div>
-    <div class="dolphin-sub">Shop Panel</div>
-  </div>
+<div class="ocean-frame"></div>
+<div class="wave-line w-top">
+  <svg preserveAspectRatio="none" viewBox="0 0 1200 40">
+    <path d="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20">
+      <animate attributeName="d" dur="6s" repeatCount="indefinite"
+        values="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
+                M0,20 Q100,35 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
+                M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20"/>
+    </path>
+  </svg>
 </div>
+<div class="wave-line w-bot">
+  <svg preserveAspectRatio="none" viewBox="0 0 1200 40">
+    <path d="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20">
+      <animate attributeName="d" dur="8s" repeatCount="indefinite"
+        values="M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
+                M0,20 Q100,35 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20;
+                M0,20 Q100,5 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20"/>
+    </path>
+  </svg>
+</div>
+
+
 
 
 
