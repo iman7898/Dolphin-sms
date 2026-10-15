@@ -9,7 +9,8 @@ from functools import wraps
 import hashlib, hmac, os, secrets, time
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)app = Flask(__name__)
+app = Flask(__name__)
+app = Flask(__name__)
 
 # ⚡ Cache + Gzip
 import gzip as _gz
