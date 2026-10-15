@@ -457,3 +457,21 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
   text-transform: uppercase !important;
   opacity: .85 !important;
 }
+
+/* 🔔 نوتیف آبی فیروزه */
+.notif-bell, #notifBellLink, .notif-bell-link {
+  background: rgba(93,184,232,.15) !important;
+  border: 2px solid #5db8e8 !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 20px rgba(93,184,232,.7), 0 0 40px rgba(144,224,239,.3) !important;
+  animation: bellPulse 3s ease-in-out infinite !important;
+}
+@keyframes bellPulse {
+  0%,100% { box-shadow: 0 0 20px rgba(93,184,232,.7), 0 0 40px rgba(144,224,239,.3); }
+  50% { box-shadow: 0 0 30px rgba(93,184,232,1), 0 0 60px rgba(144,224,239,.5); }
+}
+.notif-badge-bell, .notif-badge {
+  background: linear-gradient(135deg, #5db8e8, #0077b6) !important;
+  box-shadow: 0 0 12px rgba(93,184,232,.9) !important;
+  color: #fff !important;
+}
