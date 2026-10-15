@@ -7,7 +7,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{overflow-x:hidden;overflow-y:auto;height:auto}body{margin:0;padding:0;overflow-x:clip;overflow-y:visible;height:auto;min-height:100vh}
 body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
-  background:linear-gradient(180deg,#0c2b4a 0%,#0f3f5f 40%,#0a3e5e 70%,#051f33 100%) fixed;
+  
   padding:0 0 100px}
 
 .back-bar{display:flex;align-items:center;gap:12px;padding:16px;
@@ -87,11 +87,53 @@ body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
   box-shadow:0 0 25px rgba(93,184,232,.6)}
 
 .no-more{text-align:center;padding:20px;color:#5a7a95;font-size:11.5px}
-</style><style id="f">
-html,body{margin:0!important;padding:0!important;height:auto!important;max-height:none!important;min-height:100vh!important;overflow-y:auto!important;overflow-x:hidden!important;position:static!important;display:block!important}
-body{padding:0 0 120px!important}
-.list,.stats,.back-bar,.msg-item{height:auto!important;max-height:none!important;overflow:visible!important;position:relative!important}
-</style></head><body>
+</style><style id="FINAL-FIX">
+html {
+  overflow: visible !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100% !important;
+  position: static !important;
+}
+body {
+  overflow: visible !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  position: static !important;
+  padding: 0 0 150px 0 !important;
+  background-attachment: scroll !important;
+}
+* {
+  max-height: none !important;
+}
+.list, .stats, .back-bar, .msg-item, .toolbar {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  function forceScroll(){
+    document.documentElement.style.cssText += ';overflow:auto !important;overflow-y:auto !important;height:auto !important;max-height:none !important;position:static !important;';
+    document.body.style.cssText += ';overflow:auto !important;overflow-y:auto !important;overflow-x:hidden !important;height:auto !important;max-height:none !important;min-height:100vh !important;position:static !important;touch-action:pan-y !important;';
+    document.querySelectorAll('.list, .stats, .back-bar, .msg-item, .toolbar').forEach(function(el){
+      el.style.cssText += ';height:auto !important;max-height:none !important;overflow:visible !important;';
+    });
+    // چک کن اسکرول می‌شه یا نه
+    var canScroll = document.body.scrollHeight > window.innerHeight + 50;
+    console.log('Can scroll?', canScroll, 'ScrollHeight:', document.body.scrollHeight, 'WinHeight:', window.innerHeight);
+  }
+  forceScroll();
+  setTimeout(forceScroll, 300);
+  setTimeout(forceScroll, 1000);
+  setTimeout(forceScroll, 2500);
+});
+</script>
+</head><body>
 
 <div class="back-bar">
   <a href="/panel/dashboard" class="back-btn">→</a>
