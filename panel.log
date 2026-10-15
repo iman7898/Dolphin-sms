@@ -33,3 +33,4 @@ customer_features OK
 127.0.0.1 - - [15/Oct/2026 18:31:11] "[32mPOST /customer/login HTTP/1.1[0m" 302 -
 127.0.0.1 - - [15/Oct/2026 18:31:12] "GET /panel/dashboard HTTP/1.1" 200 -
 127.0.0.1 - - [15/Oct/2026 18:31:12] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [15/Oct/2026 18:33:19] "GET /api/notif/count HTTP/1.1" 200 -
