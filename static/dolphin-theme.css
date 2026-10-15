@@ -375,3 +375,85 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
 .btn-nav[href*="/panel/force-join"] { --c: #ffb84d; }
 .btn-nav[href*="/panel/broadcast"] { --c: #ff6b9d; }
 .btn-nav[href*="/panel/logout"], .btn-nav.btn-logout { --c: #ff4d6d; }
+
+/* 🎯 حذف نقطه */
+.btn-nav::after { display: none !important; }
+.btn-nav::before { display: none !important; }
+
+/* ✨ آیکن - حرکت ریز و زنده */
+.btn-ic {
+  background: linear-gradient(135deg, var(--c, #5db8e8) 0%, rgba(0,40,80,.5) 100%) !important;
+  border: 1px solid rgba(180,230,255,.4) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 0 15px var(--c, rgba(93,184,232,.4)) !important;
+  animation: icAlive 2.5s ease-in-out infinite !important;
+  opacity: 1 !important;
+}
+@keyframes icAlive {
+  0%,100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.05); }
+}
+.btn-nav:nth-child(2n) .btn-ic { animation-delay: .3s !important; }
+.btn-nav:nth-child(3n) .btn-ic { animation-delay: .6s !important; }
+.btn-nav:nth-child(4n) .btn-ic { animation-delay: .9s !important; }
+.btn-nav:nth-child(5n) .btn-ic { animation-delay: 1.2s !important; }
+
+.btn-nav:hover .btn-ic {
+  transform: rotate(-10deg) scale(1.15) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.3),
+    0 5px 25px var(--c, rgba(93,184,232,.8)) !important;
+}
+
+/* هدر دلفین - قوی‌تر */
+.dolphin-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  padding: 20px 18px !important;
+  margin: -12px -12px 16px -12px !important;
+  background: linear-gradient(135deg, rgba(0,40,80,.6), rgba(0,80,130,.35)) !important;
+  border-bottom: 1.5px solid rgba(150,210,240,.4) !important;
+  border-radius: 24px 24px 0 0 !important;
+  backdrop-filter: blur(10px) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.dolphin-logo {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 15px !important;
+  background: linear-gradient(135deg, #5db8e8, #0077b6, #90e0ef) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+  border: 1.5px solid rgba(180,230,255,.7) !important;
+  box-shadow: 0 0 25px rgba(93,184,232,.8), 0 0 50px rgba(144,224,239,.4) !important;
+  animation: dolphinFloat 4s ease-in-out infinite !important;
+}
+@keyframes dolphinFloat {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-6px) rotate(5deg); }
+}
+.dolphin-title {
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  background: linear-gradient(90deg, #e0f4ff, #90e0ef, #caf0f8, #e0f4ff) !important;
+  background-size: 200% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  letter-spacing: 1.5px !important;
+  animation: grdMove 5s linear infinite !important;
+  filter: drop-shadow(0 0 8px rgba(144,224,239,.7)) !important;
+}
+.dolphin-sub {
+  font-size: 10px !important;
+  color: #90e0ef !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase !important;
+  opacity: .85 !important;
+}
