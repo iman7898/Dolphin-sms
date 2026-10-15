@@ -95,3 +95,51 @@ def admin_reports():
         by_user=by_user,
         top_payers=top_payers,
         current_settings=_cs())
+
+
+# ============ گزارش پیام‌ها (لیست کامل) ============
+@report_bp.route('/panel/messages')
+def panel_messages():
+    if 'user_id' not in session:
+        return redirect('/panel/login')
+    uid = session['user_id']
+    from database import get_user_sms_history
+    import sqlite3 as _s
+    conn = _s.connect('panel.db', timeout=15)
+    c = conn.cursor()
+    c.execute("""SELECT id, phone, message, status, created_at
+                 FROM sent_sms WHERE user_id=?
+                 ORDER BY id DESC LIMIT 300""", (uid,))
+    messages = c.fetchall()
+    # آمار
+    c.execute("SELECT status, COUNT(*) FROM sent_sms WHERE user_id=? GROUP BY status", (uid,))
+    stats_rows = c.fetchall()
+    conn.close()
+    stats = {'success': 0, 'error': 0, 'pending': 0, 'total': len(messages)}
+    for st, cnt in stats_rows:
+        st = (st or '').lower()
+        if st in ('success', 'ok', 'sent'):
+            stats['success'] += cnt
+        elif st in ('error', 'failed'):
+            stats['error'] += cnt
+        else:
+            stats['pending'] += cnt
+    from database import get_user_settings
+    try: cs = get_user_settings(uid)
+    except: cs = None
+    return render_template('panel_messages.html',
+                           messages=messages, stats=stats,
+                           current_settings=cs)
+
+
+@report_bp.route('/panel/messages/clear', methods=['POST'])
+def panel_messages_clear():
+    if 'user_id' not in session:
+        return redirect('/panel/login')
+    uid = session['user_id']
+    import sqlite3 as _s
+    conn = _s.connect('panel.db', timeout=15)
+    c = conn.cursor()
+    c.execute("DELETE FROM sent_sms WHERE user_id=? AND status IN ('error','failed')", (uid,))
+    conn.commit(); conn.close()
+    return redirect('/panel/messages')
