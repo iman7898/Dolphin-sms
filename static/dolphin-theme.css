@@ -161,3 +161,23 @@ body.dolphin-cosmic::after, body.matrix-bg::after {
   box-shadow: 0 0 30px rgba(77,208,255,.4), inset 0 0 30px rgba(77,208,255,.12) !important;
   border-radius: 20px !important; backdrop-filter: blur(15px) !important;
 }
+
+/* 🎯 اصلاح: شفاف‌تر + z-index درست */
+body.dolphin-cosmic::before, body.matrix-bg::before { z-index: -3 !important; }
+body.dolphin-cosmic::after, body.matrix-bg::after { z-index: -2 !important; }
+.ocean-bg { z-index: -1 !important; }
+.fish, .bubble { z-index: -1 !important; }
+
+.container {
+  background: rgba(0,15,30,.15) !important;
+  backdrop-filter: blur(3px) !important;
+  -webkit-backdrop-filter: blur(3px) !important;
+  border: 1px solid rgba(180,240,255,.5) !important;
+  box-shadow: 0 8px 60px rgba(0,0,0,.3), inset 0 0 40px rgba(180,240,255,.1) !important;
+}
+
+/* خورشید بالاتر از قاب دیده بشه */
+body.dolphin-cosmic::after, body.matrix-bg::after {
+  z-index: 1 !important;
+  opacity: .95 !important;
+}
