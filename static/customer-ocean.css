@@ -1,0 +1,88 @@
+/* 🌊 تبدیل سبز به آبی برای پنل مشتری */
+* { -webkit-tap-highlight-color: transparent; }
+
+body, body.matrix-bg, body[class*="neon"] {
+  background: #04101c !important;
+  background-image: linear-gradient(180deg,
+    #0c2b4a 0%, #0f3f5f 30%, #0a3e5e 60%, #051f33 100%) !important;
+  background-attachment: scroll !important;
+  color: #e2e8f0 !important;
+}
+
+/* فریم و باکس */
+.frame, .header-bar, .footer-box, .box, .card, .panel, .container {
+  border-color: rgba(150,210,240,.4) !important;
+  box-shadow: 0 0 25px rgba(93,184,232,.25), inset 0 0 25px rgba(93,184,232,.06) !important;
+}
+
+/* تیترها */
+.pt, .sec-t, .footer-title, .box-title, .header-title,
+h1, h2, h3, .page-title {
+  color: #90e0ef !important;
+  text-shadow: 0 0 15px rgba(144,224,239,.7) !important;
+}
+
+/* سبز نئون → آبی */
+[style*="00ff9d"], [style*="00cc7a"], [style*="0f9"] {
+  color: #90e0ef !important;
+  border-color: #5db8e8 !important;
+  background: rgba(93,184,232,.15) !important;
+}
+
+/* دکمه‌ها */
+button, .btn, .btn-nav, .btn-white {
+  background: linear-gradient(135deg,#5db8e8,#0077b6) !important;
+  color: #fff !important;
+  border-color: rgba(150,210,240,.5) !important;
+  box-shadow: 0 0 20px rgba(93,184,232,.5) !important;
+}
+
+/* ورودی‌ها */
+input, textarea, select {
+  background: rgba(0,30,60,.6) !important;
+  border-color: rgba(93,184,232,.4) !important;
+  color: #e0f4ff !important;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: #5db8e8 !important;
+  box-shadow: 0 0 15px rgba(93,184,232,.6) !important;
+  outline: none !important;
+}
+
+/* لینک‌ها */
+a:not(.btn):not(.btn-nav):not(.ni) {
+  color: #90e0ef !important;
+}
+
+/* نوار پایین */
+.nw, .bottom-nav, .nav-wrap {
+  background: rgba(10,25,45,.9) !important;
+  border-color: rgba(150,210,240,.25) !important;
+  box-shadow: 0 -4px 30px rgba(0,0,0,.5) !important;
+}
+.ni { color: #6b8aa3 !important; }
+.ni.act { color: #90e0ef !important; background: rgba(93,184,232,.15) !important; }
+.ni.act .ic, .ni.act span:last-child { color: #90e0ef !important; }
+
+/* کارت‌ها */
+.cat, .main-cat, .prod, .shop, .cart {
+  border-color: rgba(93,184,232,.4) !important;
+}
+.cat:hover, .main-cat:hover, .prod:hover, .shop:hover {
+  border-color: #5db8e8 !important;
+  box-shadow: 0 0 25px rgba(93,184,232,.6) !important;
+}
+
+/* بنر */
+.banner {
+  background: linear-gradient(135deg,#5db8e8,#0077b6,#90e0ef) !important;
+  box-shadow: 0 0 30px rgba(93,184,232,.6) !important;
+}
+.banner-t, .banner-s { color: #0a1929 !important; }
+
+/* آیکن‌های نئون سبز */
+.cat-ic, .main-cat-ic, .shop-av, .hi-av {
+  background: linear-gradient(135deg,rgba(93,184,232,.25),rgba(0,119,182,.1)) !important;
+  border-color: #5db8e8 !important;
+  box-shadow: 0 0 15px rgba(93,184,232,.5) !important;
+}
