@@ -259,9 +259,9 @@ def count_sms(user_id=None):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     if user_id:
-        c.execute("SELECT COUNT(*) FROM sent_sms WHERE user_id=?", (user_id,))
+        c.execute("SELECT COUNT(*) FROM sent_sms WHERE user_id=? AND status IN ('success','ok','sent')", (user_id,))
     else:
-        c.execute("SELECT COUNT(*) FROM sent_sms")
+        c.execute("SELECT COUNT(*) FROM sent_sms WHERE status IN ('success','ok','sent')")
     n = c.fetchone()[0]
     conn.close()
     return n
@@ -2572,7 +2572,7 @@ def get_user_sms_history(user_id, limit=200, phone_filter='', period='all'):
 def count_user_sms(user_id, period='all'):
     conn = sqlite3.connect('panel.db')
     c = conn.cursor()
-    q = "SELECT COUNT(*) FROM sent_sms WHERE user_id=?"
+    q = "SELECT COUNT(*) FROM sent_sms WHERE user_id=? AND status IN ('success','ok','sent')"
     params = [user_id]
     if period == 'today':
         q += " AND DATE(created_at) = DATE('now')"
