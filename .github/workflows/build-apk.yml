@@ -32,7 +32,23 @@ jobs:
 
       - name: Add Android
         working-directory: ./mobile
-        run: npx cap add android
+        run: npx cap add android || true
+
+      - name: Replace app icons
+        run: |
+          ICON_SRC=static/icons/icon-1024.png
+          if [ ! -f "$ICON_SRC" ]; then
+            ICON_SRC=static/icons/icon-512.png
+          fi
+          ANDROID_RES=mobile/android/app/src/main/res
+          if [ -d "$ANDROID_RES" ]; then
+            for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+              mkdir -p "$ANDROID_RES/mipmap-$d"
+              cp "$ICON_SRC" "$ANDROID_RES/mipmap-$d/ic_launcher.png" 2>/dev/null || true
+              cp "$ICON_SRC" "$ANDROID_RES/mipmap-$d/ic_launcher_round.png" 2>/dev/null || true
+              cp "$ICON_SRC" "$ANDROID_RES/mipmap-$d/ic_launcher_foreground.png" 2>/dev/null || true
+            done
+          fi
 
       - name: Build APK
         working-directory: ./mobile/android
