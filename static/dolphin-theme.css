@@ -159,3 +159,73 @@ body.dolphin-cosmic::after, body.matrix-bg::after { display: none !important; }
   border-radius: 20px !important;
   backdrop-filter: blur(10px) !important;
 }
+
+/* 🎯 حذف سبز نئون - جایگزین با آبی فیروزه */
+.frame, .header-bar, .footer-box, .box, .card-credit, .stat-box {
+  border-color: rgba(125,220,255,.5) !important;
+  box-shadow: 0 0 30px rgba(77,208,255,.3), inset 0 0 30px rgba(77,208,255,.08) !important;
+}
+.back-btn, .footer-title, .stat-label, .box-title {
+  color: #7de5ff !important;
+  text-shadow: 0 0 12px rgba(125,229,255,.7) !important;
+}
+/* نوار پایین - آبی */
+.nw, .bottom-nav {
+  background: linear-gradient(90deg, #4dd0ff, #7dffd4, #4dd0ff) !important;
+  box-shadow: 0 0 30px rgba(77,208,255,.6), 0 0 60px rgba(125,255,212,.3) !important;
+}
+.bn2, .bottom-nav {
+  background: linear-gradient(180deg, #0a1a2f, #051020) !important;
+}
+.ni.act {
+  background: linear-gradient(135deg, rgba(77,208,255,.2), rgba(125,255,212,.1)) !important;
+}
+.ni.act .ic {
+  filter: none !important;
+  color: #7de5ff !important;
+  text-shadow: 0 0 12px #7de5ff !important;
+}
+.ni.act span:last-child { color: #7de5ff !important; }
+
+/* ✨ انیمیشن آیکن‌ها */
+.btn-ic {
+  animation: icBob 3s ease-in-out infinite, icGlow 4s ease-in-out infinite !important;
+}
+@keyframes icGlow {
+  0%,100% { box-shadow: inset 0 0 20px rgba(77,208,255,.2), 0 0 12px rgba(77,208,255,.3); }
+  50% { box-shadow: inset 0 0 30px rgba(125,255,212,.4), 0 0 25px rgba(125,255,212,.6); }
+}
+.btn-nav:hover .btn-ic {
+  animation: icSpin 0.6s ease-in-out infinite !important;
+}
+@keyframes icSpin {
+  0% { transform: scale(1.2) rotate(0deg); }
+  25% { transform: scale(1.25) rotate(-12deg); }
+  75% { transform: scale(1.25) rotate(12deg); }
+  100% { transform: scale(1.2) rotate(0deg); }
+}
+
+/* 🎨 دکمه‌ها قشنگ‌تر */
+.btn-nav {
+  position: relative;
+  border-radius: 20px !important;
+  padding: 16px 18px !important;
+}
+.btn-nav::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 20px;
+  background: linear-gradient(135deg, transparent 0%, rgba(125,220,255,.1) 50%, transparent 100%) !important;
+  background-size: 200% 100% !important;
+  animation: btnShine 4s ease-in-out infinite !important;
+  pointer-events: none;
+}
+@keyframes btnShine {
+  0%,100% { background-position: -100% 0; }
+  50% { background-position: 200% 0; }
+}
+.btn-nav:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 40px var(--c, rgba(77,208,255,.5)), inset 0 1px 0 rgba(255,255,255,.15) !important;
+}
