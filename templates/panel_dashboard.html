@@ -40,9 +40,321 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<link rel="stylesheet" href="/static/scroll-fix.css"></head>
+<link rel="stylesheet" href="/static/scroll-fix.css">
+<style id="cosmic-panel">
+/* 🌌 کهکشان */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(0,212,255,.15), transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(191,0,255,.18), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0,255,157,.05), transparent 70%),
+    #0a0a0f !important;
+}
+.stars-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.star-dot {
+  position: absolute; background: #fff; border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+  animation: starTwk 3s ease-in-out infinite;
+}
+.star-dot.blue { background: #00d4ff; color: #00d4ff; box-shadow: 0 0 10px #00d4ff; }
+.star-dot.purple { background: #bf00ff; color: #bf00ff; box-shadow: 0 0 10px #bf00ff; }
+.star-dot.green { background: #00ff9d; color: #00ff9d; box-shadow: 0 0 10px #00ff9d; }
+@keyframes starTwk {
+  0%,100% { opacity: .15; transform: scale(.5); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+.nebula { position: fixed; border-radius: 50%; filter: blur(80px); opacity: .35; z-index: -1; pointer-events: none; animation: nebMove 25s ease-in-out infinite; }
+.nebula.n1 { width: 320px; height: 320px; background: #00d4ff; top: -80px; left: -120px; }
+.nebula.n2 { width: 280px; height: 280px; background: #bf00ff; bottom: -60px; right: -100px; animation-delay: -8s; }
+@keyframes nebMove {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(40px,-40px) scale(1.2); }
+}
+
+/* 🐬 هدر */
+.cosmic-header {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px;
+  padding: 18px 16px;
+  margin: -12px -12px 16px -12px;
+  background: linear-gradient(135deg, rgba(0,20,40,.9), rgba(20,0,40,.9));
+  border-bottom: 2px solid #00d4ff;
+  box-shadow: 0 0 30px rgba(0,212,255,.4), inset 0 0 40px rgba(0,212,255,.05);
+  position: relative;
+  overflow: hidden;
+}
+.cosmic-header::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,.1), transparent);
+  background-size: 200% 100%;
+  animation: hdrShine 4s linear infinite;
+}
+@keyframes hdrShine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.cosmic-logo {
+  width: 44px; height: 44px; border-radius: 14px;
+  background: linear-gradient(135deg, #00d4ff, #0088cc, #bf00ff);
+  background-size: 200% 200%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  border: 2px solid #00d4ff;
+  box-shadow: 0 0 25px rgba(0,212,255,.8), 0 0 50px rgba(191,0,255,.4);
+  animation: logoFloat 3s ease-in-out infinite, grdMove 4s ease infinite;
+  position: relative; z-index: 1;
+}
+@keyframes logoFloat {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+}
+@keyframes grdMove {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.cosmic-title {
+  font-family: 'Vazirmatn', sans-serif;
+  font-size: 22px; font-weight: 900;
+  background: linear-gradient(90deg, #00d4ff, #bf00ff, #00ff9d, #00d4ff);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+  animation: grdMove 4s linear infinite;
+  text-shadow: 0 0 30px rgba(0,212,255,.4);
+  position: relative; z-index: 1;
+}
+.cosmic-sub {
+  font-size: 10.5px; color: #7de5ff; text-align: center;
+  margin-top: 3px; letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative; z-index: 1;
+}
+
+/* 💎 کارت اعتبار */
+.card-credit {
+  background: linear-gradient(135deg, rgba(0,25,40,.92), rgba(15,0,35,.95)) !important;
+  border: 2px solid #00d4ff !important;
+  box-shadow: 0 0 35px rgba(0,212,255,.5), inset 0 0 40px rgba(0,212,255,.08) !important;
+  position: relative;
+  overflow: hidden;
+  animation: creditPulse 3.5s ease-in-out infinite !important;
+}
+@keyframes creditPulse {
+  0%,100% { box-shadow: 0 0 35px rgba(0,212,255,.5), inset 0 0 40px rgba(0,212,255,.08); }
+  50% { box-shadow: 0 0 55px rgba(0,212,255,.8), inset 0 0 55px rgba(0,212,255,.15); }
+}
+.card-credit::before {
+  content: ""; position: absolute; inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(from var(--ang,0deg), #00d4ff, #bf00ff, #00ff9d, #00d4ff);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: rotBorder 5s linear infinite;
+  pointer-events: none;
+}
+@keyframes rotBorder {
+  from { --ang: 0deg; }
+  to { --ang: 360deg; }
+}
+
+/* ✨ دکمه‌های نئون */
+.btn-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 10px !important;
+  border-radius: 16px !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all .35s cubic-bezier(.2,.8,.2,1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1.5px solid !important;
+  background: linear-gradient(135deg, rgba(10,20,35,.9), rgba(20,10,35,.85)) !important;
+  min-height: 0 !important;
+}
+.btn-nav::before {
+  content: ""; position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+  background-size: 200% 100%;
+  transform: translateX(-200%);
+  transition: transform .6s;
+}
+.btn-nav:hover::before { transform: translateX(200%); }
+.btn-nav:hover {
+  transform: translateY(-3px) scale(1.01) !important;
+}
+.btn-nav:active { transform: scale(.97) !important; }
+
+/* نوار رنگی سمت راست هر دکمه */
+.btn-nav::after {
+  content: ""; position: absolute;
+  top: 8px; bottom: 8px; right: 0;
+  width: 4px; border-radius: 4px;
+  background: currentColor;
+  box-shadow: 0 0 15px currentColor;
+  opacity: .9;
+}
+
+/* 🎨 رنگ‌های خاص هر دکمه - با نگه داشتن رنگ‌های قدیمی */
+.btn-nav[href*="/panel/send"] {
+  border-color: #00ff9d !important;
+  color: #00ff9d !important;
+  text-shadow: 0 0 12px rgba(0,255,157,.8) !important;
+  box-shadow: 0 0 20px rgba(0,255,157,.3), inset 0 0 20px rgba(0,255,157,.05) !important;
+}
+.btn-nav[href*="/panel/send"]:hover {
+  box-shadow: 0 0 35px rgba(0,255,157,.8), inset 0 0 25px rgba(0,255,157,.1) !important;
+}
+.btn-nav[href*="/panel/contacts"] {
+  border-color: #bf00ff !important; color: #bf00ff !important;
+  text-shadow: 0 0 12px rgba(191,0,255,.8) !important;
+  box-shadow: 0 0 20px rgba(191,0,255,.3), inset 0 0 20px rgba(191,0,255,.05) !important;
+}
+.btn-nav[href*="/panel/contacts"]:hover { box-shadow: 0 0 35px rgba(191,0,255,.8) !important; }
+.btn-nav[href*="/panel/templates"] {
+  border-color: #00d4ff !important; color: #00d4ff !important;
+  text-shadow: 0 0 12px rgba(0,212,255,.8) !important;
+  box-shadow: 0 0 20px rgba(0,212,255,.3), inset 0 0 20px rgba(0,212,255,.05) !important;
+}
+.btn-nav[href*="/panel/templates"]:hover { box-shadow: 0 0 35px rgba(0,212,255,.8) !important; }
+.btn-nav[href*="/panel/wallet"] {
+  border-color: #ffd700 !important; color: #ffd700 !important;
+  text-shadow: 0 0 12px rgba(255,215,0,.8) !important;
+  box-shadow: 0 0 20px rgba(255,215,0,.3), inset 0 0 20px rgba(255,215,0,.05) !important;
+}
+.btn-nav[href*="/panel/wallet"]:hover { box-shadow: 0 0 35px rgba(255,215,0,.8) !important; }
+.btn-nav[href*="/panel/qr"] {
+  border-color: #00ff9d !important; color: #00ff9d !important;
+  box-shadow: 0 0 20px rgba(0,255,157,.3), inset 0 0 20px rgba(0,255,157,.05) !important;
+}
+.btn-nav[href*="/panel/tickets"] {
+  border-color: #ff2e63 !important; color: #ff2e63 !important;
+  text-shadow: 0 0 12px rgba(255,46,99,.8) !important;
+  box-shadow: 0 0 20px rgba(255,46,99,.3), inset 0 0 20px rgba(255,46,99,.05) !important;
+}
+.btn-nav[href*="/panel/tickets"]:hover { box-shadow: 0 0 35px rgba(255,46,99,.8) !important; }
+.btn-nav[href*="/panel/loyalty"] {
+  border-color: #ffd700 !important; color: #ffd700 !important;
+  box-shadow: 0 0 20px rgba(255,215,0,.3) !important;
+}
+.btn-nav[href*="/panel/referrals"] {
+  border-color: #bf00ff !important; color: #bf00ff !important;
+  box-shadow: 0 0 20px rgba(191,0,255,.3) !important;
+}
+.btn-nav[href*="/panel/leaderboard"] {
+  border-color: #ffd700 !important; color: #ffd700 !important;
+  box-shadow: 0 0 20px rgba(255,215,0,.3) !important;
+}
+.btn-nav[href*="/panel/reports"] {
+  border-color: #00d4ff !important; color: #00d4ff !important;
+  box-shadow: 0 0 20px rgba(0,212,255,.3) !important;
+}
+.btn-nav[href*="/panel/auto-reply"] {
+  border-color: #00d4ff !important; color: #00d4ff !important;
+  box-shadow: 0 0 20px rgba(0,212,255,.3) !important;
+}
+.btn-nav[href*="/panel/ai-manager"] {
+  border-color: #bf00ff !important; color: #bf00ff !important;
+  box-shadow: 0 0 20px rgba(191,0,255,.3) !important;
+}
+.btn-nav[href*="/panel/bot-ads"] {
+  border-color: #ff00ff !important; color: #ff00ff !important;
+  box-shadow: 0 0 20px rgba(255,0,255,.3) !important;
+}
+.btn-nav[href*="/panel/posters"] {
+  border-color: #ffd700 !important; color: #ffd700 !important;
+  box-shadow: 0 0 20px rgba(255,215,0,.3) !important;
+}
+.btn-nav[href*="/panel/invite-by-sms"] {
+  border-color: #00ff9d !important; color: #00ff9d !important;
+  box-shadow: 0 0 20px rgba(0,255,157,.3) !important;
+}
+.btn-nav[href*="/panel/force-join"] {
+  border-color: #ffaa00 !important; color: #ffaa00 !important;
+  box-shadow: 0 0 20px rgba(255,170,0,.3) !important;
+}
+
+/* ⚙️ عنوان گزینه‌ها */
+.footer-title {
+  font-size: 15px !important;
+  color: #00d4ff !important;
+  text-align: center !important;
+  padding: 12px !important;
+  margin: 16px 0 12px !important;
+  text-shadow: 0 0 15px rgba(0,212,255,.8) !important;
+  letter-spacing: 1px;
+  position: relative;
+}
+.footer-title::before,
+.footer-title::after {
+  content: ""; display: inline-block; vertical-align: middle;
+  width: 40px; height: 2px;
+  background: linear-gradient(90deg, transparent, #00d4ff);
+  margin: 0 8px;
+}
+.footer-title::after { background: linear-gradient(90deg, #00d4ff, transparent); }
+
+/* آمار */
+.stat-box {
+  background: linear-gradient(135deg, rgba(10,20,35,.9), rgba(20,10,35,.85)) !important;
+  border: 1.5px solid rgba(0,212,255,.4) !important;
+  box-shadow: 0 0 20px rgba(0,212,255,.2), inset 0 0 20px rgba(0,212,255,.03) !important;
+  transition: all .3s !important;
+}
+.stat-box:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 0 30px rgba(0,212,255,.6) !important;
+}
+.stat-value {
+  background: linear-gradient(135deg, #00d4ff, #00ff9d);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900 !important;
+}
+</style>
+
+<div class="stars-bg" id="starsBg2"></div>
+<div class="nebula n1"></div>
+<div class="nebula n2"></div>
+<script>
+(function(){
+  var b = document.getElementById('starsBg2');
+  if (!b) return;
+  var colors = ['', 'blue', 'purple', 'green'];
+  for (var i = 0; i < 90; i++){
+    var s = document.createElement('div');
+    s.className = 'star-dot ' + colors[Math.floor(Math.random()*colors.length)];
+    var sz = Math.random() * 3 + 1;
+    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 3) + 's';
+    b.appendChild(s);
+  }
+})();
+</script>
+</head>
 <body class="matrix-bg">
 <div class="container">
+<div class="cosmic-header">
+  <div class="cosmic-logo">🐬</div>
+  <div>
+    <div class="cosmic-title">Dolphin SMS</div>
+    <div class="cosmic-sub">Shop Panel</div>
+  </div>
+</div>
+
     <div class="header-bar"><div class="header-title">🏪 {{ user[3] or user[1] }}</div></div>
 
     <!-- باکس زمان اشتراک (فقط نمایش) -->

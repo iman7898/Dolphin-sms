@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>پنل من</title><link rel="stylesheet" href="/static/style.css"><link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}
+
+
+
+
+/* ==== FIX FINAL ==== */
+html, body {
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-bottom: 130px !important;
+  position: relative !important;
+}
+.bottom-nav {
+  position: fixed !important;
+  bottom: 16px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+}
+</style>
+<script src="/static/custom-alert.js"></script>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00ff9d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
+    });
+}
+</script>
+
+<link rel="stylesheet" href="/static/scroll-fix.css"></head>
+<body class="matrix-bg">
+<div class="container">
+    <div class="header-bar"><div class="header-title">🏪 {{ user[3] or user[1] }}</div></div>
+
+    <!-- باکس زمان اشتراک (فقط نمایش) -->
+    <div class="time-box {% if time_left.expired %}expired{% endif %}">
+        {% if time_left.expired %}
+            <!-- کارت اعتبار کیف پول -->
+  <div class="card-credit" style="background:linear-gradient(135deg,rgba(0,30,20,.92),rgba(0,20,10,.95));border:2px solid #00ff9d;border-radius:20px;padding:18px;margin-bottom:14px;text-align:center;box-shadow:0 0 20px rgba(0,255,157,.4);animation:framePulse 4s ease-in-out infinite">
+    <div style="font-size:14px;color:#7dfcc7;margin-bottom:8px">💰 اعتبار شما</div>
+    <div style="font-size:32px;font-weight:900;color:#00ff9d;text-shadow:0 0 20px rgba(0,255,157,.9);direction:ltr">{{ "{:,}".format(wallet_balance) }} <small style="font-size:13px;color:#7dfcc7;font-weight:400">ریال</small></div>
+    <div style="font-size:12px;color:#7dfcc7;margin-top:8px">معادل <b style="color:#00ff9d;font-size:14px">{{ (wallet_balance // sms_price)|int }}</b> پیامک</div>
+  </div>
+
+  <div class="time-title">⛔ اشتراک شما تمام شده است</div>
+            <div class="time-text">برای تمدید با پشتیبانی تماس بگیرید</div>
+        {% else %}
+            <div class="time-title">⏳ اشتراک شما</div>
+            <div class="time-count">
+                <span class="time-num">{{ time_left.days }}</span> روز
+                <span class="time-num">{{ time_left.hours }}</span> ساعت
+                <span class="time-num">{{ time_left.minutes }}</span> دقیقه
+            </div>
+            <div class="time-end">پایان: {{ time_left.end_date }}</div>
+        {% endif %}
+    </div>
+
+    <div class="stats">
+        <div class="stat-box"><span class="stat-label">روز اشتراک</span><span class="stat-value">{{ days_left }}</span></div>
+        <div class="stat-box"><span class="stat-label">پیامک باقی‌مونده</span><span class="stat-value">{{ sms_left }}</span></div>
+        
+    </div>
+
+    <div class="footer-box">
+        <div class="footer-title">⚙ گزینه‌ها</div>
+        <div class="footer-actions">
+            <a href="/panel/send" class="btn-nav">✉ ارسال پیامک</a>
+<a href="/panel/contacts" class="btn-nav" style="background:#1a0033;color:#bf00ff;border-color:#bf00ff;">📞 مخاطبین</a>
+<a href="/panel/templates" class="btn-nav" style="background:#001a33;color:#00d4ff;border-color:#00d4ff;">✉ قالب‌ها</a>
+<a href="/panel/wallet" class="btn-nav" style="background:#332200;color:#ffbe0b;border-color:#ffbe0b;">💰 کیف پول</a>
+            <a href="/panel/qr" class="btn-nav" style="background:#003322;color:#00ff9d;border-color:#00ff9d;">📱 QR کد من</a>
+            <a href="/panel/tickets" class="btn-nav" style="background:#33001a;color:#ff2e63;border-color:#ff2e63;">🎫 تیکت پشتیبانی</a>
+            <a href="/panel/loyalty" class="btn-nav" style="background:#332200;color:#ffd700;border-color:#ffd700;">🎁 باشگاه مشتریان</a>
+            <a href="/panel/referrals" class="btn-nav" style="background:#1a0033;color:#bf00ff;border-color:#bf00ff;">🎯 دعوت دوستان</a>
+            <a href="/panel/leaderboard" class="btn-nav" style="background:#332200;color:#ffd700;border-color:#ffd700;">🏆 رتبه‌بندی</a>
+            <a href="/panel/reports" class="btn-nav" style="background:#001a33;color:#00d4ff;border-color:#00d4ff;">📊 گزارش‌های من</a>
+            <a href="/panel/auto-reply" class="btn-nav" style="background:#001a33;color:#00d4ff;border-color:#00d4ff;">💬 پاسخ خودکار</a>
+            <a href="/panel/ai-manager" class="btn-nav" style="background:#1a0033;color:#bf00ff;border-color:#bf00ff;">🤖 مدیر AI</a>
+            <a href="/panel/bot-ads" class="btn-nav" style="background:#330033;color:#ff00ff;border-color:#ff00ff;">📢 تبلیغات ربات</a>
+            <a href="/panel/posters" class="btn-nav" style="background:#332200;color:#ffd700;border-color:#ffd700;">🎨 قالب‌های پوستر</a>
+            <a href="/panel/invite-by-sms" class="btn-nav" style="background:#003322;color:#00ff9d;border-color:#00ff9d;">📨 دعوت پیامکی</a>
+            <a href="/panel/force-join" class="btn-nav" style="background:#332200;color:#ffaa00;border-color:#ffaa00;">🔗 Force-Join</a>
+            <a href="/panel/broadcast" class="btn-nav" style="background:#330033;color:#ff00ff;border-color:#ff00ff;">📢 پیام انبوه</a>
+            <a href="/panel/logout" class="btn-nav btn-logout">⏻ خروج</a>
+        </div>
+    </div>
+
+    <h2>📨 پیامک‌های من</h2>
+    <div class="table-wrap">
+        <table>
+            <tr><th>ID</th><th>شماره</th><th>متن</th><th>وضعیت</th><th>زمان</th></tr>
+            {% for row in sms_list %}
+            <tr><td>{{ row[0] }}</td><td>{{ row[2] }}</td><td>{{ row[3] }}</td><td>{{ row[4] }}</td><td>{{ row[5] }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<nav class="bottom-nav">
+    <a href="/panel/dashboard" class="nav-item active">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></span>
+        <span class="nav-label">پنل</span>
+    </a>
+    <a href="/panel/chat" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-8a8 8 0 0 1 8-8h2a8 8 0 0 1 8 5z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span>
+        <span class="nav-label">چت</span>
+        {% if unread_chat and unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
+    </a>
+    <a href="/panel/ai" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="3"/><circle cx="9" cy="14" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.5" fill="currentColor" stroke="none"/><path d="M12 3v5"/><circle cx="12" cy="3" r="1"/></svg></span>
+        <span class="nav-label">هوش مصنوعی</span>
+    </a>
+    <a href="/panel/profile" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></span>
+        <span class="nav-label">پروفایل</span>
+    </a>
+</nav>
+
+{% include "_global_bg.html" %}
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+</body></html>
