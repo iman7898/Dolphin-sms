@@ -60,6 +60,7 @@ def customer_login():
         else:
             cust = get_customer_by_login(phone)
             if cust and cust[3] == password:
+                session.permanent = True
                 session['customer_id'] = cust[0]
                 session['customer_name'] = cust[2]
                 session['customer_phone'] = cust[1]
@@ -120,6 +121,7 @@ def customer_register():
         else:
             cid = add_customer(phone, name, password, username)
             if cid:
+                session.permanent = True
                 session['customer_id'] = cid
                 session['customer_name'] = name
                 session['customer_phone'] = phone

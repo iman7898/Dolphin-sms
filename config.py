@@ -1,4 +1,4 @@
-SECRET_KEY = "change-me-to-random-string"
+SECRET_KEY = "_YHXmEuR_oVI-JJnRHhHKe1NQO-6pMBtNtriYiDnzQ0TmDM4wXFU2Nsj5inltetZJXnoTHXwnE30eF6n2tw8LA"
 ADMIN_USERNAME = "iman"
 ADMIN_PASSWORD = "iman7898"
 MCI_API_URL = "https://api.kavenegar.com/v1"

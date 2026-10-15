@@ -90,6 +90,14 @@ app = Flask(__name__)
 
 app.secret_key = SECRET_KEY
 
+# 🔐 تنظیمات امنیتی session
+from datetime import timedelta as _td
+app.config['PERMANENT_SESSION_LIFETIME'] = _td(days=30)
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = False  # اگر HTTPS شد، True کن
+app.config['SESSION_REFRESH_EACH_REQUEST'] = True
+
 # ===== توابع امنیتی =====
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "static", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -462,6 +470,7 @@ def panel_login():
                     session['pending_2fa_log'] = log_id
                     return redirect('/panel/2fa/verify')
 
+                session.permanent = True
                 session["user_id"] = user_id
                 session["user_name"] = u
                 session["log_id"] = log_id
