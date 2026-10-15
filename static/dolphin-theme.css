@@ -181,3 +181,34 @@ body.dolphin-cosmic::after, body.matrix-bg::after {
   z-index: 1 !important;
   opacity: .95 !important;
 }
+
+/* 🎯 خورشید کوچیک و بالا */
+body.dolphin-cosmic::after, body.matrix-bg::after {
+  top: -40px !important;
+  width: 130px !important;
+  height: 130px !important;
+  opacity: 1 !important;
+  box-shadow: 0 0 60px rgba(255,220,150,.6), 0 0 120px rgba(255,200,120,.35) !important;
+}
+
+/* 🐟 ماهی‌ها روی قاب */
+.fish {
+  z-index: 5 !important;
+  opacity: .95 !important;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,1)) !important;
+}
+.fish.f1 { top: 18% !important; }
+.fish.f2 { top: 45% !important; }
+.fish.f3 { top: 62% !important; }
+
+/* 🫧 حباب‌ها روی قاب */
+.bubble {
+  z-index: 5 !important;
+  opacity: .9 !important;
+}
+
+/* 🌊 موج‌ها واضح */
+.ocean-bg .wave-svg { z-index: 2 !important; }
+.ocean-bg .w1 { opacity: .5 !important; }
+.ocean-bg .w2 { opacity: .65 !important; }
+.ocean-bg .w3 { opacity: .8 !important; }
