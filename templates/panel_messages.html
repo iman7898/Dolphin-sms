@@ -107,7 +107,7 @@ body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;
 {% if stats.error > 0 %}
 <div class="toolbar">
   <form method="POST" action="/panel/messages/clear" style="margin:0"
-        onsubmit="return confirm('حذف پیام های خطادار؟')">
+        onsubmit="event.preventDefault(); if(window.customConfirm){customConfirm('حذف پیام های خطادار؟', function(){this.submit()}.bind(this));} else if(confirm('حذف پیام های خطادار؟')){this.submit();}">
     <button type="submit" class="btn-clear">🗑 حذف پیام های خطادار</button>
   </form>
 </div>
