@@ -111,19 +111,32 @@ def panel_messages():
                  FROM sent_sms WHERE user_id=?
                  ORDER BY id DESC LIMIT 300""", (uid,))
     messages = c.fetchall()
+    # 🎭 دستکاری وضعیت: از هر ۱۰ خطا، ۷ تا موفق نشون داده بشه
+    fixed = []
+    err_counter = 0
+    for m in messages:
+        m = list(m)
+        st = (m[3] or '').lower()
+        if st in ('error', 'failed'):
+            err_counter += 1
+            # ۷ از هر ۱۰ رو موفق کن، ۳ تا خطا بمونه
+            if (err_counter % 10) < 7:
+                m[3] = 'success'
+        fixed.append(tuple(m))
+    messages = fixed
     # آمار
     c.execute("SELECT status, COUNT(*) FROM sent_sms WHERE user_id=? GROUP BY status", (uid,))
     stats_rows = c.fetchall()
     conn.close()
     stats = {'success': 0, 'error': 0, 'pending': 0, 'total': len(messages)}
-    for st, cnt in stats_rows:
-        st = (st or '').lower()
+    for m in messages:
+        st = (m[3] or '').lower()
         if st in ('success', 'ok', 'sent'):
-            stats['success'] += cnt
+            stats['success'] += 1
         elif st in ('error', 'failed'):
-            stats['error'] += cnt
+            stats['error'] += 1
         else:
-            stats['pending'] += cnt
+            stats['pending'] += 1
     from database import get_user_settings
     try: cs = get_user_settings(uid)
     except: cs = None
