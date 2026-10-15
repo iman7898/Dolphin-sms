@@ -106,8 +106,7 @@ body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;
 
 {% if stats.error > 0 %}
 <div class="toolbar">
-  <form method="POST" action="/panel/messages/clear" style="margin:0"
-        onsubmit="event.preventDefault(); if(window.customConfirm){customConfirm('حذف پیام های خطادار؟', function(){this.submit()}.bind(this));} else if(confirm('حذف پیام های خطادار؟')){this.submit();}">
+  <form id="clearForm" method="POST" action="/panel/messages/clear" style="margin:0">
     <button type="submit" class="btn-clear">🗑 حذف پیام های خطادار</button>
   </form>
 </div>
@@ -147,5 +146,43 @@ body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;
   <a class="ni" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
 </div>
 
+
+<div id="modalBg" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,10,20,.75);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px">
+  <div style="max-width:380px;width:100%;background:linear-gradient(135deg,rgba(0,40,80,.95),rgba(0,25,50,.95));border:1.5px solid rgba(150,210,240,.5);border-radius:22px;padding:24px 20px;box-shadow:0 0 50px rgba(93,184,232,.4),0 20px 60px rgba(0,0,0,.6);animation:modalIn .3s ease-out;text-align:center">
+    <div style="font-size:50px;margin-bottom:12px">🗑</div>
+    <div style="font-size:16px;font-weight:900;color:#e0f4ff;margin-bottom:10px;text-shadow:0 0 12px rgba(144,224,239,.6)">حذف پیام های خطادار</div>
+    <div style="font-size:13px;color:#a8c8e0;margin-bottom:24px;line-height:1.7">آیا مطمئنی می‌خوای همه پیام‌های خطادار رو حذف کنی؟<br>این عمل قابل بازگشت نیست.</div>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeModal()" style="flex:1;padding:14px;border-radius:14px;background:rgba(150,210,240,.1);border:1.5px solid rgba(150,210,240,.4);color:#90e0ef;font-family:inherit;font-size:13.5px;font-weight:900;cursor:pointer">انصراف</button>
+      <button onclick="doClear()" style="flex:1;padding:14px;border-radius:14px;background:linear-gradient(135deg,#ff6b9d,#c9184a);border:none;color:#fff;font-family:inherit;font-size:13.5px;font-weight:900;cursor:pointer;box-shadow:0 0 20px rgba(255,107,157,.6)">حذف</button>
+    </div>
+  </div>
+</div>
+<style>
+@keyframes modalIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+</style>
+<script>
+(function(){
+  var f = document.getElementById('clearForm');
+  if (f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      document.getElementById('modalBg').style.display = 'flex';
+    });
+  }
+  window.closeModal = function(){
+    document.getElementById('modalBg').style.display = 'none';
+  };
+  window.doClear = function(){
+    document.getElementById('modalBg').style.display = 'none';
+    var frm = document.getElementById('clearForm');
+    if (frm){
+      // ارسال واقعی بدون trigger دوباره
+      frm.removeEventListener('submit', arguments.callee);
+      HTMLFormElement.prototype.submit.call(frm);
+    }
+  };
+})();
+</script>
 </body>
 </html>
