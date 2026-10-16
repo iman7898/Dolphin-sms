@@ -244,8 +244,21 @@ def panel_channel_send():
                     if tag:
                         final = f'{text}\n\n🏪 {tag}'
                     try:
-                        r = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/sendMessage',
-                                     json={'chat_id': ch_id, 'text': final}, timeout=20)
+                        # اگه عکس داشت → sendPhoto
+                        if img:
+                            # آدرس مطلق
+                            import os as _os
+                            if img.startswith('/'):
+                                base_url = request.host_url.rstrip('/')
+                                full_img = base_url + img
+                            else:
+                                full_img = img
+                            r = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/sendPhoto',
+                                         json={'chat_id': ch_id, 'photo': full_img, 'caption': final},
+                                         timeout=30)
+                        else:
+                            r = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/sendMessage',
+                                         json={'chat_id': ch_id, 'text': final}, timeout=20)
                         j = r.json()
                         if j.get('status') == 'OK':
                             log_post(uid, ch_id, text, tag, 'success')
@@ -263,5 +276,11 @@ def panel_channel_send():
     channels = get_shop_channels(uid)
     try: cs = get_user_settings(uid)
     except: cs = None
+    from database import is_premium as _is_prem
+    try:
+        is_prem = _is_prem(uid)
+    except:
+        is_prem = False
     return render_template('panel_channel_send.html',
-                           channels=channels, msg=msg, current_settings=cs)
+                           channels=channels, msg=msg,
+                           is_premium=is_prem, current_settings=cs)

@@ -7,7 +7,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
   padding-bottom:130px;direction:rtl;
-  background:linear-gradient(180deg,#0c2b4a 0%,#0f3f5f 40%,#0a3e5e 70%,#051f33 100%)}
+  background:linear-gradient(180deg,#0c2b4a,#0f3f5f 40%,#051f33)}
 .back-bar{display:flex;align-items:center;gap:12px;padding:16px;
   background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
   border-bottom:1.5px solid rgba(150,210,240,.4);position:sticky;top:0;z-index:100;
@@ -39,13 +39,60 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
 .btn:hover{transform:translateY(-2px);box-shadow:0 0 35px rgba(93,184,232,.9)}
 .btn.green{background:linear-gradient(135deg,#06d6a0,#0077b6);
   box-shadow:0 0 25px rgba(6,214,160,.6)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* اکشن‌بار */
+.action-bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.act-btn{flex:1;min-width:90px;padding:11px;border-radius:12px;border:1.5px solid;
+  cursor:pointer;font-family:Vazirmatn;font-size:12px;font-weight:900;
+  background:rgba(0,30,60,.5);transition:.3s;display:flex;
+  align-items:center;justify-content:center;gap:6px}
+.act-ai{color:#c77dff;border-color:#c77dff}
+.act-ai:hover{background:rgba(199,125,255,.15);box-shadow:0 0 15px rgba(199,125,255,.5)}
+.act-emoji{color:#ffd60a;border-color:#ffd60a}
+.act-emoji:hover{background:rgba(255,214,10,.15);box-shadow:0 0 15px rgba(255,214,10,.5)}
+.act-img{color:#06d6a0;border-color:#06d6a0}
+.act-img:hover{background:rgba(6,214,160,.15);box-shadow:0 0 15px rgba(6,214,160,.5)}
+.act-clear{color:#ff6b9d;border-color:#ff6b9d}
+.act-clear:hover{background:rgba(255,107,157,.15)}
+
+/* پیش‌نمایش عکس */
+.preview{display:none;margin-bottom:10px;position:relative;
+  border-radius:12px;overflow:hidden;border:1.5px solid rgba(93,184,232,.4)}
+.preview img{width:100%;display:block;max-height:250px;object-fit:cover}
+.preview-rm{position:absolute;top:8px;left:8px;width:32px;height:32px;
+  border-radius:50%;background:rgba(255,60,100,.9);color:#fff;border:none;
+  font-size:18px;font-weight:900;cursor:pointer}
+
+/* پیشنهاد ایموجی */
+.emoji-suggest{display:none;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.emoji-chip{padding:8px 12px;border-radius:10px;background:rgba(255,214,10,.1);
+  border:1px solid rgba(255,214,10,.4);color:#ffd60a;font-size:20px;
+  cursor:pointer;transition:.2s}
+.emoji-chip:hover{background:rgba(255,214,10,.25);transform:scale(1.1)}
+
+/* لودینگ */
+.loading{display:none;text-align:center;padding:20px;color:#90e0ef}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid rgba(144,224,239,.2);
+  border-top-color:#90e0ef;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* پرمیوم */
+.premium-badge{display:inline-block;padding:5px 12px;border-radius:10px;
+  background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a1a00;
+  font-size:11px;font-weight:900;margin-bottom:10px}
+.premium-lock{background:rgba(255,215,0,.1);border:1.5px dashed #ffd700;
+  border-radius:12px;padding:14px;text-align:center;color:#ffd700;
+  font-size:12.5px;line-height:1.8}
+.premium-lock a{color:#fff;background:linear-gradient(135deg,#ffd700,#ff8c00);
+  padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:900;
+  display:inline-block;margin-top:8px;font-size:12px}
+
 .ch-item{display:flex;justify-content:space-between;align-items:center;
   padding:12px;background:rgba(0,30,60,.5);border-radius:12px;margin-bottom:8px;
   border:1px solid rgba(93,184,232,.3)}
-.ch-info{flex:1}
 .ch-id{font-size:13px;font-weight:900;color:#90e0ef;font-family:monospace}
 .ch-title{font-size:11px;color:#a8c8e0;margin-top:3px}
-.ch-tag{font-size:11px;color:#ffd60a;margin-top:3px}
 .ch-del{padding:8px 12px;border-radius:8px;background:rgba(255,107,157,.15);
   border:1px solid rgba(255,107,157,.5);color:#ff8fab;font-family:Vazirmatn;
   font-size:11px;font-weight:900;cursor:pointer}
@@ -54,18 +101,14 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
 .msg.ok{background:rgba(6,214,160,.15);border:1.5px solid #06d6a0;color:#06d6a0}
 .msg.error{background:rgba(255,107,157,.15);border:1.5px solid #ff6b9d;color:#ff8fab}
 .empty{text-align:center;padding:30px;color:#7a9cb5;font-size:12.5px}
-.tag-badge{display:inline-block;padding:3px 10px;background:rgba(255,214,10,.15);
-  border:1px solid rgba(255,214,10,.5);border-radius:8px;color:#ffd60a;
-  font-size:11px;font-weight:900;margin-top:5px}
 .nw{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
   width:calc(100% - 30px);max-width:500px;height:66px;
   background:rgba(10,25,45,.9);backdrop-filter:blur(20px);
   border:1px solid rgba(150,210,240,.25);border-radius:20px;
   display:flex;align-items:center;justify-content:space-around;z-index:9999}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  color:#6b8aa3;text-decoration:none;font-size:10px;padding:8px 4px;border-radius:14px}
-.ni .ic{font-size:20px}
-.ni.act{background:rgba(93,184,232,.15);color:#90e0ef}
+  color:#6b8aa3;text-decoration:none;font-size:10px;padding:8px 4px}
+.ni.act{color:#90e0ef;background:rgba(93,184,232,.15);border-radius:14px}
 </style></head><body>
 
 <div class="back-bar">
@@ -75,25 +118,61 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
 
 <div class="container">
 
+  {% if is_premium %}
+  <div style="text-align:center"><span class="premium-badge">💎 پرمیوم فعال</span></div>
+  {% endif %}
+
   {% if msg %}
   <div class="msg {{ msg[0] }}">{{ msg[1] }}</div>
   {% endif %}
 
   <div class="card">
-    <div class="card-title">📝 متن پیام</div>
-    <form method="POST">
+    <div class="card-title">📝 نوشتن پست</div>
+    <form method="POST" id="sendForm" enctype="multipart/form-data">
       <input type="hidden" name="action" value="send">
+      <input type="hidden" name="image_url" id="imageUrlInput" value="">
+
       <label>📢 کانال مقصد</label>
       <select name="target_channel" required>
         <option value="">-- انتخاب کانال --</option>
         {% for ch in channels %}
-        <option value="{{ ch[1] }}">{{ ch[1] }} {% if ch[2] %}({{ ch[2] }}){% endif %}</option>
+        <option value="{{ ch[1] }}">{{ ch[1] }}{% if ch[2] %} ({{ ch[2] }}){% endif %}</option>
         {% endfor %}
       </select>
+
+      {% if is_premium %}
+      <div class="action-bar">
+        <button type="button" class="act-btn act-ai" onclick="aiEnhance()">🤖 قوی‌سازی با AI</button>
+        <button type="button" class="act-btn act-emoji" onclick="emojiSuggest()">🎨 ایموجی</button>
+        <button type="button" class="act-btn act-img" onclick="document.getElementById('imgInput').click()">📷 عکس</button>
+      </div>
+      <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="uploadImage(this)">
+      {% else %}
+      <div class="premium-lock">
+        🔒 قوی‌سازی با AI، افزودن عکس و ایموجی هوشمند<br>
+        فقط برای کاربران پرمیوم
+        <br><a href="/panel/premium">💎 فعال‌سازی پرمیوم</a>
+      </div>
+      {% endif %}
+
+      <div class="preview" id="previewBox">
+        <img id="previewImg" src="" alt="">
+        <button type="button" class="preview-rm" onclick="removeImage()">✕</button>
+      </div>
+
+      <div class="emoji-suggest" id="emojiBox"></div>
+
       <label>💬 متن پیام</label>
-      <textarea name="text" placeholder="متن پیام خود را بنویسید..." required></textarea>
+      <textarea name="text" id="textInput" placeholder="متن پیام خود را بنویسید..." required></textarea>
+
+      <div class="loading" id="loading">
+        <div class="spin"></div>
+        <div style="margin-top:10px;font-size:12px">در حال پردازش...</div>
+      </div>
+
       <label>🏷 تگ (اختیاری)</label>
-      <input type="text" name="tag" placeholder="@dolphin_shop" value="{{ channels[0][3] if channels and channels[0][3] else '' }}">
+      <input type="text" name="tag" placeholder="@dolphin_shop">
+
       <button type="submit" class="btn green">📤 ارسال به کانال</button>
     </form>
   </div>
@@ -117,10 +196,9 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
     {% if channels %}
       {% for ch in channels %}
       <div class="ch-item">
-        <div class="ch-info">
+        <div>
           <div class="ch-id">{{ ch[1] }}</div>
           {% if ch[2] %}<div class="ch-title">{{ ch[2] }}</div>{% endif %}
-          {% if ch[3] %}<div class="ch-tag">🏷 {{ ch[3] }}</div>{% endif %}
         </div>
         <form method="POST" style="margin:0" onsubmit="return confirm('حذف؟')">
           <input type="hidden" name="action" value="del_channel">
@@ -134,23 +212,96 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
     {% endif %}
   </div>
 
-  <div class="card">
-    <div class="card-title">💡 راهنما</div>
-    <div style="font-size:12px;line-height:1.9;color:#a8c8e0">
-      1️⃣ کانالت رو اضافه کن (آیدی با <b style="color:#90e0ef">@</b>)<br>
-      2️⃣ ربات <b>@Dolphin_sms_bot</b> رو توی کانال <b>ادمین</b> کن<br>
-      3️⃣ متن بنویس و ارسال کن<br>
-      4️⃣ پیام با تگ تو، توی کانال منتشر می‌شه ✅
-    </div>
-  </div>
-
 </div>
 
 <div class="nw">
-  <a class="ni" href="/panel/dashboard"><span class="ic">🏠</span><span>خانه</span></a>
-  <a class="ni" href="/panel/send"><span class="ic">📤</span><span>ارسال</span></a>
-  <a class="ni act" href="/panel/channel-send"><span class="ic">📢</span><span>کانال</span></a>
-  <a class="ni" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+  <a class="ni" href="/panel/dashboard"><span>🏠</span><span>خانه</span></a>
+  <a class="ni" href="/panel/send"><span>📤</span><span>ارسال</span></a>
+  <a class="ni act" href="/panel/channel-send"><span>📢</span><span>کانال</span></a>
+  <a class="ni" href="/panel/premium"><span>💎</span><span>پرمیوم</span></a>
 </div>
+
+<script>
+function showLoading() { document.getElementById('loading').style.display = 'block'; }
+function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+
+function aiEnhance() {
+  var t = document.getElementById('textInput').value.trim();
+  if (!t) { alert('اول متن رو بنویس'); return; }
+  showLoading();
+  fetch('/panel/channel-send/ai', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: t})
+  })
+  .then(r => r.json())
+  .then(d => {
+    hideLoading();
+    if (d.result) {
+      document.getElementById('textInput').value = d.result;
+    } else {
+      alert('خطا: ' + (d.error || 'نامشخص'));
+    }
+  })
+  .catch(e => { hideLoading(); alert('خطا: ' + e); });
+}
+
+function emojiSuggest() {
+  var t = document.getElementById('textInput').value.trim();
+  if (!t) { alert('اول متن رو بنویس'); return; }
+  var word = t.split(' ')[0];
+  showLoading();
+  fetch('/panel/channel-send/emoji', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({word: word})
+  })
+  .then(r => r.json())
+  .then(d => {
+    hideLoading();
+    if (d.emoji) {
+      var box = document.getElementById('emojiBox');
+      box.style.display = 'flex';
+      var chip = document.createElement('div');
+      chip.className = 'emoji-chip';
+      chip.textContent = d.emoji;
+      chip.onclick = function() {
+        var ta = document.getElementById('textInput');
+        ta.value = d.emoji + ' ' + ta.value;
+        box.style.display = 'none';
+      };
+      box.innerHTML = '';
+      box.appendChild(chip);
+    }
+  })
+  .catch(e => { hideLoading(); alert('خطا: ' + e); });
+}
+
+function uploadImage(inp) {
+  if (!inp.files || !inp.files[0]) return;
+  showLoading();
+  var fd = new FormData();
+  fd.append('image', inp.files[0]);
+  fetch('/panel/channel-send/upload', { method: 'POST', body: fd })
+  .then(r => r.json())
+  .then(d => {
+    hideLoading();
+    if (d.url) {
+      document.getElementById('imageUrlInput').value = d.url;
+      document.getElementById('previewImg').src = d.url;
+      document.getElementById('previewBox').style.display = 'block';
+    } else {
+      alert('خطا: ' + (d.error || 'نامشخص'));
+    }
+  })
+  .catch(e => { hideLoading(); alert('خطا: ' + e); });
+}
+
+function removeImage() {
+  document.getElementById('imageUrlInput').value = '';
+  document.getElementById('previewBox').style.display = 'none';
+  document.getElementById('imgInput').value = '';
+}
+</script>
 
 </body></html>
