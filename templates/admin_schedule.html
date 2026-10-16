@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>زمان‌بندی پست</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  padding-bottom:80px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a,#0f3f5f 40%,#051f33)}
+.back-bar{display:flex;align-items:center;gap:12px;padding:16px;
+  background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
+  border-bottom:1.5px solid rgba(150,210,240,.4);position:sticky;top:0;z-index:100}
+.back-btn{width:42px;height:42px;border-radius:12px;background:rgba(93,184,232,.2);
+  border:1.5px solid rgba(144,224,239,.5);display:flex;align-items:center;
+  justify-content:center;color:#90e0ef;text-decoration:none;font-size:20px;font-weight:900}
+.page-title{font-size:18px;font-weight:900;color:#e0f4ff;flex:1;text-align:center;
+  margin-left:-42px;text-shadow:0 0 12px rgba(144,224,239,.6)}
+.container{padding:14px;max-width:700px;margin:0 auto}
+.card{background:linear-gradient(135deg,rgba(0,50,90,.65),rgba(0,30,60,.45));
+  border:1.5px solid rgba(150,210,240,.4);border-radius:20px;padding:18px;
+  backdrop-filter:blur(15px);margin-bottom:14px;
+  box-shadow:0 4px 20px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08)}
+.card-title{font-size:15px;font-weight:900;color:#90e0ef;margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px dashed rgba(144,224,239,.3);text-align:center}
+label{display:block;font-size:12.5px;color:#90e0ef;font-weight:800;margin-bottom:6px}
+input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;
+  background:rgba(0,30,60,.6);color:#e0f4ff;
+  border:1.5px solid rgba(93,184,232,.4);font-family:Vazirmatn,sans-serif;
+  font-size:13.5px;margin-bottom:12px;transition:.3s}
+textarea{min-height:90px;resize:vertical;line-height:1.7;direction:rtl;text-align:right}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#5db8e8;
+  box-shadow:0 0 20px rgba(93,184,232,.5)}
+.btn{width:100%;padding:14px;border-radius:14px;border:none;cursor:pointer;
+  font-family:Vazirmatn;font-size:14px;font-weight:900;
+  background:linear-gradient(135deg,#5db8e8,#0077b6);color:#fff;
+  box-shadow:0 0 25px rgba(93,184,232,.6);transition:.3s}
+.btn:hover{transform:translateY(-2px)}
+.help{font-size:11.5px;color:#a8c8e0;background:rgba(255,214,10,.08);
+  border-right:3px solid #ffd60a;padding:12px;border-radius:10px;
+  margin-bottom:14px;line-height:1.9}
+.help b{color:#ffd60a}
+
+/* لیست */
+.sc-item{background:rgba(0,30,60,.5);border:1.5px solid rgba(93,184,232,.3);
+  border-radius:14px;padding:14px;margin-bottom:10px;position:relative;
+  border-right:4px solid #5db8e8}
+.sc-item.off{border-right-color:#6b8aa3;opacity:.55}
+.sc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sc-time{font-size:20px;font-weight:900;color:#ffd60a;font-family:monospace;
+  background:rgba(255,214,10,.1);padding:4px 12px;border-radius:10px;
+  direction:ltr}
+.sc-badge{font-size:10px;padding:3px 10px;border-radius:8px;
+  background:rgba(6,214,160,.2);color:#06d6a0;border:1px solid rgba(6,214,160,.5);
+  font-weight:900}
+.sc-badge.off{background:rgba(107,138,163,.2);color:#a8c8e0;
+  border-color:rgba(107,138,163,.5)}
+.sc-row{display:flex;justify-content:space-between;font-size:12px;
+  margin-bottom:5px;gap:10px}
+.sc-lbl{color:#90e0ef;font-weight:800;flex-shrink:0}
+.sc-val{color:#e0f4ff;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:11.5px}
+.sc-headline{background:rgba(0,20,40,.5);padding:10px;border-radius:8px;
+  margin:8px 0;font-size:12px;line-height:1.6;color:#c8e8ff;
+  border-right:2px solid #90e0ef;max-height:60px;overflow:hidden}
+.sc-actions{display:flex;gap:6px;margin-top:10px}
+.sc-btn{flex:1;padding:8px;border-radius:8px;border:1.5px solid;
+  font-family:Vazirmatn;font-size:11.5px;font-weight:900;cursor:pointer;
+  background:transparent;transition:.3s}
+.btn-tog{color:#06d6a0;border-color:#06d6a0}
+.btn-tog:hover{background:rgba(6,214,160,.15)}
+.btn-del{color:#ff6b9d;border-color:#ff6b9d}
+.btn-del:hover{background:rgba(255,107,157,.15)}
+
+/* لاگ */
+.log-item{padding:10px;border-bottom:1px dashed rgba(144,224,239,.15);
+  font-size:11.5px;line-height:1.6}
+.log-item:last-child{border:none}
+.log-ok{color:#06d6a0}
+.log-err{color:#ff8fab}
+.log-time{color:#7a9cb5;font-size:10px;margin-top:3px}
+.empty{text-align:center;padding:30px;color:#7a9cb5;font-size:12.5px}
+.flash{padding:12px;border-radius:12px;margin-bottom:12px;text-align:center;
+  font-size:13px;font-weight:900}
+.flash.ok{background:rgba(6,214,160,.15);border:1.5px solid #06d6a0;color:#06d6a0}
+.flash.error{background:rgba(255,107,157,.15);border:1.5px solid #ff6b9d;color:#ff8fab}
+</style></head><body>
+
+<div class="back-bar">
+  <a href="/admin/dashboard" class="back-btn">→</a>
+  <div class="page-title">⏰ زمان‌بندی پست خودکار</div>
+</div>
+
+<div class="container">
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+  {% for cat, m in msgs %}
+  <div class="flash {{ 'ok' if cat=='ok' else 'error' }}">{{ m }}</div>
+  {% endfor %}
+  {% endwith %}
+
+  <div class="help">
+    <b>📖 چطور کار می‌کنه؟</b><br>
+    1️⃣ کانال رو بذار (آیدی با @)<br>
+    2️⃣ فقط <b>سرفصل</b> رو بنویس (مثلاً «قفل چهار لول»)<br>
+    3️⃣ ساعت رو بذار (مثلاً 08:00)<br>
+    4️⃣ AI خودش متن کامل می‌سازه و می‌فرسته به کانال ✅
+  </div>
+
+  <div class="card">
+    <div class="card-title">➕ افزودن زمان‌بندی</div>
+    <form method="POST">
+      <input type="hidden" name="action" value="add">
+      <label>📢 آیدی کانال</label>
+      <input type="text" name="channel_id" placeholder="@my_channel" required>
+      <label>⏰ ساعت (فرمت 24h)</label>
+      <input type="time" name="post_time" required>
+      <label>📝 عنوان (برای خودت)</label>
+      <input type="text" name="title" placeholder="پست صبحگاهی">
+      <label>💡 سرفصل (AI متن کامل می‌سازه)</label>
+      <textarea name="headline" placeholder="مثلا: قفل چهار لول، نکات امنیتی، چرا مهمه" required></textarea>
+      <label>🏷 تگ (اختیاری)</label>
+      <input type="text" name="tag" placeholder="@dolphin_shop">
+      <label>📅 روزها</label>
+      <select name="days">
+        <option value="daily">هر روز</option>
+        <option value="weekdays">شنبه تا چهارشنبه</option>
+        <option value="weekend">پنجشنبه و جمعه</option>
+      </select>
+      <button type="submit" class="btn">⏰ ثبت زمان‌بندی</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 زمان‌بندی‌های فعال</div>
+    {% if schedules %}
+      {% for s in schedules %}
+      <div class="sc-item {% if not s[8] %}off{% endif %}">
+        <div class="sc-head">
+          <span class="sc-time">{{ s[4] }}</span>
+          <span class="sc-badge {% if not s[8] %}off{% endif %}">
+            {% if s[8] %}✅ فعال{% else %}⏸ خاموش{% endif %}
+          </span>
+        </div>
+        <div class="sc-row"><span class="sc-lbl">📢 کانال:</span><span class="sc-val">{{ s[2] }}</span></div>
+        {% if s[5] %}<div class="sc-row"><span class="sc-lbl">📝 عنوان:</span><span class="sc-val">{{ s[5] }}</span></div>{% endif %}
+        <div class="sc-headline">{{ s[3] }}</div>
+        {% if s[9] %}<div class="sc-row"><span class="sc-lbl">🕐 آخرین اجرا:</span><span class="sc-val">{{ s[9] }}</span></div>{% endif %}
+        <div class="sc-actions">
+          <form method="POST" style="flex:1;margin:0">
+            <input type="hidden" name="action" value="toggle">
+            <input type="hidden" name="id" value="{{ s[0] }}">
+            <button type="submit" class="sc-btn btn-tog">{% if s[8] %}⏸ خاموش{% else %}▶️ روشن{% endif %}</button>
+          </form>
+          <form method="POST" style="flex:1;margin:0" onsubmit="return confirm('حذف؟')">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="{{ s[0] }}">
+            <button type="submit" class="sc-btn btn-del">🗑 حذف</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">📭 هنوز زمان‌بندی نداری</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-title">📜 آخرین اجراها</div>
+    {% if logs %}
+      {% for l in logs %}
+      <div class="log-item">
+        <div class="{% if l[5]=='success' %}log-ok{% else %}log-err{% endif %}">
+          {% if l[5]=='success' %}✅{% else %}❌{% endif %} {{ l[3][:50] }}
+        </div>
+        <div class="log-time">🕐 {{ l[6] }} — {{ l[2] }}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">📭 هنوز چیزی اجرا نشده</div>
+    {% endif %}
+  </div>
+
+</div>
+
+</body></html>

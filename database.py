@@ -4202,3 +4202,75 @@ def activate_premium(shop_id, days=30):
 def is_premium(shop_id):
     p = get_premium(shop_id)
     return p['active']
+
+
+# ============ CHANNEL SCHEDULE ============
+def add_schedule(shop_id, channel_id, headline, post_time, title='', tag='', days='daily'):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""INSERT INTO channel_schedule
+                 (shop_id, channel_id, headline, post_time, title, tag, days)
+                 VALUES (?,?,?,?,?,?,?)""",
+              (shop_id, channel_id, headline, post_time, title, tag, days))
+    sid = c.lastrowid
+    conn.commit(); conn.close()
+    return sid
+
+def get_schedules(shop_id=None, active_only=False):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    q = "SELECT id, shop_id, channel_id, headline, post_time, title, tag, days, active, last_run FROM channel_schedule"
+    params = []
+    where = []
+    if shop_id:
+        where.append("shop_id=?")
+        params.append(shop_id)
+    if active_only:
+        where.append("active=1")
+    if where:
+        q += " WHERE " + " AND ".join(where)
+    q += " ORDER BY post_time ASC"
+    c.execute(q, params)
+    rows = c.fetchall(); conn.close()
+    return rows
+
+def toggle_schedule(sid, shop_id=None):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    if shop_id:
+        c.execute("UPDATE channel_schedule SET active = 1 - active WHERE id=? AND shop_id=?", (sid, shop_id))
+    else:
+        c.execute("UPDATE channel_schedule SET active = 1 - active WHERE id=?", (sid,))
+    conn.commit(); conn.close()
+
+def delete_schedule(sid, shop_id=None):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    if shop_id:
+        c.execute("DELETE FROM channel_schedule WHERE id=? AND shop_id=?", (sid, shop_id))
+    else:
+        c.execute("DELETE FROM channel_schedule WHERE id=?", (sid,))
+    conn.commit(); conn.close()
+
+def mark_schedule_run(sid):
+    from datetime import datetime as _d
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("UPDATE channel_schedule SET last_run=? WHERE id=?",
+              (_d.now().strftime('%Y-%m-%d %H:%M:%S'), sid))
+    conn.commit(); conn.close()
+
+def log_schedule(sid, ch_id, headline, result, status):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("INSERT INTO channel_schedule_log (schedule_id, channel_id, headline, result, status) VALUES (?,?,?,?,?)",
+              (sid, ch_id, headline, result, status))
+    conn.commit(); conn.close()
+
+def get_schedule_logs(limit=50):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""SELECT id, schedule_id, channel_id, headline, result, status, created_at
+                 FROM channel_schedule_log ORDER BY id DESC LIMIT ?""", (limit,))
+    rows = c.fetchall(); conn.close()
+    return rows
