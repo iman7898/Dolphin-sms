@@ -127,6 +127,18 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#5db8e8;
         <option value="weekdays">شنبه تا چهارشنبه</option>
         <option value="weekend">پنجشنبه و جمعه</option>
       </select>
+      <label>🖼 عکس (اختیاری)</label>
+      <input type="file" id="imgInput" accept="image/*" style="padding:8px"
+             onchange="uploadImg(this)">
+      <input type="hidden" name="image" id="imgUrlInput" value="">
+      <div id="imgPreview" style="display:none;margin-bottom:12px;position:relative;
+        border-radius:12px;overflow:hidden;border:1.5px solid rgba(93,184,232,.4)">
+        <img id="previewImg" style="width:100%;display:block;max-height:200px;object-fit:cover">
+        <button type="button" onclick="rmImg()"
+          style="position:absolute;top:8px;left:8px;width:32px;height:32px;
+          border-radius:50%;background:rgba(255,60,100,.9);color:#fff;border:none;
+          font-size:16px;font-weight:900;cursor:pointer">✕</button>
+      </div>
       <button type="submit" class="btn">⏰ ثبت زمان‌بندی</button>
     </form>
   </div>
@@ -183,4 +195,27 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#5db8e8;
 
 </div>
 
+
+<script>
+function uploadImg(inp){
+  if (!inp.files || !inp.files[0]) return;
+  var fd = new FormData();
+  fd.append('image', inp.files[0]);
+  fetch('/admin/schedule/upload', {method:'POST', body:fd})
+    .then(r => r.json())
+    .then(d => {
+      if (d.url){
+        document.getElementById('imgUrlInput').value = d.url;
+        document.getElementById('previewImg').src = d.url;
+        document.getElementById('imgPreview').style.display = 'block';
+      } else alert('خطا: ' + (d.error || '?'));
+    })
+    .catch(e => alert('خطا: ' + e));
+}
+function rmImg(){
+  document.getElementById('imgUrlInput').value = '';
+  document.getElementById('imgPreview').style.display = 'none';
+  document.getElementById('imgInput').value = '';
+}
+</script>
 </body></html>
