@@ -78,43 +78,40 @@ def run_recruit_task(user_id, payload, messenger, token, channel):
 
 
 def run_content_task(user_id, payload, messenger, token, target):
-    """محتوا — فوروارد از کانال‌های منبع با فیلتر کلیدواژه"""
+    """محتوا - فوروارد از کانال منبع با فیلتر کلیدواژه"""
     bot = get_bot_instance(messenger, token)
     if not bot:
         return False, "آداپتر پیدا نشد"
-
     try:
         me = bot.get_me()
         if not me:
             return False, "اتصال ناموفق"
-
         sources_raw = payload.get('sources', '') or ''
         sources = [s.strip() for s in sources_raw.split(',') if s.strip()]
         keywords = [k.strip() for k in (payload.get('keywords', '') or '').split(',') if k.strip()]
         real_target = payload.get('target') or target
-
         if not sources:
             return False, "کانال منبعی تعریف نشده"
         if not real_target:
             return False, "کانال مقصد تعریف نشده"
-
-        # پیام تست به کانال مقصد
-        test_msg = f"📝 ربات محتوا فعال شد
-📥 منابع: {', '.join(sources[:3])}
-🎯 مقصد: {real_target}"
+        lines = [
+            "📝 ربات محتوا فعال شد",
+            "📥 منابع: " + ', '.join(sources[:3]),
+            "🎯 مقصد: " + real_target,
+        ]
         if keywords:
-            test_msg += f"
-🔍 کلیدواژه: {', '.join(keywords)}"
+            lines.append("🔍 کلیدواژه: " + ', '.join(keywords))
+        test_msg = chr(10).join(lines)
         r = bot.send_message(real_target, test_msg)
         if r:
             ok = (r.get('ok') is not False) and (r.get('status') != 'error') and (r.get('status') != 'INVALID_ACCESS')
             if ok:
                 return True, f"ربات محتوا فعال شد ({len(sources)} کانال منبع)"
             else:
-                return False, f"خطا: {r.get('message') or r.get('description') or r.get('dev_message', '')}"
+                return False, "خطا: " + str(r.get('message') or r.get('description') or r.get('dev_message', ''))
         return False, "بدون پاسخ"
     except Exception as e:
-        return False, f"استثنا: {e}"
+        return False, "استثنا: " + str(e)
 
 
 def process_task(task):
