@@ -432,6 +432,77 @@ def extract_msg(u):
     return None, None, None
 
 
+
+
+# ============ CHANNEL RELAY ============
+def get_active_relays():
+    conn = db(); c = conn.cursor()
+    try:
+        c.execute("SELECT id, shop_id, source_channel, dest_channel, tag FROM channel_relay WHERE active=1")
+        rows = c.fetchall()
+    except Exception:
+        rows = []
+    conn.close()
+    return rows
+
+
+def update_relay_offset(rid, off):
+    conn = db(); c = conn.cursor()
+    try:
+        c.execute("UPDATE channel_relay SET last_offset=? WHERE id=?", (str(off), rid))
+        conn.commit()
+    except Exception:
+        pass
+    conn.close()
+
+
+def get_relay_offset(rid):
+    conn = db(); c = conn.cursor()
+    try:
+        c.execute("SELECT last_offset FROM channel_relay WHERE id=?", (rid,))
+        r = c.fetchone()
+        off = r[0] if r else None
+    except Exception:
+        off = None
+    conn.close()
+    return off
+
+
+def _normalize_channel(ch):
+    """نرمال‌سازی آیدی کانال"""
+    ch = (ch or '').strip()
+    if ch.startswith('@'):
+        return ch[1:].lower()
+    return ch
+
+
+def try_forward_relay(bot, m, chat_id, text, sender_name):
+    """اگه پیام از کانال مبدأ بود، فوروارد کن به مقصد"""
+    if not chat_id:
+        return False
+    cid_str = str(chat_id)
+    cid_clean = cid_str.lstrip('-')
+    relays = get_active_relays()
+    for rid, shop_id, src, dst, tag in relays:
+        src_norm = _normalize_channel(src)
+        # چک کردن مطابقت
+        if not (src_norm == cid_str.lower() or
+                src_norm == cid_clean.lower() or
+                src_norm in cid_str.lower()):
+            continue
+        # ارسال به مقصد
+        try:
+            new_text = text or ''
+            if tag:
+                new_text = f'{new_text}\n\n🏪 {tag}'
+            r = bot.send_message(dst, new_text)
+            print(f'[relay] {src} → {dst} | {str(text)[:40]}', flush=True)
+            return True
+        except Exception as e:
+            print(f'[relay] err: {e}', flush=True)
+    return False
+
+
 def poll(bot, m):
     off = load_offset(m)
     print("[" + m + "] Poll (off=" + str(off) + ")", flush=True)
@@ -458,6 +529,12 @@ def poll(bot, m):
                     continue
                 save_member(m, cid, fname or "")
                 if not txt: continue
+                # 🔄 اول چک کن کانال مبدأ هست یا نه
+                try:
+                    if try_forward_relay(bot, m, cid, txt, fname):
+                        continue
+                except Exception as e:
+                    print("[" + m + "] relay err: " + str(e)[:80], flush=True)
                 try:
                     handle(bot, m, cid, txt, fname)
                 except Exception as e:

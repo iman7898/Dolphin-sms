@@ -4040,3 +4040,49 @@ def get_all_shops_public():
     rows = c.fetchall()
     conn.close()
     return rows
+
+
+# ============ CHANNEL RELAY ============
+def add_channel_relay(shop_id, src, dst, tag=''):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""INSERT INTO channel_relay (shop_id, source_channel, dest_channel, tag)
+                 VALUES (?, ?, ?, ?)""", (shop_id, src, dst, tag))
+    rid = c.lastrowid
+    conn.commit(); conn.close()
+    return rid
+
+def get_shop_relays(shop_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT * FROM channel_relay WHERE shop_id=? ORDER BY id DESC", (shop_id,))
+    rows = c.fetchall(); conn.close()
+    return rows
+
+def get_all_relays(active_only=True):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    if active_only:
+        c.execute("SELECT * FROM channel_relay WHERE active=1")
+    else:
+        c.execute("SELECT * FROM channel_relay ORDER BY id DESC")
+    rows = c.fetchall(); conn.close()
+    return rows
+
+def update_relay_offset(relay_id, offset):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("UPDATE channel_relay SET last_offset=? WHERE id=?", (offset, relay_id))
+    conn.commit(); conn.close()
+
+def toggle_relay(relay_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("UPDATE channel_relay SET active = 1 - active WHERE id=?", (relay_id,))
+    conn.commit(); conn.close()
+
+def delete_relay(relay_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("DELETE FROM channel_relay WHERE id=?", (relay_id,))
+    conn.commit(); conn.close()

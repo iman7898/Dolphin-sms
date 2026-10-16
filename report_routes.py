@@ -156,3 +156,35 @@ def panel_messages_clear():
     c.execute("DELETE FROM sent_sms WHERE user_id=? AND status IN ('error','failed')", (uid,))
     conn.commit(); conn.close()
     return redirect('/panel/messages')
+
+
+# ============ CHANNEL RELAY ============
+@report_bp.route('/panel/channel-relay', methods=['GET', 'POST'])
+def panel_channel_relay():
+    if 'user_id' not in session:
+        return redirect('/panel/login')
+    uid = session['user_id']
+    from database import (add_channel_relay, get_shop_relays,
+                          toggle_relay, delete_relay, get_user_settings)
+
+    if request.method == 'POST':
+        action = request.form.get('action', 'add')
+        if action == 'add':
+            src = (request.form.get('source') or '').strip()
+            dst = (request.form.get('dest') or '').strip()
+            tag = (request.form.get('tag') or '').strip()
+            if src and dst:
+                add_channel_relay(uid, src, dst, tag)
+        elif action == 'toggle':
+            rid = int(request.form.get('id') or 0)
+            if rid: toggle_relay(rid)
+        elif action == 'delete':
+            rid = int(request.form.get('id') or 0)
+            if rid: delete_relay(rid)
+        return redirect('/panel/channel-relay')
+
+    relays = get_shop_relays(uid)
+    try: cs = get_user_settings(uid)
+    except: cs = None
+    return render_template('panel_channel_relay.html',
+                           relays=relays, current_settings=cs)

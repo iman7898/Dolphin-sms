@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>فوروارد کانال</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  padding-bottom:120px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a 0%,#0f3f5f 40%,#0a3e5e 70%,#051f33 100%);
+  background-attachment:scroll}
+
+.back-bar{display:flex;align-items:center;gap:12px;padding:16px;
+  background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
+  border-bottom:1.5px solid rgba(150,210,240,.4);position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(15px)}
+.back-btn{width:42px;height:42px;border-radius:12px;background:rgba(93,184,232,.2);
+  border:1.5px solid rgba(144,224,239,.5);display:flex;align-items:center;
+  justify-content:center;color:#90e0ef;text-decoration:none;font-size:20px;font-weight:900}
+.page-title{font-size:18px;font-weight:900;color:#e0f4ff;
+  text-shadow:0 0 12px rgba(144,224,239,.6);flex:1;text-align:center;margin-left:-42px}
+
+.container{padding:16px;max-width:600px;margin:0 auto}
+
+.card{background:linear-gradient(135deg,rgba(0,50,90,.6),rgba(0,30,60,.4));
+  border:1.5px solid rgba(150,210,240,.4);border-radius:20px;padding:20px;
+  backdrop-filter:blur(15px);margin-bottom:16px;
+  box-shadow:0 4px 25px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08)}
+.card-title{font-size:14px;font-weight:900;color:#90e0ef;margin-bottom:14px;
+  letter-spacing:1px;padding-bottom:10px;
+  border-bottom:1px dashed rgba(144,224,239,.3);text-align:center}
+
+label{display:block;font-size:12.5px;color:#90e0ef;font-weight:800;
+  margin-bottom:6px;text-shadow:0 0 8px rgba(144,224,239,.4)}
+input{width:100%;padding:13px 14px;border-radius:12px;
+  background:rgba(0,30,60,.6);color:#e0f4ff;
+  border:1.5px solid rgba(93,184,232,.4);font-family:inherit;font-size:13.5px;
+  margin-bottom:14px;transition:.3s}
+input::placeholder{color:rgba(144,224,239,.4)}
+input:focus{outline:none;border-color:#5db8e8;background:rgba(0,50,90,.7);
+  box-shadow:0 0 20px rgba(93,184,232,.5)}
+
+.btn-add{width:100%;padding:15px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#5db8e8,#0077b6);color:#fff;
+  font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;
+  box-shadow:0 0 25px rgba(93,184,232,.6);transition:.3s}
+.btn-add:hover{transform:translateY(-2px);box-shadow:0 0 35px rgba(93,184,232,.8)}
+
+.relay{background:linear-gradient(135deg,rgba(0,40,80,.5),rgba(0,25,50,.35));
+  border:1px solid rgba(150,210,240,.3);border-radius:16px;
+  padding:14px;margin-bottom:10px;position:relative;
+  border-right:3px solid #5db8e8}
+.relay.off{border-right-color:#6b8aa3;opacity:.6}
+.relay-row{display:flex;justify-content:space-between;margin-bottom:8px;
+  font-size:12.5px;gap:10px}
+.relay-lbl{color:#90e0ef;font-weight:800;flex-shrink:0}
+.relay-val{color:#e0f4ff;font-family:monospace;direction:ltr;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.relay-tag{color:#ffd60a;font-weight:900;margin-top:6px;font-size:12.5px}
+.relay-actions{display:flex;gap:8px;margin-top:12px}
+.btn-tog,.btn-del{flex:1;padding:9px;border-radius:10px;
+  border:1.5px solid;font-family:inherit;font-size:12px;font-weight:900;
+  cursor:pointer;background:transparent;transition:.3s}
+.btn-tog{color:#06d6a0;border-color:#06d6a0}
+.btn-tog:hover{background:rgba(6,214,160,.15)}
+.btn-del{color:#ff6b9d;border-color:#ff6b9d}
+.btn-del:hover{background:rgba(255,107,157,.15)}
+
+.empty{text-align:center;padding:40px 20px;color:#90e0ef;font-size:13px}
+.empty-ic{font-size:60px;display:block;margin-bottom:12px;opacity:.5}
+
+.help{font-size:11.5px;color:#a8c8e0;background:rgba(0,30,60,.5);
+  padding:12px;border-radius:12px;margin-bottom:14px;line-height:1.8;
+  border-right:3px solid #ffd60a}
+.help b{color:#ffd60a}
+
+.nw{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 30px);max-width:500px;height:66px;
+  background:rgba(10,25,45,.9);backdrop-filter:blur(20px);
+  border:1px solid rgba(150,210,240,.25);border-radius:20px;
+  display:flex;align-items:center;justify-content:space-around;z-index:9999}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#6b8aa3;text-decoration:none;font-size:10px;padding:8px 4px;border-radius:14px}
+.ni .ic{font-size:20px;filter:grayscale(.5) brightness(.85)}
+.ni.act{background:rgba(93,184,232,.15)}
+.ni.act .ic{filter:none;color:#90e0ef}
+.ni.act span:last-child{color:#90e0ef;font-weight:bold}
+</style></head><body>
+
+<div class="back-bar">
+  <a href="/panel/dashboard" class="back-btn">→</a>
+  <div class="page-title">🔄 فوروارد کانال</div>
+</div>
+
+<div class="container">
+
+  <div class="help">
+    <b>📖 چطور کار می‌کنه؟</b><br>
+    ربات ما پیام‌های کانال مبدأ رو می‌گیره و با تگ شما توی کانال مقصد فوروارد می‌کنه.<br><br>
+    <b>⚠️ نکات مهم:</b><br>
+    1️⃣ ربات باید توی هر دو کانال <b>ادمین</b> باشه<br>
+    2️⃣ آیدی کانال رو با <b>@</b> بذار (مثلاً <code style="direction:ltr">@my_channel</code>)<br>
+    3️⃣ برای کانال خصوصی، آیدی عددی بذار (مثل <code style="direction:ltr">-1001234567890</code>)
+  </div>
+
+  <div class="card">
+    <div class="card-title">➕ افزودن فوروارد جدید</div>
+    <form method="POST">
+      <input type="hidden" name="action" value="add">
+      <label>📤 آیدی کانال مبدأ</label>
+      <input type="text" name="source" placeholder="@source_channel" required style="direction:ltr">
+      <label>📥 آیدی کانال مقصد (خودت)</label>
+      <input type="text" name="dest" placeholder="@my_shop_channel" required style="direction:ltr">
+      <label>🏷 تگ اضافه شده</label>
+      <input type="text" name="tag" placeholder="@iman_shop یا نام مغازه">
+      <button type="submit" class="btn-add">🚀 افزودن فوروارد</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 فورواردهای فعال</div>
+    {% if relays %}
+      {% for r in relays %}
+      <div class="relay {% if not r[5] %}off{% endif %}">
+        <div class="relay-row"><span class="relay-lbl">📤 مبدأ:</span><span class="relay-val">{{ r[2] }}</span></div>
+        <div class="relay-row"><span class="relay-lbl">📥 مقصد:</span><span class="relay-val">{{ r[3] }}</span></div>
+        {% if r[4] %}<div class="relay-tag">🏷 {{ r[4] }}</div>{% endif %}
+        <div class="relay-row" style="margin-top:8px;margin-bottom:0">
+          <span class="relay-lbl">وضعیت:</span>
+          <span class="relay-val">{% if r[5] %}✅ فعال{% else %}⏸ غیرفعال{% endif %}</span>
+        </div>
+        <div class="relay-actions">
+          <form method="POST" style="flex:1;margin:0">
+            <input type="hidden" name="action" value="toggle">
+            <input type="hidden" name="id" value="{{ r[0] }}">
+            <button type="submit" class="btn-tog">{% if r[5] %}⏸ خاموش{% else %}▶️ روشن{% endif %}</button>
+          </form>
+          <form method="POST" style="flex:1;margin:0" onsubmit="return confirm('حذف بشه؟')">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="{{ r[0] }}">
+            <button type="submit" class="btn-del">🗑 حذف</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <span class="empty-ic">📭</span>
+        هنوز فورواردی اضافه نکردی
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="nw">
+  <a class="ni" href="/panel/dashboard"><span class="ic">🏠</span><span>خانه</span></a>
+  <a class="ni" href="/panel/send"><span class="ic">📤</span><span>ارسال</span></a>
+  <a class="ni act" href="/panel/channel-relay"><span class="ic">🔄</span><span>فوروارد</span></a>
+  <a class="ni" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
+</div>
+
+</body></html>

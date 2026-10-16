@@ -257,11 +257,7 @@ window.addEventListener('load', function(){
 
 
 
-<style id="f">
-html,body{overflow-y:auto!important;height:auto!important;max-height:none!important}
-body{overflow-x:clip!important;padding-bottom:110px!important}
-.bottom-nav,.nw,.nav-wrap{position:fixed!important;bottom:10px!important;left:50%!important;transform:translateX(-50%)!important;z-index:9999!important;width:calc(100% - 30px)!important;max-width:500px!important}
-</style>
+
 <script>
 // 🔥 پاکسازی خودکار service worker قدیمی
 if ('serviceWorker' in navigator) {
@@ -279,7 +275,41 @@ if ('caches' in window) {
     });
   });
 }
-</script><link rel="stylesheet" href="/static/scroll-fix.css"><link rel="icon" type="image/png" href="/static/icons/icon-192.png"><link rel="apple-touch-icon" href="/static/apple-touch-icon.png"></head>
+</script><link rel="stylesheet" href="/static/scroll-fix.css"><link rel="icon" type="image/png" href="/static/icons/icon-192.png"><link rel="apple-touch-icon" href="/static/apple-touch-icon.png"><style id="admin-scroll-fix">
+html {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+body {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100vh !important;
+  padding-bottom: 130px !important;
+}
+.container, main, .wrap {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-bottom: 20px !important;
+}
+.section, .section-head, .cards, .card, .stats, .stat-box {
+  max-height: none !important;
+}
+/* نوار پایین */
+.nw, .bottom-nav, .nav-wrap {
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  max-width: calc(100% - 30px) !important;
+}
+</style>
+</head>
 
 <body class="matrix-bg">
 <div class="galaxy" id="galaxy">
