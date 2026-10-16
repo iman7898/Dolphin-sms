@@ -133,10 +133,18 @@ def panel_ai_toggle():
         if plan == 'recruit':
             add_ai_task(uid, 'recruit_start', msgr, {'channel': config['channel_id']})
         elif plan == 'content':
-            add_ai_task(uid, 'content_start', msgr, {'target': config['target_channel']})
+            add_ai_task(uid, 'content_start', msgr, {
+                'target': config['target_channel'],
+                'sources': config['source_channels'],
+                'keywords': config['content_keywords'],
+            })
         elif plan == 'combined':
             add_ai_task(uid, 'recruit_start', msgr, {'channel': config['channel_id']})
-            add_ai_task(uid, 'content_start', msgr, {'target': config['target_channel']})
+            add_ai_task(uid, 'content_start', msgr, {
+                'target': config['target_channel'],
+                'sources': config['source_channels'],
+                'keywords': config['content_keywords'],
+            })
     flash(f"{'🟢 فعال شد' if new_state else '🔴 غیرفعال شد'}", 'ok')
     return redirect('/panel/ai-manager')
 

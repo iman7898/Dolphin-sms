@@ -78,7 +78,7 @@ def run_recruit_task(user_id, payload, messenger, token, channel):
 
 
 def run_content_task(user_id, payload, messenger, token, target):
-    """محتوا — جمع‌آوری از کانال‌های منبع"""
+    """محتوا — فوروارد از کانال‌های منبع با فیلتر کلیدواژه"""
     bot = get_bot_instance(messenger, token)
     if not bot:
         return False, "آداپتر پیدا نشد"
@@ -88,20 +88,31 @@ def run_content_task(user_id, payload, messenger, token, target):
         if not me:
             return False, "اتصال ناموفق"
 
-        source_channels = payload.get('sources', '').split(',')
-        source_channels = [s.strip() for s in source_channels if s.strip()]
+        sources_raw = payload.get('sources', '') or ''
+        sources = [s.strip() for s in sources_raw.split(',') if s.strip()]
+        keywords = [k.strip() for k in (payload.get('keywords', '') or '').split(',') if k.strip()]
+        real_target = payload.get('target') or target
 
-        if not source_channels:
+        if not sources:
             return False, "کانال منبعی تعریف نشده"
+        if not real_target:
+            return False, "کانال مقصد تعریف نشده"
 
         # پیام تست به کانال مقصد
-        test_msg = f"📝 ربات محتوا فعال شد\nمنبع: {', '.join(source_channels[:3])}"
-        r = bot.send_message(target, test_msg)
-        ok = (r.get('ok') is not False) and (r.get('status') != 'error')
-        if ok:
-            return True, f"ربات محتوا فعال شد ({len(source_channels)} کانال منبع)"
-        else:
-            return False, f"خطا: {r.get('message') or r.get('description', '')}"
+        test_msg = f"📝 ربات محتوا فعال شد
+📥 منابع: {', '.join(sources[:3])}
+🎯 مقصد: {real_target}"
+        if keywords:
+            test_msg += f"
+🔍 کلیدواژه: {', '.join(keywords)}"
+        r = bot.send_message(real_target, test_msg)
+        if r:
+            ok = (r.get('ok') is not False) and (r.get('status') != 'error') and (r.get('status') != 'INVALID_ACCESS')
+            if ok:
+                return True, f"ربات محتوا فعال شد ({len(sources)} کانال منبع)"
+            else:
+                return False, f"خطا: {r.get('message') or r.get('description') or r.get('dev_message', '')}"
+        return False, "بدون پاسخ"
     except Exception as e:
         return False, f"استثنا: {e}"
 
