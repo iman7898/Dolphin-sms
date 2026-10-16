@@ -94,14 +94,14 @@ def panel_ai_settings():
             'channel_id': (request.form.get('channel_id') or '').strip(),
             'admin_username': (request.form.get('admin_username') or '').strip(),
             'target_channel': (request.form.get('target_channel') or '').strip(),
-            'source_channels': (request.form.get('source_channels') or '').strip(),
+            'source_channels': ', '.join([x.strip() for x in request.form.getlist('source_channel') if x.strip()]),
             'content_keywords': (request.form.get('content_keywords') or '').strip(),
             'recruit_target': int(request.form.get('recruit_target') or 100),
             'recruit_message': (request.form.get('recruit_message') or '').strip(),
         }
         save_ai_config(uid, data)
         # ذخیره توکن اگه وارد شده
-        bot_token = (request.form.get('bot_token') or '').strip()
+        bot_token = (request.form.get('bot_token') or '').strip()  # اختیاری
         if bot_token:
             save_bot_token(uid, bot_token, data.get('messenger', 'rubika'))
         flash('✅ تنظیمات ذخیره شد', 'ok')

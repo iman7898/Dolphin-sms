@@ -113,7 +113,44 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#5db8e8;
 .ni.act{background:rgba(93,184,232,.15)}
 .ni.act .ic{filter:none;color:#90e0ef}
 .ni.act span:last-child{color:#90e0ef;font-weight:bold}
-</style></head><body>
+</style>
+<style>
+.src-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.src-row input{flex:1;margin:0}
+.src-btn{width:44px;height:44px;flex-shrink:0;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid;cursor:pointer;background:transparent;
+  font-size:18px;font-weight:900;transition:.3s;font-family:inherit}
+.src-del{color:#ff6b9d;border-color:rgba(255,107,157,.5)}
+.src-del:hover{background:rgba(255,107,157,.15);box-shadow:0 0 15px rgba(255,107,157,.5)}
+.src-add{width:100%;padding:12px;border-radius:12px;
+  background:rgba(6,214,160,.15);border:1.5px dashed rgba(6,214,160,.6);
+  color:#06d6a0;font-family:Vazirmatn,sans-serif;font-size:13.5px;font-weight:900;
+  cursor:pointer;transition:.3s;margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.src-add:hover{background:rgba(6,214,160,.25);border-style:solid;
+  box-shadow:0 0 20px rgba(6,214,160,.4)}
+</style>
+<script>
+function addSource(){
+  var list = document.getElementById('sourceList');
+  var row = document.createElement('div');
+  row.className = 'src-row';
+  row.innerHTML = '<input type="text" name="source_channel" placeholder="@src_channel"><button type="button" class="src-btn src-del" onclick="removeSource(this)" title="حذف"><span>➖</span></button>';
+  list.appendChild(row);
+  var inputs = row.querySelectorAll('input');
+  if (inputs.length) inputs[0].focus();
+}
+function removeSource(btn){
+  var list = document.getElementById('sourceList');
+  if (list.querySelectorAll('.src-row').length > 1){
+    btn.parentElement.remove();
+  } else {
+    btn.parentElement.querySelector('input').value = '';
+  }
+}
+</script>
+</head><body>
 
 <div class="back-bar">
   <a href="/panel/dashboard" class="back-btn">→</a>
@@ -195,11 +232,24 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#5db8e8;
       </div>
 
       <div class="field">
-        <div class="field-lbl"><span class="ic">📥</span> کانال‌های منبع</div>
-        <textarea name="source_channels" placeholder="@src1, @src2, @src3">{{ config.source_channels if config else '' }}</textarea>
+        <div class="field-lbl"><span class="ic">📥</span> کانال‌های منبع (چند تا می‌تونی اضافه کنی)</div>
+        <div id="sourceList">
+          {% set srcs = (config.source_channels.split(',') if config and config.source_channels else [''])%}
+          {% for src in srcs %}
+          <div class="src-row">
+            <input type="text" name="source_channel" placeholder="@src_channel" value="{{ src.strip() }}">
+            <button type="button" class="src-btn src-del" onclick="removeSource(this)" title="حذف">
+              <span>➖</span>
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+        <button type="button" class="src-add" onclick="addSource()">
+          <span>➕</span> افزودن کانال جدید
+        </button>
         <div class="field-hint">
-          چند تا کانال رو با <b>کاما</b> جدا کن. AI از اینا کپی می‌کنه.<br>
-          مثال: <code>@news1, @news2</code>
+          AI از این کانال‌ها محتوا کپی می‌کنه.<br>
+          مثال: <code>@news1</code> یا آیدی عددی <code>-1001234567890</code>
         </div>
       </div>
 
