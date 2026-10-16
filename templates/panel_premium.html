@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پرمیوم</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  padding-bottom:80px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a,#0f3f5f 40%,#051f33)}
+.back-bar{display:flex;align-items:center;gap:12px;padding:16px;
+  background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
+  border-bottom:1.5px solid rgba(150,210,240,.4);position:sticky;top:0}
+.back-btn{width:42px;height:42px;border-radius:12px;background:rgba(93,184,232,.2);
+  border:1.5px solid rgba(144,224,239,.5);display:flex;align-items:center;
+  justify-content:center;color:#90e0ef;text-decoration:none;font-size:20px;font-weight:900}
+.page-title{font-size:18px;font-weight:900;color:#e0f4ff;flex:1;text-align:center;margin-left:-42px}
+.container{padding:16px;max-width:600px;margin:0 auto}
+.hero{text-align:center;padding:30px 20px;
+  background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.08));
+  border:2px solid #ffd700;border-radius:24px;margin-bottom:20px;
+  box-shadow:0 0 40px rgba(255,215,0,.4)}
+.hero-icon{font-size:60px;margin-bottom:10px;
+  animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero-title{font-size:24px;font-weight:900;color:#ffd700;
+  text-shadow:0 0 20px rgba(255,215,0,.6);margin-bottom:8px}
+.hero-sub{font-size:13px;color:#ffe9a8;line-height:1.6}
+.status{padding:20px;background:linear-gradient(135deg,rgba(0,50,90,.65),rgba(0,30,60,.45));
+  border:1.5px solid rgba(150,210,240,.4);border-radius:20px;margin-bottom:16px;text-align:center}
+.status.active{border-color:#06d6a0;box-shadow:0 0 30px rgba(6,214,160,.4)}
+.status.inactive{border-color:#ff6b9d;box-shadow:0 0 30px rgba(255,107,157,.3)}
+.status-badge{display:inline-block;padding:6px 16px;border-radius:12px;
+  font-size:13px;font-weight:900;margin-bottom:10px}
+.status.active .status-badge{background:rgba(6,214,160,.2);color:#06d6a0;border:1px solid #06d6a0}
+.status.inactive .status-badge{background:rgba(255,107,157,.2);color:#ff8fab;border:1px solid #ff6b9d}
+.status-days{font-size:38px;font-weight:900;color:#fff;margin:10px 0}
+.status-lbl{font-size:12px;color:#a8c8e0}
+.features{background:rgba(0,50,90,.5);border:1.5px solid rgba(150,210,240,.4);
+  border-radius:20px;padding:20px;margin-bottom:16px}
+.features-title{font-size:15px;font-weight:900;color:#90e0ef;margin-bottom:14px;
+  text-align:center;padding-bottom:12px;border-bottom:1px dashed rgba(144,224,239,.3)}
+.feat{display:flex;align-items:center;gap:12px;padding:10px 0;
+  border-bottom:1px dashed rgba(144,224,239,.15);font-size:13px}
+.feat:last-child{border:none}
+.feat-icon{width:36px;height:36px;border-radius:10px;background:rgba(93,184,232,.15);
+  border:1px solid rgba(144,224,239,.4);display:flex;align-items:center;
+  justify-content:center;font-size:18px;flex-shrink:0}
+.btn{width:100%;padding:16px;border-radius:14px;border:none;cursor:pointer;
+  font-family:Vazirmatn;font-size:15px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a1a00;
+  box-shadow:0 0 30px rgba(255,215,0,.6);transition:.3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(255,215,0,.9)}
+</style></head><body>
+
+<div class="back-bar">
+  <a href="/panel/dashboard" class="back-btn">→</a>
+  <div class="page-title">💎 پرمیوم</div>
+</div>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-icon">💎</div>
+    <div class="hero-title">Dolphin Premium</div>
+    <div class="hero-sub">قابلیت‌های حرفه‌ای برای فروشگاه تو</div>
+  </div>
+
+  <div class="status {% if premium.active %}active{% else %}inactive{% endif %}">
+    <div class="status-badge">
+      {% if premium.active %}🟢 فعال{% else %}🔴 غیرفعال{% endif %}
+    </div>
+    <div class="status-days">{{ premium.days_left }}</div>
+    <div class="status-lbl">روز باقیمانده{% if premium.plan == 'trial' %} (تست رایگان){% endif %}</div>
+  </div>
+
+  <div class="features">
+    <div class="features-title">✨ قابلیت‌های پرمیوم</div>
+    <div class="feat"><div class="feat-icon">🖼</div><div>ارسال عکس به کانال</div></div>
+    <div class="feat"><div class="feat-icon">🤖</div><div>قوی‌سازی متن با AI</div></div>
+    <div class="feat"><div class="feat-icon">🎨</div><div>پیشنهاد ایموجی هوشمند</div></div>
+    <div class="feat"><div class="feat-icon">📢</div><div>ارسال به چند کانال</div></div>
+    <div class="feat"><div class="feat-icon">🏷</div><div>تگ خودکار</div></div>
+    <div class="feat"><div class="feat-icon">⚡</div><div>پشتیبانی اولویت‌دار</div></div>
+  </div>
+
+  {% if session.get('is_admin') %}
+  <form method="POST">
+    <input type="hidden" name="action" value="activate">
+    <button class="btn" type="submit">💎 فعال‌سازی ۳۰ روز (ادمین)</button>
+  </form>
+  {% else %}
+  <button class="btn" onclick="alert('برای خرید با پشتیبانی تماس بگیر')">💎 خرید پرمیوم</button>
+  {% endif %}
+
+  <div style="text-align:center;margin-top:20px;font-size:12px;color:#7a9cb5">
+    ۵ روز تست رایگان از اولین ورود فعال شد ✅
+  </div>
+
+</div>
+
+</body></html>

@@ -4138,3 +4138,67 @@ def log_post(shop_id, channel_id, text, tag, status):
     c.execute("INSERT INTO channel_posts (shop_id, channel_id, text, tag, status) VALUES (?,?,?,?,?)",
               (shop_id, channel_id, text, tag, status))
     conn.commit(); conn.close()
+
+
+# ============ PREMIUM ============
+from datetime import datetime as _dt2, timedelta as _td2
+
+def get_premium(shop_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT id, plan, trial_start, trial_end, paid_until FROM shop_premium WHERE shop_id=?",
+              (shop_id,))
+    r = c.fetchone()
+    if not r:
+        # ۵ روز تست رایگان
+        trial_end = (_dt2.now() + _td2(days=5)).strftime('%Y-%m-%d %H:%M:%S')
+        c.execute("INSERT INTO shop_premium (shop_id, plan, trial_end) VALUES (?, 'trial', ?)",
+                  (shop_id, trial_end))
+        conn.commit()
+        c.execute("SELECT id, plan, trial_start, trial_end, paid_until FROM shop_premium WHERE shop_id=?",
+                  (shop_id,))
+        r = c.fetchone()
+    conn.close()
+    if not r:
+        return {'active': False, 'plan': 'none', 'days_left': 0}
+    plan = r[1] or 'trial'
+    trial_end = r[3]
+    paid_until = r[4]
+    now = _dt2.now()
+    active = False
+    days_left = 0
+    until = None
+    if paid_until:
+        try:
+            u = _dt2.fromisoformat(str(paid_until).replace('Z', ''))
+            until = u
+            active = u > now
+            days_left = max(0, (u - now).days)
+        except: pass
+    if not active and trial_end:
+        try:
+            t = _dt2.fromisoformat(str(trial_end).replace('Z', ''))
+            if not until or t > until:
+                active = t > now
+                days_left = max(0, (t - now).days)
+        except: pass
+    return {'active': active, 'plan': plan, 'days_left': days_left,
+            'trial_end': trial_end, 'paid_until': paid_until}
+
+def activate_premium(shop_id, days=30):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    until = (_dt2.now() + _td2(days=days)).strftime('%Y-%m-%d %H:%M:%S')
+    c.execute("SELECT id FROM shop_premium WHERE shop_id=?", (shop_id,))
+    if c.fetchone():
+        c.execute("UPDATE shop_premium SET plan='premium', paid_until=? WHERE shop_id=?",
+                  (until, shop_id))
+    else:
+        c.execute("INSERT INTO shop_premium (shop_id, plan, paid_until) VALUES (?, 'premium', ?)",
+                  (shop_id, until))
+    conn.commit(); conn.close()
+    return until
+
+def is_premium(shop_id):
+    p = get_premium(shop_id)
+    return p['active']
