@@ -3259,13 +3259,33 @@ def save_bot_token(user_id, token, messenger='rubika'):
 def get_bot_token(user_id):
     conn = sqlite3.connect('panel.db')
     c = conn.cursor()
+    # ۱) اول از ai_channel_config
     c.execute("SELECT bot_token, messenger, rubika_channel_id FROM ai_channel_config WHERE user_id=?",
               (user_id,))
     row = c.fetchone()
+    token = (row[0] if row else '') or ''
+    messenger = (row[1] if row else '') or 'rubika'
+    channel = (row[2] if row else '') or ''
+    # ۲) اگه توکن خالی بود، از admin_bots بخون
+    if not token:
+        c.execute("SELECT token, messenger FROM admin_bots WHERE active=1 AND token != '' LIMIT 1")
+        r2 = c.fetchone()
+        if r2:
+            token = r2[0] or ''
+            messenger = r2[1] or messenger
+    # ۳) اگه هنوز channel خالی، از ai_config بگیر
+    if not channel:
+        try:
+            c.execute("SELECT channel_id, target_channel FROM ai_config WHERE user_id=?", (user_id,))
+            r3 = c.fetchone()
+            if r3:
+                channel = r3[1] or r3[0] or ''
+        except Exception:
+            pass
     conn.close()
-    if not row:
+    if not token:
         return None
-    return {'token': row[0] or '', 'messenger': row[1] or 'rubika', 'channel': row[2] or ''}
+    return {'token': token, 'messenger': messenger, 'channel': channel}
 
 
 def get_pending_tasks(limit=10):
@@ -4085,4 +4105,36 @@ def delete_relay(relay_id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("DELETE FROM channel_relay WHERE id=?", (relay_id,))
+    conn.commit(); conn.close()
+
+
+# ============ SHOP CHANNELS ============
+def add_shop_channel(shop_id, channel_id, title='', tag=''):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("INSERT INTO shop_channels (shop_id, channel_id, title, tag) VALUES (?,?,?,?)",
+              (shop_id, channel_id, title, tag))
+    cid = c.lastrowid
+    conn.commit(); conn.close()
+    return cid
+
+def get_shop_channels(shop_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT id, channel_id, title, tag FROM shop_channels WHERE shop_id=? ORDER BY id DESC",
+              (shop_id,))
+    rows = c.fetchall(); conn.close()
+    return rows
+
+def delete_shop_channel(cid, shop_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("DELETE FROM shop_channels WHERE id=? AND shop_id=?", (cid, shop_id))
+    conn.commit(); conn.close()
+
+def log_post(shop_id, channel_id, text, tag, status):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("INSERT INTO channel_posts (shop_id, channel_id, text, tag, status) VALUES (?,?,?,?,?)",
+              (shop_id, channel_id, text, tag, status))
     conn.commit(); conn.close()

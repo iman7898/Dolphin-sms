@@ -188,3 +188,80 @@ def panel_channel_relay():
     except: cs = None
     return render_template('panel_channel_relay.html',
                            relays=relays, current_settings=cs)
+
+
+# ============ SEND TO CHANNEL ============
+@report_bp.route('/panel/channel-send', methods=['GET', 'POST'])
+def panel_channel_send():
+    if 'user_id' not in session:
+        return redirect('/panel/login')
+    uid = session['user_id']
+    from database import (get_shop_channels, add_shop_channel, delete_shop_channel,
+                          log_post, get_user_settings)
+    import requests as _rq
+
+    msg = None
+    if request.method == 'POST':
+        action = request.form.get('action', 'send')
+
+        if action == 'add_channel':
+            ch = (request.form.get('channel_id') or '').strip()
+            title = (request.form.get('title') or '').strip()
+            tag = (request.form.get('tag') or '').strip()
+            if ch:
+                if not ch.startswith('@') and not ch.startswith('-'):
+                    ch = '@' + ch
+                add_shop_channel(uid, ch, title, tag)
+                msg = ('ok', f'✅ کانال {ch} اضافه شد')
+
+        elif action == 'del_channel':
+            cid = int(request.form.get('cid') or 0)
+            if cid: delete_shop_channel(cid, uid)
+            msg = ('ok', '✅ حذف شد')
+
+        elif action == 'send':
+            text = (request.form.get('text') or '').strip()
+            ch_id = (request.form.get('target_channel') or '').strip()
+            tag = (request.form.get('tag') or '').strip()
+            img = (request.form.get('image_url') or '').strip()
+            if not text:
+                msg = ('error', '❌ متن خالیه')
+            elif not ch_id:
+                msg = ('error', '❌ کانال رو انتخاب کن')
+            else:
+                # توکن ربات
+                import sqlite3 as _s
+                conn = _s.connect('panel.db', timeout=15)
+                c = conn.cursor()
+                c.execute("SELECT token FROM admin_bots WHERE active=1 AND token!='' ORDER BY id DESC LIMIT 1")
+                row = c.fetchone()
+                conn.close()
+                if not row:
+                    msg = ('error', '❌ توکن ربات تنظیم نشده (ادمین باید تنظیم کنه)')
+                else:
+                    tok = row[0]
+                    final = text
+                    if tag:
+                        final = f'{text}\n\n🏪 {tag}'
+                    try:
+                        r = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/sendMessage',
+                                     json={'chat_id': ch_id, 'text': final}, timeout=20)
+                        j = r.json()
+                        if j.get('status') == 'OK':
+                            log_post(uid, ch_id, text, tag, 'success')
+                            msg = ('ok', f'✅ پیام به {ch_id} ارسال شد')
+                        else:
+                            err = j.get('dev_message') or j.get('message') or 'خطای نامشخص'
+                            log_post(uid, ch_id, text, tag, 'error')
+                            msg = ('error', f'❌ {err}')
+                    except Exception as e:
+                        log_post(uid, ch_id, text, tag, 'error')
+                        msg = ('error', f'❌ {str(e)[:100]}')
+
+        return redirect('/panel/channel-send')
+
+    channels = get_shop_channels(uid)
+    try: cs = get_user_settings(uid)
+    except: cs = None
+    return render_template('panel_channel_send.html',
+                           channels=channels, msg=msg, current_settings=cs)
