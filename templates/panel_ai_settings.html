@@ -1,70 +1,153 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>⚙️ تنظیمات ربات</title>
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مدیر AI</title>
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
 <style>
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;padding:0}
-  body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padding:74px 14px 130px;background:#020a08;
-    background-image:radial-gradient(circle at 15% 0%,rgba(191,0,255,.16),transparent 45%),radial-gradient(circle at 85% 100%,rgba(0,212,255,.14),transparent 45%);}
-  .back-btn{position:fixed;top:18px;right:18px;z-index:20;background:rgba(0,255,157,.1);color:#00ff9d;border:1px solid #00ff9d;border-radius:10px;padding:7px 14px;font-size:12px;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(0,255,157,.4)}
-  .frame{border:2px solid #bf00ff;border-radius:26px;padding:18px 14px;background:rgba(20,0,30,.4);backdrop-filter:blur(6px);animation:fp 4s ease-in-out infinite}
-  @keyframes fp{0%,100%{box-shadow:0 0 22px rgba(191,0,255,.55),inset 0 0 18px rgba(191,0,255,.08)}50%{box-shadow:0 0 34px rgba(191,0,255,.85),inset 0 0 24px rgba(191,0,255,.16)}}
-  .page-title{text-align:center;font-size:19px;font-weight:900;color:#bf00ff;text-shadow:0 0 16px rgba(191,0,255,.9);margin:0 0 16px}
-  .box{background:linear-gradient(135deg,rgba(20,0,30,.7),rgba(30,0,40,.8));border:1.5px solid rgba(191,0,255,.4);border-radius:20px;padding:18px;box-shadow:0 0 15px rgba(191,0,255,.2);margin-bottom:14px}
-  .box-title{text-align:center;font-size:13.5px;color:#bf00ff;margin-bottom:14px;text-shadow:0 0 10px rgba(191,0,255,.6);padding-bottom:12px;border-bottom:1px solid rgba(191,0,255,.25)}
-  label{display:block;font-size:12px;color:#e0b4ff;margin-bottom:8px;font-weight:bold}
-  label .req{color:#ff4d6d;font-size:14px}
-  input[type=text],input[type=number],textarea{width:100%;background:rgba(10,0,15,.9);color:#e2e8f0;border:1.5px solid rgba(191,0,255,.4);border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;margin-bottom:14px;transition:.25s}
-  input:focus,textarea:focus{outline:none;border-color:#bf00ff;box-shadow:0 0 15px rgba(191,0,255,.6);background:rgba(20,0,30,.9)}
-  textarea{min-height:80px;resize:vertical;line-height:1.7}
-  .messenger-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;margin-bottom:10px}
-  .msgr-btn{background:rgba(10,0,15,.8);border:2px solid rgba(191,0,255,.3);border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;transition:.3s;font-family:inherit;color:#e2e8f0;position:relative;overflow:hidden}
-  .msgr-btn:active{transform:scale(.96)}
-  .msgr-btn:hover{border-color:rgba(191,0,255,.7);box-shadow:0 0 15px rgba(191,0,255,.4)}
-  .msgr-btn.active{border-color:#bf00ff;background:linear-gradient(135deg,rgba(191,0,255,.25),rgba(0,212,255,.1));box-shadow:0 0 22px rgba(191,0,255,.8)}
-  .msgr-btn.active::after{content:"✓";position:absolute;top:5px;left:7px;color:#00ff9d;font-size:13px;font-weight:900;text-shadow:0 0 8px rgba(0,255,157,.9)}
-  .msgr-icon{font-size:30px;line-height:1;display:block;margin-bottom:6px}
-  .msgr-name{font-size:11px;font-weight:bold;color:#e0b4ff}
-  .msgr-btn.active .msgr-name{color:#bf00ff;text-shadow:0 0 8px rgba(191,0,255,.8)}
-  .submit-btn{width:100%;background:linear-gradient(135deg,#bf00ff,#7700cc);color:#fff;border:none;border-radius:14px;padding:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 22px rgba(191,0,255,.8);transition:.3s;position:relative;overflow:hidden}
-  .submit-btn:active{transform:scale(.97)}
-  .submit-btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:sweep 3s ease-in-out infinite}
-  @keyframes sweep{0%{left:-100%}50%,100%{left:100%}}
-  .hint{padding:12px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.4);border-radius:12px;font-size:11.5px;color:#7de5ff;line-height:1.9;margin-top:12px}
-  .hint b{color:#00d4ff}
-  .hint code{background:rgba(0,0,0,.5);padding:2px 6px;border-radius:5px;font-family:monospace;font-size:10.5px;color:#00ff9d;direction:ltr}
-  .field-group{display:none}
-  .field-group.active{display:block;animation:fadein .3s ease}
-  @keyframes fadein{from{opacity:0}to{opacity:1}}
-  .nav-wrap{position:fixed;bottom:14px;left:14px;right:14px;height:76px;padding:2px;border-radius:40px;background:linear-gradient(90deg,#00ff9d 0%,#00d4ff 35%,#bf00ff 70%,#00ff9d 100%);box-shadow:0 0 24px rgba(0,255,157,.45);z-index:100}
-  .bottom-nav{height:100%;border-radius:38px;background:linear-gradient(180deg,#0a1f1a,#04120e);display:flex;align-items:center;justify-content:space-around;padding:0 6px}
-  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9aa8b2;text-decoration:none;font-size:10.5px;padding:8px 4px;border-radius:20px;margin:6px 3px}
-  .nav-item .ic{font-size:22px;line-height:1;filter:grayscale(1) brightness(.85)}
-  .nav-item.active{background:linear-gradient(135deg,rgba(191,0,255,.15),rgba(0,212,255,.06));box-shadow:0 0 18px rgba(191,0,255,.4)}
-  .nav-item.active .ic{filter:none;color:#bf00ff;text-shadow:0 0 12px #bf00ff}
-  .nav-item.active span:last-child{color:#bf00ff;font-weight:bold}
-</style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  padding-bottom:130px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a 0%,#0f3f5f 40%,#0a3e5e 70%,#051f33 100%);
+  background-attachment:scroll}
 
-<link rel="stylesheet" href="/static/scroll-fix.css"><link rel="icon" type="image/png" href="/static/icons/icon-192.png"><link rel="apple-touch-icon" href="/static/apple-touch-icon.png"></head>
-<body>
+/* هدر */
+.back-bar{display:flex;align-items:center;gap:12px;padding:16px;
+  background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
+  border-bottom:1.5px solid rgba(150,210,240,.4);position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(15px)}
+.back-btn{width:42px;height:42px;border-radius:12px;background:rgba(93,184,232,.2);
+  border:1.5px solid rgba(144,224,239,.5);display:flex;align-items:center;
+  justify-content:center;color:#90e0ef;text-decoration:none;font-size:20px;font-weight:900}
+.page-title{font-size:18px;font-weight:900;color:#e0f4ff;
+  text-shadow:0 0 12px rgba(144,224,239,.6);flex:1;text-align:center;margin-left:-42px}
 
-<a class="back-btn" href="/panel/ai-manager">→ مدیر AI</a>
+.container{padding:14px;max-width:600px;margin:0 auto}
 
-<div class="frame">
-  <div class="page-title">⚙️ تنظیمات ربات</div>
+/* راهنمای بالا */
+.intro{background:linear-gradient(135deg,rgba(93,184,232,.15),rgba(0,119,182,.08));
+  border:1.5px solid rgba(144,224,239,.5);border-radius:18px;padding:16px;
+  margin-bottom:16px;font-size:13px;line-height:1.9;color:#c8e8ff;
+  border-right:4px solid #5db8e8}
+.intro-title{font-size:15px;font-weight:900;color:#90e0ef;margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+.intro-title::before{content:"💡";font-size:20px}
+
+/* کارت مرحله */
+.step{background:linear-gradient(135deg,rgba(0,50,90,.65),rgba(0,30,60,.45));
+  border:1.5px solid rgba(150,210,240,.4);border-radius:20px;padding:18px;
+  backdrop-filter:blur(15px);margin-bottom:14px;
+  box-shadow:0 4px 20px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative}
+.step-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;
+  padding-bottom:12px;border-bottom:1px dashed rgba(144,224,239,.25)}
+.step-num{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#5db8e8,#0077b6);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:900;
+  box-shadow:0 0 15px rgba(93,184,232,.6)}
+.step-title{font-size:15px;font-weight:900;color:#e0f4ff;
+  text-shadow:0 0 10px rgba(144,224,239,.5)}
+.step-desc{font-size:11.5px;color:#a8c8e0;margin-top:3px;line-height:1.6}
+
+/* فرم */
+.field{margin-bottom:14px}
+.field-lbl{display:flex;align-items:center;gap:6px;font-size:12.5px;
+  color:#90e0ef;font-weight:800;margin-bottom:8px}
+.field-lbl .ic{font-size:16px}
+.field-lbl .req{color:#ff8fab}
+.field-hint{font-size:10.5px;color:#7a9cb5;margin-top:6px;line-height:1.7;
+  padding-right:4px}
+input,textarea,select{width:100%;padding:13px 14px;border-radius:12px;
+  background:rgba(0,30,60,.6);color:#e0f4ff;
+  border:1.5px solid rgba(93,184,232,.4);font-family:Vazirmatn,Tahoma,sans-serif;
+  font-size:13.5px;transition:.3s;direction:ltr;text-align:left}
+textarea{min-height:80px;resize:vertical;line-height:1.7}
+input::placeholder,textarea::placeholder{color:rgba(144,224,239,.35)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#5db8e8;
+  background:rgba(0,50,90,.7);box-shadow:0 0 20px rgba(93,184,232,.5)}
+
+/* پیام‌رسان‌ها */
+.msgr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.msgr-btn{display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 8px;border-radius:14px;background:rgba(0,30,60,.5);
+  border:1.5px solid rgba(93,184,232,.3);cursor:pointer;
+  font-family:inherit;color:#a8c8e0;transition:.3s;font-size:11.5px;font-weight:800}
+.msgr-btn:hover{transform:translateY(-2px);border-color:#5db8e8}
+.msgr-btn.active{background:linear-gradient(135deg,rgba(93,184,232,.3),rgba(0,119,182,.15));
+  border-color:#5db8e8;color:#e0f4ff;
+  box-shadow:0 0 20px rgba(93,184,232,.5)}
+.msgr-icon{font-size:26px}
+.msgr-name{font-size:11px}
+
+/* دکمه ذخیره */
+.btn-save{width:100%;padding:18px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,#06d6a0,#0077b6);color:#fff;
+  font-family:Vazirmatn,Tahoma,sans-serif;font-size:16px;font-weight:900;
+  cursor:pointer;box-shadow:0 0 30px rgba(6,214,160,.6);transition:.3s;
+  letter-spacing:1px;margin-top:10px}
+.btn-save:hover{transform:translateY(-3px);box-shadow:0 0 45px rgba(6,214,160,.9)}
+
+/* مثال */
+.example{background:rgba(0,30,60,.5);border:1px dashed rgba(144,224,239,.4);
+  border-radius:10px;padding:10px 12px;margin-top:6px;font-size:11px;
+  color:#a8c8e0;line-height:1.8;direction:rtl;text-align:right}
+.example code{background:rgba(0,20,40,.7);padding:2px 8px;border-radius:6px;
+  color:#90e0ef;font-family:monospace;direction:ltr;display:inline-block;
+  font-size:11px}
+
+/* اطلاعات/توجه */
+.warn{background:rgba(255,214,10,.1);border:1px solid rgba(255,214,10,.4);
+  border-radius:10px;padding:10px 12px;margin-top:10px;font-size:11.5px;
+  color:#ffe066;line-height:1.8}
+.warn b{color:#ffd60a}
+
+/* نوار پایین */
+.nw{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 30px);max-width:500px;height:66px;
+  background:rgba(10,25,45,.9);backdrop-filter:blur(20px);
+  border:1px solid rgba(150,210,240,.25);border-radius:20px;
+  display:flex;align-items:center;justify-content:space-around;z-index:9999}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#6b8aa3;text-decoration:none;font-size:10px;padding:8px 4px;border-radius:14px}
+.ni .ic{font-size:20px;filter:grayscale(.5) brightness(.85)}
+.ni.act{background:rgba(93,184,232,.15)}
+.ni.act .ic{filter:none;color:#90e0ef}
+.ni.act span:last-child{color:#90e0ef;font-weight:bold}
+</style></head><body>
+
+<div class="back-bar">
+  <a href="/panel/dashboard" class="back-btn">→</a>
+  <div class="page-title">🤖 مدیر AI</div>
+</div>
+
+<div class="container">
+
+  <!-- راهنمای کلی -->
+  <div class="intro">
+    <div class="intro-title">این صفحه چیکار می‌کنه؟</div>
+    ربات AI به کانال شما وصل می‌شه و به‌صورت خودکار:
+    <br>✍️ محتوا تولید می‌کنه
+    <br>📢 به اعضا پیام می‌فرسته
+    <br>🔄 از کانال‌های دیگه کپی می‌کنه
+    <br>👥 عضو جدید جذب می‌کنه
+  </div>
 
   <form method="POST">
     <input type="hidden" name="messenger" id="messengerInput" value="{{ config.messenger if config else 'rubika' }}">
 
-    <div class="box">
-      <div class="box-title">📱 پیام‌رسان</div>
-      <div class="messenger-grid">
+    <!-- مرحله ۱: پیام‌رسان -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">۱</div>
+        <div>
+          <div class="step-title">پیام‌رسان رو انتخاب کن</div>
+          <div class="step-desc">ربات روی کدوم پیام‌رسان کار کنه؟</div>
+        </div>
+      </div>
+      <div class="msgr-grid">
         {% for m in messengers %}
-        <button type="button" class="msgr-btn {% if (config and config.messenger == m[0]) or (not config and m[0]=='rubika') %}active{% endif %}" data-code="{{ m[0] }}" onclick="selectMessenger('{{ m[0] }}')">
+        <button type="button" class="msgr-btn {% if (config and config.messenger == m[0]) or (not config and m[0]=='rubika') %}active{% endif %}"
+                data-code="{{ m[0] }}" onclick="selectMessenger('{{ m[0] }}')">
           <span class="msgr-icon">{{ m[2] }}</span>
           <span class="msgr-name">{{ m[1] }}</span>
         </button>
@@ -72,62 +155,123 @@
       </div>
     </div>
 
+    <!-- مرحله ۲: کانال اصلی -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">۲</div>
+        <div>
+          <div class="step-title">کانال اصلی خودت</div>
+          <div class="step-desc">کانالی که می‌خوای AI روش کار کنه</div>
+        </div>
+      </div>
 
-    <div class="box">
-      <div class="box-title">📢 کانال‌ها</div>
-      <label>🆔 آیدی کانال اصلی <span class="req">*</span></label>
-      <input type="text" name="channel_id" placeholder="@mychannel یا k1a2b3c4" value="{{ config.channel_id if config else '' }}" required>
-      <label>👤 یوزرنیم ادمین (اختیاری)</label>
-      <input type="text" name="admin_username" placeholder="@admin" value="{{ config.admin_username if config else '' }}">
-      <label>🎯 کانال مقصد (برای محتوا)</label>
-      <input type="text" name="target_channel" placeholder="@target" value="{{ config.target_channel if config else '' }}">
-      <label>📥 کانال‌های منبع (با کاما)</label>
-      <textarea name="source_channels" placeholder="@src1, @src2">{{ config.source_channels if config else '' }}</textarea>
+      <div class="field">
+        <div class="field-lbl"><span class="ic">📢</span> آیدی کانال اصلی <span class="req">*</span></div>
+        <input type="text" name="channel_id" placeholder="@my_channel" value="{{ config.channel_id if config else '' }}" required>
+        <div class="field-hint">
+          مثال: <code>@dolphin_shop</code> یا آیدی عددی مثل <code>-1001234567890</code>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl"><span class="ic">👤</span> یوزرنیم ادمین (اختیاری)</div>
+        <input type="text" name="admin_username" placeholder="@admin" value="{{ config.admin_username if config else '' }}">
+        <div class="field-hint">یوزرنیمی که AI به عنوان ادمین باهاش کار کنه</div>
+      </div>
+
+      <div class="warn">
+        <b>⚠️ مهم:</b> ربات باید توی کانال <b>ادمین</b> باشه تا بتونه پیام بفرسته.
+      </div>
     </div>
 
-    <div class="box">
-      <div class="box-title">👥 تنظیمات عضوآوری</div>
-      <label>🎯 تعداد هدف اعضا</label>
-      <input type="number" name="recruit_target" value="{{ config.recruit_target if config else 1000 }}" min="10">
-      <label>💬 پیام دعوت</label>
-      <textarea name="recruit_message" placeholder="سلام! به کانال ما بپیوند">{{ config.recruit_message if config else '' }}</textarea>
+    <!-- مرحله ۳: فوروارد محتوا -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">۳</div>
+        <div>
+          <div class="step-title">فوروارد محتوا (اختیاری)</div>
+          <div class="step-desc">از کانال‌های دیگه کپی کن به کانال خودت</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl"><span class="ic">📥</span> کانال‌های منبع</div>
+        <textarea name="source_channels" placeholder="@src1, @src2, @src3">{{ config.source_channels if config else '' }}</textarea>
+        <div class="field-hint">
+          چند تا کانال رو با <b>کاما</b> جدا کن. AI از اینا کپی می‌کنه.<br>
+          مثال: <code>@news1, @news2</code>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl"><span class="ic">🎯</span> کانال مقصد</div>
+        <input type="text" name="target_channel" placeholder="@my_channel" value="{{ config.target_channel if config else '' }}">
+        <div class="field-hint">محتوا به این کانال فوروارد می‌شه (معمولاً همون کانال اصلی)</div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl"><span class="ic">🔍</span> کلیدواژه‌ها (اختیاری)</div>
+        <textarea name="content_keywords" placeholder="فروش, تخفیف, جدید">{{ config.content_keywords if config else '' }}</textarea>
+        <div class="field-hint">
+          فقط پست‌هایی که این کلمات رو دارن کپی می‌شن.<br>
+          مثال: <code>فروش, تخفیف</code>
+        </div>
+      </div>
     </div>
 
-    <div class="box">
-      <div class="box-title">📝 تنظیمات محتوا</div>
-      <label>🔍 کلیدواژه‌ها (با کاما)</label>
-      <textarea name="content_keywords" placeholder="اخبار, آموزشی">{{ config.content_keywords if config else '' }}</textarea>
+    <!-- مرحله ۴: عضوآوری -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">۴</div>
+        <div>
+          <div class="step-title">جذب اعضای جدید</div>
+          <div class="step-desc">AI چطور عضو جدید بیاره</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl"><span class="ic">🎯</span> تعداد هدف اعضا</div>
+        <input type="number" name="recruit_target" value="{{ config.recruit_target if config else 1000 }}" min="10">
+        <div class="field-hint">AI تلاش می‌کنه این تعداد عضو جمع کنه</div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl"><span class="ic">💬</span> پیام دعوت</div>
+        <textarea name="recruit_message" placeholder="سلام! به کانال ما بپیوند">{{ config.recruit_message if config else '' }}</textarea>
+        <div class="field-hint">این پیام به اعضای جدید فرستاده می‌شه</div>
+      </div>
     </div>
 
-    <button class="submit-btn" type="submit">💾 ذخیره تنظیمات</button>
+    <!-- دکمه ذخیره -->
+    <button type="submit" class="btn-save">💾 ذخیره تنظیمات</button>
   </form>
 
-  <div class="hint">
-    <b>📌 راهنما:</b><br>
-    1️⃣ پیام‌رسان رو انتخاب کن<br>
-    2️⃣ آیدی کانال رو بذار<br>
-    3️⃣ توی پیام‌رسان، ربات رو <code>ادمین</code> کن<br>
-    4️⃣ ذخیره و برگرد → فعال‌سازی
+  <!-- راهنمای پایین -->
+  <div class="intro" style="margin-top:16px;border-right-color:#ffd60a">
+    <div class="intro-title" style="color:#ffd60a">📌 نکات مهم</div>
+    1️⃣ همه کانال‌ها باید <b>عمومی</b> باشن (مگر اینکه آیدی عددی بذاری)<br>
+    2️⃣ ربات باید توی همه کانال‌های مبدأ و مقصد <b>ادمین</b> باشه<br>
+    3️⃣ بعد از ذخیره، ۵ دقیقه صبر کن تا AI شروع کنه<br>
+    4️⃣ برای غیرفعال کردن، پیام‌رسان رو خالی کن و ذخیره بزن
   </div>
 
 </div>
 
-<div class="nav-wrap">
-  <div class="bottom-nav">
-    <a class="nav-item" href="/panel/ai-manager"><span class="ic">🤖</span><span>مدیر AI</span></a>
-    <a class="nav-item active" href="/panel/ai-manager/settings"><span class="ic">⚙️</span><span>تنظیمات</span></a>
-    <a class="nav-item" href="/panel/ai-manager/plans"><span class="ic">💎</span><span>پلن‌ها</span></a>
-    <a class="nav-item" href="/panel/dashboard"><span class="ic">🏠</span><span>پنل</span></a>
-  </div>
+<div class="nw">
+  <a class="ni" href="/panel/dashboard"><span class="ic">🏠</span><span>خانه</span></a>
+  <a class="ni" href="/panel/send"><span class="ic">📤</span><span>ارسال</span></a>
+  <a class="ni act" href="/panel/ai-manager"><span class="ic">🤖</span><span>AI</span></a>
+  <a class="ni" href="/panel/profile"><span class="ic">👤</span><span>پروفایل</span></a>
 </div>
-
-{% include "_global_bg.html" %}
 
 <script>
 function selectMessenger(code){
   document.getElementById('messengerInput').value = code;
-  document.querySelectorAll('.msgr-btn').forEach(b => b.classList.toggle('active', b.dataset.code === code));
+  document.querySelectorAll('.msgr-btn').forEach(function(b){
+    b.classList.remove('active');
+    if (b.dataset.code === code) b.classList.add('active');
+  });
 }
 </script>
-</body>
-</html>
+
+</body></html>
