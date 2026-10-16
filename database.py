@@ -4205,13 +4205,13 @@ def is_premium(shop_id):
 
 
 # ============ CHANNEL SCHEDULE ============
-def add_schedule(shop_id, channel_id, headline, post_time, title='', tag='', days='daily'):
+def add_schedule(shop_id, channel_id, headline, post_time, title='', tag='', days='daily', image=''):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""INSERT INTO channel_schedule
-                 (shop_id, channel_id, headline, post_time, title, tag, days)
-                 VALUES (?,?,?,?,?,?,?)""",
-              (shop_id, channel_id, headline, post_time, title, tag, days))
+                 (shop_id, channel_id, headline, post_time, title, tag, days, image)
+                 VALUES (?,?,?,?,?,?,?,?)""",
+              (shop_id, channel_id, headline, post_time, title, tag, days, image))
     sid = c.lastrowid
     conn.commit(); conn.close()
     return sid
@@ -4219,7 +4219,7 @@ def add_schedule(shop_id, channel_id, headline, post_time, title='', tag='', day
 def get_schedules(shop_id=None, active_only=False):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    q = "SELECT id, shop_id, channel_id, headline, post_time, title, tag, days, active, last_run FROM channel_schedule"
+    q = "SELECT id, shop_id, channel_id, headline, post_time, title, tag, days, active, last_run, image FROM channel_schedule"
     params = []
     where = []
     if shop_id:

@@ -119,3 +119,51 @@ def panel_premium():
             flash('✅ ۳۰ روز پریمیوم فعال شد', 'ok')
         return redirect('/panel/premium')
     return render_template('panel_premium.html', premium=p)
+
+@channel_send_bp.route('/panel/channel-send/send-photo', methods=['POST'])
+def channel_send_photo():
+    """ارسال عکس به کانال"""
+    if not _uid():
+        return {'error': 'not logged in'}, 401
+    from database import is_premium
+    if not is_premium(_uid()):
+        return {'error': 'پرمیوم نیستی'}, 403
+    tok = _get_token()
+    if not tok:
+        return {'error': 'توکن ربات نیست'}, 500
+    data = request.json or {}
+    ch = (data.get('channel') or '').strip()
+    img_url = (data.get('image') or '').strip()
+    caption = (data.get('caption') or '').strip()
+    if not ch or not img_url:
+        return {'error': 'کانال یا عکس نیست'}, 400
+    try:
+        local_path = img_url.lstrip('/')
+        if not os.path.exists(local_path):
+            return {'error': f'فایل پیدا نشد: {local_path}'}, 400
+        # آپلود با multipart
+        with open(local_path, 'rb') as f:
+            fname = os.path.basename(local_path)
+            files = {'file': (fname, f, 'image/jpeg')}
+            up = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/uploadFile',
+                          files=files, timeout=60)
+        upj = up.json()
+        if upj.get('status') != 'OK':
+            return {'error': 'آپلود: ' + str(upj.get('dev_message') or upj.get('message') or upj)[:200]}
+        file_id = (upj.get('data', {}).get('file_id') or
+                   upj.get('data', {}).get('fileId') or
+                   upj.get('data', {}).get('file', {}).get('id'))
+        if not file_id:
+            return {'error': 'file_id نیومد: ' + str(upj)[:300]}
+        # ارسال با file_id
+        r = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/sendPhoto',
+                     json={'chat_id': ch, 'photo': file_id, 'caption': caption},
+                     timeout=30)
+        j = r.json()
+        if j.get('status') == 'OK':
+            return {'ok': True, 'file_id': file_id, 'result': j}
+        return {'error': j.get('dev_message') or j.get('message') or 'خطا', 'detail': str(j)[:200]}
+    except Exception as e:
+        return {'error': str(e)[:300]}
+
+

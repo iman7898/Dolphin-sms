@@ -27,8 +27,9 @@ def admin_schedule():
             tag = (request.form.get('tag') or '').strip()
             days = (request.form.get('days') or 'daily').strip()
             shop_id = int(request.form.get('shop_id') or 1)
+            image = (request.form.get('image') or '').strip()
             if ch and headline and t:
-                add_schedule(shop_id, ch, headline, t, title, tag, days)
+                add_schedule(shop_id, ch, headline, t, title, tag, days, image)
                 flash('✅ پست زمان‌بندی شد', 'ok')
             else:
                 flash('❌ کانال، سرفصل و ساعت الزامی', 'error')
@@ -49,3 +50,22 @@ def admin_schedule():
     return render_template('admin_schedule.html',
                            schedules=schedules, logs=logs,
                            users=users, current_settings=_cs())
+
+@schedule_bp.route('/admin/schedule/upload', methods=['POST'])
+def admin_schedule_upload():
+    if not _is_admin(): return {'error': 'no auth'}, 401
+    import os
+    if 'image' not in request.files:
+        return {'error': 'no file'}, 400
+    f = request.files['image']
+    if not f.filename:
+        return {'error': 'empty'}, 400
+    ext = f.filename.rsplit('.', 1)[-1].lower()
+    if ext not in ('jpg','jpeg','png','gif','webp'):
+        return {'error': 'format'}, 400
+    os.makedirs('static/uploads', exist_ok=True)
+    import time
+    fn = f'sch_{int(time.time())}.{ext}'
+    path = os.path.join('static/uploads', fn)
+    f.save(path)
+    return {'url': '/' + path}

@@ -18,7 +18,7 @@ def get_due():
     hm = now.strftime('%H:%M')
     weekday = now.weekday()  # 0=Mon, 5=Sat, 6=Sun
     c = db().cursor()
-    c.execute("""SELECT id, shop_id, channel_id, headline, tag, days, last_run
+    c.execute("""SELECT id, shop_id, channel_id, headline, tag, days, last_run, image
                  FROM channel_schedule
                  WHERE active=1 AND post_time = ?""", (hm,))
     rows = c.fetchall()
@@ -76,6 +76,36 @@ def log_run(sid, ch, headline, result, status):
               (sid, ch, headline, result[:500], status))
     conn.commit(); conn.close()
 
+
+
+def send_with_photo(tok, ch, img, caption=''):
+    """آپلود و ارسال عکس"""
+    import os
+    local_path = img.lstrip('/')
+    if not os.path.exists(local_path):
+        return {'status': 'error', 'message': f'file not found: {local_path}'}
+    try:
+        with open(local_path, 'rb') as f:
+            fname = os.path.basename(local_path)
+            files = {'file': (fname, f, 'image/jpeg')}
+            up = requests.post(f'https://botapi.rubika.ir/v3/{tok}/uploadFile',
+                               files=files, timeout=60)
+        upj = up.json()
+        if upj.get('status') != 'OK':
+            return {'status': 'error', 'message': 'upload: ' + str(upj.get('dev_message') or upj.get('message'))}
+        file_id = (upj.get('data', {}).get('file_id') or
+                   upj.get('data', {}).get('fileId') or
+                   upj.get('data', {}).get('file', {}).get('id'))
+        if not file_id:
+            return {'status': 'error', 'message': 'no file_id'}
+        r = requests.post(f'https://botapi.rubika.ir/v3/{tok}/sendPhoto',
+                          json={'chat_id': ch, 'photo': file_id, 'caption': caption},
+                          timeout=30)
+        return r.json()
+    except Exception as e:
+        return {'status': 'error', 'message': str(e)[:200]}
+
+
 def main():
     log('⏰ Schedule Worker')
     log('✅ آماده')
@@ -86,10 +116,14 @@ def main():
                 time.sleep(60); continue
             due = get_due()
             for r in due:
-                sid, shop_id, ch, headline, tag, days, last_run = r
+                sid, shop_id, ch, headline, tag, days, last_run, img = r
                 log(f'📝 اجرا: {headline[:40]} → {ch}')
                 body = make_post(headline, tag)
-                rr = send_post(tok, ch, body)
+                # اگه عکس داشت
+                if img:
+                    rr = send_with_photo(tok, ch, img, body)
+                else:
+                    rr = send_post(tok, ch, body)
                 if rr.get('status') == 'OK':
                     log(f'✅ ارسال شد')
                     log_run(sid, ch, headline, body, 'success')
