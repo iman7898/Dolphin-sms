@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>پنل مدیریت</title>
+    <link rel="stylesheet" href="/static/style.css">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>body,input,textarea,button,select{font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif !important;}
+/* ============ COSMIC ADMIN THEME ============ */
+*{box-sizing:border-box}
+body{background:#0a0a0f !important;color:#e2e8f0;
+  font-family:Vazirmatn,Tahoma,sans-serif;
+  min-height:100vh;overflow-x:hidden;position:relative;
+  padding:0 0 40px;}
+
+.galaxy{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+  background:radial-gradient(ellipse at 20% 0%,rgba(0,212,255,.15),transparent 50%),
+             radial-gradient(ellipse at 80% 100%,rgba(191,0,255,.18),transparent 50%),
+             radial-gradient(ellipse at 50% 50%,rgba(0,255,157,.06),transparent 70%),
+             #0a0a0f;}
+.star{position:absolute;background:#fff;border-radius:50%;
+  box-shadow:0 0 6px currentColor;animation:twinkle 3s ease-in-out infinite}
+.star.blue{color:#00d4ff;background:#00d4ff;box-shadow:0 0 10px #00d4ff}
+.star.purple{color:#bf00ff;background:#bf00ff;box-shadow:0 0 10px #bf00ff}
+.star.green{color:#00ff9d;background:#00ff9d;box-shadow:0 0 10px #00ff9d}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.5)}50%{opacity:1;transform:scale(1.4)}}
+.nebula{position:absolute;border-radius:50%;filter:blur(70px);opacity:.4;
+  animation:nebulaMove 20s ease-in-out infinite}
+.nebula.b1{width:280px;height:280px;background:#00d4ff;top:5%;left:-100px}
+.nebula.b2{width:250px;height:250px;background:#bf00ff;bottom:5%;right:-80px;animation-delay:-7s}
+@keyframes nebulaMove{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-50px) scale(1.2)}}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 15px rgba(0,212,255,.5)}50%{box-shadow:0 0 30px rgba(0,212,255,.9)}}
+@keyframes goldPulse{0%,100%{box-shadow:0 0 15px rgba(255,215,0,.5)}50%{box-shadow:0 0 30px rgba(255,215,0,.9)}}
+@keyframes purplePulse{0%,100%{box-shadow:0 0 15px rgba(191,0,255,.5)}50%{box-shadow:0 0 30px rgba(191,0,255,.9)}}
+@keyframes greenPulse{0%,100%{box-shadow:0 0 15px rgba(0,255,157,.5)}50%{box-shadow:0 0 30px rgba(0,255,157,.9)}}
+
+.container{max-width:900px;margin:0 auto;padding:0 14px}
+
+/* هدر */
+.header-bar{
+  background:linear-gradient(135deg,rgba(10,21,32,.9),rgba(20,0,30,.9));
+  border:2px solid #00d4ff;border-radius:22px;
+  padding:20px;margin:16px 0;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 0 40px rgba(0,212,255,.4),inset 0 0 30px rgba(0,212,255,.05);
+  animation:fadeUp .6s ease-out both,glowPulse 4s ease-in-out 1s infinite;
+  position:relative;overflow:hidden;
+}
+.header-bar::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent 0%,rgba(0,212,255,.1) 25%,transparent 50%);
+  animation:rotateBorder 8s linear infinite;pointer-events:none}
+@keyframes rotateBorder{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.header-title{font-size:22px;font-weight:900;color:#00d4ff;
+  text-shadow:0 0 20px rgba(0,212,255,.9),0 0 40px rgba(0,212,255,.5);
+  position:relative;z-index:1;animation:fadeUp .6s ease-out .1s both}
+
+/* آمار */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;
+  animation:fadeUp .6s ease-out .2s both}
+.stat-box{
+  background:linear-gradient(135deg,rgba(10,21,32,.8),rgba(20,0,30,.8));
+  border:1.5px solid rgba(0,212,255,.4);
+  border-radius:18px;padding:16px 10px;text-align:center;
+  display:flex;flex-direction:column;gap:6px;
+  transition:.3s;cursor:pointer;backdrop-filter:blur(10px);
+  animation:glowPulse 3s ease-in-out infinite;
+}
+.stat-box:nth-child(1){border-color:#00d4ff;animation-name:glowPulse}
+.stat-box:nth-child(2){border-color:#00ff9d;animation-name:greenPulse}
+.stat-box:nth-child(3){border-color:#bf00ff;animation-name:purplePulse}
+.stat-box:hover{transform:translateY(-4px) scale(1.03)}
+.stat-label{font-size:11.5px;color:#7de5ff;font-weight:bold}
+.stat-value{font-size:22px;font-weight:900;color:#fff;
+  text-shadow:0 0 15px currentColor}
+
+/* بخش‌ها */
+.section{margin:20px 0;animation:fadeUp .6s ease-out both}
+.section:nth-child(2){animation-delay:.1s}
+.section:nth-child(3){animation-delay:.15s}
+.section:nth-child(4){animation-delay:.2s}
+.section:nth-child(5){animation-delay:.25s}
+.section:nth-child(6){animation-delay:.3s}
+.section:nth-child(7){animation-delay:.35s}
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  padding:0 6px}
+.section-icon{width:38px;height:38px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,136,204,.05));
+  border:1.5px solid #00d4ff;
+  box-shadow:0 0 15px rgba(0,212,255,.4)}
+.section-title{font-size:15px;font-weight:900;color:#fff;
+  text-shadow:0 0 12px rgba(0,212,255,.5)}
+.section-count{margin-right:auto;font-size:11px;color:#7de5ff;
+  background:rgba(0,212,255,.1);padding:4px 10px;border-radius:8px;
+  border:1px solid rgba(0,212,255,.3)}
+
+/* گرید کارت‌ها */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 12px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(10,21,32,.7),rgba(20,0,30,.7));
+  border:1.5px solid rgba(0,212,255,.3);
+  text-decoration:none;color:#e2e8f0;
+  transition:.3s cubic-bezier(.2,.8,.2,1);
+  position:relative;overflow:hidden;
+  animation:fadeUp .5s ease-out both;
+}
+.card:nth-child(odd){animation-delay:.05s}
+.card:nth-child(even){animation-delay:.1s}
+.card::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  background-size:200% 100%;transform:translateX(-200%);
+  animation:cardShine 6s ease-in-out infinite}
+@keyframes cardShine{0%,80%,100%{transform:translateX(-200%)}40%{transform:translateX(200%)}}
+.card:hover{
+  transform:translateY(-3px) scale(1.02);
+  border-color:var(--c,#00d4ff);
+  box-shadow:0 0 25px var(--c,rgba(0,212,255,.8)),inset 0 0 15px rgba(0,212,255,.1);
+}
+.card-ic{width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;background:rgba(0,212,255,.1);
+  border:1.5px solid var(--c,#00d4ff);
+  box-shadow:0 0 12px var(--c,rgba(0,212,255,.6));
+  flex-shrink:0}
+.card-t{font-size:13px;font-weight:900;color:#fff;line-height:1.3;
+  position:relative;z-index:1}
+.card-s{font-size:10px;color:#7de5ff;margin-top:2px;
+  position:relative;z-index:1}
+.card-full{}
+
+/* جدول مغازه‌ها */
+h2{font-size:17px;font-weight:900;color:#00d4ff;
+  text-shadow:0 0 15px rgba(0,212,255,.6);
+  margin:24px 6px 12px;display:flex;align-items:center;gap:8px;
+  animation:fadeUp .6s ease-out both}
+.table-wrap{background:linear-gradient(135deg,rgba(10,21,32,.6),rgba(20,0,30,.6));
+  border:1.5px solid rgba(0,212,255,.3);border-radius:18px;
+  padding:8px;overflow-x:auto;backdrop-filter:blur(10px);
+  animation:fadeUp .6s ease-out .2s both}
+.table-wrap table{width:100%;border-collapse:collapse;font-size:12.5px}
+.table-wrap th{padding:10px 8px;text-align:right;
+  background:rgba(0,212,255,.08);color:#00d4ff;font-weight:900;
+  border-bottom:1.5px solid rgba(0,212,255,.3);font-size:11.5px;
+  white-space:nowrap}
+.table-wrap td{padding:10px 8px;color:#e2e8f0;
+  border-bottom:1px solid rgba(0,212,255,.1);white-space:nowrap}
+.table-wrap tr:hover td{background:rgba(0,212,255,.05)}
+
+.btn-nav{display:inline-flex;align-items:center;gap:6px;
+  padding:10px 16px;border-radius:12px;
+  text-decoration:none;font-family:inherit;font-size:12.5px;font-weight:900;
+  cursor:pointer;transition:.3s;border:1.5px solid;position:relative;overflow:hidden}
+.btn-nav:hover{transform:translateY(-2px)}
+
+.btn-logout{background:rgba(255,77,109,.1) !important;color:#ff4d6d !important;
+  border-color:#ff4d6d !important;
+  box-shadow:0 0 15px rgba(255,77,109,.4)}
+.btn-logout:hover{box-shadow:0 0 30px rgba(255,77,109,.8) !important}
+
+.success{padding:12px;border-radius:12px;margin:10px 0;text-align:center;
+  font-size:13px;font-weight:bold;
+  background:rgba(0,255,157,.1);border:1.5px solid #00ff9d;color:#00ff9d;
+  animation:fadeUp .4s ease both}
+.error{padding:12px;border-radius:12px;margin:10px 0;text-align:center;
+  font-size:13px;font-weight:bold;
+  background:rgba(255,77,109,.1);border:1.5px solid #ff4d6d;color:#ff4d6d;
+  animation:fadeUp .4s ease both}
+
+.footer-box{display:none}
+</style>
+<script src="/static/custom-alert.js"></script>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00ff9d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پنل پیامکی">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(function(){});
+    });
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+window.addEventListener('load', function(){
+  var c = document.querySelector('.container');
+  if (!c) return;
+  // همه عناصر رو بگرد
+  var all = c.querySelectorAll('*');
+  all.forEach(function(el){
+    // اگه div خالی با ارتفاع زیاده → حذف کن
+    var r = el.getBoundingClientRect();
+    var t = (el.textContent||'').trim();
+    if (el.tagName === 'DIV' && t === '' && r.height > 15){
+      el.remove();
+      return;
+    }
+    // فاصله‌های margin/padding بالا پایین رو صفر کن
+    var cs = getComputedStyle(el);
+    ['marginTop','marginBottom','paddingTop','paddingBottom'].forEach(function(p){
+      var v = parseFloat(cs[p]) || 0;
+      if (v > 8){
+        el.style.setProperty(p.replace(/[A-Z]/g, function(m){return '-'+m.toLowerCase();}), '0', 'important');
+      }
+    });
+  });
+  // اسکرول رو آزاد کن
+  document.documentElement.style.setProperty('overflow-y','auto','important');
+  document.body.style.setProperty('overflow-y','auto','important');
+  document.documentElement.style.setProperty('height','auto','important');
+  document.body.style.setProperty('height','auto','important');
+});
+</script>
+
+
+
+
+
+
+
+<script>
+// 🔥 پاکسازی خودکار service worker قدیمی
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    regs.forEach(function(r){ r.update(); });
+  });
+}
+// پاک کردن کش قدیمی
+if ('caches' in window) {
+  caches.keys().then(function(keys){
+    keys.forEach(function(k){
+      if (k.indexOf('otp-panel') !== -1 || k.indexOf('dolphin') === -1){
+        caches.delete(k);
+      }
+    });
+  });
+}
+</script><link rel="stylesheet" href="/static/scroll-fix.css"><link rel="icon" type="image/png" href="/static/icons/icon-192.png"><link rel="apple-touch-icon" href="/static/apple-touch-icon.png"><style id="admin-scroll-fix">
+html {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+body {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100vh !important;
+  padding-bottom: 130px !important;
+}
+.container, main, .wrap {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-bottom: 20px !important;
+}
+.section, .section-head, .cards, .card, .stats, .stat-box {
+  max-height: none !important;
+}
+/* نوار پایین */
+.nw, .bottom-nav, .nav-wrap {
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  max-width: calc(100% - 30px) !important;
+}
+</style>
+</head>
+
+<body class="matrix-bg">
+<div class="galaxy" id="galaxy">
+  <div class="nebula b1"></div>
+  <div class="nebula b2"></div>
+</div>
+
+<div class="container">
+    <div class="header-bar"><div class="header-title">👑 پنل مدیریت کل</div></div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+            <div class="{{ 'success' if cat=='success' else 'error' }}">{{ msg }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="stats">
+        <div class="stat-box"><span class="stat-label">کل پیامک‌ها</span><span class="stat-value">{{ total_sms }}</span></div>
+        <div class="stat-box"><span class="stat-label">کاربران</span><span class="stat-value">{{ users|length }}</span></div>
+        <div class="stat-box"><span class="stat-label">آنلاین</span><span class="stat-value">{{ stats.online }}</span></div>
+    </div>
+
+    <!-- بخش‌های دسته‌بندی شده -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon" style="color:#00d4ff">👥</div>
+    <div class="section-title">مدیریت کاربران</div>
+    <div class="section-count">۵ گزینه</div>
+  </div>
+  <div class="cards">
+    <button type="button" class="card" style="--c:#00d4ff;background:transparent;cursor:pointer;text-align:right;font-family:inherit" onclick="openAddModal()">
+      <div class="card-ic" style="color:#00d4ff">➕</div>
+      <div><div class="card-t">افزودن مغازه</div><div class="card-s">کاربر جدید بساز</div></div>
+    </button>
+    <a href="/admin/wallets" class="card" style="--c:#00ff9d">
+      <div class="card-ic" style="color:#00ff9d">💰</div>
+      <div><div class="card-t">کیف پول‌ها</div><div class="card-s">مدیریت موجودی</div></div>
+    </a>
+    <a href="/admin/logs" class="card" style="--c:#bf00ff">
+      <div class="card-ic" style="color:#bf00ff">📋</div>
+      <div><div class="card-t">لاگ ورودها</div><div class="card-s">سوابق ورود کاربران</div></div>
+    </a>
+    <a href="/admin/birthdays" class="card" style="--c:#ff64a0">
+      <div class="card-ic" style="color:#ff64a0">🎂</div>
+      <div><div class="card-t">تولدها</div><div class="card-s">مشتریان امروز</div></div>
+    </a>
+    <a href="/admin/stats" class="card" style="--c:#ffbe0b;">
+      <div class="card-ic" style="color:#ffbe0b">📊</div>
+      <div><div class="card-t">آمار کلی</div><div class="card-s">نمودار و آمار کامل سیستم</div></div>
+    </a>
+  </div>
+<a href="/admin/schedule" class="card" style="--c:#ffd60a"><div class="card-ic" style="color:#ffd60a">⏰</div><div><div class="card-t">زمان‌بندی پست</div><div class="card-s">پست خودکار با AI</div></div></a></div>
+
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon" style="color:#ffd700">💰</div>
+    <div class="section-title">مالی و پرداخت</div>
+    <div class="section-count">۳ گزینه</div>
+  </div>
+  <div class="cards">
+    <a href="/admin/reports" class="card" style="--c:#ffd700">
+      <div class="card-ic" style="color:#ffd700">📈</div>
+      <div><div class="card-t">گزارش درآمد</div><div class="card-s">درآمد کل و ریز</div></div>
+    </a>
+    <a href="/admin/payments" class="card" style="--c:#ff8c00">
+      <div class="card-ic" style="color:#ff8c00">💳</div>
+      <div><div class="card-t">پرداخت‌ها</div><div class="card-s">تراکنش‌های زرین‌پال</div></div>
+    </a>
+    <a href="/admin/payment" class="card" style="--c:#facc15;">
+      <div class="card-ic" style="color:#facc15">⚙️</div>
+      <div><div class="card-t">تنظیمات پرداخت</div><div class="card-s">درگاه و کلیدها</div></div>
+    </a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon" style="color:#ff2e63">📢</div>
+    <div class="section-title">ارتباطات و پشتیبانی</div>
+    <div class="section-count">۵ گزینه</div>
+  </div>
+  <div class="cards">
+    <a href="/admin/tickets" class="card" style="--c:#ff2e63">
+      <div class="card-ic" style="color:#ff2e63">🎫</div>
+      <div><div class="card-t">تیکت‌ها</div><div class="card-s">درخواست‌های پشتیبانی</div></div>
+    </a>
+    <a href="/admin/contacts" class="card" style="--c:#ff00ff">
+      <div class="card-ic" style="color:#ff00ff">📞</div>
+      <div><div class="card-t">مخاطبین</div><div class="card-s">لیست مخاطبین کل</div></div>
+    </a>
+    <a href="/admin/templates" class="card" style="--c:#ffbe0b">
+      <div class="card-ic" style="color:#ffbe0b">✉</div>
+      <div><div class="card-t">قالب‌ها</div><div class="card-s">قالب‌های پیامک</div></div>
+    </a>
+    <a href="/admin/test-sms" class="card" style="--c:#00ff9d">
+      <div class="card-ic" style="color:#00ff9d">📨</div>
+      <div><div class="card-t">تست پیامک</div><div class="card-s">ارسال آزمایشی</div></div>
+    </a>
+    <a href="/admin/ai-manager" class="card" style="--c:#bf00ff;">
+      <div class="card-ic" style="color:#bf00ff">🤖</div>
+      <div><div class="card-t">مدیر AI</div><div class="card-s">پلن و تنظیمات هوش مصنوعی</div></div>
+    </a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon" style="color:#00d4ff">🤖</div>
+    <div class="section-title">ربات‌های پیام‌رسان</div>
+    <div class="section-count">۳ گزینه</div>
+  </div>
+  <div class="cards">
+    <a href="/admin/bots" class="card" style="--c:#00d4ff">
+      <div class="card-ic" style="color:#00d4ff">🤖</div>
+      <div><div class="card-t">ربات‌های ادمین</div><div class="card-s">مدیریت ربات‌ها</div></div>
+    </a>
+    <a href="/admin/bot-members" class="card" style="--c:#00ff9d">
+      <div class="card-ic" style="color:#00ff9d">👥</div>
+      <div><div class="card-t">کاربران ربات</div><div class="card-s">اعضای ربات‌ها</div></div>
+    </a>
+    <a href="/admin/bot-ads" class="card" style="--c:#ff00ff;">
+      <div class="card-ic" style="color:#ff00ff">📢</div>
+      <div><div class="card-t">تبلیغات ربات</div><div class="card-s">کمپین‌های تبلیغاتی</div></div>
+    </a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon" style="color:#ffd700">🎁</div>
+    <div class="section-title">باشگاه مشتریان</div>
+    <div class="section-count">۲ گزینه</div>
+  </div>
+  <div class="cards">
+    <a href="/admin/loyalty" class="card" style="--c:#ffd700">
+      <div class="card-ic" style="color:#ffd700">🎁</div>
+      <div><div class="card-t">باشگاه مشتریان</div><div class="card-s">امتیاز و پاداش</div></div>
+    </a>
+    <a href="/admin/referrals" class="card" style="--c:#bf00ff">
+      <div class="card-ic" style="color:#bf00ff">🎯</div>
+      <div><div class="card-t">رتبه‌بندی دعوت</div><div class="card-s">لیدربورد معرفی</div></div>
+    </a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon" style="color:#7de5ff">⚙️</div>
+    <div class="section-title">سیستم و تنظیمات</div>
+    <div class="section-count">۳ گزینه</div>
+  </div>
+  <div class="cards">
+    <a href="/admin/backups" class="card" style="--c:#bf00ff">
+      <div class="card-ic" style="color:#bf00ff">💾</div>
+      <div><div class="card-t">پشتیبان‌گیری</div><div class="card-s">بکاپ دیتابیس</div></div>
+    </a>
+    <a href="/admin/public-url" class="card" style="--c:#00ff9d">
+      <div class="card-ic" style="color:#00ff9d">🌐</div>
+      <div><div class="card-t">آدرس عمومی</div><div class="card-s">URL های سرور</div></div>
+    </a>
+    <button type="button" class="card btn-logout" style="--c:#ff4d6d;background:transparent;cursor:pointer;font-family:inherit;text-align:right;border-color:rgba(255,77,109,.5)" onclick="openExitModal()">
+      <div class="card-ic" style="color:#ff4d6d">🚪</div>
+      <div><div class="card-t">خروج از پنل</div><div class="card-s">پایان جلسه</div></div>
+    </button>
+  </div>
+</div>
+<h2>🏪 لیست مغازه‌ها</h2>
+    <div class="table-wrap">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>کاربر</th>
+                <th>مغازه</th>
+                <th>روز</th>
+                <th>پیامک</th>
+                <th>مصرف</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+            </tr>
+            {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.shop_name or '-' }}</td>
+                <td>{{ u.days_left }}</td>
+                <td>{{ u.sms_left }}/{{ u.sms_limit }}</td>
+                <td>{{ u.sms_used }}</td>
+                <td>{{ '✅' if u.status=='active' else '⛔' }}</td>
+                <td><a href="/admin/user/{{ u.id }}" class="btn-mini">👁</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div id="addModal" class="modal-overlay">
+    <div class="modal-box" style="border-color:#00ff41;">
+        <div class="modal-icon" style="color:#00ff41;text-shadow:0 0 20px #00ff41;">➕</div>
+        <div class="modal-title" style="color:#00ff41;">افزودن مغازه جدید</div>
+        <form method="post" action="/admin/users/add" style="text-align:right;">
+            <label class="form-label">نام کاربری</label>
+            <input type="text" name="username" required>
+            <label class="form-label">رمز عبور</label>
+            <input type="text" name="password" required>
+            <label class="form-label">نام مغازه</label>
+            <input type="text" name="shop_name">
+            <label class="form-label">شماره تماس</label>
+            <input type="text" name="phone">
+            <label class="form-label">مدت اشتراک (روز)</label>
+            <input type="number" name="days" value="30" min="1">
+            <label class="form-label">محدودیت پیامک (تعداد کل)</label>
+            <input type="number" name="sms_limit" value="1000" min="1">
+            <div class="modal-actions" style="margin-top:15px;">
+                <button type="button" class="modal-btn modal-cancel" onclick="closeAddModal()">انصراف</button>
+                <button type="submit" class="modal-btn" style="background:#00ff41;color:#000;border-color:#00ff41;">ساخت</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="exitModal" class="modal-overlay">
+    <div class="modal-box" style="border-color:#ff0040;">
+        <div class="modal-icon" style="color:#ff0040;">❌</div>
+        <div class="modal-title" style="color:#ff0040;">خروج از پنل</div>
+        <div class="modal-text">آیا مطمئنی می‌خوای از پنل خارج بشی؟</div>
+        <div class="modal-actions">
+            <button type="button" class="modal-btn modal-cancel" onclick="closeExitModal()">انصراف</button>
+            <a href="/admin/logout" class="modal-btn modal-confirm" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">بله، خارج شو</a>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function openAddModal(){document.getElementById('addModal').classList.add('show');}
+    function closeAddModal(){document.getElementById('addModal').classList.remove('show');}
+    function openExitModal(){document.getElementById('exitModal').classList.add('show');}
+    function closeExitModal(){document.getElementById('exitModal').classList.remove('show');}
+    document.getElementById('exitModal').addEventListener('click', function(e){if(e.target===this)closeExitModal();});
+    document.getElementById('addModal').addEventListener('click', function(e){if(e.target===this)closeAddModal();});
+</script>
+<nav class="bottom-nav">
+    <a href="/admin/dashboard" class="nav-item active">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></span>
+        <span class="nav-label">پنل</span>
+    </a>
+    <a href="/admin/chat" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-8a8 8 0 0 1 8-8h2a8 8 0 0 1 8 5z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span>
+        <span class="nav-label">چت</span>
+        {% if unread_chat and unread_chat > 0 %}<span class="nav-badge">{{ unread_chat }}</span>{% endif %}
+    </a>
+    <a href="/admin/ai" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="3"/><circle cx="9" cy="14" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.5" fill="currentColor" stroke="none"/><path d="M12 3v5"/><circle cx="12" cy="3" r="1"/></svg></span>
+        <span class="nav-label">هوش مصنوعی</span>
+    </a>
+    <a href="/admin/profile" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></span>
+        <span class="nav-label">پروفایل</span>
+    </a>
+</nav>
+
+{% include "_global_bg.html" %}
+
+<!-- زنگوله اعلان‌ها -->
+<a href="#" id="notifBellLink" class="notif-bell" title="اعلان‌ها">
+🔔
+<span class="notif-badge-bell" id="notifBadge" style="display:none;">0</span>
+</a>
+<script>
+(function() {
+    if (window.__notif_loaded) return;
+    window.__notif_loaded = true;
+    function updateNotifCount() {
+        fetch('/api/notif/count').then(function(r) { return r.json(); }).then(function(data) {
+            var badge = document.getElementById('notifBadge');
+            if (!badge) return;
+            if (data.count > 0) {
+                badge.textContent = data.count > 99 ? '99+' : data.count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }).catch(function() {});
+    }
+    updateNotifCount();
+    setInterval(updateNotifCount, 30000);
+})();
+</script>
+
+
+<script>
+(function() {
+    var bell = document.getElementById('notifBellLink');
+    if (bell) {
+        if (window.location.pathname.indexOf('/admin/') === 0) {
+            bell.href = '/admin/notifications';
+        } else {
+            bell.href = '/notifications';
+        }
+    }
+})();
+</script>
+
+
+
+</body>
+</html>
