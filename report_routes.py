@@ -253,7 +253,7 @@ def panel_channel_send():
                                 full_img = base_url + img
                             else:
                                 full_img = img
-                            r = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/sendPhoto',
+                            r = _rq.post(f'https://botapi.rubika.ir/v3/{tok}/sendPhoto?v=3.6',
                                          json={'chat_id': ch_id, 'photo': full_img, 'caption': final},
                                          timeout=30)
                         else:
