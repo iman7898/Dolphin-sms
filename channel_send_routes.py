@@ -64,8 +64,8 @@ def channel_send_upload():
     ext = f.filename.rsplit('.', 1)[-1].lower()
     if ext not in ('jpg', 'jpeg', 'png', 'gif', 'webp'):
         return {'error': 'فرمت پشتیبانی نمیشه'}, 400
-    import time
-    fn = f'ch_{_uid()}_{int(time.time())}.{ext}'
+    import uuid
+    fn = f'ch_{_uid()}_{uuid.uuid4().hex[:8]}.{ext}'
     path = os.path.join(UPLOAD_DIR, fn)
     f.save(path)
     return {'url': '/' + path}
