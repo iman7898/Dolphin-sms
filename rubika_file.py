@@ -1,6 +1,7 @@
-"""📤 آپلود و ارسال فایل به روبیکا (روش درست)"""
+"""📤 آپلود و ارسال فایل به روبیکا"""
 import requests
 import os
+import mimetypes
 
 BASE = "https://botapi.rubika.ir/v3"
 
@@ -9,6 +10,11 @@ def upload_and_send_file(tok, chat_id, file_path, caption=''):
     """آپلود فایل + ارسال به کانال"""
     if not os.path.exists(file_path):
         return {'status': 'error', 'message': f'file not found: {file_path}'}
+
+    # تشخیص نوع فایل
+    mime_type, _ = mimetypes.guess_type(file_path)
+    if not mime_type:
+        mime_type = 'image/jpeg'
 
     # ۱) گرفتن URL آپلود
     try:
@@ -27,7 +33,7 @@ def upload_and_send_file(tok, chat_id, file_path, caption=''):
     try:
         with open(file_path, 'rb') as f:
             fname = os.path.basename(file_path)
-            files = {'file': (fname, f, 'image/jpeg')}
+            files = {'file': (fname, f, mime_type)}
             r2 = requests.post(upload_url, files=files, timeout=60)
         d2 = r2.json()
         if d2.get('status') != 'OK':

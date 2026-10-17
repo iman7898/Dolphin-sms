@@ -26,8 +26,9 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://22.11.137.146:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [17/Oct/2026 06:06:23] "GET /panel/channel-send HTTP/1.1" 200 -
-127.0.0.1 - - [17/Oct/2026 06:06:37] "POST /panel/channel-send/upload HTTP/1.1" 200 -
-127.0.0.1 - - [17/Oct/2026 06:06:38] "GET /static/uploads/ch_1_1792204597.png HTTP/1.1" 200 -
-127.0.0.1 - - [17/Oct/2026 06:06:54] "[32mPOST /panel/channel-send HTTP/1.1[0m" 302 -
-127.0.0.1 - - [17/Oct/2026 06:06:55] "GET /panel/channel-send HTTP/1.1" 200 -
+127.0.0.1 - - [17/Oct/2026 06:16:44] "GET /panel/channel-send HTTP/1.1" 200 -
+127.0.0.1 - - [17/Oct/2026 06:16:44] "[36mGET /static/icons/icon-192.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [17/Oct/2026 06:17:00] "POST /panel/channel-send/upload HTTP/1.1" 200 -
+127.0.0.1 - - [17/Oct/2026 06:17:00] "GET /static/uploads/ch_1_1792205220.png HTTP/1.1" 200 -
+127.0.0.1 - - [17/Oct/2026 06:17:10] "[32mPOST /panel/channel-send HTTP/1.1[0m" 302 -
+127.0.0.1 - - [17/Oct/2026 06:17:10] "GET /panel/channel-send HTTP/1.1" 200 -
