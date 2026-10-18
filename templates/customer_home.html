@@ -379,9 +379,21 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
 </style>
 
 
-<div style="padding: 10px 16px 0 16px;">
-    <button id="enablePushBtn" onclick="enableNotifications()" style="width:100%; background:linear-gradient(135deg,#bf00ff,#00d4ff); border:none; padding:12px; border-radius:12px; color:#fff; font-weight:bold; font-family:'Vazirmatn'; font-size:14px; cursor:pointer; box-shadow:0 0 15px rgba(0,212,255,0.5); display:flex; align-items:center; justify-content:center; gap:8px;">
-        <span>🔔</span> فعالسازی نوتیفیکیشن‌ها
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="pushContainer" style="padding: 10px 16px 0 16px; display: none;">
+    <button id="enablePushBtn" onclick="enableNotifications()" style="width:100%; background:linear-gradient(135deg,#bf00ff,#00d4ff); border:none; padding:14px; border-radius:14px; color:#fff; font-weight:bold; font-family:Vazirmatn; font-size:14px; cursor:pointer; box-shadow:0 0 20px rgba(0,212,255,0.4); display:flex; align-items:center; justify-content:center; gap:8px; transition: all 0.3s ease;">
+        <span>🔔</span> فعال‌سازی اعلان‌های هوشمند
     </button>
 </div>
 
@@ -457,4 +469,108 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
 })();
 </script>
 {% with active="home" %}{% include "_customer_nav.html" %}{% endwith %}
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="pushToast" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#ff4d6d; color:#fff; padding:10px 20px; border-radius:10px; font-weight:bold; z-index:99999; box-shadow:0 5px 15px rgba(0,0,0,0.5); text-align:center; width:80%; max-width:300px;"></div>
+
+<script>
+function showPushToast(msg, isError = true) {
+    const t = document.getElementById('pushToast');
+    t.innerText = msg;
+    t.style.background = isError ? '#ff4d6d' : '#06d6a0';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 4000);
+}
+
+function urlB64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) { outputArray[i] = rawData.charCodeAt(i); }
+  return outputArray;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    const container = document.getElementById('pushContainer');
+    
+    if (Notification.permission === 'granted') {
+        try {
+            const reg = await navigator.serviceWorker.getRegistration('/');
+            if(reg) {
+                const sub = await reg.pushManager.getSubscription();
+                if (sub) return; // دکمه رو نشون نده اگه قبلا ثبت شده
+            }
+        } catch(e) {}
+    }
+    container.style.display = 'block';
+});
+
+async function enableNotifications() {
+    const btn = document.getElementById('enablePushBtn');
+    
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+            showPushToast('شما اجازه دسترسی به نوتیفیکیشن را ندادید!');
+            return;
+        }
+
+        btn.innerHTML = '⏳ در حال اتصال...';
+        btn.style.pointerEvents = 'none';
+
+        const oldRegs = await navigator.serviceWorker.getRegistrations();
+        for(let reg of oldRegs) { await reg.unregister(); }
+
+        const reg = await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+        await navigator.serviceWorker.ready;
+        
+        const response = await fetch('/api/push/key');
+        const data = await response.json();
+        if (!data.key) {
+            showPushToast('کلید امنیتی از سرور دریافت نشد!');
+            return;
+        }
+        
+        const sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlB64ToUint8Array(data.key)
+        });
+
+        const saveRes = await fetch('/api/push/subscribe', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(sub)
+        });
+        
+        const saveData = await saveRes.json();
+        if(!saveData.ok) {
+            showPushToast('خطای سرور: ذخیره نشد!');
+            return;
+        }
+        
+        btn.innerHTML = '✅ اعلان‌ها فعال شد';
+        btn.style.background = 'linear-gradient(135deg,#06d6a0,#0077b6)';
+        showPushToast('با موفقیت فعال شد!', false);
+        
+        setTimeout(() => { document.getElementById('pushContainer').style.display = 'none'; }, 3000);
+        
+    } catch (e) {
+        showPushToast('خطا: ' + e.message);
+        btn.innerHTML = '🔔 فعال‌سازی اعلان‌های هوشمند';
+        btn.style.pointerEvents = 'auto';
+    }
+}
+</script>
 </body></html>

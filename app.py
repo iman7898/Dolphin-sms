@@ -90,6 +90,13 @@ app = Flask(__name__)
 
 app.secret_key = SECRET_KEY
 
+# ============ SERVICE WORKER (ROOT SCOPE) ============
+from flask import send_file
+@app.route('/service-worker.js')
+def serve_sw():
+    return send_file('static/pwa/service-worker.js', mimetype='application/javascript')
+
+
 # 🔐 تنظیمات امنیتی session
 from datetime import timedelta as _td
 app.config['PERMANENT_SESSION_LIFETIME'] = _td(days=30)

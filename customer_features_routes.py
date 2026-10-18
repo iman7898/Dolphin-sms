@@ -462,6 +462,20 @@ def send_push_to_user(user_id, title, body, url='/'):
 
 @feat_bp.route('/api/push/test')
 def push_test():
-    if not session.get('customer_id'): return {'error': 'login first'}
-    send_push_to_user(session['customer_id'], '🐬 تست موفق!', 'نوتیفیکیشن‌ها با موفقیت کار می‌کنند.', '/customer/home')
-    return {'ok': True, 'msg': 'نوتیفیکیشن تستی ارسال شد!'}
+    cid = session.get('customer_id')
+    if not cid: return {'error': 'اول لاگین کن'}
+    
+    try:
+        conn = sqlite3.connect('panel.db')
+        c = conn.cursor()
+        c.execute("SELECT COUNT(*) FROM push_subscriptions WHERE user_id=?", (cid,))
+        count = c.fetchone()[0]
+        conn.close()
+        
+        if count == 0:
+            return {'error': 'شما هنوز دکمه فعالسازی رو نزدید یا مرورگر اجازه نداده!'}
+            
+        send_push_to_user(cid, '🐬 تست موفق!', 'این یه نوتیفیکیشن واقعی از طرف Dolphin SMS هست.')
+        return {'ok': True, 'msg': 'نوتیفیکیشن ارسال شد! به گوشیت نگاه کن.'}
+    except Exception as e:
+        return {'error': f'خطای سرور: {str(e)}'}
