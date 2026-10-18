@@ -39,9 +39,8 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
 .btn:hover{transform:translateY(-2px);box-shadow:0 0 35px rgba(93,184,232,.9)}
 .btn.green{background:linear-gradient(135deg,#06d6a0,#0077b6);
   box-shadow:0 0 25px rgba(6,214,160,.6)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
 
-/* اکشن‌بار */
+/* ۳ دکمه اصلی */
 .action-bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .act-btn{flex:1;min-width:90px;padding:11px;border-radius:12px;border:1.5px solid;
   cursor:pointer;font-family:Vazirmatn;font-size:12px;font-weight:900;
@@ -53,63 +52,76 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
 .act-emoji:hover{background:rgba(255,214,10,.15);box-shadow:0 0 15px rgba(255,214,10,.5)}
 .act-img{color:#06d6a0;border-color:#06d6a0}
 .act-img:hover{background:rgba(6,214,160,.15);box-shadow:0 0 15px rgba(6,214,160,.5)}
-.act-clear{color:#ff6b9d;border-color:#ff6b9d}
-.act-clear:hover{background:rgba(255,107,157,.15)}
+
+/* 🟢 ۳ گزینه جدید که زیر دکمه‌ها باز میشه */
+.photo-menu{display:none;gap:8px;margin-bottom:12px;animation:slideDown .3s ease-out}
+.photo-menu.show{display:flex}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.pm-btn{flex:1;padding:10px 4px;border-radius:12px;border:1.5px solid;
+  cursor:pointer;font-family:Vazirmatn;font-size:11.5px;font-weight:900;
+  background:rgba(0,30,60,.4);transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pm-btn .ic{font-size:18px}
+.pm-upload{color:#06d6a0;border-color:rgba(6,214,160,.4)}
+.pm-upload:hover{background:rgba(6,214,160,.15)}
+.pm-create{color:#c77dff;border-color:rgba(199,125,255,.4)}
+.pm-create:hover{background:rgba(199,125,255,.15)}
+.pm-edit{color:#ffd60a;border-color:rgba(255,214,10,.4)}
+.pm-edit:hover{background:rgba(255,214,10,.15)}
 
 /* پیش‌نمایش عکس */
 .preview{display:none;margin-bottom:10px;position:relative;
-  border-radius:12px;overflow:hidden;border:1.5px solid rgba(93,184,232,.4)}
+  border-radius:12px;overflow:hidden;border:1.5px solid rgba(93,184,232,.4);cursor:pointer}
 .preview img{width:100%;display:block;max-height:250px;object-fit:cover}
 .preview-rm{position:absolute;top:8px;left:8px;width:32px;height:32px;
   border-radius:50%;background:rgba(255,60,100,.9);color:#fff;border:none;
-  font-size:18px;font-weight:900;cursor:pointer}
+  font-size:18px;font-weight:900;cursor:pointer;z-index:10}
 
-/* پیشنهاد ایموجی */
-.emoji-suggest{display:none;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.emoji-chip{padding:8px 12px;border-radius:10px;background:rgba(255,214,10,.1);
-  border:1px solid rgba(255,214,10,.4);color:#ffd60a;font-size:20px;
-  cursor:pointer;transition:.2s}
-.emoji-chip:hover{background:rgba(255,214,10,.25);transform:scale(1.1)}
-
-/* لودینگ */
-.loading{display:none;text-align:center;padding:20px;color:#90e0ef}
-.spin{display:inline-block;width:32px;height:32px;border:3px solid rgba(144,224,239,.2);
-  border-top-color:#90e0ef;border-radius:50%;animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-
-/* پرمیوم */
-.premium-badge{display:inline-block;padding:5px 12px;border-radius:10px;
-  background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a1a00;
-  font-size:11px;font-weight:900;margin-bottom:10px}
-.premium-lock{background:rgba(255,215,0,.1);border:1.5px dashed #ffd700;
-  border-radius:12px;padding:14px;text-align:center;color:#ffd700;
-  font-size:12.5px;line-height:1.8}
-.premium-lock a{color:#fff;background:linear-gradient(135deg,#ffd700,#ff8c00);
-  padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:900;
-  display:inline-block;margin-top:8px;font-size:12px}
+.msg{padding:12px;border-radius:12px;margin-bottom:12px;text-align:center;
+  font-size:13px;font-weight:900}
+.msg.ok{background:rgba(6,214,160,.15);border:1.5px solid #06d6a0;color:#06d6a0}
+.msg.error{background:rgba(255,107,157,.15);border:1.5px solid #ff6b9d;color:#ff8fab}
 
 .ch-item{display:flex;justify-content:space-between;align-items:center;
   padding:12px;background:rgba(0,30,60,.5);border-radius:12px;margin-bottom:8px;
   border:1px solid rgba(93,184,232,.3)}
 .ch-id{font-size:13px;font-weight:900;color:#90e0ef;font-family:monospace}
-.ch-title{font-size:11px;color:#a8c8e0;margin-top:3px}
 .ch-del{padding:8px 12px;border-radius:8px;background:rgba(255,107,157,.15);
   border:1px solid rgba(255,107,157,.5);color:#ff8fab;font-family:Vazirmatn;
   font-size:11px;font-weight:900;cursor:pointer}
-.msg{padding:12px;border-radius:12px;margin-bottom:12px;text-align:center;
-  font-size:13px;font-weight:900}
-.msg.ok{background:rgba(6,214,160,.15);border:1.5px solid #06d6a0;color:#06d6a0}
-.msg.error{background:rgba(255,107,157,.15);border:1.5px solid #ff6b9d;color:#ff8fab}
 .empty{text-align:center;padding:30px;color:#7a9cb5;font-size:12.5px}
-.nw{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
-  width:calc(100% - 30px);max-width:500px;height:66px;
-  background:rgba(10,25,45,.9);backdrop-filter:blur(20px);
-  border:1px solid rgba(150,210,240,.25);border-radius:20px;
-  display:flex;align-items:center;justify-content:space-around;z-index:9999}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  color:#6b8aa3;text-decoration:none;font-size:10px;padding:8px 4px}
-.ni.act{color:#90e0ef;background:rgba(93,184,232,.15);border-radius:14px}
+
+/* 🌟 مودال هوش مصنوعی */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);z-index:10000;align-items:center;justify-content:center;padding:20px}
+.modal{background:linear-gradient(135deg,#0f3f5f,#0c2b4a);width:100%;max-width:420px;
+  border-radius:20px;padding:20px;border:1.5px solid rgba(150,210,240,.4);
+  box-shadow:0 0 50px rgba(0,0,0,.5)}
+.modal-title{font-size:16px;font-weight:900;color:#90e0ef;text-align:center;margin-bottom:6px}
+.modal-sub{font-size:11px;color:#a8c8e0;text-align:center;margin-bottom:16px}
+
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.preset-chip{padding:6px 12px;border-radius:20px;background:rgba(93,184,232,.15);
+  border:1px solid rgba(93,184,232,.4);color:#e0f4ff;font-family:Vazirmatn;
+  font-size:11px;cursor:pointer;transition:.2s}
+.preset-chip:hover{background:rgba(93,184,232,.3);border-color:#5db8e8}
+
+.modal textarea{min-height:80px;margin-bottom:12px}
+.modal-actions{display:flex;gap:10px}
+.btn-cancel{background:rgba(150,210,240,.1);color:#a8c8e0;border:1.5px solid rgba(150,210,240,.3)}
+.loading-img{display:none;text-align:center;padding:20px;color:#90e0ef}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid rgba(144,224,239,.2);
+  border-top-color:#90e0ef;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* 🌟 توست (پیام شیک) */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:linear-gradient(135deg,#ff6b9d,#c9184a);color:#fff;padding:12px 24px;
+  border-radius:12px;font-weight:bold;font-size:13px;z-index:99999;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .3s;}
+#toast.show{transform:translateX(-50%) translateY(0);}
 </style></head><body>
+
+<div id="toast"></div>
 
 <div class="back-bar">
   <a href="/panel/dashboard" class="back-btn">→</a>
@@ -117,20 +129,14 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
 </div>
 
 <div class="container">
-
-  {% if is_premium %}
-  <div style="text-align:center"><span class="premium-badge">💎 پرمیوم فعال</span></div>
-  {% endif %}
-
   {% if msg %}
   <div class="msg {{ msg[0] }}">{{ msg[1] }}</div>
   {% endif %}
 
   <div class="card">
     <div class="card-title">📝 نوشتن پست</div>
-    <form method="POST" id="sendForm" enctype="multipart/form-data">
+    <form method="POST" action="/panel/channel-send" enctype="multipart/form-data" id="mainForm">
       <input type="hidden" name="action" value="send">
-      <input type="hidden" name="image_url" id="imageUrlInput" value="">
 
       <label>📢 کانال مقصد</label>
       <select name="target_channel" required>
@@ -140,35 +146,35 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
         {% endfor %}
       </select>
 
-      {% if is_premium %}
+      <!-- ۳ دکمه اصلی -->
       <div class="action-bar">
-        <button type="button" class="act-btn act-ai" onclick="aiEnhance()">🤖 قوی‌سازی با AI</button>
+        <button type="button" class="act-btn act-ai" onclick="aiEnhance()">🤖 قوی‌سازی متن</button>
         <button type="button" class="act-btn act-emoji" onclick="emojiSuggest()">🎨 ایموجی</button>
-        <button type="button" class="act-btn act-img" onclick="document.getElementById('imgInput').click()">📷 عکس</button>
-      </div>
-      <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="uploadImage(this)">
-      {% else %}
-      <div class="premium-lock">
-        🔒 قوی‌سازی با AI، افزودن عکس و ایموجی هوشمند<br>
-        فقط برای کاربران پرمیوم
-        <br><a href="/panel/premium">💎 فعال‌سازی پرمیوم</a>
-      </div>
-      {% endif %}
-
-      <div class="preview" id="previewBox">
-        <img id="previewImg" src="" alt="">
-        <button type="button" class="preview-rm" onclick="removeImage()">✕</button>
+        <button type="button" class="act-btn act-img" onclick="togglePhotoMenu()">📷 عکس</button>
       </div>
 
-      <div class="emoji-suggest" id="emojiBox"></div>
+      <!-- ۳ گزینه که زیر دکمه عکس باز میشه -->
+      <div class="photo-menu" id="photoMenu">
+        <button type="button" class="pm-btn pm-upload" onclick="document.getElementById('imgInput').click()">
+          <span class="ic">📁</span> آپلود از گوشی
+        </button>
+        <button type="button" class="pm-btn pm-create" onclick="openModal('create')">
+          <span class="ic">🎨</span> ساخت با AI
+        </button>
+        <button type="button" class="pm-btn pm-edit" onclick="openModal('edit')">
+          <span class="ic">✨</span> تغییر با AI
+        </button>
+      </div>
+      
+      <input type="file" id="imgInput" name="image_file" accept="image/*" style="display:none" onchange="showPreview(this)">
+
+      <div class="preview" id="previewBox" onclick="togglePhotoMenu()">
+        <img id="previewImg" src="" alt="برای تغییر کلیک کنید">
+        <button type="button" class="preview-rm" onclick="event.stopPropagation(); rmImg();">✕</button>
+      </div>
 
       <label>💬 متن پیام</label>
       <textarea name="text" id="textInput" placeholder="متن پیام خود را بنویسید..." required></textarea>
-
-      <div class="loading" id="loading">
-        <div class="spin"></div>
-        <div style="margin-top:10px;font-size:12px">در حال پردازش...</div>
-      </div>
 
       <label>🏷 تگ (اختیاری)</label>
       <input type="text" name="tag" placeholder="@dolphin_shop">
@@ -179,128 +185,192 @@ input:focus,textarea:focus{outline:none;border-color:#5db8e8;
 
   <div class="card">
     <div class="card-title">➕ افزودن کانال جدید</div>
-    <form method="POST">
+    <form method="POST" action="/panel/channel-send">
       <input type="hidden" name="action" value="add_channel">
       <label>📢 آیدی کانال</label>
       <input type="text" name="channel_id" placeholder="@my_channel" required>
-      <label>📝 عنوان (اختیاری)</label>
-      <input type="text" name="title" placeholder="کانال فروشگاه">
-      <label>🏷 تگ پیش‌فرض (اختیاری)</label>
-      <input type="text" name="tag" placeholder="@dolphin_shop">
       <button type="submit" class="btn">➕ افزودن</button>
     </form>
   </div>
-
-  <div class="card">
-    <div class="card-title">📋 کانال‌های من</div>
-    {% if channels %}
-      {% for ch in channels %}
-      <div class="ch-item">
-        <div>
-          <div class="ch-id">{{ ch[1] }}</div>
-          {% if ch[2] %}<div class="ch-title">{{ ch[2] }}</div>{% endif %}
-        </div>
-        <form method="POST" style="margin:0" onsubmit="return confirm('حذف؟')">
-          <input type="hidden" name="action" value="del_channel">
-          <input type="hidden" name="cid" value="{{ ch[0] }}">
-          <button type="submit" class="ch-del">🗑</button>
-        </form>
-      </div>
-      {% endfor %}
-    {% else %}
-      <div class="empty">📭 هنوز کانالی اضافه نکردی</div>
-    {% endif %}
-  </div>
-
 </div>
 
-<div class="nw">
-  <a class="ni" href="/panel/dashboard"><span>🏠</span><span>خانه</span></a>
-  <a class="ni" href="/panel/send"><span>📤</span><span>ارسال</span></a>
-  <a class="ni act" href="/panel/channel-send"><span>📢</span><span>کانال</span></a>
-  <a class="ni" href="/panel/premium"><span>💎</span><span>پرمیوم</span></a>
+<!-- 🌟 مودال هوش مصنوعی -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">ساخت عکس</div>
+    <div class="modal-sub" id="modalSub">توصیف کن چه عکسی می‌خوای (انگلیسی بهتره)</div>
+    
+    <div class="presets">
+      <div class="preset-chip" onclick="setPrompt('A cozy modern cafe interior, warm lighting, coffee cups')">☕ کافه</div>
+      <div class="preset-chip" onclick="setPrompt('Fresh colorful fruits on wooden shelves in a shop')">🍎 میوه‌فروشی</div>
+      <div class="preset-chip" onclick="setPrompt('A modern clothing boutique with stylish mannequins')">👕 پوشاک</div>
+      <div class="preset-chip" onclick="setPrompt('A luxury sports car in a dark showroom, cinematic')">🚗 ماشین</div>
+    </div>
+
+    <div id="modalBody">
+      <textarea id="aiPrompt" placeholder="مثلا: A beautiful modern room..."></textarea>
+      <div class="loading-img" id="aiLoading">
+        <div class="spin"></div>
+        <div style="margin-top:10px">در حال ساخت عکس...</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="closeModal()">انصراف</button>
+        <button class="btn green" id="aiSubmitBtn" onclick="generateAIImage()">✨ ساخت عکس</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-function showLoading() { document.getElementById('loading').style.display = 'block'; }
-function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+// --- توست شیک ---
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 
+// --- باز و بسته کردن منوی عکس ---
+function togglePhotoMenu() {
+  var menu = document.getElementById('photoMenu');
+  menu.classList.toggle('show');
+}
+
+// --- AI متن ---
 function aiEnhance() {
   var t = document.getElementById('textInput').value.trim();
-  if (!t) { alert('اول متن رو بنویس'); return; }
-  showLoading();
+  if (!t) { showToast('اول متن رو توی کادر بنویس'); return; }
+  var btn = document.querySelector('.act-ai');
+  var old = btn.innerHTML;
+  btn.innerHTML = '⏳...';
   fetch('/panel/channel-send/ai', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    method: 'POST', headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({text: t})
-  })
-  .then(r => r.json())
-  .then(d => {
-    hideLoading();
-    if (d.result) {
-      document.getElementById('textInput').value = d.result;
-    } else {
-      alert('خطا: ' + (d.error || 'نامشخص'));
-    }
-  })
-  .catch(e => { hideLoading(); alert('خطا: ' + e); });
+  }).then(r => r.json()).then(d => {
+    btn.innerHTML = old;
+    if (d.result) document.getElementById('textInput').value = d.result;
+    else showToast('خطا در قوی‌سازی');
+  }).catch(e => { btn.innerHTML = old; showToast('خطای شبکه'); });
 }
 
+// --- ایموجی ---
 function emojiSuggest() {
   var t = document.getElementById('textInput').value.trim();
-  if (!t) { alert('اول متن رو بنویس'); return; }
+  if (!t) { showToast('اول متن رو بنویس'); return; }
   var word = t.split(' ')[0];
-  showLoading();
+  var btn = document.querySelector('.act-emoji');
+  var old = btn.innerHTML;
+  btn.innerHTML = '⏳...';
   fetch('/panel/channel-send/emoji', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    method: 'POST', headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({word: word})
-  })
-  .then(r => r.json())
-  .then(d => {
-    hideLoading();
+  }).then(r => r.json()).then(d => {
+    btn.innerHTML = old;
     if (d.emoji) {
-      var box = document.getElementById('emojiBox');
-      box.style.display = 'flex';
-      var chip = document.createElement('div');
-      chip.className = 'emoji-chip';
-      chip.textContent = d.emoji;
-      chip.onclick = function() {
-        var ta = document.getElementById('textInput');
-        ta.value = d.emoji + ' ' + ta.value;
-        box.style.display = 'none';
-      };
-      box.innerHTML = '';
-      box.appendChild(chip);
+      var ta = document.getElementById('textInput');
+      ta.value = d.emoji + ' ' + ta.value;
     }
-  })
-  .catch(e => { hideLoading(); alert('خطا: ' + e); });
+  }).catch(e => { btn.innerHTML = old; });
 }
 
-function uploadImage(inp) {
-  if (!inp.files || !inp.files[0]) return;
-  showLoading();
-  var fd = new FormData();
-  fd.append('image', inp.files[0]);
-  fetch('/panel/channel-send/upload', { method: 'POST', body: fd })
-  .then(r => r.json())
-  .then(d => {
-    hideLoading();
-    if (d.url) {
-      document.getElementById('imageUrlInput').value = d.url;
-      document.getElementById('previewImg').src = d.url;
-      document.getElementById('previewBox').style.display = 'block';
-    } else {
-      alert('خطا: ' + (d.error || 'نامشخص'));
-    }
-  })
-  .catch(e => { hideLoading(); alert('خطا: ' + e); });
+// --- پیش‌نمایش ---
+function showPreview(inp) {
+  if (inp.files && inp.files[0]) {
+    var url = URL.createObjectURL(inp.files[0]);
+    document.getElementById('previewImg').src = url;
+    document.getElementById('previewBox').style.display = 'block';
+  }
 }
-
-function removeImage() {
-  document.getElementById('imageUrlInput').value = '';
-  document.getElementById('previewBox').style.display = 'none';
+function rmImg() {
   document.getElementById('imgInput').value = '';
+  document.getElementById('previewBox').style.display = 'none';
+}
+
+// --- هوش مصنوعی عکس ---
+let currentMode = 'create';
+function openModal(mode) {
+  document.getElementById('photoMenu').classList.remove('show'); // بستن منوی عکس
+  currentMode = mode;
+  document.getElementById('modalBg').style.display = 'flex';
+  document.getElementById('aiLoading').style.display = 'none';
+  document.getElementById('aiSubmitBtn').style.display = 'block';
+  document.getElementById('aiPrompt').value = '';
+  
+  if (mode === 'create') {
+    document.getElementById('modalTitle').innerText = '🎨 ساخت عکس جدید';
+    document.getElementById('modalSub').innerText = 'توصیف کن چه عکسی می‌خوای یا از دکمه‌های بالا انتخاب کن';
+    document.getElementById('aiSubmitBtn').innerText = '✨ ساخت عکس';
+  } else {
+    document.getElementById('modalTitle').innerText = '✨ تغییر عکس';
+    document.getElementById('modalSub').innerText = 'چه تغییری در عکس آپلود شده می‌خوای؟';
+    document.getElementById('aiSubmitBtn').innerText = '✨ اعمال تغییرات';
+    var imgInput = document.getElementById('imgInput');
+    if (!imgInput.files || imgInput.files.length === 0) {
+      showToast('اول باید یه عکس از گوشی انتخاب کنی!');
+      imgInput.click();
+      closeModal();
+    }
+  }
+}
+function closeModal(){ document.getElementById('modalBg').style.display = 'none'; }
+function setPrompt(txt) { document.getElementById('aiPrompt').value = txt; }
+
+function generateAIImage() {
+  var prompt = document.getElementById('aiPrompt').value.trim();
+  if (!prompt) { showToast('لطفا یه توضیحی بنویس'); return; }
+  
+  document.getElementById('aiLoading').style.display = 'block';
+  document.getElementById('aiSubmitBtn').style.display = 'none';
+  
+  var fetchOptions = {};
+  var endpoint = '/panel/channel-send/ai-image';
+  
+  if (currentMode === 'edit') {
+    endpoint = '/panel/channel-send/edit-image';
+    var formData = new FormData();
+    formData.append('prompt', prompt);
+    formData.append('image', document.getElementById('imgInput').files[0]);
+    fetchOptions = { method: 'POST', body: formData };
+  } else {
+    fetchOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ prompt: prompt })
+    };
+  }
+
+  fetch(endpoint, fetchOptions)
+  .then(async r => {
+    const text = await r.text();
+    try { return JSON.parse(text); } catch(e) { throw new Error('پاسخ نامعتبر'); }
+  })
+  .then(d => {
+    document.getElementById('aiLoading').style.display = 'none';
+    document.getElementById('aiSubmitBtn').style.display = 'block';
+    
+    if (d.url) {
+      fetch(d.url)
+        .then(res => res.blob())
+        .then(blob => {
+          var file = new File([blob], "ai_generated.jpg", { type: "image/jpeg" });
+          var dt = new DataTransfer();
+          dt.items.add(file);
+          document.getElementById('imgInput').files = dt.files;
+          
+          document.getElementById('previewImg').src = d.url;
+          document.getElementById('previewBox').style.display = 'block';
+          closeModal();
+          showToast('✅ عکس با موفقیت ساخته شد');
+        });
+    } else {
+      showToast('خطا: ' + (d.error || 'مشکل در پردازش'));
+    }
+  })
+  .catch(e => {
+    document.getElementById('aiLoading').style.display = 'none';
+    document.getElementById('aiSubmitBtn').style.display = 'block';
+    showToast('خطای شبکه: ' + e.message);
+  });
 }
 </script>
 

@@ -348,6 +348,36 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
   <div class="sec-t">📂 دسته‌بندی‌های اصلی</div>
   <a href="/customer/categories" class="sec-more">بیشتر ←</a>
 </div>
+
+<!-- 🌟 بنر گردونه شانس -->
+<div style="padding: 0 16px 16px 16px;">
+    <a href="/customer/wheel" style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #bf00ff, #00d4ff); padding: 16px; border-radius: 20px; text-decoration: none; box-shadow: 0 0 25px rgba(191, 0, 255, 0.5); position: relative; overflow: hidden; animation: pulseWheel 2.5s infinite;">
+        
+        <!-- افکت نور پس زمینه -->
+        <div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: translateX(-100%); animation: shine 3s infinite;"></div>
+        
+        <div style="display: flex; align-items: center; gap: 14px; z-index: 1;">
+            <div style="width: 50px; height: 50px; background: rgba(0,0,0,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 30px; animation: spinWheel 3s linear infinite;">🎡</span>
+            </div>
+            <div>
+                <div style="color: #fff; font-weight: 900; font-size: 16px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">گردونه شانس روزانه!</div>
+                <div style="color: #e0f4ff; font-size: 12px; margin-top: 4px; font-weight: bold;">امروز شانستو امتحان کن و جایزه بگیر</div>
+            </div>
+        </div>
+        
+        <div style="background: #fff; color: #bf00ff; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 18px; font-weight: 900; z-index: 1; box-shadow: 0 0 15px rgba(255,255,255,0.8);">←</div>
+    </a>
+</div>
+<style>
+@keyframes spinWheel { 100% { transform: rotate(360deg); } }
+@keyframes pulseWheel { 
+    0%, 100% { box-shadow: 0 0 25px rgba(191, 0, 255, 0.5); transform: scale(1); } 
+    50% { box-shadow: 0 0 45px rgba(0, 212, 255, 0.8); transform: scale(1.02); } 
+}
+@keyframes shine { 100% { transform: translateX(100%); } }
+</style>
+
 <div class="main-cats">
 {% for c in home_cats %}
 <a href="/customer/category/{{ c[1] }}" class="main-cat" style="--c:{{ c[3] }}">

@@ -1,37 +1,33 @@
-const CACHE = 'otp-panel-v1';
-const OFFLINE_URLS = [
-  '/customer/home',
-  '/customer/search',
-  '/static/pwa/manifest.json',
-];
+const CACHE = 'otp-panel-v2';
+self.addEventListener('install', function(e) { self.skipWaiting(); });
+self.addEventListener('activate', function(e) { e.waitUntil(self.clients.claim()); });
 
-self.addEventListener('install', function(e){
-  e.waitUntil(
-    caches.open(CACHE).then(function(c){ return c.addAll(OFFLINE_URLS); })
-    .then(function(){ return self.skipWaiting(); })
-  );
+self.addEventListener('push', function(e) {
+  let data = { title: 'Dolphin SMS', body: 'پیام جدید دارید' };
+  if (e.data) {
+    try { data = e.data.json(); } catch(err) { data.body = e.data.text(); }
+  }
+  const options = {
+    body: data.body,
+    icon: '/static/icons/icon-192.png',
+    badge: '/static/icons/icon-192.png',
+    vibrate: [200, 100, 200],
+    data: { url: data.url || '/' }
+  };
+  e.waitUntil(self.registration.showNotification(data.title, options));
 });
 
-self.addEventListener('activate', function(e){
+self.addEventListener('notificationclick', function(e) {
+  e.notification.close();
   e.waitUntil(
-    caches.keys().then(function(keys){
-      return Promise.all(keys.filter(function(k){return k!==CACHE;})
-        .map(function(k){return caches.delete(k);}));
-    }).then(function(){ return self.clients.claim(); })
-  );
-});
-
-self.addEventListener('fetch', function(e){
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request).then(function(res){
-      const copy = res.clone();
-      caches.open(CACHE).then(function(c){ c.put(e.request, copy); });
-      return res;
-    }).catch(function(){
-      return caches.match(e.request).then(function(r){
-        return r || caches.match('/customer/home');
-      });
+    clients.matchAll({ type: 'window' }).then(function(clientList) {
+      for (let i = 0; i < clientList.length; i++) {
+        let client = clientList[i];
+        if (client.url === e.notification.data.url && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) { return clients.openWindow(e.notification.data.url); }
     })
   );
 });

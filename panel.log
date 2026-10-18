@@ -6,7 +6,7 @@ nohup: ignoring input
 ✅ ticket_bp registered
 ✅ loyalty_bp registered
 ✅ referral_bp registered
-❌ report_bp error: View function mapping is overwriting an existing endpoint function: channel_send.channel_send_photo
+✅ report_bp registered
 ✅ twofa_bp registered
 ✅ test_bp registered
 ✅ autoreply_bp registered
@@ -24,5 +24,5 @@ customer_features OK
 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:8080
- * Running on http://22.11.137.146:8080
+ * Running on http://192.168.78.11:8080
 [33mPress CTRL+C to quit[0m

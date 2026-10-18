@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ورود با پیامک</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;background:#020617;color:#fff;
+  display:flex;align-items:center;justify-content:center;min-height:100vh;
+  overflow:hidden;direction:rtl;padding:20px}
+
+/* افکت کهکشان */
+.stars{position:fixed;inset:0;z-index:-2;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, #fff, rgba(0,0,0,0));
+  background-repeat:repeat;background-size:250px 250px;
+  opacity:0.4;animation:twinkle 5s infinite alternate}
+@keyframes twinkle{0%{opacity:0.3}100%{opacity:0.8}}
+.nebula{position:fixed;width:300px;height:300px;border-radius:50%;filter:blur(80px);
+  z-index:-1;opacity:0.4;animation:float 10s infinite alternate}
+.n1{background:#4c1d95;top:-50px;right:-50px}
+.n2{background:#064e3b;bottom:-50px;left:-50px}
+@keyframes float{0%{transform:translate(0,0)}100%{transform:translate(-30px,30px)}}
+
+/* کارت شیشه‌ای */
+.card{background:rgba(10, 25, 45, 0.6);backdrop-filter:blur(20px);
+  border:1.5px solid rgba(0, 212, 255, 0.3);
+  border-radius:24px;padding:35px 25px;width:100%;max-width:400px;text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(0,212,255,.1);
+  animation:cardIn .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.icon{font-size:60px;margin-bottom:15px;animation:iconFloat 3s infinite}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+h2{margin-bottom:8px;font-size:20px;font-weight:900;
+  background:linear-gradient(90deg,#00d4ff,#7dffd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+p{color:#a8c8e0;font-size:13px;margin-bottom:25px;line-height:1.6}
+
+/* ورودی شماره */
+input.phone-input{width:100%;padding:16px;border-radius:14px;background:rgba(0,0,0,.3);
+  color:#fff;border:1.5px solid rgba(93,184,232,.4);font-family:'Vazirmatn';
+  font-size:18px;text-align:center;letter-spacing:2px;margin-bottom:20px;transition:.3s}
+input.phone-input:focus{outline:none;border-color:#00d4ff;box-shadow:0 0 20px rgba(0,212,255,.4)}
+
+/* ورودی کد ۴ رقمی (دیزاین جعبه‌ای) */
+.otp-boxes{display:flex;gap:10px;justify-content:center;direction:ltr;margin-bottom:20px}
+.otp-input{width:55px;height:60px;border-radius:12px;background:rgba(0,0,0,.3);
+  color:#00d4ff;border:1.5px solid rgba(93,184,232,.4);font-family:monospace;
+  font-size:28px;font-weight:900;text-align:center;transition:.3s}
+.otp-input:focus{outline:none;border-color:#00d4ff;background:rgba(0,212,255,.1);
+  box-shadow:0 0 20px rgba(0,212,255,.4);transform:translateY(-3px)}
+
+/* دکمه */
+button{width:100%;padding:16px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#00d4ff,#0077b6);color:#fff;
+  font-family:'Vazirmatn';font-size:16px;font-weight:900;cursor:pointer;
+  transition:.3s;box-shadow:0 10px 25px rgba(0,212,255,.3)}
+button:hover{transform:translateY(-2px);box-shadow:0 15px 35px rgba(0,212,255,.5)}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+#step2{display:none}
+.timer{color:#ff6b9d;font-size:14px;margin-bottom:15px;font-weight:bold;font-family:monospace;letter-spacing:1px}
+.resend{color:#a8c8e0;font-size:12px;margin-top:15px;cursor:pointer}
+.resend:hover{color:#00d4ff}
+</style></head><body>
+
+<div class="stars"></div>
+<div class="nebula n1"></div>
+<div class="nebula n2"></div>
+
+<div class="card">
+  <div class="icon" id="mainIcon">📲</div>
+  <h2 id="title">ورود با پیامک</h2>
+  <p id="subtitle">شماره موبایل خود را وارد کنید</p>
+
+  <div id="step1">
+    <input type="tel" id="phone" class="phone-input" placeholder="09123456789" maxlength="11">
+    <button onclick="sendCode()" id="btnSend">دریافت کد</button>
+  </div>
+
+  <div id="step2">
+    <div class="otp-boxes">
+      <input type="tel" class="otp-input" maxlength="1" onkeyup="moveNext(this, 'otp2')" id="otp1">
+      <input type="tel" class="otp-input" maxlength="1" onkeyup="moveNext(this, 'otp3')" id="otp2">
+      <input type="tel" class="otp-input" maxlength="1" onkeyup="moveNext(this, 'otp4')" id="otp3">
+      <input type="tel" class="otp-input" maxlength="1" onkeyup="moveNext(this, '')" id="otp4">
+    </div>
+    <div class="timer" id="timer">۰۲:۰۰</div>
+    <button onclick="verifyCode()" id="btnVerify">ورود به فروشگاه</button>
+    <div class="resend" onclick="backToPhone()">ویرایش شماره موبایل</div>
+  </div>
+</div>
+
+<script>
+let userPhone = '';
+
+// حرکت خودکار بین کادرهای کد
+function moveNext(current, nextId) {
+  if (current.value.length === 1 && nextId) {
+    document.getElementById(nextId).focus();
+  }
+}
+
+function backToPhone() {
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('title').innerText = 'ورود با پیامک';
+  document.getElementById('subtitle').innerText = 'شماره موبایل خود را وارد کنید';
+  document.getElementById('mainIcon').innerText = '📲';
+  document.getElementById('btnSend').disabled = false;
+  document.getElementById('btnSend').innerText = 'دریافت کد';
+}
+
+function sendCode() {
+  const phone = document.getElementById('phone').value;
+  if(phone.length !== 11 || !phone.startsWith('09')) {
+    alert('شماره موبایل را درست وارد کنید'); return;
+  }
+  
+  const btn = document.getElementById('btnSend');
+  btn.innerText = 'در حال ارسال...'; btn.disabled = true;
+
+  fetch('/customer/otp/send', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({phone: phone})
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(data.error) { 
+        alert(data.error); 
+        btn.disabled = false; btn.innerText = 'دریافت کد';
+        return; 
+    }
+    
+    userPhone = phone;
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'block';
+    document.getElementById('title').innerText = 'کد تایید را وارد کنید';
+    document.getElementById('subtitle').innerText = 'کد ۴ رقمی به ' + phone + ' ارسال شد';
+    document.getElementById('mainIcon').innerText = '🔐';
+    document.getElementById('otp1').focus();
+    
+    // تایمر
+    let time = 120;
+    const timerEl = document.getElementById('timer');
+    const interval = setInterval(() => {
+      time--;
+      if(time <= 0) {
+        clearInterval(interval);
+        timerEl.innerText = 'کد منقضی شد';
+        document.getElementById('btnVerify').disabled = true;
+      } else {
+        let m = Math.floor(time / 60).toString().padStart(2, '0');
+        let s = (time % 60).toString().padStart(2, '0');
+        timerEl.innerText = m + ':' + s;
+      }
+    }, 1000);
+  });
+}
+
+function verifyCode() {
+  const code = document.getElementById('otp1').value + document.getElementById('otp2').value + 
+               document.getElementById('otp3').value + document.getElementById('otp4').value;
+  if(code.length < 4) { alert('کد را کامل وارد کنید'); return; }
+  
+  const btn = document.getElementById('btnVerify');
+  btn.innerText = 'در حال بررسی...'; btn.disabled = true;
+
+  fetch('/customer/otp/verify', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({phone: userPhone, code: code})
+  })
+  .then(r => r.json())
+  .then(data => {
+    btn.disabled = false; btn.innerText = 'ورود به فروشگاه';
+    if(data.error) { alert(data.error); return; }
+    if(data.redirect) { window.location.href = data.redirect; }
+  });
+}
+</script>
+</body></html>

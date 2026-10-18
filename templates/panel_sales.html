@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>داشبورد فروش</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn';background:#0a0a0f;color:#fff;padding:15px;padding-bottom:100px;direction:rtl;
+  background-image:radial-gradient(circle at 50% 0%,rgba(0,212,255,.1),transparent 50%)}
+.top{display:flex;align-items:center;gap:15px;margin-bottom:20px}
+.back{background:rgba(0,212,255,.1);border:1px solid #00d4ff;color:#00d4ff;padding:8px 12px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
+h1{font-size:18px;color:#e0f4ff}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.stat-box{background:rgba(0,212,255,.05);border:1.5px solid rgba(0,212,255,.2);padding:15px;border-radius:16px;text-align:center}
+.stat-title{font-size:12px;color:#a8c8e0;margin-bottom:5px}
+.stat-val{font-size:20px;font-weight:900;color:#00d4ff;direction:ltr}
+
+.chart-box{background:rgba(0,212,255,.05);border:1.5px solid rgba(0,212,255,.2);padding:15px;border-radius:16px;margin-bottom:20px}
+.chart-title{font-size:14px;font-weight:bold;color:#00d4ff;margin-bottom:15px;text-align:center}
+
+.add-box{background:linear-gradient(135deg,rgba(6,214,160,.1),rgba(0,119,182,.1));border:1.5px solid #06d6a0;padding:20px;border-radius:20px;text-align:center}
+input{width:100%;padding:15px;border-radius:12px;background:rgba(0,0,0,.3);color:#fff;border:1.5px solid rgba(6,214,160,.5);font-family:'Vazirmatn';font-size:18px;text-align:center;margin-bottom:15px;font-weight:bold}
+input:focus{outline:none;border-color:#06d6a0;box-shadow:0 0 20px rgba(6,214,160,.3)}
+button{width:100%;padding:15px;border-radius:12px;border:none;background:linear-gradient(135deg,#06d6a0,#0077b6);color:#fff;font-family:'Vazirmatn';font-size:16px;font-weight:900;cursor:pointer;transition:.3s}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(6,214,160,.4)}
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:#06d6a0;color:#000;padding:12px 24px;border-radius:12px;font-weight:bold;z-index:999;transition:.3s}
+#toast.show{transform:translateX(-50%) translateY(0)}
+</style></head><body>
+
+<div id="toast"></div>
+
+<div class="top">
+  <a href="/panel/dashboard" class="back">← بازگشت</a>
+  <h1>📊 داشبورد فروش</h1>
+</div>
+
+<div class="stats">
+  <div class="stat-box">
+    <div class="stat-title">فروش امروز</div>
+    <div class="stat-val">{{ "{:,}".format(today_stat[1]) }} <small style="font-size:12px">ت</small></div>
+    <div style="font-size:11px;color:#a8c8e0;margin-top:5px">{{ today_stat[0] }} فاکتور</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-title">فروش این ماه</div>
+    <div class="stat-val">{{ "{:,}".format(month_stat[1]) }} <small style="font-size:12px">ت</small></div>
+    <div style="font-size:11px;color:#a8c8e0;margin-top:5px">{{ month_stat[0] }} فاکتور</div>
+  </div>
+</div>
+
+<div class="chart-box">
+  <div class="chart-title">📈 نمودار فروش ۷ روز اخیر</div>
+  <canvas id="salesChart" height="200"></canvas>
+</div>
+
+<div class="add-box">
+  <div style="font-size:14px;font-weight:bold;color:#06d6a0;margin-bottom:15px">💳 ثبت سریع کارت‌کشی جدید</div>
+  <input type="number" id="amountInput" placeholder="مبلغ به تومان (مثلا 150000)">
+  <button onclick="addSale()">ثبت فروش</button>
+</div>
+
+<script>
+// رسم نمودار
+fetch('/panel/sales/chart-data')
+  .then(r => r.json())
+  .then(data => {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'مبلغ فروش (تومان)',
+          data: data.data,
+          borderColor: '#00d4ff',
+          backgroundColor: 'rgba(0, 212, 255, 0.1)',
+          borderWidth: 3,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#00d4ff',
+          pointRadius: 5,
+          fill: true,
+          tension: 0.4 // خطوط نرم و منحنی
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#a8c8e0', font: { family: 'Vazirmatn' } }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: '#a8c8e0', font: { family: 'Vazirmatn' } }
+          }
+        }
+      }
+    });
+  });
+
+// ثبت فروش
+function addSale() {
+  const amount = document.getElementById('amountInput').value;
+  if (!amount || amount <= 0) { alert('مبلغ رو درست وارد کن'); return; }
+  
+  fetch('/panel/sales/add', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({amount: amount})
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) {
+      showToast('✅ فروش با موفقیت ثبت شد');
+      document.getElementById('amountInput').value = '';
+      setTimeout(() => location.reload(), 1000); // رفرش برای آپدیت آمار
+    } else {
+      alert(data.error);
+    }
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+
+</body></html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>آپلود گروهی محصولات</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a 0%,#0f3f5f 40%,#051f33 100%);
+  overflow-x:hidden}
+
+/* افکت‌های کهکشانی پس‌زمینه */
+.nebula{position:fixed;border-radius:50%;filter:blur(80px);opacity:.4;z-index:0;pointer-events:none}
+.nebula.n1{width:300px;height:300px;background:#4dd0ff;top:-50px;left:-50px;animation:float 10s ease-in-out infinite}
+.nebula.n2{width:250px;height:250px;background:#c77dff;bottom:-50px;right:-50px;animation:float 12s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,30px)}}
+
+/* کارت شیشه‌ای اصلی */
+.container{width:100%;max-width:450px;position:relative;z-index:1}
+.card{
+  background:rgba(10, 30, 55, 0.4);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1.5px solid rgba(93,184,232,.4);
+  border-radius:24px;padding:30px 20px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(93,184,232,.2);
+  animation:cardIn .6s cubic-bezier(.2,.8,.2,1)
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* هدر */
+.head{text-align:center;margin-bottom:25px}
+.head-icon{font-size:50px;margin-bottom:10px;display:inline-block;
+  filter:drop-shadow(0 0 15px rgba(93,184,232,.8));animation:iconFloat 3s ease-in-out infinite}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+h2{font-size:22px;font-weight:900;color:#e0f4ff;
+  background:linear-gradient(90deg,#5db8e8,#c77dff,#5db8e8);
+  background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:gradient 4s linear infinite;margin-bottom:8px}
+@keyframes gradient{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.hint{font-size:12px;color:#a8c8e0;line-height:1.8;background:rgba(0,0,0,.2);padding:12px;border-radius:12px;border-right:3px solid #5db8e8}
+.hint code{background:rgba(93,184,232,.2);padding:2px 6px;border-radius:4px;color:#5db8e8;font-family:monospace;direction:ltr;display:inline-block;margin:4px 0}
+
+/* ناحیه آپلود فایل */
+.upload-area{
+  position:relative;border:2px dashed rgba(93,184,232,.6);border-radius:16px;
+  padding:30px 15px;text-align:center;margin:20px 0;cursor:pointer;
+  transition:.3s;background:rgba(93,184,232,.05)
+}
+.upload-area:hover{background:rgba(93,184,232,.15);border-color:#5db8e8;box-shadow:0 0 20px rgba(93,184,232,.3)}
+.upload-area input[type="file"]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.upload-icon{font-size:40px;margin-bottom:10px;display:block;transition:.3s}
+.upload-text{font-size:14px;font-weight:bold;color:#e0f4ff}
+.upload-sub{font-size:11px;color:#a8c8e0;margin-top:5px}
+.upload-area.active{border-style:solid;border-color:#06d6a0;background:rgba(6,214,160,.1)}
+
+/* دکمه ارسال */
+.btn{
+  width:100%;padding:16px;border-radius:14px;border:none;cursor:pointer;
+  font-family:Vazirmatn;font-size:16px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,#06d6a0,#0077b6);
+  box-shadow:0 10px 25px rgba(6,214,160,.4);transition:.3s;
+  position:relative;overflow:hidden
+}
+.btn::before{content:"";position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:skewX(-20deg);transition:.5s}
+.btn:hover::before{left:150%}
+.btn:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(6,214,160,.6)}
+
+/* لینک بازگشت */
+.back{display:block;text-align:center;margin-top:20px;color:#5db8e8;
+  text-decoration:none;font-size:13px;font-weight:bold;transition:.3s}
+.back:hover{color:#fff;text-shadow:0 0 10px #5db8e8}
+
+/* پیام موفقیت/خطا */
+.msg{padding:12px;border-radius:12px;margin-bottom:15px;text-align:center;
+  font-size:13px;font-weight:900;animation:fadeDown .3s ease-out}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.msg.ok{background:rgba(6,214,160,.15);border:1.5px solid #06d6a0;color:#06d6a0;box-shadow:0 0 15px rgba(6,214,160,.3)}
+.msg.error{background:rgba(255,107,157,.15);border:1.5px solid #ff6b9d;color:#ff8fab;box-shadow:0 0 15px rgba(255,107,157,.3)}
+</style></head><body>
+
+<div class="nebula n1"></div>
+<div class="nebula n2"></div>
+
+<div class="container">
+  <div class="card">
+    
+    {% if msg %}
+    <div class="msg {{ 'ok' if '✅' in msg else 'error' }}">{{ msg }}</div>
+    {% endif %}
+
+    <div class="head">
+      <span class="head-icon">📊</span>
+      <h2>آپلود گروهی محصولات</h2>
+    </div>
+
+    <div class="hint">
+      فایل شما باید با فرمت <code>CSV</code> باشد.<br>
+      ستون‌های مورد نیاز:<br>
+      <code>name, price, category, unit</code><br>
+      مثال: <code>سیب, 50000, میوه, کیلو</code>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+      <label class="upload-area" id="dropZone">
+        <input type="file" name="csv_file" accept=".csv" required onchange="updateFileName(this)">
+        <span class="upload-icon" id="uploadIcon">📁</span>
+        <div class="upload-text" id="uploadText">برای انتخاب فایل کلیک کنید</div>
+        <div class="upload-sub">یا فایل را اینجا رها کنید</div>
+      </label>
+
+      <button type="submit" class="btn" id="submitBtn">🚀 آپلود و ثبت محصولات</button>
+    </form>
+
+    <a href="/panel/dashboard" class="back">← بازگشت به داشبورد</a>
+  </div>
+</div>
+
+<script>
+function updateFileName(input) {
+  var zone = document.getElementById('dropZone');
+  var text = document.getElementById('uploadText');
+  var icon = document.getElementById('uploadIcon');
+  
+  if (input.files && input.files.length > 0) {
+    var fileName = input.files[0].name;
+    text.innerText = fileName;
+    text.style.color = '#06d6a0';
+    icon.innerText = '✅';
+    zone.classList.add('active');
+  } else {
+    text.innerText = 'برای انتخاب فایل کلیک کنید';
+    text.style.color = '#e0f4ff';
+    icon.innerText = '📁';
+    zone.classList.remove('active');
+  }
+}
+
+// افکت لودینگ روی دکمه هنگام ارسال
+document.getElementById('uploadForm').addEventListener('submit', function() {
+  var btn = document.getElementById('submitBtn');
+  btn.innerHTML = '⏳ در حال آپلود و پردازش...';
+  btn.style.opacity = '0.7';
+  btn.style.pointerEvents = 'none';
+});
+</script>
+
+</body></html>

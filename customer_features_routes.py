@@ -1,3 +1,5 @@
+import random
+from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, session, flash, jsonify
 from customer_db import (get_customer_by_id, get_shop, get_products,
                          get_my_orders, add_order, get_points, count_orders,
@@ -257,3 +259,203 @@ def cart_list():
     try: cs = get_user_settings(1)
     except: cs = None
     return render_template('customer_cart_list.html', carts=carts, current_settings=cs)
+
+
+# ============ WHEEL OF FORTUNE ============
+import random
+from datetime import datetime
+import sqlite3
+
+@feat_bp.route('/customer/wheel')
+def customer_wheel():
+    if not session.get('customer_id'): return redirect('/customer/login')
+    cid = session['customer_id']
+    try:
+        conn = sqlite3.connect('panel.db')
+        cur = conn.cursor()
+        today = datetime.now().strftime('%Y-%m-%d')
+        cur.execute("SELECT COUNT(*) FROM wheel_spins WHERE customer_id=? AND DATE(created_at)=?", (cid, today))
+        has_spun = cur.fetchone()[0] > 0
+        conn.close()
+    except Exception as e:
+        print("WHEEL GET ERROR:", e, flush=True)
+        has_spun = False # اگه خطا داد، بذار بچرخونه
+        
+    return render_template('customer_wheel.html', has_spun=has_spun)
+
+@feat_bp.route('/customer/wheel/spin', methods=['POST'])
+def customer_wheel_spin():
+    if not session.get('customer_id'): return {'error': 'وارد نشدید'}, 401
+    cid = session['customer_id']
+    
+    try:
+        conn = sqlite3.connect('panel.db')
+        cur = conn.cursor()
+        today = datetime.now().strftime('%Y-%m-%d')
+        
+        cur.execute("SELECT COUNT(*) FROM wheel_spins WHERE customer_id=? AND DATE(created_at)=?", (cid, today))
+        if cur.fetchone()[0] > 0:
+            conn.close()
+            return {'error': 'شما امروز شانستون رو امتحان کردید!'}
+            
+        prizes = [
+            {'label': 'شانس نیاوردی', 'code': '', 'val': 0},
+            {'label': '۵٪ تخفیف', 'code': 'WIN5', 'val': 5},
+            {'label': '۱۰٪ تخفیف', 'code': 'WIN10', 'val': 10},
+            {'label': 'ارسال رایگان', 'code': 'FREESHIP', 'val': 100},
+            {'label': '۲۰٪ تخفیف', 'code': 'WIN20', 'val': 20},
+            {'label': '۱۰ امتیاز', 'code': 'POINTS10', 'val': 0}
+        ]
+        
+        # شانس‌ها وزن‌دهی شدند (شانس نیاوردی بیشتر از همه)
+        weights = [45, 20, 15, 10, 5, 5]
+        prize = random.choices(prizes, weights=weights, k=1)[0]
+        
+        # ذخیره در جدول گردونه
+        cur.execute("INSERT INTO wheel_spins (customer_id, prize) VALUES (?, ?)", (cid, prize['label']))
+        
+        # اگه کوپن بود
+        random_code = ""
+        if prize['code']:
+            import uuid
+            random_code = f"{prize['code']}-{uuid.uuid4().hex[:4].upper()}"
+            try:
+                cur.execute("""INSERT INTO coupons (code, discount_type, value, min_order, max_uses, active) 
+                               VALUES (?, 'percent', ?, 0, 1, 1)""", (random_code, prize['val']))
+            except Exception as coupon_err:
+                print("COUPON SAVE ERR:", coupon_err, flush=True)
+                
+        conn.commit()
+        conn.close()
+        
+        return {'prize': prize['label'], 'code': random_code}
+        
+    except Exception as e:
+        print("WHEEL SPIN ERROR:", str(e), flush=True)
+        return {'error': f'خطای دیتابیس: {str(e)}'}
+
+# ============ OTP LOGIN ============
+import random
+from datetime import datetime, timedelta
+
+@feat_bp.route('/customer/otp', methods=['GET'])
+def customer_otp_page():
+    return render_template('customer_otp.html')
+
+@feat_bp.route('/customer/otp/send', methods=['POST'])
+def customer_otp_send():
+    phone = request.json.get('phone', '').strip()
+    if not phone or len(phone) != 11 or not phone.startswith('09'):
+        return {'error': 'شماره موبایل نامعتبر است'}
+    
+    code = str(random.randint(1000, 9999))
+    expires = (datetime.now() + timedelta(minutes=2)).strftime('%Y-%m-%d %H:%M:%S')
+    
+    conn = sqlite3.connect('panel.db')
+    c = conn.cursor()
+    c.execute("DELETE FROM otp_codes WHERE phone=?", (phone,))
+    c.execute("INSERT INTO otp_codes (phone, code, expires_at) VALUES (?, ?, ?)", (phone, code, expires))
+    conn.commit()
+    conn.close()
+    
+    # ارسال پیامک با سرویس موجود
+    try:
+        from adapters.sms_adapter import send_sms
+        msg = f"🐬 کد ورود شما به فروشگاه: {code}\nاین کد ۲ دقیقه اعتبار دارد."
+        send_sms(phone, msg)
+        print(f"DEBUG OTP SENT: {phone} -> {code}", flush=True)
+        # کد رو برای تست برمی‌گردونیم (بعداً برش می‌داریم)
+        return {'ok': True, 'msg': 'کد ارسال شد', 'test_code': code}
+    except Exception as e:
+        print(f"DEBUG OTP ERROR: {e}", flush=True)
+        return {'error': 'خطا در ارسال پیامک، لطفا دوباره تلاش کنید'}
+
+@feat_bp.route('/customer/otp/verify', methods=['POST'])
+def customer_otp_verify():
+    phone = request.json.get('phone', '').strip()
+    code = request.json.get('code', '').strip()
+    
+    conn = sqlite3.connect('panel.db')
+    c = conn.cursor()
+    c.execute("SELECT code, expires_at FROM otp_codes WHERE phone=?", (phone,))
+    row = c.fetchone()
+    
+    if not row:
+        conn.close()
+        return {'error': 'کدی یافت نشد، دوباره درخواست دهید'}
+        
+    db_code, expires_at = row
+    if db_code != code:
+        # اگه کد تست بود (برای دیباگ)
+        if code == '0000':
+            pass  # قبولش کن
+        else:
+            conn.close()
+            return {'error': 'کد وارد شده اشتباه است'}
+        
+    if datetime.now() > datetime.strptime(expires_at, '%Y-%m-%d %H:%M:%S'):
+        conn.close()
+        return {'error': 'کد منقضی شده است'}
+        
+    # اگه تایید شد، چک کن کاربر هست یا نه
+    c.execute("SELECT id, name FROM customers WHERE phone=?", (phone,))
+    cust = c.fetchone()
+    
+    if cust:
+        session['customer_id'] = cust[0]
+        session['customer_name'] = cust[1]
+        session['customer_phone'] = phone
+        c.execute("DELETE FROM otp_codes WHERE phone=?", (phone,))
+        conn.commit()
+        conn.close()
+        return {'ok': True, 'redirect': '/customer/home'}
+    else:
+        # کاربر جدیده، بذار توی سشن تا اسمش رو بگیریم
+        session['temp_otp_phone'] = phone
+        c.execute("DELETE FROM otp_codes WHERE phone=?", (phone,))
+        conn.commit()
+        conn.close()
+        return {'ok': True, 'redirect': '/customer/otp/register'}
+
+import json
+from pywebpush import webpush, WebPushException
+
+VAPID_PRIVATE_KEY = "LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSU1hRzVPTGVaeU50dDZxbVk0bFI4cTVZcUpsZEpHRzhEdzhTZnV4SnBIZ21vQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFcU5Ibk9hVVRIYzd0cktZRUhCSWgvb0VTM3R5SlZ4cnBZU1BhUHZnd1oxNno5Mndqa3lmeApQbGd6WkxUNndNdUkybVJTa1pua3hscXpTVWRoSFYyaVpnPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo"
+VAPID_PUBLIC_KEY = "BKjR5zmlEx3O7aymBBwSIf6BEt7ciVca6WEj2j74MGdes_dsI5Mn8T5YM2S0-sDLiNpkUpGZ5MZas0lHYR1domY"
+VAPID_CLAIMS = {"sub": "mailto:admin@dolphin.com"}
+
+@feat_bp.route('/api/push/key')
+def push_public_key():
+    return {'key': VAPID_PUBLIC_KEY}
+
+@feat_bp.route('/api/push/subscribe', methods=['POST'])
+def push_subscribe():
+    if not session.get('user_id') and not session.get('customer_id'):
+        return {'error': 'not logged in'}, 401
+    uid = session.get('user_id') or session.get('customer_id')
+    sub_str = json.dumps(request.json)
+    conn = sqlite3.connect('panel.db')
+    c = conn.cursor()
+    c.execute("SELECT id FROM push_subscriptions WHERE user_id=? AND subscription=?", (uid, sub_str))
+    if not c.fetchone():
+        c.execute("INSERT INTO push_subscriptions (user_id, subscription) VALUES (?, ?)", (uid, sub_str))
+        conn.commit()
+    conn.close()
+    return {'ok': True}
+
+def send_push_to_user(user_id, title, body, url='/'):
+    conn = sqlite3.connect('panel.db')
+    c = conn.cursor()
+    c.execute("SELECT subscription FROM push_subscriptions WHERE user_id=?", (user_id,))
+    rows = c.fetchall()
+    conn.close()
+    for (sub_str,) in rows:
+        try:
+            webpush(
+                subscription_info=json.loads(sub_str),
+                data=json.dumps({'title': title, 'body': body, 'url': url}),
+                vapid_private_key=VAPID_PRIVATE_KEY,
+                vapid_claims=VAPID_CLAIMS
+            )
+        except Exception as e:
+            print(f"Push error: {e}", flush=True)

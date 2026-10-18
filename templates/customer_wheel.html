@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>گردونه شانس</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;background:#020617;color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;overflow:hidden;direction:rtl}
+
+/* کهکشان پس‌زمینه */
+.stars{position:fixed;inset:0;z-index:-2;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, #fff, rgba(0,0,0,0));
+  background-repeat:repeat;background-size:250px 250px;
+  opacity:0.4;animation:twinkle 5s infinite alternate}
+@keyframes twinkle{0%{opacity:0.3}100%{opacity:0.8}}
+.nebula{position:fixed;width:300px;height:300px;border-radius:50%;filter:blur(80px);
+  z-index:-1;opacity:0.3;animation:float 10s infinite alternate}
+.n1{background:#4c1d95;top:-50px;right:-50px}
+.n2{background:#064e3b;bottom:-50px;left:-50px}
+@keyframes float{0%{transform:translate(0,0)}100%{transform:translate(-20px,20px)}}
+
+/* دکمه بازگشت */
+.top-bar{position:fixed;top:0;left:0;right:0;padding:15px;display:flex;z-index:10}
+.back-btn{padding:10px 18px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.2);color:#e2e8f0;text-decoration:none;
+  font-size:13px;font-weight:bold;backdrop-filter:blur(5px);transition:.3s}
+
+.title{font-size:22px;font-weight:900;color:#e0f4ff;
+  text-shadow:0 0 15px rgba(0, 212, 255, 0.5);margin-bottom:30px;margin-top:40px}
+
+/* کانتینر گردونه */
+.wheel-container{position:relative;width:310px;height:310px}
+
+/* فلش SVG گرد */
+.arrow{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  z-index:10;animation:arrowBounce 1.5s infinite;
+  filter:drop-shadow(0 4px 10px rgba(255, 77, 109, 0.6));}
+@keyframes arrowBounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+
+/* هاله وسط گردونه */
+.center-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:60px;height:60px;background:#0f172a;border-radius:50%;border:2px solid rgba(255,255,255,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  z-index:10;box-shadow:0 0 25px rgba(255,255,255,0.1), inset 0 0 15px rgba(255,255,255,0.05);
+  animation:pulseCenter 2s infinite}
+@keyframes pulseCenter{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+
+/* بدنه گردونه */
+.wheel{width:100%;height:100%;border-radius:50%;border:4px solid rgba(255,255,255,0.2);
+  box-shadow:0 0 40px rgba(255,255,255,0.1), inset 0 0 20px rgba(0,0,0,0.9);
+  transition:transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  position:relative;background:conic-gradient(
+    #1e293b 0deg 60deg, #0f766e 60deg 120deg, #4338ca 120deg 180deg,
+    #b45309 180deg 240deg, #831843 240deg 300deg, #6b21a8 300deg 360deg
+  )}
+
+/* متن‌ها و استیکرها (دقیقاً وسط) */
+.slice-text{position:absolute;left:50%;top:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-size:13px;font-weight:900;color:#fff;text-shadow:0 2px 4px #000;
+  white-space:nowrap;pointer-events:none;z-index:5}
+.slice-text span:first-child{font-size:24px;filter:drop-shadow(0 0 5px rgba(0,0,0,0.8))}
+
+/* دکمه چرخش */
+.spin-btn{margin-top:40px;width:220px;padding:16px;border-radius:30px;
+  background:linear-gradient(135deg,#ff4d6d,#c9184a);color:#fff;
+  font-family:'Vazirmatn';font-size:18px;font-weight:900;border:none;cursor:pointer;
+  box-shadow:0 10px 25px rgba(255,77,109,.4);transition:.3s}
+.spin-btn:disabled{opacity:0.5;filter:grayscale(1);cursor:not-allowed}
+.spin-btn:active{transform:scale(.95)}
+
+/* مودال جایزه */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,5,15,.9);
+  backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:linear-gradient(180deg,#0f172a,#020617);border:2px solid #ff4d6d;
+  border-radius:24px;padding:30px 20px;width:100%;max-width:320px;text-align:center}
+.prize-icon{font-size:70px;margin-bottom:15px;animation:bounce 1s infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-15px)}}
+.prize-text{font-size:22px;font-weight:900;color:#ffd60a;margin-bottom:15px}
+.prize-code{background:rgba(255,77,109,.1);border:1px dashed #ff4d6d;color:#ffb3c1;
+  padding:12px;border-radius:12px;font-family:monospace;font-size:16px;
+  direction:ltr;margin-bottom:20px}
+.close-btn{width:100%;padding:14px;background:linear-gradient(135deg,#ff4d6d,#c9184a);
+  color:#fff;border:none;border-radius:12px;font-family:'Vazirmatn';
+  font-weight:bold;font-size:15px;cursor:pointer}
+</style></head><body>
+
+<div class="stars"></div>
+<div class="nebula n1"></div>
+<div class="nebula n2"></div>
+
+<div class="top-bar">
+  <a href="/customer/home" class="back-btn">→ بازگشت</a>
+</div>
+
+<div class="title">🎡 گردونه شانس روزانه</div>
+
+<div class="wheel-container">
+  <!-- فلش SVG گرد و نرم -->
+  <div class="arrow">
+    <svg width="40" height="45" viewBox="0 0 40 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 45C20 45 8 28 5 15C5 15 15 20 20 20C25 20 35 15 35 15C32 28 20 45 20 45Z" fill="#ff4d6d" stroke="#ff4d6d" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  
+  <div class="center-pin">🎁</div>
+  <div class="wheel" id="wheel"></div>
+</div>
+
+{% if has_spun %}
+<button class="spin-btn" disabled>فردا دوباره بیا!</button>
+{% else %}
+<button class="spin-btn" id="spinBtn" onclick="spinWheel()">بچرخون!</button>
+{% endif %}
+
+<!-- مودال جایزه -->
+<div class="modal" id="prizeModal">
+  <div class="modal-box">
+    <div class="prize-icon" id="mIcon">🎉</div>
+    <div class="prize-text" id="mText">تبریک!</div>
+    <div class="prize-code" id="mCode" style="display:none"></div>
+    <button class="close-btn" onclick="document.getElementById('prizeModal').style.display='none'">باشه، ممنون</button>
+  </div>
+</div>
+
+<script>
+const prizes = [
+  { label: 'شانس نیاوردی', icon: '🥀', angle: 30 },
+  { label: '۵٪ تخفیف', icon: '🍀', angle: 90 },
+  { label: '۱۰٪ تخفیف', icon: '💸', angle: 150 },
+  { label: 'ارسال رایگان', icon: '🚚', angle: 210 },
+  { label: '۲۰٪ تخفیف', icon: '💎', angle: 270 },
+  { label: '۱۰ امتیاز', icon: '🎁', angle: 330 }
+];
+
+const wheel = document.getElementById('wheel');
+
+prizes.forEach(p => {
+  let el = document.createElement('div');
+  el.className = 'slice-text';
+  el.innerHTML = `<span>${p.icon}</span><span>${p.label}</span>`;
+  
+  // فرمول دقیق ریاضی برای قرار دادن در مرکز برش
+  // ابتدا به مرکز منتقل میکنیم، بعد میچرخونیم، بعد به سمت بیرون میریم و دوباره برمیگردونیم تا متن صاف باشه
+  el.style.transform = `translate(-50%, -50%) rotate(${p.angle}deg) translateY(-95px) rotate(-${p.angle}deg)`;
+  wheel.appendChild(el);
+});
+
+let isSpinning = false;
+let currentRotation = 0;
+
+function spinWheel() {
+  if (isSpinning) return;
+  isSpinning = true;
+  const btn = document.getElementById('spinBtn');
+  btn.disabled = true;
+  btn.innerText = 'در حال چرخش...';
+
+  fetch('/customer/wheel/spin', { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        alert(data.error);
+        isSpinning = false;
+        btn.disabled = false;
+        btn.innerText = 'بچرخون!';
+        return;
+      }
+
+      let prizeIndex = prizes.findIndex(p => p.label === data.prize);
+      if (prizeIndex === -1) prizeIndex = 0;
+      
+      let centerAngle = prizes[prizeIndex].angle;
+      let targetAngle = 360 - centerAngle;
+      let jitter = Math.floor(Math.random() * 20) - 10; 
+      targetAngle += jitter;
+      
+      let spins = 5 + Math.floor(Math.random() * 3); 
+      let baseRotation = Math.floor(currentRotation / 360) * 360;
+      currentRotation = baseRotation + (spins * 360) + targetAngle;
+      
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+      setTimeout(() => {
+        document.getElementById('mText').innerText = data.prize;
+        if (data.code) {
+          document.getElementById('mCode').innerText = 'کد: ' + data.code;
+          document.getElementById('mCode').style.display = 'block';
+          document.getElementById('mIcon').innerText = '🎉';
+        } else {
+          document.getElementById('mCode').style.display = 'none';
+          document.getElementById('mIcon').innerText = '😢';
+        }
+        document.getElementById('prizeModal').style.display = 'flex';
+        btn.innerText = 'فردا دوباره بیا!';
+      }, 5100); 
+    })
+    .catch(err => {
+      alert('خطای شبکه، دوباره تلاش کنید');
+      isSpinning = false;
+      btn.disabled = false;
+      btn.innerText = 'بچرخون!';
+    });
+}
+</script>
+
+</body></html>

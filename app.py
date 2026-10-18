@@ -2027,11 +2027,15 @@ except Exception as _e:
 # ===== اتصال گزارش‌ها =====
 try:
     from report_routes import report_bp
-    from schedule_routes import schedule_bp
+    from sales_routes import sales_bp
     from channel_send_routes import channel_send_bp
+    from schedule_routes import schedule_bp
+    
     app.register_blueprint(report_bp)
-    app.register_blueprint(schedule_bp)
+    app.register_blueprint(sales_bp)
     app.register_blueprint(channel_send_bp)
+    app.register_blueprint(schedule_bp)
+    
     print('✅ report_bp registered')
 except Exception as _e:
     print('❌ report_bp error:', _e)
