@@ -378,6 +378,13 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
 @keyframes shine { 100% { transform: translateX(100%); } }
 </style>
 
+
+<div style="padding: 10px 16px 0 16px;">
+    <button id="enablePushBtn" onclick="enableNotifications()" style="width:100%; background:linear-gradient(135deg,#bf00ff,#00d4ff); border:none; padding:12px; border-radius:12px; color:#fff; font-weight:bold; font-family:'Vazirmatn'; font-size:14px; cursor:pointer; box-shadow:0 0 15px rgba(0,212,255,0.5); display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span>🔔</span> فعالسازی نوتیفیکیشن‌ها
+    </button>
+</div>
+
 <div class="main-cats">
 {% for c in home_cats %}
 <a href="/customer/category/{{ c[1] }}" class="main-cat" style="--c:{{ c[3] }}">
