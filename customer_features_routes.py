@@ -459,3 +459,9 @@ def send_push_to_user(user_id, title, body, url='/'):
             )
         except Exception as e:
             print(f"Push error: {e}", flush=True)
+
+@feat_bp.route('/api/push/test')
+def push_test():
+    if not session.get('customer_id'): return {'error': 'login first'}
+    send_push_to_user(session['customer_id'], '🐬 تست موفق!', 'نوتیفیکیشن‌ها با موفقیت کار می‌کنند.', '/customer/home')
+    return {'ok': True, 'msg': 'نوتیفیکیشن تستی ارسال شد!'}

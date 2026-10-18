@@ -26,3 +26,6 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://192.168.78.11:8080
 [33mPress CTRL+C to quit[0m
+127.0.0.1 - - [18/Oct/2026 13:09:22] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [18/Oct/2026 13:09:37] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [18/Oct/2026 13:10:07] "GET /api/notif/count HTTP/1.1" 200 -
