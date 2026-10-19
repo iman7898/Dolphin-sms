@@ -2288,7 +2288,38 @@ def admin_shops():
     shops = get_all_shop_owners()
     return render_template("admin_shops.html", shops=shops, current_settings={})
 
+
+@app.route('/customer/rewards')
+def customer_rewards():
+    import json
+    user_id = session.get('user_id') # اگه اسم سشن فرق داره، اینو بعدا چک میکنیم
+    if not user_id:
+        return redirect('/login')
+    
+    # گرفتن اطلاعات کاربر از دیتابیس
+    db = get_db()
+    user = db.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    
+    points_num = 0
+    tier_name = "برنزی 🥉"
+    
+    if user:
+        raw_points = user['points'] if 'points' in user.keys() else '0'
+        # حل باگ: اگه دیتابیس JSON ذخیره کرده بود، فقط عدد رو دربیار
+        try:
+            if '{' in str(raw_points):
+                data = json.loads(raw_points)
+                points_num = int(data.get('points', 0))
+                tier_name = data.get('tier', 'برنزی 🥉')
+            else:
+                points_num = int(raw_points) if raw_points else 0
+        except:
+            points_num = 0
+            
+    return render_template('customer_rewards.html', points_num=points_num, tier_name=tier_name)
+
 if __name__ == "__main__":
+
     init_db()
     init_contacts_table()
     init_templates_table()

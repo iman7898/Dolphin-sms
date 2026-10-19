@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>باشگاه مشتریان | دلفین</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Tahoma, sans-serif; }
+        body { background: #001220; color: white; padding: 20px; background-image: radial-gradient(circle at top right, #003366, #001220 60%); min-height: 100vh; }
+        
+        .header { display: flex; align-items: center; margin-bottom: 30px; }
+        .back-btn { background: rgba(255,255,255,0.1); border: 1px solid #00d4ff; color: #00d4ff; padding: 8px 15px; border-radius: 10px; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .back-btn:hover { background: #00d4ff; color: #001220; }
+        .header h1 { font-size: 18px; margin-right: 15px; color: #fff; }
+
+        .score-card { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,85,255,0.1)); border: 1px solid #00d4ff; border-radius: 20px; padding: 30px 20px; text-align: center; margin-bottom: 30px; box-shadow: 0 0 20px rgba(0,212,255,0.2); backdrop-filter: blur(10px); }
+        .score-title { font-size: 16px; color: #a0c4ff; margin-bottom: 10px; }
+        .score-value { font-size: 60px; font-weight: bold; color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.5); line-height: 1; }
+        .score-desc { font-size: 12px; color: #ccc; margin-top: 15px; }
+
+        .section-title { font-size: 16px; margin-bottom: 15px; color: #00d4ff; display: flex; align-items: center; gap: 10px; }
+        
+        .rewards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .reward-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 20px 15px; text-align: center; transition: 0.3s; position: relative; overflow: hidden; }
+        .reward-card:hover { transform: translateY(-5px); border-color: #00d4ff; box-shadow: 0 10px 20px rgba(0,212,255,0.2); }
+        .reward-icon { font-size: 35px; margin-bottom: 10px; }
+        .reward-name { font-size: 14px; margin-bottom: 10px; font-weight: bold; }
+        .reward-cost { background: rgba(0,212,255,0.15); color: #00d4ff; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+        .redeem-btn { background: #00d4ff; color: #001220; border: none; padding: 8px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .redeem-btn:hover { background: #fff; }
+        .redeem-btn:disabled { background: #555; color: #999; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="/customer" class="back-btn">← بازگشت</a>
+        <h1>باشگاه مشتریان</h1>
+    </div>
+
+    <div class="score-card">
+        <div class="score-title">✨ امتیاز فعلی شما</div>
+        <!-- اینجا فقط عدد نمایش داده میشه -->
+        <div class="score-value">{{ points_num }}</div>
+        <div class="score-desc">سطح شما: {{ tier_name }}</div>
+    </div>
+
+    <div class="section-title">🎁 جوایز قابل دریافت</div>
+    
+    <div class="rewards-grid">
+        <div class="reward-card">
+            <div class="reward-icon">🚚</div>
+            <div class="reward-name">ارسال رایگان</div>
+            <div class="reward-cost">۵۰۰ امتیاز</div>
+            <button class="redeem-btn" {% if points_num < 500 %}disabled{% endif %}>دریافت</button>
+        </div>
+        <div class="reward-card">
+            <div class="reward-icon">🎟️</div>
+            <div class="reward-name">تخفیف ۱۰٪</div>
+            <div class="reward-cost">۱۰۰۰ امتیاز</div>
+            <button class="redeem-btn" {% if points_num < 1000 %}disabled{% endif %}>دریافت</button>
+        </div>
+        <div class="reward-card">
+            <div class="reward-icon">🎁</div>
+            <div class="reward-name">هدیه مغازه‌دار</div>
+            <div class="reward-cost">۲۰۰۰ امتیاز</div>
+            <button class="redeem-btn" {% if points_num < 2000 %}disabled{% endif %}>دریافت</button>
+        </div>
+        <div class="reward-card">
+            <div class="reward-icon">👑</div>
+            <div class="reward-name">عضویت VIP</div>
+            <div class="reward-cost">۵۰۰۰ امتیاز</div>
+            <button class="redeem-btn" {% if points_num < 5000 %}disabled{% endif %}>دریافت</button>
+        </div>
+    </div>
+
+</body>
+</html>
