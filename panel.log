@@ -26,80 +26,211 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://7.33.175.234:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [19/Oct/2026 11:26:27] "[33mGET /admin/ HTTP/1.1[0m" 404 -
-127.0.0.1 - - [19/Oct/2026 11:26:27] "[32mGET /admin/shops HTTP/1.1[0m" 302 -
-[2026-10-19 11:26:30,716] ERROR in app: Exception on /admin/shops [GET]
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 223, in decorated
-    return f(*args, **kwargs)
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 2288, in admin_shops
-    return render_template("admin_shops.html", shops=shops, current_settings=_cs())
-                                                                             ^^^
-NameError: name '_cs' is not defined. Did you mean: '_os'?
-127.0.0.1 - - [19/Oct/2026 11:26:30] "[35m[1mGET /admin/shops HTTP/1.1[0m" 500 -
-[2026-10-19 11:26:31,642] ERROR in app: Exception on /admin/shops [GET]
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 223, in decorated
-    return f(*args, **kwargs)
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 2288, in admin_shops
-    return render_template("admin_shops.html", shops=shops, current_settings=_cs())
-                                                                             ^^^
-NameError: name '_cs' is not defined. Did you mean: '_os'?
-127.0.0.1 - - [19/Oct/2026 11:26:31] "[35m[1mGET /admin/shops HTTP/1.1[0m" 500 -
-127.0.0.1 - - [19/Oct/2026 11:26:32] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [19/Oct/2026 11:26:33] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
-[2026-10-19 11:27:29,802] ERROR in app: Exception on /admin/shops [GET]
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 223, in decorated
-    return f(*args, **kwargs)
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 2288, in admin_shops
-    return render_template("admin_shops.html", shops=shops, current_settings=_cs())
-                                                                             ^^^
-NameError: name '_cs' is not defined. Did you mean: '_os'?
-127.0.0.1 - - [19/Oct/2026 11:27:29] "[35m[1mGET /admin/shops HTTP/1.1[0m" 500 -
-[2026-10-19 11:27:30,367] ERROR in app: Exception on /admin/shops [GET]
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 223, in decorated
-    return f(*args, **kwargs)
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 2288, in admin_shops
-    return render_template("admin_shops.html", shops=shops, current_settings=_cs())
-                                                                             ^^^
-NameError: name '_cs' is not defined. Did you mean: '_os'?
-127.0.0.1 - - [19/Oct/2026 11:27:30] "[35m[1mGET /admin/shops HTTP/1.1[0m" 500 -
-127.0.0.1 - - [19/Oct/2026 11:27:32] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:29:12] "[32mGET /admin/shops HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:29:20] "GET /admin/shops HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:29:21] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:03] "[32mGET /admin/shops HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:37:03] "GET /admin/login HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:37:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:04] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:04] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:04] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:04] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:04] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:04] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:05] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:13] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:37:14] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:37:14] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:37:15] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:23] "GET /admin/shops HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:37:24] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:29] "[32mPOST /admin/shops HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:37:29] "GET /admin/shops HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:37:31] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:41] "[32mPOST /admin/shops HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:37:41] "GET /admin/shops HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:37:43] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:37:44] "[32mPOST /admin/shops HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:37:44] "GET /admin/shops HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:37:45] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:38:26] "[32mPOST /admin/shops HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:38:26] "GET /admin/shops HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:38:28] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:38:38] "[32mGET /panel/add-product HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:38:38] "GET /panel/login HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:38:38] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:38:40] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:38:51] "[32mPOST /panel/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:38:56] "[32mPOST /panel/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:38:56] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:38:57] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:38:59] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:39:00] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:39:01] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "GET /panel/send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:11] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:13] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:39:41] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "POST /panel/send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:02] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:04] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "GET /admin/login HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:10] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:12] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:23] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:40:24] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:24] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:25] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:33] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:34] "GET /admin/wallets HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:34] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:34] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:34] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:34] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:34] "[36mGET /static/pwa/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:34] "[36mGET /static/icons/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:36] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "[32mPOST /admin/wallet/5/charge HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "GET /admin/wallets HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "[36mGET /static/pwa/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:55] "[36mGET /static/icons/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:57] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:40:58] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:40:58] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:00] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:03] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:29] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:29] "[32mPOST /panel/send HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:41:29] "GET /panel/login HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:30] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:31] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:44] "[32mPOST /panel/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 11:41:50] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:50] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "GET /panel/send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:52] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:54] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:41:59] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:42:18] "POST /panel/send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:42:18] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "POST /panel/send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:22] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:24] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "POST /panel/send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:37] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:42:39] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:08] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:43:38] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:43:47] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "POST /panel/send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "[36mGET /static/app-feel.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "[36mGET /static/app-feel.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:43:49] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:50] "[36mGET /static/icons/icon-192.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:50] "[36mGET /static/apple-touch-icon.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:50] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:51] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:52] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:43:52] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:43:53] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:43:59] "GET /panel/channel-send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:44:01] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:44:28] "POST /panel/channel-send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:44:30] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:45:33] "POST /panel/channel-send/ai-image HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:45:33] "GET /static/uploads/ai_b7a6527c.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:45:33] "[36mGET /static/uploads/ai_b7a6527c.jpg HTTP/1.1[0m" 304 -
+DEBUG: Original prompt: پسرش کن
+DEBUG: Enhanced prompt: «پسرش کن» عبارتی است که به معنی «به‌عنوان پسر او یا او را به‌عنوان پسر خود بپذیر»، یا در حالت ساده‌تر «پسرش (به‌مناسبت تو) کن» می‌باشد.  
+معمولاً وقتی می‌گویند «پسرش کن»، دو حالت مختلف در ذهن دارد:
+
+| حالت | توضیح | مثال |
+|------|-------|------|
+| 1.  **پسرگیری / تملک** | به معنای واگذاری مستند یا قانونی، یعنی بندنامه یا نیاز به پذیرش کسی به عنوان برادری یا پسر، معمولاً برای مقررات وراثت، بیمه یا مالکیت.| «اگر آن همسر جدیدشو به‌صورت کتبی «پسرش کن»، او می‌توانند ورثه هوان را بدون مشکل به‌دست آورند.» |
+| 2.  **تأیید، تمجید یا **عاطفی**| در مکالمه ساده، برخلاف «فرزندی»، برای اشاره به تعارف، تبریک یا تسلیم شدن به اودرهمی.| «آره، حالا تو هم بگو: پسرش کن، من راضی‌ام!»  |
+
+> **نکته مهم**: این عبارت در زبان عامیانه گاهی به شیوه‌ای نازک یا خنده‌دار استفاده می‌شود و در متون رسمی کاربرد کمتری دارد.
+
+اگر به دنبال نمونه‌های کاربردی‌تر هستید، بفرمایید که دقیقاً در چه شرایط یا با چه هدفی می‌خواهید از این عبارت استفاده کنید., masterpiece, ultra-detailed, dramatic lighting, 8k resolution, photorealistic, high contrast
+DEBUG: Uploading image to Catbox...
+DEBUG ERROR EDIT: HTTPSConnectionPool(host='catbox.moe', port=443): Max retries exceeded with url: /user/api.php (Caused by NewConnectionError("HTTPSConnection(host='catbox.moe', port=443): Failed to establish a new connection: [Errno 111] Connection refused"))
+127.0.0.1 - - [19/Oct/2026 11:46:30] "[35m[1mPOST /panel/channel-send/edit-image HTTP/1.1[0m" 500 -
+DEBUG: Original prompt: تو اتاق کن و پسر
+DEBUG: Enhanced prompt: I’m not quite sure what “تو اتاق کن و پسر” is pointing at.  
+Is it a scene you’re setting up, a phrase you’d like translated, or something else entirely?  
+If you give me a bit more detail I’ll do my best to help—or we can just chat about whatever’s on your mind!, masterpiece, ultra-detailed, dramatic lighting, 8k resolution, photorealistic, high contrast
+DEBUG: Uploading image to Catbox...
+DEBUG ERROR EDIT: HTTPSConnectionPool(host='catbox.moe', port=443): Max retries exceeded with url: /user/api.php (Caused by NewConnectionError("HTTPSConnection(host='catbox.moe', port=443): Failed to establish a new connection: [Errno 111] Connection refused"))
+127.0.0.1 - - [19/Oct/2026 11:47:17] "[35m[1mPOST /panel/channel-send/edit-image HTTP/1.1[0m" 500 -
+127.0.0.1 - - [19/Oct/2026 11:47:32] "POST /panel/channel-send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:47:33] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:47:36] "POST /panel/channel-send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:47:37] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:48:53] "POST /panel/channel-send HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:48:55] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:52:00] "POST /panel/channel-send/ai-image HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:52:00] "GET /static/uploads/ai_137df9dc.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:52:00] "[36mGET /static/uploads/ai_137df9dc.jpg HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:52:28] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
+127.0.0.1 - - [19/Oct/2026 11:54:38] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
+127.0.0.1 - - [19/Oct/2026 11:54:51] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
+127.0.0.1 - - [19/Oct/2026 11:54:59] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
+127.0.0.1 - - [19/Oct/2026 11:55:09] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
+127.0.0.1 - - [19/Oct/2026 11:55:13] "POST /panel/channel-send/ai-image HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:55:13] "GET /static/uploads/ai_e879ce9c.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:55:14] "[36mGET /static/uploads/ai_e879ce9c.jpg HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 12:02:30] "POST /panel/channel-send/ai-image HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 12:02:30] "GET /static/uploads/ai_afcc4108.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 12:02:30] "[36mGET /static/uploads/ai_afcc4108.jpg HTTP/1.1[0m" 304 -
