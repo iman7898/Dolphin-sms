@@ -2290,18 +2290,23 @@ def admin_shops():
 
 
 
+
 @app.route('/customer/rewards')
 def customer_rewards():
     import json
-    # پیدا کردن آیدی کاربر با هر اسمی که توی سشن باشه
+    import sqlite3
+    
+    # پیدا کردن آیدی کاربر از سشن
     user_id = session.get('user_id') or session.get('uid') or session.get('customer_id') or session.get('id')
     
     if not user_id:
-        return "❌ خطا: شما لاگین نیستید یا سشن شما منقضی شده است. لطفاً از حساب خارج و دوباره وارد شوید."
+        return "❌ خطا: شما لاگین نیستید. لطفاً دوباره وارد شوید."
     
-    db = get_db() # تابع اتصال به دیتابیس
-    # گرفتن اطلاعات کاربر
-    user = db.execute("SELECT * FROM users WHERE id = ? OR username = ?", (user_id, user_id)).fetchone()
+    # اتصال مستقیم به دیتابیس (بدون نیاز به تابع get_db)
+    conn = sqlite3.connect('panel.db')
+    conn.row_factory = sqlite3.Row
+    user = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    conn.close()
     
     points_num = 0
     tier_name = "برنزی 🥉"
@@ -2309,7 +2314,6 @@ def customer_rewards():
     if user:
         try:
             raw_points = user['points']
-            # اگه دیتابیس رشته JSON ذخیره کرده باشه، عدد رو در میاریم
             if raw_points and str(raw_points).strip().startswith('{'):
                 data = json.loads(raw_points)
                 points_num = int(data.get('points', 0))
