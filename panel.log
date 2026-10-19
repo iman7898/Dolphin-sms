@@ -26,3 +26,31 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://7.64.168.232:8080
 [33mPress CTRL+C to quit[0m
+127.0.0.1 - - [19/Oct/2026 16:32:18] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:18] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:20] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:20] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:20] "[36mGET /static/apple-touch-icon.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:20] "[36mGET /static/icons/icon-192.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:20] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:22] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:24] "GET /customer/home HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:26] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:27] "GET /customer/home HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:27] "[36mGET /static/icons/icon-192.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:27] "[36mGET /static/apple-touch-icon.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:28] "[32mGET /customer/wheel HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 16:32:28] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:28] "[36mGET /static/customer-ocean.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:30] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:31] "GET /customer/home HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:33] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:34] "[32mGET /customer/shop/5 HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 16:32:34] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:34] "[36mGET /static/customer-ocean.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:36] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:44] "[32mPOST /customer/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 16:32:44] "GET /customer/home HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:32:46] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 16:32:51] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 16:33:21] "GET /api/notif/count HTTP/1.1" 200 -
