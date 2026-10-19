@@ -1,14 +1,115 @@
 from flask import (Flask, request, render_template, redirect, url_for,
                    session, jsonify, flash)
 from database import *
-from adapters.mci_adapter import send_sms, check_balance
+from database import (find_user_by_ref_code, process_referral,
+                      get_or_create_referral_code)
+from adapters.sms_adapter import send_sms, check_balance
 from config import SECRET_KEY, ADMIN_USERNAME, ADMIN_PASSWORD
 from functools import wraps
 import hashlib, hmac, os, secrets, time
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app = Flask(__name__)
+
+# ⚡ Cache + Gzip
+import gzip as _gz
+from io import BytesIO as _BIO
+
+@app.after_request
+def _cache_response(response):
+    # Gzip
+    try:
+        accept = request.headers.get('Accept-Encoding', '')
+        if 'gzip' in accept.lower() and response.status_code == 200:
+            if not response.direct_passthrough:
+                ct = response.content_type or ''
+                if any(x in ct for x in ['text/', 'json', 'javascript', 'css', 'xml', 'svg']):
+                    data = response.get_data()
+                    if len(data) > 500:
+                        buf = _BIO()
+                        with _gz.GzipFile(fileobj=buf, mode='wb', compresslevel=6) as gz:
+                            gz.write(data)
+                        comp = buf.getvalue()
+                        if len(comp) < len(data):
+                            response.set_data(comp)
+                            response.headers['Content-Encoding'] = 'gzip'
+                            response.headers['Content-Length'] = str(len(comp))
+                            response.headers['Vary'] = 'Accept-Encoding'
+    except Exception:
+        pass
+    # Cache استاتیک
+    try:
+        if request.path.startswith('/static/'):
+            response.headers['Cache-Control'] = 'public, max-age=86400'
+    except Exception:
+        pass
+    return response
+
+
+app = Flask(__name__)
+
+# ⚡ Gzip Compression دستی
+import gzip as _gz
+from io import BytesIO as _BIO
+
+@app.after_request
+def _gzip_response(response):
+    try:
+        accept = request.headers.get('Accept-Encoding', '')
+        if 'gzip' not in accept.lower():
+            return response
+        if response.status_code < 200 or response.status_code >= 300:
+            return response
+        if response.direct_passthrough:
+            return response
+        ct = response.content_type or ''
+        if not (ct.startswith('text/') or 'json' in ct or 'javascript' in ct or 'css' in ct or 'xml' in ct or 'svg' in ct):
+            return response
+        data = response.get_data()
+        if len(data) < 500:
+            return response
+        buf = _BIO()
+        with _gz.GzipFile(fileobj=buf, mode='wb', compresslevel=6) as gz:
+            gz.write(data)
+        compressed = buf.getvalue()
+        if len(compressed) >= len(data):
+            return response
+        response.set_data(compressed)
+        response.headers['Content-Encoding'] = 'gzip'
+        response.headers['Content-Length'] = str(len(compressed))
+        response.headers['Vary'] = 'Accept-Encoding'
+    except Exception:
+        pass
+    return response
+
+print("✅ Gzip دستی فعال شد")
+app = Flask(__name__)
+
+
+
 app.secret_key = SECRET_KEY
+
+@app.route('/sw-new.js')
+def serve_sw_new():
+    from flask import send_file
+    return send_file('static/sw-new.js', mimetype='application/javascript')
+
+
+# ============ SERVICE WORKER (ROOT SCOPE) ============
+from flask import send_file
+@app.route('/service-worker.js')
+def serve_sw():
+    return send_file('static/pwa/service-worker.js', mimetype='application/javascript')
+
+
+# 🔐 تنظیمات امنیتی session
+from datetime import timedelta as _td
+app.config['PERMANENT_SESSION_LIFETIME'] = _td(days=30)
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = False  # اگر HTTPS شد، True کن
+app.config['SESSION_REFRESH_EACH_REQUEST'] = True
 
 # ===== توابع امنیتی =====
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "static", "uploads")
@@ -309,13 +410,6 @@ def admin_user_update_end_date(user_id):
     return redirect(url_for("admin_user_detail", user_id=user_id))
 
 
-@app.route("/admin/user/<int:user_id>/delete", methods=["POST"])
-@admin_required
-def admin_user_delete(user_id):
-    delete_user(user_id)
-    flash("کاربر حذف شد", "success")
-    return redirect(url_for("admin_dashboard"))
-
 
 @app.route("/admin/logs")
 @admin_required
@@ -349,7 +443,11 @@ def panel_login():
             log_login(u or "unknown", ip, ua, user_id=None, status="rate_limited")
             return render_template("panel_login.html", error=error, expired=expired)
 
-        user = get_user_by_username(u)
+        try:
+            from database import get_user_by_username_or_phone as _getu
+            user = _getu(u)
+        except Exception:
+            user = get_user_by_username(u)
         if user and _verify_password(user[2], p):
             user_id = user[0]
             if not is_user_active(user_id):
@@ -359,6 +457,33 @@ def panel_login():
                 clear_login_attempts(ip)
                 session.clear()
                 log_id = log_login(u, ip, ua, user_id=user_id, status="success")
+                # 🔒 چک 2FA
+                try:
+                    from database import get_2fa as _g2fa
+                    f2 = _g2fa(user_id)
+                except Exception:
+                    f2 = {'enabled': 0}
+                if f2.get('enabled'):
+                    # پیامک کد
+                    try:
+                        from database import generate_2fa_code as _g2code
+                        code = _g2code(user_id)
+                        # 🔥 ارسال پیامک — اگه خط نداری، کد رو توی log چاپ کن
+                        try:
+                            from twofa_routes import _send_2fa_sms
+                            r = _send_2fa_sms(f2.get('phone',''), code)
+                            if not (r and r.get('status') == 'success'):
+                                print(f'⚠️ پیامک نرفت — کد 2FA برای کاربر {user_id}: {code}', flush=True)
+                        except Exception as e:
+                            print(f'⚠️ خطا پیامک: {e} — کد: {code}', flush=True)
+                    except Exception as e:
+                        print(f'⚠️ خطا 2FA: {e}', flush=True)
+                    session['pending_2fa_uid'] = user_id
+                    session['pending_2fa_name'] = u
+                    session['pending_2fa_log'] = log_id
+                    return redirect('/panel/2fa/verify')
+
+                session.permanent = True
                 session["user_id"] = user_id
                 session["user_name"] = u
                 session["log_id"] = log_id
@@ -388,6 +513,8 @@ def panel_dashboard():
     return render_template("panel_dashboard.html",
         user=user,
         sms_list=get_all_sms(50, user_id=user_id),
+                           wallet_balance=get_wallet(session["user_id"]),
+                           sms_price=5000,
         total=count_sms(user_id=user_id),
         days_left=days_remaining(user_id),
         sms_left=sms_remaining(user_id),
@@ -412,8 +539,22 @@ def panel_send():
         elif sms_remaining(user_id) <= 0:
             result = {"status": "error", "message": "اعتبار پیامک شما تمام شده"}
         else:
-            result = send_sms(phone, message)
-            log_sms(phone, message, result.get("status", "unknown"), user_id=user_id)
+            # 💰 هزینه هر پیامک (ریال) — قابل تغییر
+            SMS_PRICE = 5000
+            if get_wallet(user_id) < SMS_PRICE:
+                result = {"status": "error", "message": "موجودی کیف پول کافی نیست"}
+            else:
+                result = send_sms(phone, message)
+                log_sms(phone, message, result.get("status", "unknown"), user_id=user_id)
+                # فقط اگه پیامک با موفقیت ارسال شد، از کیف پول کم کن
+                if result.get("status") == "success":
+                    deduct_wallet(user_id, SMS_PRICE, f"ارسال پیامک به {phone}")
+                    # 🎁 امتیاز وفاداری (۲x در پنجشنبه/جمعه)
+                    try:
+                        mult = loyalty_multiplier()
+                        add_loyalty_points(user_id, 1 * mult, f'ارسال پیامک ({mult}x)')
+                    except Exception:
+                        pass
     return render_template("panel_send.html", result=result,
                            sms_left=sms_remaining(user_id),
                            schedules=get_user_schedules(user_id))
@@ -1214,588 +1355,6 @@ def api_message_counts():
     return jsonify(get_conversation_counts(user_id))
 
 
-
-@app.route("/admin/stats")
-@admin_required
-def admin_stats():
-    return render_template("admin_stats.html",
-        unread_chat=count_unread_for_admin())
-
-
-@app.route("/api/stats/data")
-@admin_required
-def api_stats_data():
-    return jsonify({
-        "daily": get_sms_stats_by_day(7),
-        "hourly": get_sms_stats_by_hour(),
-        "top_users": get_top_users(5),
-        "statuses": get_status_stats(),
-        "revenue": get_monthly_revenue()
-    })
-
-
-
-# ============ مخاطبین ============
-@app.route("/panel/contacts")
-@user_required
-def panel_contacts():
-    user_id = session["user_id"]
-    search = request.args.get("q", "").strip()
-    group = request.args.get("group", "").strip()
-    return render_template("contacts.html",
-        contacts=get_user_contacts(user_id, search, group),
-        groups=get_contact_groups(user_id),
-        total=count_contacts(user_id),
-        search=search,
-        current_group=group,
-        unread_chat=count_unread_for_user(user_id))
-
-
-@app.route("/panel/contacts/add", methods=["POST"])
-@user_required
-def panel_contacts_add():
-    user_id = session["user_id"]
-    name = request.form.get("name", "").strip()
-    phone = request.form.get("phone", "").strip()
-    group = request.form.get("group", "معمولی").strip() or "معمولی"
-    notes = request.form.get("notes", "").strip()
-
-    if not name or not phone:
-        flash("نام و شماره الزامی است", "error")
-    elif not (phone.startswith("09") and len(phone) == 11):
-        flash("شماره باید با 09 شروع شود و 11 رقم باشد", "error")
-    else:
-        add_contact(user_id, name, phone, group, notes)
-        flash(f"مخاطب {name} اضافه شد", "success")
-    return redirect(url_for("panel_contacts"))
-
-
-@app.route("/panel/contacts/edit/<int:contact_id>", methods=["POST"])
-@user_required
-def panel_contacts_edit(contact_id):
-    user_id = session["user_id"]
-    name = request.form.get("name", "").strip()
-    phone = request.form.get("phone", "").strip()
-    group = request.form.get("group", "معمولی").strip() or "معمولی"
-    notes = request.form.get("notes", "").strip()
-    update_contact(contact_id, user_id, name, phone, group, notes)
-    flash("مخاطب بروزرسانی شد", "success")
-    return redirect(url_for("panel_contacts"))
-
-
-@app.route("/panel/contacts/delete/<int:contact_id>", methods=["POST"])
-@user_required
-def panel_contacts_delete(contact_id):
-    delete_contact(contact_id, session["user_id"])
-    flash("مخاطب حذف شد", "success")
-    return redirect(url_for("panel_contacts"))
-
-
-@app.route("/panel/contacts/import", methods=["POST"])
-@user_required
-def panel_contacts_import():
-    user_id = session["user_id"]
-    text = request.form.get("contacts_text", "").strip()
-    if not text:
-        flash("متنی وارد نشده", "error")
-        return redirect(url_for("panel_contacts"))
-
-    contacts_list = []
-    for line in text.split("\n"):
-        line = line.strip()
-        if not line:
-            continue
-        # فرمت: نام,شماره,گروه
-        parts = [p.strip() for p in line.replace(";", ",").split(",")]
-        if len(parts) >= 2:
-            contacts_list.append({
-                "name": parts[0],
-                "phone": parts[1],
-                "group": parts[2] if len(parts) > 2 else "معمولی"
-            })
-
-    added = import_contacts(user_id, contacts_list)
-    flash(f"{added} مخاطب اضافه شد", "success")
-    return redirect(url_for("panel_contacts"))
-
-
-
-@app.route("/admin/contacts")
-@admin_required
-def admin_contacts():
-    raw_users = get_all_users()
-    users = []
-    for u in raw_users:
-        user_id = u[0]
-        users.append({
-            "id": u[0],
-            "username": u[1],
-            "shop_name": u[3],
-            "contacts_count": count_contacts(user_id)
-        })
-    return render_template("admin_contacts.html",
-        users=users,
-        total_users=len(users),
-        unread_chat=count_unread_for_admin())
-
-
-@app.route("/admin/contacts/<int:user_id>")
-@admin_required
-def admin_user_contacts(user_id):
-    user = get_user(user_id)
-    if not user:
-        return "کاربر پیدا نشد", 404
-    search = request.args.get("q", "").strip()
-    group = request.args.get("group", "").strip()
-    return render_template("contacts.html",
-        contacts=get_user_contacts(user_id, search, group),
-        groups=get_contact_groups(user_id),
-        total=count_contacts(user_id),
-        search=search,
-        current_group=group,
-        admin_view=True,
-        user=user,
-        user_id=user_id,
-        unread_chat=count_unread_for_admin())
-
-
-
-# ============ قالب‌های پیامک ============
-@app.route("/panel/templates")
-@user_required
-def panel_templates():
-    user_id = session["user_id"]
-    category = request.args.get("cat", "").strip()
-    return render_template("templates.html",
-        templates=get_user_templates(user_id, category),
-        categories=get_template_categories(user_id),
-        total=count_templates(user_id),
-        current_cat=category,
-        unread_chat=count_unread_for_user(user_id))
-
-
-@app.route("/panel/templates/add", methods=["POST"])
-@user_required
-def panel_templates_add():
-    user_id = session["user_id"]
-    title = request.form.get("title", "").strip()
-    body = request.form.get("body", "").strip()
-    category = request.form.get("category", "عمومی").strip() or "عمومی"
-
-    if not title or not body:
-        flash("عنوان و متن الزامی است", "error")
-    else:
-        add_template(user_id, title, body, category)
-        flash(f"قالب {title} ذخیره شد", "success")
-    return redirect(url_for("panel_templates"))
-
-
-@app.route("/panel/templates/edit/<int:template_id>", methods=["POST"])
-@user_required
-def panel_templates_edit(template_id):
-    user_id = session["user_id"]
-    title = request.form.get("title", "").strip()
-    body = request.form.get("body", "").strip()
-    category = request.form.get("category", "عمومی").strip() or "عمومی"
-    update_template(template_id, user_id, title, body, category)
-    flash("قالب بروزرسانی شد", "success")
-    return redirect(url_for("panel_templates"))
-
-
-@app.route("/panel/templates/delete/<int:template_id>", methods=["POST"])
-@user_required
-def panel_templates_delete(template_id):
-    delete_template(template_id, session["user_id"])
-    flash("قالب حذف شد", "success")
-    return redirect(url_for("panel_templates"))
-
-
-@app.route("/api/templates/list")
-@user_required
-def api_templates_list():
-    user_id = session["user_id"]
-    rows = get_user_templates(user_id)
-    return jsonify({"templates": [
-        {"id": r[0], "title": r[2], "body": r[3], "category": r[4], "use_count": r[5]}
-        for r in rows
-    ]})
-
-
-@app.route("/api/templates/use/<int:template_id>", methods=["POST"])
-@user_required
-def api_templates_use(template_id):
-    increment_template_use(template_id, session["user_id"])
-    return jsonify({"status": "success"})
-
-
-
-@app.route("/admin/templates")
-@admin_required
-def admin_templates_list():
-    raw_users = get_all_users()
-    users = []
-    for u in raw_users:
-        user_id = u[0]
-        users.append({
-            "id": u[0],
-            "username": u[1],
-            "shop_name": u[3],
-            "templates_count": count_templates(user_id)
-        })
-    return render_template("admin_templates_list.html",
-        users=users,
-        total_users=len(users),
-        unread_chat=count_unread_for_admin())
-
-
-@app.route("/admin/templates/<int:user_id>")
-@admin_required
-def admin_user_templates(user_id):
-    user = get_user(user_id)
-    if not user:
-        return "کاربر پیدا نشد", 404
-    category = request.args.get("cat", "").strip()
-    return render_template("templates.html",
-        templates=get_user_templates(user_id, category),
-        categories=get_template_categories(user_id),
-        total=count_templates(user_id),
-        current_cat=category,
-        admin_view=True,
-        user=user,
-        user_id=user_id,
-        unread_chat=count_unread_for_admin())
-
-
-
-# ============ بکاپ ============
-BACKUP_DIR = os.path.join(os.path.dirname(__file__), "backups")
-os.makedirs(BACKUP_DIR, exist_ok=True)
-
-
-def create_backup(backup_type="manual"):
-    """ساخت فایل بکاپ از دیتابیس"""
-    from datetime import datetime
-    import shutil
-    try:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"panel_{backup_type}_{timestamp}.db"
-        filepath = os.path.join(BACKUP_DIR, filename)
-        # کپی دیتابیس
-        shutil.copy2("panel.db", filepath)
-        size = os.path.getsize(filepath)
-        log_backup(filename, size, backup_type, "success")
-        return True, filename, size
-    except Exception as e:
-        print(f"[BACKUP ERROR] {e}")
-        log_backup("", 0, backup_type, f"error: {str(e)[:50]}")
-        return False, str(e), 0
-
-
-@app.route("/admin/backups")
-@admin_required
-def admin_backups():
-    all_backups = get_backup_history(100)
-    auto_backups = [b for b in all_backups if b[4] == 'auto']
-    manual_backups = [b for b in all_backups if b[4] != 'auto']
-    return render_template("admin_backups.html",
-        backups=all_backups,
-        auto_backups=auto_backups,
-        manual_backups=manual_backups,
-        auto_count=len(auto_backups),
-        manual_count=len(manual_backups),
-        total=count_backups(),
-        unread_chat=count_unread_for_admin())
-
-
-@app.route("/admin/backups/create", methods=["POST"])
-@admin_required
-def admin_backups_create():
-    ok, filename, size = create_backup("manual")
-    if ok:
-        flash(f"بکاپ ساخته شد: {filename} ({size//1024} KB)", "success")
-    else:
-        flash(f"خطا در بکاپ: {filename}", "error")
-    return redirect(url_for("admin_backups"))
-
-
-@app.route("/admin/backups/download/<int:backup_id>")
-@admin_required
-def admin_backups_download(backup_id):
-    from flask import send_file
-    conn = __import__("sqlite3").connect("panel.db")
-    c = conn.cursor()
-    c.execute("SELECT filename FROM backups WHERE id=?", (backup_id,))
-    row = c.fetchone()
-    conn.close()
-    if not row:
-        return "بکاپ پیدا نشد", 404
-    filepath = os.path.join(BACKUP_DIR, row[0])
-    if not os.path.exists(filepath):
-        return "فایل بکاپ پیدا نشد", 404
-    return send_file(filepath, as_attachment=True, download_name=row[0])
-
-
-@app.route("/admin/backups/delete/<int:backup_id>", methods=["POST"])
-@admin_required
-def admin_backups_delete(backup_id):
-    conn = __import__("sqlite3").connect("panel.db")
-    c = conn.cursor()
-    c.execute("SELECT filename FROM backups WHERE id=?", (backup_id,))
-    row = c.fetchone()
-    conn.close()
-    if row:
-        filepath = os.path.join(BACKUP_DIR, row[0])
-        if os.path.exists(filepath):
-            os.remove(filepath)
-    delete_backup_record(backup_id)
-    flash("بکاپ حذف شد", "success")
-    return redirect(url_for("admin_backups"))
-
-
-@app.route("/admin/backups/restore/<int:backup_id>", methods=["POST"])
-@admin_required
-def admin_backups_restore(backup_id):
-    from datetime import datetime
-    import shutil
-    conn = __import__("sqlite3").connect("panel.db")
-    c = conn.cursor()
-    c.execute("SELECT filename FROM backups WHERE id=?", (backup_id,))
-    row = c.fetchone()
-    conn.close()
-    if not row:
-        flash("بکاپ پیدا نشد", "error")
-        return redirect(url_for("admin_backups"))
-    filepath = os.path.join(BACKUP_DIR, row[0])
-    if not os.path.exists(filepath):
-        flash("فایل بکاپ پیدا نشد", "error")
-        return redirect(url_for("admin_backups"))
-    try:
-        # بکاپ از وضعیت فعلی قبل از بازیابی
-        create_backup("before_restore")
-        # بازیابی
-        shutil.copy2(filepath, "panel.db")
-        flash("بکاپ با موفقیت بازیابی شد. لطفاً سرور را ری‌استارت کنید.", "success")
-    except Exception as e:
-        flash(f"خطا در بازیابی: {str(e)[:100]}", "error")
-    return redirect(url_for("admin_backups"))
-
-
-
-# ============ بکاپ خودکار ۲۴ ساعته ============
-import threading
-
-def auto_backup_loop():
-    """هر ۲۴ ساعت یه بکاپ خودکار می‌گیره"""
-    import time
-    from datetime import datetime
-    # صبر اولیه ۱ دقیقه (تا سرور کامل بالا بیاد)
-    time.sleep(60)
-    while True:
-        try:
-            # چک کن آخرین بکاپ خودکار کِی بوده
-            conn = __import__("sqlite3").connect("panel.db")
-            c = conn.cursor()
-            c.execute("""SELECT created_at FROM backups
-                         WHERE type='auto' ORDER BY id DESC LIMIT 1""")
-            row = c.fetchone()
-            conn.close()
-
-            need_backup = False
-            if not row:
-                need_backup = True
-            else:
-                try:
-                    last = datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
-                    hours_passed = (datetime.now() - last).total_seconds() / 3600
-                    if hours_passed >= 24:
-                        need_backup = True
-                        print(f"[AUTO BACKUP] آخرین بکاپ {hours_passed:.1f} ساعت پیش بود")
-                except Exception:
-                    need_backup = True
-
-            if need_backup:
-                ok, filename, size = create_backup("auto")
-                if ok:
-                    print(f"[AUTO BACKUP] ✅ {filename} ({size//1024} KB)")
-                    # پاک کردن بکاپ‌های قدیمی خودکار (فقط ۷ تا نگه‌دار)
-                    conn = __import__("sqlite3").connect("panel.db")
-                    c = conn.cursor()
-                    c.execute("""SELECT id, filename FROM backups WHERE type='auto'
-                                 ORDER BY id DESC""")
-                    old_rows = c.fetchall()
-                    for old in old_rows[7:]:
-                        try:
-                            old_path = os.path.join(BACKUP_DIR, old[1])
-                            if os.path.exists(old_path):
-                                os.remove(old_path)
-                            c.execute("DELETE FROM backups WHERE id=?", (old[0],))
-                        except Exception:
-                            pass
-                    conn.commit()
-                    conn.close()
-                else:
-                    print(f"[AUTO BACKUP] ❌ خطا: {filename}")
-        except Exception as e:
-            print(f"[AUTO BACKUP ERROR] {e}")
-
-        # هر ۱ ساعت چک کن (اگه ۲۴ ساعت گذشته باشه، بکاپ بگیره)
-        time.sleep(3600)
-
-
-def start_auto_backup():
-    """راه‌اندازی ترد بکاپ خودکار"""
-    t = threading.Thread(target=auto_backup_loop, daemon=True)
-    t.start()
-    print("[AUTO BACKUP] ترد بکاپ خودکار راه‌اندازی شد")
-
-
-
-# ============ نوتیفیکیشن جدید ============
-@app.route("/notifications")
-@user_required
-def notifications_page():
-    user_id = session["user_id"]
-    mark_all_read(user_id)
-    return render_template("notifications.html",
-        notifications=get_user_notifications(user_id),
-        is_admin=False,
-        unread_chat=0)
-
-
-@app.route("/admin/notifications")
-@admin_required
-def admin_notifications_page():
-    mark_all_read(-1)
-    return render_template("notifications.html",
-        notifications=get_user_notifications(-1),
-        is_admin=True,
-        unread_chat=count_unread_for_admin())
-
-
-@app.route("/api/notifications/count")
-@app.route("/api/notifications/count")
-def api_notifications_count():
-    if session.get("is_admin"):
-        user_id = -1
-    elif session.get("user_id"):
-        user_id = session["user_id"]
-    else:
-        return jsonify({"count": 0})
-    conn = __import__("sqlite3").connect("panel.db")
-    c = conn.cursor()
-    c.execute("SELECT COUNT(*) FROM notifications WHERE user_id=? AND is_read=0", (user_id,))
-    n = c.fetchone()[0]
-    conn.close()
-    return jsonify({"count": n})
-
-
-@app.route("/api/notifications/list")
-@app.route("/api/notifications/list")
-def api_notifications_list():
-    if session.get("is_admin"):
-        user_id = -1
-    elif session.get("user_id"):
-        user_id = session["user_id"]
-    else:
-        return jsonify({"notifications": []})
-    rows = get_user_notifications(user_id, 10)
-    return jsonify({"notifications": [
-        {"id": r[0], "title": r[2], "body": r[3], "icon": r[4],
-         "link": r[5], "is_read": bool(r[6]), "created_at": r[7]}
-        for r in rows
-    ]})
-
-
-@app.route("/api/notifications/mark-read", methods=["POST"])
-@app.route("/api/notifications/mark-read", methods=["POST"])
-def api_notifications_mark_read():
-    if session.get("is_admin"):
-        mark_all_read(-1)
-    elif session.get("user_id"):
-        mark_all_read(session["user_id"])
-    return jsonify({"status": "success"})
-
-
-@app.route("/api/notifications/delete/<int:notif_id>", methods=["POST"])
-@app.route("/api/notifications/delete/<int:notif_id>", methods=["POST"])
-def api_notifications_delete(notif_id):
-    if session.get("is_admin"):
-        delete_notification(notif_id, -1)
-    elif session.get("user_id"):
-        delete_notification(notif_id, session["user_id"])
-    return jsonify({"status": "success"})
-
-
-@app.route("/api/notifications/clear", methods=["POST"])
-@app.route("/api/notifications/clear", methods=["POST"])
-def api_notifications_clear():
-    if session.get("is_admin"):
-        clear_user_notifications(-1)
-    elif session.get("user_id"):
-        clear_user_notifications(session["user_id"])
-    return jsonify({"status": "success"})
-
-
-@app.route("/admin/notifications/send", methods=["POST"])
-@admin_required
-def admin_send_notification():
-    title = request.form.get("title", "").strip()
-    body = request.form.get("body", "").strip()
-    icon = request.form.get("icon", "🔔").strip() or "🔔"
-    link = request.form.get("link", "").strip()
-    target = request.form.get("target", "all")
-
-    if not title or not body:
-        flash("عنوان و متن الزامی است", "error")
-    else:
-        if target == "all":
-            n = notify_all_users(title, body, icon, link)
-            flash(f"نوتیفیکیشن به {n} کاربر ارسال شد", "success")
-        else:
-            try:
-                uid = int(target)
-                create_notification(uid, title, body, icon, link)
-                flash(f"نوتیفیکیشن به کاربر #{uid} ارسال شد", "success")
-            except Exception:
-                flash("کاربر نامعتبر", "error")
-    return redirect(url_for("admin_notifications_page"))
-
-
-
-# ============ نوتیفیکیشن جدید ============
-@app.route("/notifications")
-@user_required
-
-@app.route("/admin/notifications")
-@admin_required
-
-@app.route("/api/notifications/count")
-
-@app.route("/api/notifications/list")
-def api_notifications_list_new():
-    if session.get("is_admin"):
-        user_id = -1
-    elif session.get("user_id"):
-        user_id = session["user_id"]
-    else:
-        return jsonify({"notifications": []})
-    rows = get_user_notifications(user_id, 10)
-    return jsonify({"notifications": [
-        {"id": r[0], "title": r[2], "body": r[3], "icon": r[4],
-         "link": r[5], "is_read": bool(r[6]), "created_at": r[7]}
-        for r in rows
-    ]})
-
-
-@app.route("/api/notifications/mark-read", methods=["POST"])
-
-@app.route("/api/notifications/delete/<int:notif_id>", methods=["POST"])
-
-@app.route("/api/notifications/clear", methods=["POST"])
-
-@app.route("/admin/notifications/send", methods=["POST"])
-@admin_required
-
 # ============ API Trigger ============
 @app.route("/api/trigger", methods=["POST"])
 def trigger():
@@ -1814,9 +1373,923 @@ def trigger():
     return jsonify(result)
 
 
+
+# ============ مخاطبین ============
+@app.route("/panel/contacts")
+@user_required
+def panel_contacts():
+    uid = session["user_id"]
+    s = request.args.get("q", "").strip()
+    g = request.args.get("group", "").strip()
+    return render_template("contacts.html",
+        contacts=get_user_contacts(uid, s, g),
+        groups=get_contact_groups(uid),
+        total=count_contacts(uid),
+        search=s, current_group=g,
+        unread_chat=count_unread_for_user(uid))
+
+@app.route("/panel/contacts/add", methods=["POST"])
+@user_required
+def panel_contacts_add():
+    uid = session["user_id"]
+    name = request.form.get("name", "").strip()
+    phone = request.form.get("phone", "").strip()
+    grp = request.form.get("group", "معمولی").strip() or "معمولی"
+    notes = request.form.get("notes", "").strip()
+    if not name or not phone:
+        flash("نام و شماره الزامی است", "error")
+    elif not (phone.startswith("09") and len(phone) == 11):
+        flash("شماره معتبر نیست", "error")
+    else:
+        add_contact(uid, name, phone, grp, notes)
+        flash("مخاطب اضافه شد", "success")
+    return redirect(url_for("panel_contacts"))
+
+@app.route("/panel/contacts/edit/<int:cid>", methods=["POST"])
+@user_required
+def panel_contacts_edit(cid):
+    update_contact(cid, session["user_id"],
+        request.form.get("name", "").strip(),
+        request.form.get("phone", "").strip(),
+        request.form.get("group", "معمولی").strip() or "معمولی",
+        request.form.get("notes", "").strip())
+    flash("بروزرسانی شد", "success")
+    return redirect(url_for("panel_contacts"))
+
+@app.route("/panel/contacts/delete/<int:cid>", methods=["POST"])
+@user_required
+def panel_contacts_delete(cid):
+    delete_contact(cid, session["user_id"])
+    flash("حذف شد", "success")
+    return redirect(url_for("panel_contacts"))
+
+@app.route("/panel/contacts/import", methods=["POST"])
+@user_required
+def panel_contacts_import():
+    uid = session["user_id"]
+    txt = request.form.get("contacts_text", "").strip()
+    default_group = request.form.get("default_group", "معمولی").strip() or "معمولی"
+    
+    if not txt:
+        flash("متنی وارد نشده", "error")
+        return redirect(url_for("panel_contacts"))
+    
+    items = []
+    errors = []
+    line_num = 0
+    
+    for line in txt.split("\n"):
+        line_num += 1
+        line = line.strip()
+        if not line:
+            continue
+        
+        # پشتیبانی از جداکننده‌های مختلف: , ; | tab
+        parts = []
+        for sep in [",", ";", "|", "	"]:
+            if sep in line:
+                parts = [p.strip() for p in line.split(sep)]
+                break
+        
+        if not parts:
+            # فقط شماره
+            if line.startswith("09") and len(line) == 11:
+                items.append({"name": "مشتری " + line[-4:], "phone": line, "group": default_group})
+            else:
+                errors.append(f"خط {line_num}: نامعتبر")
+            continue
+        
+        # اگر فقط یه بخش
+        if len(parts) == 1:
+            if parts[0].startswith("09") and len(parts[0]) == 11:
+                items.append({"name": "مشتری " + parts[0][-4:], "phone": parts[0], "group": default_group})
+            else:
+                errors.append(f"خط {line_num}: نامعتبر")
+        
+        # دو بخش یا بیشتر
+        elif len(parts) >= 2:
+            name = parts[0]
+            phone = parts[1]
+            group = parts[2] if len(parts) > 2 else default_group
+            
+            # نرمال‌سازی شماره
+            phone = phone.replace(" ", "").replace("-", "")
+            
+            # چک شماره
+            if phone.startswith("+98"):
+                phone = "0" + phone[3:]
+            elif phone.startswith("98") and len(phone) == 12:
+                phone = "0" + phone[2:]
+            elif phone.startswith("9") and len(phone) == 10:
+                phone = "0" + phone
+            
+            if not (phone.startswith("09") and len(phone) == 11):
+                errors.append(f"خط {line_num}: شماره نامعتبر ({phone})")
+                continue
+            
+            if not name:
+                name = "مشتری " + phone[-4:]
+            
+            items.append({"name": name, "phone": phone, "group": group})
+    
+    if not items:
+        msg = "هیچ مخاطب معتبری پیدا نشد"
+        if errors:
+            msg += " — " + "; ".join(errors[:3])
+        flash(msg, "error")
+        return redirect(url_for("panel_contacts"))
+    
+    added = import_contacts(uid, items)
+    
+    success_msg = f"✅ {added} مخاطب اضافه شد"
+    if errors:
+        success_msg += f" ({len(errors)} خطا)"
+    flash(success_msg, "success")
+    return redirect(url_for("panel_contacts"))
+
+
+@app.route("/admin/contacts/<int:target_uid>/import", methods=["POST"])
+@admin_required
+def admin_contacts_import(target_uid):
+    txt = request.form.get("contacts_text", "").strip()
+    default_group = request.form.get("default_group", "معمولی").strip() or "معمولی"
+    
+    if not txt:
+        flash("متنی وارد نشده", "error")
+        return redirect(url_for("admin_user_contacts", user_id=target_uid))
+    
+    items = []
+    errors = []
+    line_num = 0
+    
+    for line in txt.split("\n"):
+        line_num += 1
+        line = line.strip()
+        if not line:
+            continue
+        
+        parts = []
+        for sep in [",", ";", "|", "	"]:
+            if sep in line:
+                parts = [p.strip() for p in line.split(sep)]
+                break
+        
+        if not parts:
+            if line.startswith("09") and len(line) == 11:
+                items.append({"name": "مشتری " + line[-4:], "phone": line, "group": default_group})
+            continue
+        
+        if len(parts) >= 2:
+            name = parts[0] or "مشتری " + parts[1][-4:]
+            phone = parts[1].replace(" ", "").replace("-", "")
+            group = parts[2] if len(parts) > 2 else default_group
+            
+            if phone.startswith("+98"):
+                phone = "0" + phone[3:]
+            elif phone.startswith("9") and len(phone) == 10:
+                phone = "0" + phone
+            
+            if phone.startswith("09") and len(phone) == 11:
+                items.append({"name": name, "phone": phone, "group": group})
+    
+    if items:
+        added = import_contacts(target_uid, items)
+        flash(f"✅ {added} مخاطب اضافه شد", "success")
+    else:
+        flash("هیچ مخاطب معتبری پیدا نشد", "error")
+    
+    return redirect(url_for("admin_user_contacts", user_id=target_uid))
+
+@app.route("/admin/contacts")
+@admin_required
+def admin_contacts():
+    raw = get_all_users()
+    users = [{"id": u[0], "username": u[1], "shop_name": u[3],
+              "contacts_count": count_contacts(u[0])} for u in raw]
+    return render_template("admin_contacts.html", users=users,
+        total_users=len(users), unread_chat=count_unread_for_admin())
+
+@app.route("/admin/contacts/<int:uid>")
+@admin_required
+def admin_user_contacts(uid):
+    user = get_user(uid)
+    if not user: return "not found", 404
+    s = request.args.get("q", "").strip()
+    g = request.args.get("group", "").strip()
+    return render_template("contacts.html",
+        contacts=get_user_contacts(uid, s, g),
+        groups=get_contact_groups(uid), total=count_contacts(uid),
+        search=s, current_group=g,
+        admin_view=True, user=user, user_id=uid,
+        unread_chat=count_unread_for_admin())
+
+
+# ============ قالب‌ها ============
+@app.route("/panel/templates")
+@user_required
+def panel_templates():
+    uid = session["user_id"]
+    cat = request.args.get("cat", "").strip()
+    return render_template("templates.html",
+        templates=get_user_templates(uid, cat),
+        categories=get_template_categories(uid),
+        total=count_templates(uid), current_cat=cat,
+        unread_chat=count_unread_for_user(uid))
+
+@app.route("/panel/templates/add", methods=["POST"])
+@user_required
+def panel_templates_add():
+    uid = session["user_id"]
+    t = request.form.get("title", "").strip()
+    b = request.form.get("body", "").strip()
+    c = request.form.get("category", "عمومی").strip() or "عمومی"
+    if not t or not b:
+        flash("عنوان و متن الزامی است", "error")
+    else:
+        add_template(uid, t, b, c)
+        flash("قالب ذخیره شد", "success")
+    return redirect(url_for("panel_templates"))
+
+@app.route("/panel/templates/edit/<int:tid>", methods=["POST"])
+@user_required
+def panel_templates_edit(tid):
+    update_template(tid, session["user_id"],
+        request.form.get("title", "").strip(),
+        request.form.get("body", "").strip(),
+        request.form.get("category", "عمومی").strip() or "عمومی")
+    flash("بروزرسانی شد", "success")
+    return redirect(url_for("panel_templates"))
+
+@app.route("/panel/templates/delete/<int:tid>", methods=["POST"])
+@user_required
+def panel_templates_delete(tid):
+    delete_template(tid, session["user_id"])
+    flash("حذف شد", "success")
+    return redirect(url_for("panel_templates"))
+
+@app.route("/api/templates/list")
+@user_required
+def api_templates_list():
+    rows = get_user_templates(session["user_id"])
+    return jsonify({"templates": [
+        {"id": r[0], "title": r[2], "body": r[3], "category": r[4], "use_count": r[5]}
+        for r in rows]})
+
+@app.route("/api/templates/use/<int:tid>", methods=["POST"])
+@user_required
+def api_templates_use(tid):
+    increment_template_use(tid, session["user_id"])
+    return jsonify({"status": "success"})
+
+@app.route("/admin/templates")
+@admin_required
+def admin_templates_list():
+    raw = get_all_users()
+    users = [{"id": u[0], "username": u[1], "shop_name": u[3],
+              "templates_count": count_templates(u[0])} for u in raw]
+    return render_template("admin_templates_list.html", users=users,
+        total_users=len(users), unread_chat=count_unread_for_admin())
+
+@app.route("/admin/templates/<int:uid>")
+@admin_required
+def admin_user_templates(uid):
+    user = get_user(uid)
+    if not user: return "not found", 404
+    cat = request.args.get("cat", "").strip()
+    return render_template("templates.html",
+        templates=get_user_templates(uid, cat),
+        categories=get_template_categories(uid),
+        total=count_templates(uid), current_cat=cat,
+        admin_view=True, user=user, user_id=uid,
+        unread_chat=count_unread_for_admin())
+
+
+# ============ بکاپ ============
+BACKUP_DIR = os.path.join(os.path.dirname(__file__), "backups")
+os.makedirs(BACKUP_DIR, exist_ok=True)
+
+def create_backup(backup_type="manual"):
+    from datetime import datetime
+    import shutil
+    try:
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        fname = f"panel_{backup_type}_{ts}.db"
+        fpath = os.path.join(BACKUP_DIR, fname)
+        shutil.copy2("panel.db", fpath)
+        size = os.path.getsize(fpath)
+        log_backup(fname, size, backup_type, "success")
+        return True, fname, size
+    except Exception as e:
+        log_backup("", 0, backup_type, f"error: {str(e)[:50]}")
+        return False, str(e), 0
+
+@app.route("/admin/backups")
+@admin_required
+def admin_backups():
+    all_b = get_backup_history(100)
+    auto_b = [b for b in all_b if b[4] == 'auto']
+    manual_b = [b for b in all_b if b[4] != 'auto']
+    return render_template("admin_backups.html",
+        backups=all_b, auto_backups=auto_b, manual_backups=manual_b,
+        auto_count=len(auto_b), manual_count=len(manual_b),
+        total=count_backups(), unread_chat=count_unread_for_admin())
+
+@app.route("/admin/backups/create", methods=["POST"])
+@admin_required
+def admin_backups_create():
+    ok, fname, size = create_backup("manual")
+    if ok:
+        flash(f"بکاپ ساخته شد ({size//1024} KB)", "success")
+    else:
+        flash(f"خطا: {fname}", "error")
+    return redirect(url_for("admin_backups"))
+
+@app.route("/admin/backups/download/<int:bid>")
+@admin_required
+def admin_backups_download(bid):
+    from flask import send_file
+    conn = __import__("sqlite3").connect("panel.db")
+    c = conn.cursor()
+    c.execute("SELECT filename FROM backups WHERE id=?", (bid,))
+    row = c.fetchone()
+    conn.close()
+    if not row: return "not found", 404
+    fp = os.path.join(BACKUP_DIR, row[0])
+    if not os.path.exists(fp): return "not found", 404
+    return send_file(fp, as_attachment=True, download_name=row[0])
+
+@app.route("/admin/backups/delete/<int:bid>", methods=["POST"])
+@admin_required
+def admin_backups_delete(bid):
+    conn = __import__("sqlite3").connect("panel.db")
+    c = conn.cursor()
+    c.execute("SELECT filename FROM backups WHERE id=?", (bid,))
+    row = c.fetchone()
+    conn.close()
+    if row:
+        fp = os.path.join(BACKUP_DIR, row[0])
+        if os.path.exists(fp): os.remove(fp)
+    delete_backup_record(bid)
+    flash("حذف شد", "success")
+    return redirect(url_for("admin_backups"))
+
+@app.route("/admin/backups/restore/<int:bid>", methods=["POST"])
+@admin_required
+def admin_backups_restore(bid):
+    import shutil
+    conn = __import__("sqlite3").connect("panel.db")
+    c = conn.cursor()
+    c.execute("SELECT filename FROM backups WHERE id=?", (bid,))
+    row = c.fetchone()
+    conn.close()
+    if not row:
+        flash("بکاپ پیدا نشد", "error")
+        return redirect(url_for("admin_backups"))
+    fp = os.path.join(BACKUP_DIR, row[0])
+    if not os.path.exists(fp):
+        flash("فایل پیدا نشد", "error")
+        return redirect(url_for("admin_backups"))
+    try:
+        create_backup("before_restore")
+        shutil.copy2(fp, "panel.db")
+        flash("بازیابی شد. سرور رو ری‌استارت کن.", "success")
+    except Exception as e:
+        flash(f"خطا: {str(e)[:80]}", "error")
+    return redirect(url_for("admin_backups"))
+
+
+# ============ آمار ============
+@app.route("/admin/stats")
+@admin_required
+def admin_stats():
+    return render_template("admin_stats.html", unread_chat=count_unread_for_admin())
+
+@app.route("/api/stats/data")
+@admin_required
+def api_stats_data():
+    return jsonify({
+        "daily": get_sms_stats_by_day(7),
+        "hourly": get_sms_stats_by_hour(),
+        "top_users": get_top_users(5),
+        "statuses": get_status_stats(),
+        "revenue": get_monthly_revenue()})
+
+
+
+# ============ نوتیفیکیشن ============
+@app.route("/notifications")
+@user_required
+def notif_page_user():
+    uid = session["user_id"]
+    mark_all_read(uid)
+    return render_template("notifications.html",
+        notifications=get_user_notifications(uid),
+        is_admin=False, unread_chat=0)
+
+@app.route("/admin/notifications")
+@admin_required
+def notif_page_admin():
+    mark_all_read(-1)
+    return render_template("notifications.html",
+        notifications=get_user_notifications(-1),
+        is_admin=True, unread_chat=count_unread_for_admin())
+
+@app.route("/api/notif/count")
+def notif_api_count():
+    if session.get("is_admin"):
+        uid = -1
+    elif session.get("user_id"):
+        uid = session["user_id"]
+    else:
+        return jsonify({"count": 0})
+    return jsonify({"count": count_unread_notifications(uid)})
+
+@app.route("/api/notif/delete/<int:nid>", methods=["POST"])
+def notif_api_delete(nid):
+    if session.get("is_admin"):
+        delete_notification(nid, -1)
+    elif session.get("user_id"):
+        delete_notification(nid, session["user_id"])
+    return jsonify({"status": "success"})
+
+@app.route("/api/notif/clear", methods=["POST"])
+def notif_api_clear():
+    if session.get("is_admin"):
+        clear_user_notifications(-1)
+    elif session.get("user_id"):
+        clear_user_notifications(session["user_id"])
+    return jsonify({"status": "success"})
+
+@app.route("/admin/notif/send", methods=["POST"])
+@admin_required
+def notif_api_send():
+    title = request.form.get("title", "").strip()
+    body = request.form.get("body", "").strip()
+    icon = request.form.get("icon", "🔔").strip() or "🔔"
+    link = request.form.get("link", "").strip()
+    target = request.form.get("target", "all")
+    if not title or not body:
+        flash("عنوان و متن الزامی است", "error")
+    else:
+        if target == "all":
+            n = notify_all_users(title, body, icon, link)
+            flash(f"ارسال شد به {n} کاربر", "success")
+        else:
+            try:
+                create_notification(int(target), title, body, icon, link)
+                flash("ارسال شد", "success")
+            except Exception:
+                flash("کاربر نامعتبر", "error")
+    return redirect(url_for("notif_page_admin"))
+
+
+
+# ============ QR کد ============
+import io
+import qrcode
+from flask import Response
+
+@app.route("/panel/qr")
+@user_required
+def qr_my_page():
+    uid = session["user_id"]
+    user = get_user(uid)
+    if not user:
+        return redirect(url_for("panel_login"))
+    return render_template("qr_page.html",
+        user=user, is_admin=False,
+        scans=get_qr_scans(uid, 20),
+        scan_count=count_qr_scans(uid),
+        unread_chat=count_unread_for_user(uid))
+
+@app.route("/admin/qr/<int:uid>")
+@admin_required
+def qr_admin_view(uid):
+    user = get_user(uid)
+    if not user:
+        return "not found", 404
+    return render_template("qr_page.html",
+        user=user, is_admin=True,
+        scans=get_qr_scans(uid, 20),
+        scan_count=count_qr_scans(uid),
+        unread_chat=count_unread_for_admin())
+
+@app.route("/qr/<username>.png")
+def qr_image(username):
+    user = get_user_by_username(username)
+    if not user:
+        return "", 404
+    base_url = request.url_root.rstrip("/")
+    register_url = base_url + "/register/" + username
+    qr = qrcode.QRCode(version=1, box_size=10, border=2)
+    qr.add_data(register_url)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    buf.seek(0)
+    return Response(buf.getvalue(), mimetype="image/png")
+
+@app.route("/register/<username>", methods=["GET", "POST"])
+def public_register(username):
+    # اطلاعات مغازه‌دار
+    user = get_user_by_username(username)
+    if not user:
+        return render_template("public_register.html",
+            shop=None, msg="این مغازه وجود ندارد", success=False)
+
+    msg = None
+    success = False
+
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        phone = (request.form.get("phone") or "").strip()
+
+        if not phone or not (phone.startswith("09") and len(phone) == 11):
+            msg = "شماره موبایل معتبر نیست"
+        elif not name:
+            msg = "نام الزامی است"
+        else:
+            try:
+                # اضافه به مخاطبین مغازه‌دار
+                add_contact(
+                    user_id=user[0],
+                    name=name,
+                    phone=phone,
+                    group_name="ثبت‌نام QR",
+                    note=f"از طریق لینک عمومی"
+                )
+                msg = "✅ ثبت‌نام موفق! از این پس پیامک‌های این مغازه به شما ارسال می‌شود."
+                success = True
+            except Exception as e:
+                msg = f"خطا: {e}"
+
+    return render_template("public_register.html",
+        shop=user, msg=msg, success=success)
+
+
+# ========== 🎯 روت جدید: ثبت‌نام با کد دعوت ==========
+@app.route("/register/ref/<code>", methods=["GET", "POST"])
+def public_register_ref(code):
+    referrer_id = find_user_by_ref_code(code)
+    if not referrer_id:
+        return render_template("public_register.html",
+            shop=None, msg="کد دعوت نامعتبر است", success=False)
+
+    # اگه کاربر لاگین کرده و خودش صاحب کده → بفرست به داشبورد
+    if session.get("user_id") == referrer_id:
+        flash("خودت نمی‌تونی خودت رو دعوت کنی!", "warning")
+        return redirect("/panel/referrals")
+
+    referrer = get_user(referrer_id)
+    if not referrer:
+        return render_template("public_register.html",
+            shop=None, msg="دعوت‌کننده پیدا نشد", success=False)
+
+    msg = None
+    success = False
+
+    if request.method == "POST":
+        username = (request.form.get("username") or "").strip()
+        password = (request.form.get("password") or "").strip()
+        shop_name = (request.form.get("shop_name") or "").strip()
+        phone = (request.form.get("phone") or "").strip()
+
+        # اعتبارسنجی
+        if not username or not password:
+            msg = "نام کاربری و رمز الزامی است"
+        elif len(password) < 6:
+            msg = "رمز باید حداقل ۶ کاراکتر باشد"
+        elif get_user_by_username(username):
+            msg = "این نام کاربری قبلاً گرفته شده"
+        else:
+            try:
+                # ساخت کاربر جدید
+                new_uid = add_user(
+                    username=username,
+                    password=password,
+                    shop_name=shop_name or username,
+                    phone=phone,
+                    days=30,
+                    sms_limit=100
+                )
+                if new_uid:
+                    # 🎁 پردازش ارجاع
+                    ok = process_referral(referrer_id, new_uid, code)
+                    if ok:
+                        msg = f"🎉 ثبت‌نام موفق! ۲۵,۰۰۰ ریال + ۲۵ امتیاز هدیه گرفتید."
+                    else:
+                        msg = "✅ ثبت‌نام موفق شد."
+                    success = True
+                else:
+                    msg = "خطا در ساخت حساب"
+            except Exception as e:
+                msg = f"خطا: {e}"
+
+    # رندر تمپلیت مخصوص
+    return render_template("public_register_ref.html",
+        referrer=referrer, code=code, msg=msg, success=success)
+
+
+
+# ===== اتصال کیف پول =====
+try:
+    from wallet_routes import wallet_bp
+    app.register_blueprint(wallet_bp)
+    print('✅ wallet_bp registered')
+except Exception as _e:
+    print('❌ wallet_bp error:', _e)
+
+
+# ===== اتصال درگاه پرداخت =====
+try:
+    from payment_routes import payment_bp
+    app.register_blueprint(payment_bp)
+    print('✅ payment_bp registered')
+except Exception as _e:
+    print('❌ payment_bp error:', _e)
+
+
+# ===== اتصال تیکت پشتیبانی =====
+try:
+    from ticket_routes import ticket_bp
+    app.register_blueprint(ticket_bp)
+    print('✅ ticket_bp registered')
+except Exception as _e:
+    print('❌ ticket_bp error:', _e)
+
+
+# ===== اتصال وفاداری =====
+try:
+    from loyalty_routes import loyalty_bp
+    app.register_blueprint(loyalty_bp)
+    print('✅ loyalty_bp registered')
+except Exception as _e:
+    print('❌ loyalty_bp error:', _e)
+
+
+# ===== اتصال ارجاع =====
+try:
+    from referral_routes import referral_bp
+    app.register_blueprint(referral_bp)
+    print('✅ referral_bp registered')
+except Exception as _e:
+    print('❌ referral_bp error:', _e)
+
+
+# ===== اتصال گزارش‌ها =====
+try:
+    from report_routes import report_bp
+    from product_routes import product_bp
+    from sales_routes import sales_bp
+    from channel_send_routes import channel_send_bp
+    from schedule_routes import schedule_bp
+    
+    app.register_blueprint(report_bp)
+    app.register_blueprint(product_bp)
+    app.register_blueprint(sales_bp)
+    app.register_blueprint(channel_send_bp)
+    app.register_blueprint(schedule_bp)
+    
+    print('✅ report_bp registered')
+except Exception as _e:
+    print('❌ report_bp error:', _e)
+
+@app.route("/admin/user/<int:user_id>/delete", methods=["POST"])
+def admin_delete_user(user_id):
+    if not session.get("is_admin"):
+        return redirect("/admin/login")
+
+    confirm = (request.form.get("confirm_name") or "").strip()
+    u = get_user(user_id)
+    if not u:
+        return redirect("/admin/dashboard")
+
+    if confirm != u[1]:
+        return redirect(f"/admin/user/{user_id}")
+
+    import sqlite3
+    conn = sqlite3.connect('panel.db')
+    c = conn.cursor()
+
+    # حذف تیکت‌ها و پاسخ‌هاشون
+    try:
+        c.execute("SELECT id FROM tickets WHERE user_id=?", (user_id,))
+        for (tid,) in c.fetchall():
+            c.execute("DELETE FROM ticket_replies WHERE ticket_id=?", (tid,))
+        c.execute("DELETE FROM tickets WHERE user_id=?", (user_id,))
+    except: pass
+
+    # حذف ارجاع‌ها
+    try:
+        c.execute("DELETE FROM referrals WHERE referrer_id=? OR referred_id=?", (user_id, user_id))
+        c.execute("DELETE FROM referral_codes WHERE user_id=?", (user_id,))
+    except: pass
+
+    # بقیه جدول‌ها با user_id
+    for tbl in ['wallets','transactions','payments','notifications','loyalty',
+                'loyalty_log','sent_sms','contacts','sms_templates','schedules',
+                'chat_messages','direct_messages','chat_requests','user_settings',
+                'reactions','ai_usage','qr_scans','login_logs','login_attempts','events']:
+        try:
+            c.execute(f"DELETE FROM {tbl} WHERE user_id=?", (user_id,))
+        except: pass
+
+    # حذف خود کاربر (نه ادمین id=1)
+    c.execute("DELETE FROM users WHERE id=? AND id != 1", (user_id,))
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin/dashboard")
+
+
+
+# ===== اتصال 2FA =====
+try:
+    from twofa_routes import twofa_bp
+    app.register_blueprint(twofa_bp)
+    print('✅ twofa_bp registered')
+except Exception as _e:
+    print('❌ twofa_bp error:', _e)
+
+
+# ===== اتصال تست پیامک =====
+try:
+    from test_routes import test_bp
+    app.register_blueprint(test_bp)
+    print('✅ test_bp registered')
+except Exception as _e:
+    print('❌ test_bp error:', _e)
+
+
+# ===== اتصال پاسخ خودکار =====
+try:
+    from autoreply_routes import autoreply_bp
+    app.register_blueprint(autoreply_bp)
+    print('✅ autoreply_bp registered')
+except Exception as _e:
+    print('❌ autoreply_bp error:', _e)
+
+
+# ===== اتصال AI Manager =====
+try:
+    from aimanager_routes import aimanager_bp
+    app.register_blueprint(aimanager_bp)
+    print('✅ aimanager_bp registered')
+except Exception as _e:
+    print('❌ aimanager_bp error:', _e)
+
+
+# ===== اتصال Broadcast =====
+try:
+    from broadcast_routes import broadcast_bp
+    app.register_blueprint(broadcast_bp)
+    print('✅ broadcast_bp registered')
+except Exception as _e:
+    print('❌ broadcast_bp error:', _e)
+
+
+# ===== Bot Ads =====
+try:
+    from botads_routes import botads_bp
+    app.register_blueprint(botads_bp)
+    print('✅ botads_bp registered')
+except Exception as _e:
+    print('❌ botads_bp error:', _e)
+
+
+# ===== Posters =====
+try:
+    from poster_routes import poster_bp
+    app.register_blueprint(poster_bp)
+    print('✅ poster_bp registered')
+except Exception as _e:
+    print('❌ poster_bp error:', _e)
+
+
+# ===== Admin Bots =====
+try:
+    from admin_bots_routes import admin_bots_bp
+    app.register_blueprint(admin_bots_bp)
+    print('admin_bots_bp OK')
+except Exception as e:
+    print('admin_bots_bp error:', e)
+
+
+
+
+
+
+
+
+
+try:
+    from bot_members_routes import members_bp
+    app.register_blueprint(members_bp)
+    print('members_bp OK')
+except Exception as e:
+    print('members_bp err:', e)
+
+
+try:
+    from url_admin_routes import url_admin_bp
+    app.register_blueprint(url_admin_bp)
+    print('url_admin_bp OK')
+except Exception as e:
+    print('url_admin_bp err:', e)
+
+
+try:
+    from customer_panel import customer_panel_bp
+    app.register_blueprint(customer_panel_bp)
+    print("customer_panel OK")
+except Exception as e:
+    print("customer_panel err:", e)
+
+
+try:
+    from customer_features_routes import feat_bp
+    app.register_blueprint(feat_bp)
+    print("customer_features OK")
+except Exception as e:
+    print("customer_features err:", e)
+
+# 🔄 Keep-alive (فقط روی Render)
+try:
+    import os as _os
+    if _os.environ.get('RENDER') or _os.environ.get('RENDER_EXTERNAL_URL'):
+        from keep_alive import start as _ka_start
+        _ka_start()
+except Exception as _e:
+    pass
+
+
+# ============ ADMIN ADD USER (SHOP) ============
+@app.route("/admin/add-user", methods=["POST"])
+@admin_required
+def admin_add_user_new():
+    from database import add_user  # تابعی که مغازه جدید رو توی دیتابیس ذخیره می‌کنه
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "").strip()
+    shop_name = request.form.get("shop_name", "").strip()
+    phone = request.form.get("phone", "").strip()
+    
+    if username and password and shop_name:
+        try:
+            # فراخوانی تابع دیتابیس (اگه تابع add_user وجود نداشته باشه، اینجا خطا میده)
+            add_user(username, password, shop_name, phone)
+            flash("✅ مغازه جدید با موفقیت اضافه شد", "success")
+        except Exception as e:
+            flash(f"❌ خطا در ذخیره‌سازی: {str(e)}", "error")
+    else:
+        flash("❌ لطفا فیلدهای الزامی را پر کنید", "error")
+        
+    return redirect("/admin/dashboard")
+
+
 if __name__ == "__main__":
     init_db()
     init_contacts_table()
     init_templates_table()
     init_backup_table()
     app.run(host="0.0.0.0", port=8080, debug=False)
+
+
+# ============ ADMIN: MANAGE SHOPS ============
+@app.route("/admin/shops", methods=["GET", "POST"])
+@admin_required
+def admin_shops():
+    from database import add_user_full, delete_user, get_all_shop_owners
+    
+    if request.method == "POST":
+        action = request.form.get("action")
+        if action == "add":
+            username = request.form.get("username", "").strip()
+            password = request.form.get("password", "").strip()
+            shop_name = request.form.get("shop_name", "").strip()
+            phone = request.form.get("phone", "").strip()
+            days = request.form.get("days", "30")
+            
+            if username and password and shop_name:
+                try:
+                    days = int(days)
+                    success, err = add_user_full(username, password, shop_name, phone, days)
+                    if success:
+                        flash("✅ مغازه‌دار با موفقیت اضافه شد", "success")
+                    else:
+                        flash(f"❌ خطا: {err}", "error")
+                except:
+                    flash("❌ تعداد روز نامعتبر است", "error")
+            else:
+                flash("❌ فیلدهای الزامی را پر کنید", "error")
+                
+        elif action == "delete":
+            uid = request.form.get("uid")
+            if uid:
+                delete_user(uid)
+                flash("✅ مغازه‌دار حذف شد", "success")
+                
+        return redirect("/admin/shops")
+
+    shops = get_all_shop_owners()
+    return render_template("admin_shops.html", shops=shops, current_settings=_cs())

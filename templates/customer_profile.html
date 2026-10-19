@@ -41,4 +41,49 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;padd
 </div>
 {% include "_global_bg.html" %}
 {% with active="profile" %}{% include "_customer_nav.html" %}{% endwith %}
+
+    <div style="margin-top:20px; background:rgba(0,40,80,.5); border:1.5px solid rgba(0,212,255,.3); border-radius:16px; padding:16px;">
+        <div style="font-size:15px; font-weight:900; color:#00d4ff; margin-bottom:12px; text-align:center;">🔔 اعلان‌ها</div>
+        <p style="font-size:12px; color:#a8c8e0; text-align:center; margin-bottom:15px;">با فعال‌سازی این گزینه، وضعیت سفارش و تخفیف‌های جدید را سریع متوجه شوید.</p>
+        <button id="custPushBtn" onclick="enableCustPush()" style="width:100%; background:linear-gradient(135deg,#bf00ff,#00d4ff); border:none; padding:14px; border-radius:14px; color:#fff; font-weight:bold; font-family:Vazirmatn; font-size:14px; cursor:pointer; box-shadow:0 0 20px rgba(0,212,255,0.4); display:flex; align-items:center; justify-content:center; gap:8px;">
+            <span>🔔</span> فعال‌سازی اعلان‌ها
+        </button>
+    </div>
+
+    <script>
+    function urlB64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) { outputArray[i] = rawData.charCodeAt(i); }
+      return outputArray;
+    }
+    async function enableCustPush() {
+        const btn = document.getElementById('custPushBtn');
+        try {
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') { alert('شما اجازه ندادید!'); return; }
+            btn.innerHTML = '⏳ در حال ثبت...';
+            const oldRegs = await navigator.serviceWorker.getRegistrations();
+            for(let r of oldRegs) { await r.unregister(); }
+            const reg = await navigator.serviceWorker.register('/sw-new.js', { scope: '/' });
+            await navigator.serviceWorker.ready;
+            const response = await fetch('/api/push/key');
+            const data = await response.json();
+            const sub = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlB64ToUint8Array(data.key)
+            });
+            await fetch('/api/push/subscribe', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(sub)
+            });
+            btn.innerHTML = '✅ اعلان‌ها فعال شد';
+            btn.style.background = 'linear-gradient(135deg,#06d6a0,#0077b6)';
+        } catch(e) { alert('خطا: ' + e.message); btn.innerHTML = '🔔 فعال‌سازی اعلان‌ها'; }
+    }
+    </script>
+
 </body></html>

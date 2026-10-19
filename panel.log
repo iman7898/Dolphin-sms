@@ -24,5 +24,6 @@ customer_features OK
 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:8080
- * Running on http://192.168.78.11:8080
+ * Running on http://7.33.175.234:8080
 [33mPress CTRL+C to quit[0m
+127.0.0.1 - - [19/Oct/2026 11:16:24] "GET /admin/ HTTP/1.1" 200 -

@@ -4274,3 +4274,39 @@ def get_schedule_logs(limit=50):
                  FROM channel_schedule_log ORDER BY id DESC LIMIT ?""", (limit,))
     rows = c.fetchall(); conn.close()
     return rows
+
+
+# ============ ADMIN: ADD & DELETE USER ============
+from datetime import datetime as _dt, timedelta as _td
+
+def add_user_full(username, password, shop_name, phone, days=30):
+    end_date = (_dt.now() + _td(days=days)).strftime('%Y-%m-%d %H:%M:%S')
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    try:
+        c.execute("INSERT INTO users (username, password, shop_name, phone, end_date) VALUES (?,?,?,?,?)", 
+                  (username, password, shop_name, phone, end_date))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+    finally:
+        conn.close()
+
+def delete_user(user_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    try:
+        c.execute("DELETE FROM users WHERE id=?", (user_id,))
+        conn.commit()
+    except Exception as e:
+        pass
+    conn.close()
+
+def get_all_shop_owners():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT id, username, shop_name, phone, end_date, status FROM users WHERE id != 1 ORDER BY id DESC")
+    rows = c.fetchall()
+    conn.close()
+    return rows

@@ -397,6 +397,7 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
     </button>
 </div>
 
+
 <div class="main-cats">
 {% for c in home_cats %}
 <a href="/customer/category/{{ c[1] }}" class="main-cat" style="--c:{{ c[3] }}">
@@ -533,7 +534,7 @@ async function enableNotifications() {
         const oldRegs = await navigator.serviceWorker.getRegistrations();
         for(let reg of oldRegs) { await reg.unregister(); }
 
-        const reg = await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+        const reg = await navigator.serviceWorker.register('/service-worker.js?v=2', { scope: '/' });
         await navigator.serviceWorker.ready;
         
         const response = await fetch('/api/push/key');
@@ -543,6 +544,96 @@ async function enableNotifications() {
             return;
         }
         
+        const sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlB64ToUint8Array(data.key)
+        });
+
+        const saveRes = await fetch('/api/push/subscribe', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(sub)
+        });
+        
+        const saveData = await saveRes.json();
+        if(!saveData.ok) {
+            showPushToast('خطای سرور: ذخیره نشد!');
+            return;
+        }
+        
+        btn.innerHTML = '✅ اعلان‌ها فعال شد';
+        btn.style.background = 'linear-gradient(135deg,#06d6a0,#0077b6)';
+        showPushToast('با موفقیت فعال شد!', false);
+        
+        setTimeout(() => { document.getElementById('pushContainer').style.display = 'none'; }, 3000);
+        
+    } catch (e) {
+        showPushToast('خطا: ' + e.message);
+        btn.innerHTML = '🔔 فعال‌سازی اعلان‌های هوشمند';
+        btn.style.pointerEvents = 'auto';
+    }
+}
+</script>
+
+<div id="pushToast" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#ff4d6d; color:#fff; padding:10px 20px; border-radius:10px; font-weight:bold; z-index:99999; box-shadow:0 5px 15px rgba(0,0,0,0.5); text-align:center; width:80%; max-width:300px;"></div>
+
+<script>
+function showPushToast(msg, isError = true) {
+    const t = document.getElementById('pushToast');
+    t.innerText = msg;
+    t.style.background = isError ? '#ff4d6d' : '#06d6a0';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 4000);
+}
+
+function urlB64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) { outputArray[i] = rawData.charCodeAt(i); }
+  return outputArray;
+}
+
+async function enableNotifications() {
+    const btn = document.getElementById('enablePushBtn');
+    
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+            showPushToast('شما اجازه دسترسی به نوتیفیکیشن را ندادید!');
+            return;
+        }
+
+        btn.innerHTML = '⏳ در حال اتصال...';
+        btn.style.pointerEvents = 'none';
+
+        // 🚨 پاک کردن کامل سابسکرایب قبلی (مهم‌ترین بخش)
+        try {
+            const reg = await navigator.serviceWorker.getRegistration();
+            if (reg) {
+                const oldSub = await reg.pushManager.getSubscription();
+                if (oldSub) {
+                    await oldSub.unsubscribe(); // لغو سابسکرایب قبلی
+                }
+                const oldRegs = await navigator.serviceWorker.getRegistrations();
+                for(let r of oldRegs) { await r.unregister(); }
+            }
+        } catch(e) {}
+
+        // ثبت سرویس ورکر جدید (نسخه ۲)
+        const reg = await navigator.serviceWorker.register('/sw-new.js', { scope: '/' });
+        await navigator.serviceWorker.ready;
+        
+        const response = await fetch('/api/push/key');
+        const data = await response.json();
+        
+        if (!data.key) {
+            showPushToast('کلید امنیتی از سرور دریافت نشد!');
+            return;
+        }
+        
+        // سابسکرایب با کلید جدید
         const sub = await reg.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlB64ToUint8Array(data.key)

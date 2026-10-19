@@ -90,6 +90,12 @@ app = Flask(__name__)
 
 app.secret_key = SECRET_KEY
 
+@app.route('/sw-new.js')
+def serve_sw_new():
+    from flask import send_file
+    return send_file('static/sw-new.js', mimetype='application/javascript')
+
+
 # ============ SERVICE WORKER (ROOT SCOPE) ============
 from flask import send_file
 @app.route('/service-worker.js')
@@ -2034,11 +2040,13 @@ except Exception as _e:
 # ===== اتصال گزارش‌ها =====
 try:
     from report_routes import report_bp
+    from product_routes import product_bp
     from sales_routes import sales_bp
     from channel_send_routes import channel_send_bp
     from schedule_routes import schedule_bp
     
     app.register_blueprint(report_bp)
+    app.register_blueprint(product_bp)
     app.register_blueprint(sales_bp)
     app.register_blueprint(channel_send_bp)
     app.register_blueprint(schedule_bp)
@@ -2215,9 +2223,78 @@ try:
 except Exception as _e:
     pass
 
+
+# ============ ADMIN ADD USER (SHOP) ============
+@app.route("/admin/add-user", methods=["POST"])
+@admin_required
+def admin_add_user_new():
+    from database import add_user  # تابعی که مغازه جدید رو توی دیتابیس ذخیره می‌کنه
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "").strip()
+    shop_name = request.form.get("shop_name", "").strip()
+    phone = request.form.get("phone", "").strip()
+    
+    if username and password and shop_name:
+        try:
+            # فراخوانی تابع دیتابیس (اگه تابع add_user وجود نداشته باشه، اینجا خطا میده)
+            add_user(username, password, shop_name, phone)
+            flash("✅ مغازه جدید با موفقیت اضافه شد", "success")
+        except Exception as e:
+            flash(f"❌ خطا در ذخیره‌سازی: {str(e)}", "error")
+    else:
+        flash("❌ لطفا فیلدهای الزامی را پر کنید", "error")
+        
+    return redirect("/admin/dashboard")
+
+
+
+@app.route('/admin/', strict_slashes=False)
+def admin_recovered():
+    return '<h1 style="color:green;text-align:center;margin-top:50px;">پنل ادمین بازیابی شد! کد اصلی رو برگردون.</h1>'
+
 if __name__ == "__main__":
     init_db()
     init_contacts_table()
     init_templates_table()
     init_backup_table()
     app.run(host="0.0.0.0", port=8080, debug=False)
+
+
+# ============ ADMIN: MANAGE SHOPS ============
+@app.route("/admin/shops", methods=["GET", "POST"])
+@admin_required
+def admin_shops():
+    from database import add_user_full, delete_user, get_all_shop_owners
+    
+    if request.method == "POST":
+        action = request.form.get("action")
+        if action == "add":
+            username = request.form.get("username", "").strip()
+            password = request.form.get("password", "").strip()
+            shop_name = request.form.get("shop_name", "").strip()
+            phone = request.form.get("phone", "").strip()
+            days = request.form.get("days", "30")
+            
+            if username and password and shop_name:
+                try:
+                    days = int(days)
+                    success, err = add_user_full(username, password, shop_name, phone, days)
+                    if success:
+                        flash("✅ مغازه‌دار با موفقیت اضافه شد", "success")
+                    else:
+                        flash(f"❌ خطا: {err}", "error")
+                except:
+                    flash("❌ تعداد روز نامعتبر است", "error")
+            else:
+                flash("❌ فیلدهای الزامی را پر کنید", "error")
+                
+        elif action == "delete":
+            uid = request.form.get("uid")
+            if uid:
+                delete_user(uid)
+                flash("✅ مغازه‌دار حذف شد", "success")
+                
+        return redirect("/admin/shops")
+
+    shops = get_all_shop_owners()
+    return render_template("admin_shops.html", shops=shops, current_settings=_cs())

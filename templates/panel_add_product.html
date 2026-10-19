@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>افزودن محصول</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+body{font-family:Vazirmatn;background:#0a0a0f;color:#fff;padding:20px;direction:rtl;padding-bottom:100px}
+.card{background:rgba(10,20,40,.6);backdrop-filter:blur(20px);border:1.5px solid rgba(0,212,255,.3);border-radius:24px;padding:20px;max-width:500px;margin:0 auto}
+h2{text-align:center;color:#00d4ff;margin-bottom:20px}
+label{display:block;font-size:13px;color:#a8c8e0;margin-bottom:6px}
+input,textarea{width:100%;padding:12px;border-radius:12px;background:rgba(0,0,0,.3);color:#fff;border:1.5px solid rgba(0,212,255,.3);font-family:Vazirmatn;margin-bottom:15px;font-size:14px}
+input:focus,textarea:focus{outline:none;border-color:#00d4ff;box-shadow:0 0 15px rgba(0,212,255,.3)}
+.btn{width:100%;padding:15px;border-radius:12px;border:none;background:linear-gradient(135deg,#00d4ff,#0077b6);color:#fff;font-family:Vazirmatn;font-size:16px;font-weight:bold;cursor:pointer;margin-top:10px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,212,255,.4)}
+.btn-ai{background:linear-gradient(135deg,#bf00ff,#7700cc);margin-bottom:15px}
+.preview{display:none;margin-bottom:15px;position:relative;border-radius:12px;overflow:hidden;border:1.5px solid rgba(0,212,255,.4)}
+.preview img{width:100%;max-height:250px;object-fit:cover;display:block}
+.preview-rm{position:absolute;top:8px;left:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,60,100,.9);color:#fff;border:none;font-size:18px;font-weight:900;cursor:pointer}
+.loading{display:none;text-align:center;padding:20px;color:#00d4ff}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid rgba(0,212,255,.2);border-top-color:#00d4ff;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style></head><body>
+
+<div class="card">
+  <h2>➕ افزودن محصول جدید</h2>
+  
+  <label>📸 عکس محصول</label>
+  <div id="previewBox" class="preview">
+    <img id="previewImg" src="" alt="">
+    <button type="button" class="preview-rm" onclick="rmImg()">✕</button>
+  </div>
+  
+  <button type="button" class="btn btn-ai" onclick="openAiModal()">🎨 ساخت عکس با هوش مصنوعی</button>
+  
+  <form method="POST" action="/panel/add-product" id="prodForm">
+    <input type="hidden" name="image" id="formImg" value="">
+    <label>📦 نام محصول</label>
+    <input type="text" name="name" placeholder="مثلاً سیب قرمز" required>
+    
+    <label>💰 قیمت (تومان)</label>
+    <input type="number" name="price" placeholder="مثلاً 50000" required>
+    
+    <label>📝 توضیحات (اختیاری)</label>
+    <textarea name="description" placeholder="توضیح کوتاه درباره محصول..."></textarea>
+    
+    <button type="submit" class="btn">💾 ثبت محصول</button>
+  </form>
+</div>
+
+<div id="aiModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); backdrop-filter:blur(10px); z-index:100; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#0f172a; border:2px solid #bf00ff; border-radius:20px; padding:20px; width:100%; max-width:400px;">
+    <h3 style="color:#bf00ff; text-align:center; margin-bottom:15px;">🎨 ساخت عکس با AI</h3>
+    <textarea id="aiPrompt" placeholder="چه عکسی می‌خوای؟ (مثلاً: سیب قرمز تازه روی میز چوبی)" style="width:100%; padding:12px; border-radius:12px; background:rgba(0,0,0,.5); color:#fff; border:1px solid #bf00ff; font-family:Vazirmatn; min-height:80px; margin-bottom:15px;"></textarea>
+    <div id="aiLoading" class="loading" style="display:none;">
+      <div class="spin"></div>
+      <div style="margin-top:10px; color:#bf00ff;">در حال ساخت عکس...</div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button type="button" onclick="closeAiModal()" style="flex:1; padding:12px; border-radius:10px; border:1px solid #777; background:transparent; color:#fff; cursor:pointer;">انصراف</button>
+      <button type="button" id="aiSubmitBtn" onclick="generateAiImg()" style="flex:1; padding:12px; border-radius:10px; border:none; background:#bf00ff; color:#fff; cursor:pointer; font-weight:bold;">✨ ساخت</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openAiModal() { document.getElementById('aiModal').style.display = 'flex'; }
+function closeAiModal() { document.getElementById('aiModal').style.display = 'none'; }
+
+function generateAiImg() {
+    const prompt = document.getElementById('aiPrompt').value.trim();
+    if(!prompt) { alert('لطفا توضیح بده چه عکسی می‌خوای'); return; }
+    
+    document.getElementById('aiLoading').style.display = 'block';
+    document.getElementById('aiSubmitBtn').style.display = 'none';
+    
+    fetch('/panel/api/ai-image', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ prompt: prompt })
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('aiLoading').style.display = 'none';
+        document.getElementById('aiSubmitBtn').style.display = 'block';
+        
+        if(data.url) {
+            document.getElementById('previewImg').src = data.url;
+            document.getElementById('previewBox').style.display = 'block';
+            document.getElementById('formImg').value = data.url;
+            closeAiModal();
+        } else {
+            alert('خطا: ' + (data.error || 'مشکل در ساخت عکس'));
+        }
+    })
+    .catch(e => {
+        document.getElementById('aiLoading').style.display = 'none';
+        document.getElementById('aiSubmitBtn').style.display = 'block';
+        alert('خطا در شبکه');
+    });
+}
+
+function rmImg() {
+    document.getElementById('previewBox').style.display = 'none';
+    document.getElementById('formImg').value = '';
+}
+</script>
+
+</body></html>

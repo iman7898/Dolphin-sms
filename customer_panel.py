@@ -211,6 +211,12 @@ def customer_order(uid):
             flash('موضوع و پیام الزامی است', 'error')
         else:
             add_order(cid, uid, subject, message, phone)
+            # 🔔 ارسال نوتیفیکیشن به مغازه‌دار
+            try:
+                from customer_features_routes import send_push_to_user
+                send_push_to_user(uid, '🛒 سفارش جدید!', f'مشتری یک سفارش جدید ثبت کرد: {subject}', '/panel/orders')
+            except Exception as e:
+                print(f'Push Error: {e}', flush=True)
             flash('✅ سفارش ارسال شد', 'ok')
             return redirect('/customer/orders')
     cust = get_customer_by_id(cid)

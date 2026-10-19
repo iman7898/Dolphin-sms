@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مدیریت مغازه‌دارها</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;background:#0c2b4a;color:#e2e8f0;padding:20px;direction:rtl;min-height:100vh}
+.container{max-width:600px;margin:0 auto}
+.back{display:inline-block;padding:8px 16px;background:rgba(0,212,255,.15);border:1px solid #00d4ff;color:#00d4ff;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold;margin-bottom:20px}
+h2{text-align:center;color:#00d4ff;margin-bottom:20px;font-size:20px}
+
+/* فرم افزودن */
+.form-box{background:linear-gradient(135deg,rgba(0,40,80,.7),rgba(0,20,40,.5));border:1.5px solid rgba(0,212,255,.4);border-radius:20px;padding:20px;margin-bottom:24px;box-shadow:0 0 20px rgba(0,212,255,.2)}
+.form-box h3{color:#fff;margin-bottom:15px;font-size:16px;text-align:center}
+label{display:block;font-size:12px;color:#a8c8e0;margin-bottom:4px}
+input{width:100%;padding:12px;border-radius:10px;background:rgba(0,0,0,.3);color:#fff;border:1.5px solid rgba(0,212,255,.3);font-family:Vazirmatn;margin-bottom:12px;font-size:14px}
+input:focus{outline:none;border-color:#00d4ff;box-shadow:0 0 15px rgba(0,212,255,.3)}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#00d4ff,#0077b6);color:#fff;font-family:Vazirmatn;font-size:15px;font-weight:bold;cursor:pointer;box-shadow:0 0 20px rgba(0,212,255,.4)}
+
+/* لیست مغازه‌ها */
+.shop-card{background:rgba(0,20,40,.6);border:1px solid rgba(0,212,255,.3);border-radius:16px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.shop-info h4{color:#00d4ff;font-size:15px;margin-bottom:4px}
+.shop-info p{color:#a8c8e0;font-size:12px;margin-bottom:2px}
+.shop-info .date{color:#ffd700;font-size:11px;margin-top:5px;display:inline-block;background:rgba(255,215,0,.1);padding:2px 8px;border-radius:6px}
+.btn-del{background:rgba(255,77,109,.15);border:1px solid #ff4d6d;color:#ff8fab;padding:8px 16px;border-radius:10px;font-family:Vazirmatn;font-size:12px;font-weight:bold;cursor:pointer;transition:.3s}
+.btn-del:hover{background:rgba(255,77,109,.3)}
+.flash{padding:12px;border-radius:10px;margin-bottom:15px;text-align:center;font-size:13px;font-weight:bold}
+.flash.success{background:rgba(6,214,160,.15);border:1px solid #06d6a0;color:#06d6a0}
+.flash.error{background:rgba(255,77,109,.15);border:1px solid #ff4d6d;color:#ff8fab}
+</style></head><body>
+
+<div class="container">
+  <a href="/admin/dashboard" class="back">→ بازگشت به داشبورد</a>
+  <h2>🏪 مدیریت مغازه‌دارها</h2>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+  {% for cat, m in msgs %}
+  <div class="flash {{ cat }}">{{ m }}</div>
+  {% endfor %}
+  {% endwith %}
+
+  <!-- فرم افزودن -->
+  <div class="form-box">
+    <h3>➕ افزودن مغازه‌دار جدید</h3>
+    <form method="POST">
+      <input type="hidden" name="action" value="add">
+      <label>نام کاربری</label>
+      <input type="text" name="username" required placeholder="مثلا: ali_shop">
+      <label>رمز عبور</label>
+      <input type="text" name="password" required placeholder="مثلا: 123456">
+      <label>نام مغازه</label>
+      <input type="text" name="shop_name" required placeholder="مثلا: سوپرمارکت علی">
+      <label>شماره موبایل</label>
+      <input type="tel" name="phone" placeholder="09123456789" maxlength="11">
+      <label>تعداد روز اشتراک</label>
+      <input type="number" name="days" value="30" min="1" required>
+      <button type="submit" class="btn">✅ ثبت مغازه‌دار</button>
+    </form>
+  </div>
+
+  <!-- لیست مغازه‌ها -->
+  <h3 style="color:#fff; margin-bottom:15px; font-size:16px; border-bottom:1px dashed rgba(0,212,255,.3); padding-bottom:8px;">📋 لیست مغازه‌دارهای فعلی</h3>
+  
+  {% if shops %}
+    {% for s in shops %}
+    <div class="shop-card">
+      <div class="shop-info">
+        <h4>{{ s[2] or s[1] }}</h4>
+        <p>👤 یوزرنیم: {{ s[1] }}</p>
+        <p>📱 موبایل: {{ s[3] or 'ندارد' }}</p>
+        <div class="date">⏳ انقضا: {{ s[4] or 'نامشخص' }}</div>
+      </div>
+      <form method="POST" onsubmit="return confirm('مطمئنی می‌خوای این مغازه‌دار رو حذف کنی؟');">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="uid" value="{{ s[0] }}">
+        <button type="submit" class="btn-del">🗑 حذف</button>
+      </form>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="text-align:center; color:#a8c8e0; font-size:13px; padding:20px;">هیچ مغازه‌داری ثبت نشده است.</div>
+  {% endif %}
+
+</div>
+
+</body></html>
