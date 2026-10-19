@@ -1,3 +1,4 @@
+from image_generator import generate_image
 from flask import (Flask, request, render_template, redirect, url_for,
                    session, jsonify, flash)
 from database import *
