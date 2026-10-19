@@ -715,7 +715,7 @@ def _ask_ai(question, history=None):
     if not result:
         try:
             r = req.get(
-                f"https://text.pollinations.ai/{req.utils.quote(question)}?model=openai",
+                f"https://text.pollinations.ai/{req.utils.quote(question)}?model=flux-realism",
                 timeout=15
             )
             if r.status_code == 200 and r.text.strip():
