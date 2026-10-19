@@ -26,15 +26,3 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://7.64.168.232:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [19/Oct/2026 16:10:12] "GET /panel/channel-send HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 16:10:12] "[36mGET /static/icons/icon-192.png HTTP/1.1[0m" 304 -
-127.0.0.1 - - [19/Oct/2026 16:10:14] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [19/Oct/2026 16:10:39] "POST /panel/channel-send/ai-image HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 16:10:39] "GET /static/uploads/ai_148e5ed4.jpg HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 16:10:39] "[36mGET /static/uploads/ai_148e5ed4.jpg HTTP/1.1[0m" 304 -
-127.0.0.1 - - [19/Oct/2026 16:14:11] "POST /panel/channel-send/ai-image HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 16:14:11] "GET /static/uploads/ai_741743df.jpg HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 16:14:11] "[36mGET /static/uploads/ai_741743df.jpg HTTP/1.1[0m" 304 -
-127.0.0.1 - - [19/Oct/2026 16:17:18] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
-127.0.0.1 - - [19/Oct/2026 16:19:55] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
-127.0.0.1 - - [19/Oct/2026 16:19:58] "[35m[1mPOST /panel/channel-send/ai-image HTTP/1.1[0m" 500 -
