@@ -21,12 +21,5 @@ customer_panel OK
 customer_features OK
  * Serving Flask app 'app'
  * Debug mode: off
-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:8080
- * Running on http://7.33.175.234:8080
-[33mPress CTRL+C to quit[0m
-127.0.0.1 - - [19/Oct/2026 11:18:48] "GET /admin/ HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 11:18:51] "[33mGET /admin/shops HTTP/1.1[0m" 404 -
-127.0.0.1 - - [19/Oct/2026 11:18:52] "[33mGET /admin/shops HTTP/1.1[0m" 404 -
-127.0.0.1 - - [19/Oct/2026 11:18:54] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+Address already in use
+Port 8080 is in use by another program. Either identify and stop that program, or start the server with a different port.

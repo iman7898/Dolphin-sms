@@ -2248,18 +2248,6 @@ def admin_add_user_new():
 
 
 
-@app.route('/admin/', strict_slashes=False)
-def admin_recovered():
-    return '<h1 style="color:green;text-align:center;margin-top:50px;">پنل ادمین بازیابی شد! کد اصلی رو برگردون.</h1>'
-
-if __name__ == "__main__":
-    init_db()
-    init_contacts_table()
-    init_templates_table()
-    init_backup_table()
-    app.run(host="0.0.0.0", port=8080, debug=False)
-
-
 # ============ ADMIN: MANAGE SHOPS ============
 @app.route("/admin/shops", methods=["GET", "POST"])
 @admin_required
@@ -2298,3 +2286,13 @@ def admin_shops():
 
     shops = get_all_shop_owners()
     return render_template("admin_shops.html", shops=shops, current_settings=_cs())
+
+if __name__ == "__main__":
+    init_db()
+    init_contacts_table()
+    init_templates_table()
+    init_backup_table()
+    app.run(host="0.0.0.0", port=8080, debug=False)
+
+
+
