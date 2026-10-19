@@ -26,8 +26,7 @@ customer_features OK
  * Running on http://127.0.0.1:8080
  * Running on http://7.33.175.234:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [19/Oct/2026 11:17:45] "GET /admin/ HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 11:17:50] "[33mGET /admin/shops HTTP/1.1[0m" 404 -
-127.0.0.1 - - [19/Oct/2026 11:17:51] "[33mGET /admin/shops HTTP/1.1[0m" 404 -
-127.0.0.1 - - [19/Oct/2026 11:17:51] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
-127.0.0.1 - - [19/Oct/2026 11:17:53] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 11:18:48] "GET /admin/ HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 11:18:51] "[33mGET /admin/shops HTTP/1.1[0m" 404 -
+127.0.0.1 - - [19/Oct/2026 11:18:52] "[33mGET /admin/shops HTTP/1.1[0m" 404 -
+127.0.0.1 - - [19/Oct/2026 11:18:54] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
