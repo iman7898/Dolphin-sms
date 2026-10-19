@@ -64,4 +64,17 @@ body{margin:0;padding:0 0 90px;background:#0a0a0f;color:#e2e8f0;font-family:Vazi
 
 
 
+
+    <script>
+    document.addEventListener('click', function(e) {
+        // هر جایی که کلیک شد، چک کن اگه متنش ستاره داشت، برو به صفحه جوایز
+        let targetText = e.target.innerText || '';
+        let parentText = e.target.parentElement ? e.target.parentElement.innerText : '';
+        
+        if (targetText.includes('⭐') || parentText.includes('⭐')) {
+            window.location.href = '/customer/rewards';
+        }
+    });
+    </script>
+    
 </body></html>

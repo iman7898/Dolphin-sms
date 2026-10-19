@@ -135,4 +135,17 @@ body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
 
 
 
+
+    <script>
+    document.addEventListener('click', function(e) {
+        // هر جایی که کلیک شد، چک کن اگه متنش ستاره داشت، برو به صفحه جوایز
+        let targetText = e.target.innerText || '';
+        let parentText = e.target.parentElement ? e.target.parentElement.innerText : '';
+        
+        if (targetText.includes('⭐') || parentText.includes('⭐')) {
+            window.location.href = '/customer/rewards';
+        }
+    });
+    </script>
+    
 </body></html>

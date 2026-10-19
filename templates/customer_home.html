@@ -667,4 +667,17 @@ async function enableNotifications() {
 
 
 
+
+    <script>
+    document.addEventListener('click', function(e) {
+        // هر جایی که کلیک شد، چک کن اگه متنش ستاره داشت، برو به صفحه جوایز
+        let targetText = e.target.innerText || '';
+        let parentText = e.target.parentElement ? e.target.parentElement.innerText : '';
+        
+        if (targetText.includes('⭐') || parentText.includes('⭐')) {
+            window.location.href = '/customer/rewards';
+        }
+    });
+    </script>
+    
 </body></html>

@@ -96,4 +96,17 @@ textarea{min-height:110px;resize:vertical;line-height:1.7}
 
 
 
+
+    <script>
+    document.addEventListener('click', function(e) {
+        // هر جایی که کلیک شد، چک کن اگه متنش ستاره داشت، برو به صفحه جوایز
+        let targetText = e.target.innerText || '';
+        let parentText = e.target.parentElement ? e.target.parentElement.innerText : '';
+        
+        if (targetText.includes('⭐') || parentText.includes('⭐')) {
+            window.location.href = '/customer/rewards';
+        }
+    });
+    </script>
+    
 </body></html>
