@@ -2285,7 +2285,7 @@ def admin_shops():
         return redirect("/admin/shops")
 
     shops = get_all_shop_owners()
-    return render_template("admin_shops.html", shops=shops, current_settings=_cs())
+    return render_template("admin_shops.html", shops=shops, current_settings={})
 
 if __name__ == "__main__":
     init_db()
