@@ -1,29 +1,27 @@
-import os
-import time
 import requests
+import time
+import urllib.parse
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-MODEL_ID = "stabilityai/stable-diffusion-xl-base-1.0"
-API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL_ID}"
-
-def generate_image(prompt: str, max_retries: int = 3, timeout: int = 60) -> bytes:
-    if not HF_TOKEN:
-        raise RuntimeError("توکن HF_TOKEN تنظیم نشده است.")
+def generate_image(prompt: str, max_retries: int = 5, timeout: int = 60) -> bytes:
+    encoded_prompt = urllib.parse.quote(prompt)
+    # استفاده از مدل Flux (قوی‌ترین مدل رایگان) و سایز بالا
+    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&model=flux&nologo=true"
+    
     headers = {
-        "Authorization": f"Bearer {HF_TOKEN}",
-        "Content-Type": "application/json",
-        "Accept": "image/png",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
-    payload = {"inputs": prompt}
+
     for attempt in range(max_retries):
         try:
-            response = requests.post(API_URL, headers=headers, json=payload, timeout=timeout)
+            response = requests.get(url, headers=headers, timeout=timeout)
             if response.status_code == 200:
                 return response.content
-            if response.status_code in [429, 503]:
-                time.sleep((attempt + 1) * 5)
+            elif response.status_code in [429, 500, 502, 503, 504]:
+                print(f"⏳ سرور شلوغه، 10 ثانیه صبر می‌کنم... (تلاش {attempt+1})")
+                time.sleep(10)
                 continue
-            response.raise_for_status()
         except requests.exceptions.Timeout:
+            print("⏳ تایم‌اوت، تلاش مجدد...")
             time.sleep(5)
-    raise RuntimeError("ساخت عکس با شکست مواجه شد.")
+            
+    raise RuntimeError("ساخت عکس بعد از چند بار تلاش با شکست مواجه شد.")
