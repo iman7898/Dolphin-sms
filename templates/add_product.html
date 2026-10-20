@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>افزودن محصول | دلفین</title>
+    <style>
+        
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  padding-bottom:130px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a,#0f3f5f 40%,#051f33)}
+.back-bar{display:flex;align-items:center;gap:12px;padding:16px;
+  background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
+  border-bottom:1.5px solid rgba(150,210,240,.4);position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(15px)}
+.back-btn{width:42px;height:42px;border-radius:12px;background:rgba(93,184,232,.2);
+  border:1.5px solid rgba(144,224,239,.5);display:flex;align-items:center;
+  justify-content:center;color:#90e0ef;text-decoration:none;font-size:20px;font-weight:900}
+.page-title{font-size:18px;font-weight:900;color:#e0f4ff;flex:1;text-align:center;
+  margin-left:-42px;text-shadow:0 0 12px rgba(144,224,239,.6)}
+.container{padding:14px;max-width:600px;margin:0 auto}
+.card{background:linear-gradient(135deg,rgba(0,50,90,.65),rgba(0,30,60,.45));
+  border:1.5px solid rgba(150,210,240,.4);border-radius:20px;padding:18px;
+  backdrop-filter:blur(15px);margin-bottom:14px;
+  box-shadow:0 4px 20px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08)}
+.card-title{font-size:14px;font-weight:900;color:#90e0ef;margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px dashed rgba(144,224,239,.3);text-align:center}
+label{display:block;font-size:12.5px;color:#90e0ef;font-weight:800;margin-bottom:6px}
+input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;
+  background:rgba(0,30,60,.6);color:#e0f4ff;
+  border:1.5px solid rgba(93,184,232,.4);font-family:Vazirmatn,sans-serif;
+  font-size:13.5px;margin-bottom:12px;transition:.3s}
+textarea{min-height:100px;resize:vertical;line-height:1.7;direction:rtl;text-align:right}
+input:focus,textarea:focus{outline:none;border-color:#5db8e8;
+  box-shadow:0 0 20px rgba(93,184,232,.5)}
+.btn{width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;
+  font-family:Vazirmatn,sans-serif;font-size:15px;font-weight:900;
+  background:linear-gradient(135deg,#5db8e8,#0077b6);color:#fff;
+  box-shadow:0 0 25px rgba(93,184,232,.6);transition:.3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 35px rgba(93,184,232,.9)}
+.btn.green{background:linear-gradient(135deg,#06d6a0,#0077b6);
+  box-shadow:0 0 25px rgba(6,214,160,.6)}
+
+/* ۳ دکمه اصلی */
+.action-bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.act-btn{flex:1;min-width:90px;padding:11px;border-radius:12px;border:1.5px solid;
+  cursor:pointer;font-family:Vazirmatn;font-size:12px;font-weight:900;
+  background:rgba(0,30,60,.5);transition:.3s;display:flex;
+  align-items:center;justify-content:center;gap:6px}
+.act-ai{color:#c77dff;border-color:#c77dff}
+.act-ai:hover{background:rgba(199,125,255,.15);box-shadow:0 0 15px rgba(199,125,255,.5)}
+.act-emoji{color:#ffd60a;border-color:#ffd60a}
+.act-emoji:hover{background:rgba(255,214,10,.15);box-shadow:0 0 15px rgba(255,214,10,.5)}
+.act-img{color:#06d6a0;border-color:#06d6a0}
+.act-img:hover{background:rgba(6,214,160,.15);box-shadow:0 0 15px rgba(6,214,160,.5)}
+
+/* 🟢 ۳ گزینه جدید که زیر دکمه‌ها باز میشه */
+.photo-menu{display:none;gap:8px;margin-bottom:12px;animation:slideDown .3s ease-out}
+.photo-menu.show{display:flex}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.pm-btn{flex:1;padding:10px 4px;border-radius:12px;border:1.5px solid;
+  cursor:pointer;font-family:Vazirmatn;font-size:11.5px;font-weight:900;
+  background:rgba(0,30,60,.4);transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pm-btn .ic{font-size:18px}
+.pm-upload{color:#06d6a0;border-color:rgba(6,214,160,.4)}
+.pm-upload:hover{background:rgba(6,214,160,.15)}
+.pm-create{color:#c77dff;border-color:rgba(199,125,255,.4)}
+.pm-create:hover{background:rgba(199,125,255,.15)}
+.pm-edit{color:#ffd60a;border-color:rgba(255,214,10,.4)}
+.pm-edit:hover{background:rgba(255,214,10,.15)}
+
+/* پیش‌نمایش عکس */
+.preview{display:none;margin-bottom:10px;position:relative;
+  border-radius:12px;overflow:hidden;border:1.5px solid rgba(93,184,232,.4);cursor:pointer}
+.preview img{width:100%;display:block;max-height:250px;object-fit:cover}
+.preview-rm{position:absolute;top:8px;left:8px;width:32px;height:32px;
+  border-radius:50%;background:rgba(255,60,100,.9);color:#fff;border:none;
+  font-size:18px;font-weight:900;cursor:pointer;z-index:10}
+
+.msg{padding:12px;border-radius:12px;margin-bottom:12px;text-align:center;
+  font-size:13px;font-weight:900}
+.msg.ok{background:rgba(6,214,160,.15);border:1.5px solid #06d6a0;color:#06d6a0}
+.msg.error{background:rgba(255,107,157,.15);border:1.5px solid #ff6b9d;color:#ff8fab}
+
+.ch-item{display:flex;justify-content:space-between;align-items:center;
+  padding:12px;background:rgba(0,30,60,.5);border-radius:12px;margin-bottom:8px;
+  border:1px solid rgba(93,184,232,.3)}
+.ch-id{font-size:13px;font-weight:900;color:#90e0ef;font-family:monospace}
+.ch-del{padding:8px 12px;border-radius:8px;background:rgba(255,107,157,.15);
+  border:1px solid rgba(255,107,157,.5);color:#ff8fab;font-family:Vazirmatn;
+  font-size:11px;font-weight:900;cursor:pointer}
+.empty{text-align:center;padding:30px;color:#7a9cb5;font-size:12.5px}
+
+/* 🌟 مودال هوش مصنوعی */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);z-index:10000;align-items:center;justify-content:center;padding:20px}
+.modal{background:linear-gradient(135deg,#0f3f5f,#0c2b4a);width:100%;max-width:420px;
+  border-radius:20px;padding:20px;border:1.5px solid rgba(150,210,240,.4);
+  box-shadow:0 0 50px rgba(0,0,0,.5)}
+.modal-title{font-size:16px;font-weight:900;color:#90e0ef;text-align:center;margin-bottom:6px}
+.modal-sub{font-size:11px;color:#a8c8e0;text-align:center;margin-bottom:16px}
+
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.preset-chip{padding:6px 12px;border-radius:20px;background:rgba(93,184,232,.15);
+  border:1px solid rgba(93,184,232,.4);color:#e0f4ff;font-family:Vazirmatn;
+  font-size:11px;cursor:pointer;transition:.2s}
+.preset-chip:hover{background:rgba(93,184,232,.3);border-color:#5db8e8}
+
+.modal textarea{min-height:80px;margin-bottom:12px}
+.modal-actions{display:flex;gap:10px}
+.btn-cancel{background:rgba(150,210,240,.1);color:#a8c8e0;border:1.5px solid rgba(150,210,240,.3)}
+.loading-img{display:none;text-align:center;padding:20px;color:#90e0ef}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid rgba(144,224,239,.2);
+  border-top-color:#90e0ef;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* 🌟 توست (پیام شیک) */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:linear-gradient(135deg,#ff6b9d,#c9184a);color:#fff;padding:12px 24px;
+  border-radius:12px;font-weight:bold;font-size:13px;z-index:99999;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .3s;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+        
+        /* استایل‌های اختصاصی این صفحه (با استایل‌های خودت هماهنگ شده) */
+        * { font-family: inherit !important; box-sizing: border-box; }
+        body { background-color: #021222 !important; color: white !important; }
+        
+        .main-box { 
+            width: 100%; max-width: 500px; margin: 15px auto; 
+            background: #06213b !important; 
+            border: 1.5px solid #00a8ff !important; 
+            border-radius: 20px; padding: 20px; 
+        }
+        
+        .header-title { 
+            text-align: center; color: #00d4ff !important; 
+            font-size: 18px; font-weight: bold; margin-bottom: 20px; 
+        }
+        
+        .btn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        
+        .grid-btn { 
+            background: rgba(0,0,0,0.2) !important; 
+            border-radius: 12px; padding: 15px 5px; text-align: center; 
+            font-size: 13px; font-weight: bold; display: flex; 
+            flex-direction: column; align-items: center; gap: 8px; cursor: pointer;
+        }
+        .grid-btn i { font-size: 24px; font-style: normal; }
+        
+        .c-green { border: 1.5px solid #00ff88 !important; color: #00ff88 !important; }
+        .c-yellow { border: 1.5px solid #ffd700 !important; color: #ffd700 !important; }
+        .c-purple { border: 1.5px solid #b100ff !important; color: #b100ff !important; }
+        .c-pink { border: 1.5px solid #ff69b4 !important; color: #ff69b4 !important; }
+
+        .form-group { margin-bottom: 20px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 10px; color: white !important; font-size: 14px; font-weight: bold; }
+        
+        .form-control { 
+            width: 100%; 
+            background: #021222 !important; 
+            border: 1.5px solid #0066ff !important; 
+            color: white !important; 
+            padding: 15px; border-radius: 12px; 
+            font-size: 14px; outline: none; 
+        }
+        
+        textarea.form-control { resize: none; min-height: 120px; }
+        
+        .submit-btn { 
+            width: 100%; 
+            background: linear-gradient(90deg, #00ff88, #00d4ff) !important; 
+            color: #021222 !important; 
+            border: none; padding: 15px; 
+            border-radius: 15px; font-size: 16px; 
+            font-weight: bold; cursor: pointer; margin-top: 10px; 
+        }
+        #realImageInput { display: none; }
+    </style>
+</head>
+<body>
+
+    
+    <div style="color: #6688aa; font-size: 13px; margin-top: 8px; font-family: Tahoma;">فرمت‌های مجاز: JPG, PNG</div>
+</div>
+
+
+        
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // مخفی کردن دکمه‌های رنگی قبلی
+        document.querySelectorAll('div').forEach(function(d) {
+            if (d.innerText && d.innerText.includes('قوی‌سازی متن') && !d.innerText.includes('نام محصول')) {
+                d.style.setProperty('display', 'none', 'important');
+            }
+        });
+
+        let selectedFiles = [];
+        let input = document.getElementById('imgInput');
+        
+        document.getElementById('add-more-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            input.click();
+        });
+
+        input.addEventListener('change', function(e) {
+            let files = Array.from(e.target.files);
+            selectedFiles = selectedFiles.concat(files);
+            this.value = '';
+            updatePreviews();
+        });
+
+        function updatePreviews() {
+            let container = document.getElementById('preview-container');
+            container.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let div = document.createElement('div');
+                    div.style.cssText = 'position: relative; width: 80px; height: 80px;';
+                    
+                    let img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 2px solid #00ff88;';
+                    
+                    let delBtn = document.createElement('div');
+                    delBtn.innerHTML = '&times;';
+                    delBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; background: #ff4d4d; color: white; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-weight: bold; cursor: pointer; font-size: 14px;';
+                    delBtn.onclick = function(e) {
+                        e.stopPropagation();
+                        selectedFiles.splice(index, 1);
+                        updatePreviews();
+                    };
+                    
+                    div.appendChild(img);
+                    div.appendChild(delBtn);
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            if (selectedFiles.length > 0) {
+                document.getElementById('upload-text').style.display = 'none';
+                document.getElementById('add-more-btn').style.display = 'block';
+            } else {
+                document.getElementById('upload-text').style.display = 'block';
+                document.getElementById('add-more-btn').style.display = 'none';
+            }
+        }
+    });
+</script>
+
+
+<!-- === FORCED 100% WIDTH FORM === -->
+<div style="width: 100% !important; max-width: 100% !important; display: block !important; clear: both !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 !important;">
+    <form method="POST" enctype="multipart/form-data" action="/panel/add-product" style="width: 100% !important; display: block !important;">
+        
+        <div style="width: 100% !important; box-sizing: border-box !important; margin-bottom: 20px; padding: 30px 20px; background: #031526; border: 2px dashed #00ff88; border-radius: 15px; text-align: center; cursor: pointer; position: relative; min-height: 180px; display: flex !important; flex-direction: column; justify-content: center; align-items: center;" id="main-upload-box" onclick="document.getElementById('imgInput').click()">
+            
+            <div id="preview-container" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%;"></div>
+            
+            <div id="upload-text" style="pointer-events: none; width: 100% !important; text-align: center;">
+                <div style="font-size: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(0,255,136,0.5));">📸</div>
+                <div style="color: #00ff88; font-weight: bold; font-size: 16px; font-family: Tahoma;">برای آپلود عکس کلیک کنید</div>
+                <div style="color: #6688aa; font-size: 12px; margin-top: 5px; font-family: Tahoma;">(می‌توانید چند عکس انتخاب کنید)</div>
+            </div>
+            
+            <div id="add-more-btn" style="display: none; margin-top: 15px; background: #00ff88; color: #031526; width: 40px; height: 40px; border-radius: 50%; font-size: 26px; font-weight: bold; line-height: 38px; box-shadow: 0 0 15px rgba(0,255,136,0.5); pointer-events: auto; cursor: pointer;">+</div>
+        </div>
+        
+        <input type="file" id="imgInput" name="image" accept="image/*" multiple style="display: none;">
+        
+        <div style="margin-bottom: 15px; text-align:right; width: 100% !important; box-sizing: border-box !important;">
+            <label style="color: white; display:block; margin-bottom:8px; font-family:Tahoma; font-weight:bold;">📦 نام محصول</label>
+            <input type="text" name="name" placeholder="مثلاً سیب قرمز" style="width:100% !important; box-sizing: border-box !important; padding:15px; background:#021222; border:1.5px solid #0066ff; border-radius:12px; color:white; font-family:Tahoma; outline:none;" required>
+        </div>
+        <div style="margin-bottom: 15px; text-align:right; width: 100% !important; box-sizing: border-box !important;">
+            <label style="color: white; display:block; margin-bottom:8px; font-family:Tahoma; font-weight:bold;">💰 قیمت (تومان)</label>
+            <input type="number" name="price" placeholder="مثلاً ۵۰۰۰۰" style="width:100% !important; box-sizing: border-box !important; padding:15px; background:#021222; border:1.5px solid #0066ff; border-radius:12px; color:white; font-family:Tahoma; outline:none;" required>
+        </div>
+        <div style="margin-bottom: 15px; text-align:right; width: 100% !important; box-sizing: border-box !important;">
+            <label style="color: white; display:block; margin-bottom:8px; font-family:Tahoma; font-weight:bold;">📝 توضیحات</label>
+            <textarea name="description" placeholder="توضیح کوتاه درباره محصول..." style="width:100% !important; box-sizing: border-box !important; padding:15px; background:#021222; border:1.5px solid #0066ff; border-radius:12px; color:white; font-family:Tahoma; height:100px; outline:none; resize:none;"></textarea>
+        </div>
+        <button type="submit" style="width:100% !important; box-sizing: border-box !important; padding:15px; background:linear-gradient(90deg, #00ff88, #00d4ff); color:#021222; border:none; border-radius:15px; font-weight:bold; font-size:16px; font-family:Tahoma; cursor:pointer; box-shadow:0 4px 15px rgba(0,180,219,0.3);">💾 ثبت محصول</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // مخفی کردن دکمه‌های رنگی قبلی
+        document.querySelectorAll('div').forEach(function(d) {
+            if (d.innerText && d.innerText.includes('قوی‌سازی متن') && !d.innerText.includes('نام محصول')) {
+                d.style.setProperty('display', 'none', 'important');
+            }
+        });
+
+        let selectedFiles = [];
+        let input = document.getElementById('imgInput');
+        
+        document.getElementById('add-more-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            input.click();
+        });
+
+        input.addEventListener('change', function(e) {
+            let files = Array.from(e.target.files);
+            selectedFiles = selectedFiles.concat(files);
+            this.value = '';
+            updatePreviews();
+        });
+
+        function updatePreviews() {
+            let container = document.getElementById('preview-container');
+            container.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let div = document.createElement('div');
+                    div.style.cssText = 'position: relative; width: 80px; height: 80px;';
+                    
+                    let img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 2px solid #00ff88;';
+                    
+                    let delBtn = document.createElement('div');
+                    delBtn.innerHTML = '&times;';
+                    delBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; background: #ff4d4d; color: white; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-weight: bold; cursor: pointer; font-size: 14px;';
+                    delBtn.onclick = function(e) {
+                        e.stopPropagation();
+                        selectedFiles.splice(index, 1);
+                        updatePreviews();
+                    };
+                    
+                    div.appendChild(img);
+                    div.appendChild(delBtn);
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            if (selectedFiles.length > 0) {
+                document.getElementById('upload-text').style.display = 'none';
+                document.getElementById('add-more-btn').style.display = 'block';
+            } else {
+                document.getElementById('upload-text').style.display = 'block';
+                document.getElementById('add-more-btn').style.display = 'none';
+            }
+        }
+    });
+</script>
+<!-- === END FORM === -->
+
+
+<style>
+    /* زور زدن عرض 100 درصد به کل فرم و کادرها */
+    form[action="/panel/add-product"] { width: 100% !important; display: block !important; padding: 0 !important; }
+    form[action="/panel/add-product"] > div { width: 100% !important; display: block !important; box-sizing: border-box !important; }
+    #main-upload-box { width: 100% !important; max-width: 100% !important; display: flex !important; }
+    
+    /* مخفی کردن متن های مزاحم */
+    .rogue-text-remove { display: none !important; }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // پیدا کردن و مخفی کردن متن "فرمت های مجاز" که بیرون از کادر مونده
+        let elements = document.querySelectorAll('*');
+        elements.forEach(el => {
+            if (el.children.length === 0) { // فقط المان های برگ
+                let txt = el.innerText || '';
+                if (txt.includes('JPG') || txt.includes('PNG') || txt.includes('فرمت‌های مجاز')) {
+                    el.classList.add('rogue-text-remove');
+                    if(el.parentElement && el.parentElement.innerText.includes('JPG, PNG')) {
+                        el.parentElement.classList.add('rogue-text-remove');
+                    }
+                }
+            }
+        });
+
+        // زور زدن عرض 100 درصد به کادر آپلود
+        let box = document.getElementById('main-upload-box');
+        if (box) {
+            box.style.setProperty('width', '100%', 'important');
+            box.parentElement.style.setProperty('width', '100%', 'important');
+        }
+    });
+</script>
+
+</body>
+</html>

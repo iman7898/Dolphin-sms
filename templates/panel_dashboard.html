@@ -154,7 +154,235 @@ body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;
   font-size:10px;font-weight:900;min-width:18px;height:18px;
   border-radius:9px;display:flex;align-items:center;justify-content:center;
   padding:0 4px;box-shadow:0 0 10px rgba(93,184,232,.9)}
-</style></head><body>
+</style>
+    <style>
+    /* --- FORCED PRODUCT STYLE --- */
+    
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;min-height:100vh;
+  padding-bottom:130px;direction:rtl;
+  background:linear-gradient(180deg,#0c2b4a,#0f3f5f 40%,#051f33)}
+.back-bar{display:flex;align-items:center;gap:12px;padding:16px;
+  background:linear-gradient(135deg,rgba(0,40,80,.9),rgba(0,80,130,.6));
+  border-bottom:1.5px solid rgba(150,210,240,.4);position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(15px)}
+.back-btn{width:42px;height:42px;border-radius:12px;background:rgba(93,184,232,.2);
+  border:1.5px solid rgba(144,224,239,.5);display:flex;align-items:center;
+  justify-content:center;color:#90e0ef;text-decoration:none;font-size:20px;font-weight:900}
+.page-title{font-size:18px;font-weight:900;color:#e0f4ff;flex:1;text-align:center;
+  margin-left:-42px;text-shadow:0 0 12px rgba(144,224,239,.6)}
+.container{padding:14px;max-width:600px;margin:0 auto}
+.card{background:linear-gradient(135deg,rgba(0,50,90,.65),rgba(0,30,60,.45));
+  border:1.5px solid rgba(150,210,240,.4);border-radius:20px;padding:18px;
+  backdrop-filter:blur(15px);margin-bottom:14px;
+  box-shadow:0 4px 20px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08)}
+.card-title{font-size:14px;font-weight:900;color:#90e0ef;margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px dashed rgba(144,224,239,.3);text-align:center}
+label{display:block;font-size:12.5px;color:#90e0ef;font-weight:800;margin-bottom:6px}
+input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;
+  background:rgba(0,30,60,.6);color:#e0f4ff;
+  border:1.5px solid rgba(93,184,232,.4);font-family:Vazirmatn,sans-serif;
+  font-size:13.5px;margin-bottom:12px;transition:.3s}
+textarea{min-height:100px;resize:vertical;line-height:1.7;direction:rtl;text-align:right}
+input:focus,textarea:focus{outline:none;border-color:#5db8e8;
+  box-shadow:0 0 20px rgba(93,184,232,.5)}
+.btn{width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;
+  font-family:Vazirmatn,sans-serif;font-size:15px;font-weight:900;
+  background:linear-gradient(135deg,#5db8e8,#0077b6);color:#fff;
+  box-shadow:0 0 25px rgba(93,184,232,.6);transition:.3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 35px rgba(93,184,232,.9)}
+.btn.green{background:linear-gradient(135deg,#06d6a0,#0077b6);
+  box-shadow:0 0 25px rgba(6,214,160,.6)}
+
+/* ۳ دکمه اصلی */
+.action-bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.act-btn{flex:1;min-width:90px;padding:11px;border-radius:12px;border:1.5px solid;
+  cursor:pointer;font-family:Vazirmatn;font-size:12px;font-weight:900;
+  background:rgba(0,30,60,.5);transition:.3s;display:flex;
+  align-items:center;justify-content:center;gap:6px}
+.act-ai{color:#c77dff;border-color:#c77dff}
+.act-ai:hover{background:rgba(199,125,255,.15);box-shadow:0 0 15px rgba(199,125,255,.5)}
+.act-emoji{color:#ffd60a;border-color:#ffd60a}
+.act-emoji:hover{background:rgba(255,214,10,.15);box-shadow:0 0 15px rgba(255,214,10,.5)}
+.act-img{color:#06d6a0;border-color:#06d6a0}
+.act-img:hover{background:rgba(6,214,160,.15);box-shadow:0 0 15px rgba(6,214,160,.5)}
+
+/* 🟢 ۳ گزینه جدید که زیر دکمه‌ها باز میشه */
+.photo-menu{display:none;gap:8px;margin-bottom:12px;animation:slideDown .3s ease-out}
+.photo-menu.show{display:flex}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.pm-btn{flex:1;padding:10px 4px;border-radius:12px;border:1.5px solid;
+  cursor:pointer;font-family:Vazirmatn;font-size:11.5px;font-weight:900;
+  background:rgba(0,30,60,.4);transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pm-btn .ic{font-size:18px}
+.pm-upload{color:#06d6a0;border-color:rgba(6,214,160,.4)}
+.pm-upload:hover{background:rgba(6,214,160,.15)}
+.pm-create{color:#c77dff;border-color:rgba(199,125,255,.4)}
+.pm-create:hover{background:rgba(199,125,255,.15)}
+.pm-edit{color:#ffd60a;border-color:rgba(255,214,10,.4)}
+.pm-edit:hover{background:rgba(255,214,10,.15)}
+
+/* پیش‌نمایش عکس */
+.preview{display:none;margin-bottom:10px;position:relative;
+  border-radius:12px;overflow:hidden;border:1.5px solid rgba(93,184,232,.4);cursor:pointer}
+.preview img{width:100%;display:block;max-height:250px;object-fit:cover}
+.preview-rm{position:absolute;top:8px;left:8px;width:32px;height:32px;
+  border-radius:50%;background:rgba(255,60,100,.9);color:#fff;border:none;
+  font-size:18px;font-weight:900;cursor:pointer;z-index:10}
+
+.msg{padding:12px;border-radius:12px;margin-bottom:12px;text-align:center;
+  font-size:13px;font-weight:900}
+.msg.ok{background:rgba(6,214,160,.15);border:1.5px solid #06d6a0;color:#06d6a0}
+.msg.error{background:rgba(255,107,157,.15);border:1.5px solid #ff6b9d;color:#ff8fab}
+
+.ch-item{display:flex;justify-content:space-between;align-items:center;
+  padding:12px;background:rgba(0,30,60,.5);border-radius:12px;margin-bottom:8px;
+  border:1px solid rgba(93,184,232,.3)}
+.ch-id{font-size:13px;font-weight:900;color:#90e0ef;font-family:monospace}
+.ch-del{padding:8px 12px;border-radius:8px;background:rgba(255,107,157,.15);
+  border:1px solid rgba(255,107,157,.5);color:#ff8fab;font-family:Vazirmatn;
+  font-size:11px;font-weight:900;cursor:pointer}
+.empty{text-align:center;padding:30px;color:#7a9cb5;font-size:12.5px}
+
+/* 🌟 مودال هوش مصنوعی */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);z-index:10000;align-items:center;justify-content:center;padding:20px}
+.modal{background:linear-gradient(135deg,#0f3f5f,#0c2b4a);width:100%;max-width:420px;
+  border-radius:20px;padding:20px;border:1.5px solid rgba(150,210,240,.4);
+  box-shadow:0 0 50px rgba(0,0,0,.5)}
+.modal-title{font-size:16px;font-weight:900;color:#90e0ef;text-align:center;margin-bottom:6px}
+.modal-sub{font-size:11px;color:#a8c8e0;text-align:center;margin-bottom:16px}
+
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.preset-chip{padding:6px 12px;border-radius:20px;background:rgba(93,184,232,.15);
+  border:1px solid rgba(93,184,232,.4);color:#e0f4ff;font-family:Vazirmatn;
+  font-size:11px;cursor:pointer;transition:.2s}
+.preset-chip:hover{background:rgba(93,184,232,.3);border-color:#5db8e8}
+
+.modal textarea{min-height:80px;margin-bottom:12px}
+.modal-actions{display:flex;gap:10px}
+.btn-cancel{background:rgba(150,210,240,.1);color:#a8c8e0;border:1.5px solid rgba(150,210,240,.3)}
+.loading-img{display:none;text-align:center;padding:20px;color:#90e0ef}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid rgba(144,224,239,.2);
+  border-top-color:#90e0ef;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* 🌟 توست (پیام شیک) */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:linear-gradient(135deg,#ff6b9d,#c9184a);color:#fff;padding:12px 24px;
+  border-radius:12px;font-weight:bold;font-size:13px;z-index:99999;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .3s;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+    
+    /* اعمال زورکی استایل‌های کانال به فرم محصول */
+    .add-product-container, form#addProductForm {
+        background: #06213b !important;
+        border: 1.5px solid #00a8ff !important;
+        border-radius: 20px !important;
+        padding: 20px !important;
+        box-shadow: 0 0 15px rgba(0,168,255,0.15) !important;
+    }
+    
+    .add-product-container input, .add-product-container textarea,
+    form#addProductForm input, form#addProductForm textarea {
+        background: #021222 !important;
+        border: 1.5px solid #0066ff !important;
+        color: white !important;
+        padding: 15px !important;
+        border-radius: 12px !important;
+        font-family: inherit !important;
+    }
+    
+    .add-product-container button[type="submit"],
+    form#addProductForm button[type="submit"] {
+        background: linear-gradient(90deg, #00ff88, #00d4ff) !important;
+        color: #021222 !important;
+        font-weight: bold !important;
+        border-radius: 15px !important;
+        padding: 15px !important;
+        border: none !important;
+    }
+    </style>
+    
+
+<!-- ====== ULTIMATE FORCE THEME START ====== -->
+<style>
+    /* پس زمینه اصلی */
+    body { background-color: #021222 !important; color: white !important; }
+    
+    /* کادرهای اصلی (شامل فرم ها و کارت ها) */
+    .card, .glass-panel, form, .main-box, .content-box { 
+        background: #06213b !important; 
+        border: 1.5px solid #00a8ff !important; 
+        border-radius: 20px !important; 
+        padding: 20px !important; 
+        box-shadow: 0 0 15px rgba(0,168,255,0.15) !important;
+    }
+    
+    /* اینپوت ها و تکست آریا */
+    input, textarea, select { 
+        background: #031526 !important; 
+        border: 1.5px solid #0066ff !important; 
+        color: white !important; 
+        padding: 15px !important; 
+        border-radius: 12px !important; 
+        font-family: Tahoma, Arial, sans-serif !important; 
+        font-size: 14px !important;
+        width: 100% !important;
+        outline: none !important;
+    }
+    
+    /* دکمه های ثبت و ارسال */
+    button[type="submit"], .submit-btn, .btn-primary { 
+        background: linear-gradient(90deg, #00ff88, #00d4ff) !important; 
+        color: #021222 !important; 
+        font-weight: bold !important; 
+        border-radius: 15px !important; 
+        padding: 15px !important; 
+        border: none !important; 
+        font-family: Tahoma !important;
+        font-size: 16px !important;
+        width: 100% !important;
+        box-shadow: 0 4px 15px rgba(0,180,219,0.3) !important;
+    }
+
+    /* دکمه بنفش رنگی که تو عکس قبلی بود رو کلا مخفی میکنه (اگه مونده باشه) */
+    .btn-purple { background: transparent !important; border: 1px solid #00a8ff !important; }
+
+    /* تیترها */
+    h1, h2, h3 { color: #00d4ff !important; text-align: center !important; }
+    
+    /* لیبل ها */
+    label { color: #fff !important; font-family: Tahoma !important; font-weight: bold !important; }
+</style>
+<!-- ====== ULTIMATE FORCE THEME END ====== -->
+
+
+<style>
+    body { background-color: #021222 !important; color: white !important; font-family: Tahoma, sans-serif !important; }
+    form, .card, .glass-panel, .main-box, div[style*="background"] { 
+        background: #06213b !important; 
+        border: 1.5px solid #00a8ff !important; 
+        border-radius: 20px !important; 
+        padding: 20px !important; 
+        box-shadow: 0 0 15px rgba(0,168,255,0.15) !important;
+    }
+    label, h1, h2, h3, span, div { font-family: Tahoma, sans-serif !important; }
+</style>
+
+</head><body>
+
+        <a href="/panel/activate-admin" style="text-decoration:none; color:inherit; display:block; margin-top:15px;">
+            <div style="background: rgba(0, 212, 255, 0.1); border: 1.5px solid #00d4ff; border-radius: 15px; padding: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 0 15px rgba(0,212,255,0.2);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">⚙️</span>
+                    <span style="font-weight: bold; color: white; font-size: 15px;">فعال‌سازی ادمین کانال</span>
+                </div>
+                <span style="color: #00d4ff; font-size: 20px;">‹</span>
+            </div>
+        </a>
+        
 
 <a href="/notifications" class="notif-bell" id="notifBellLink" title="اعلان‌ها">
   🔔<span class="notif-bell" id="notifBadge" style="display:none"></span>
@@ -276,4 +504,139 @@ body{font-family:'Vazirmatn',Tahoma,sans-serif;color:#e2e8f0;
     });
     </script>
     
+
+<!-- === REVIVE BUTTONS === -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // پیدا کردن تمام دکمه ها
+    let divs = document.querySelectorAll('div');
+    
+    divs.forEach(function(btn) {
+        let txt = btn.innerText || '';
+        // اگه دکمه های 6 گانه بود
+        if (txt.includes('عکس') && txt.includes('📷')) {
+            btn.onclick = function() { document.querySelector('input[type="file"]').click(); };
+        } 
+        else if (txt.includes('آپلود از گوشی') || (txt.includes('آپلود') && txt.includes('📁'))) {
+            btn.onclick = function() { document.querySelector('input[type="file"]').click(); };
+        }
+        else if (txt.includes('ایموجی') && txt.includes('😋')) {
+            btn.onclick = function() { alert('بخش ایموجی به زودی فعال میشود!'); };
+        }
+        else if (txt.includes('قوی‌سازی') && txt.includes('🤖')) {
+            btn.onclick = function() { alert('هوش مصنوعی در حال قوی کردن متن است...'); };
+        }
+        else if (txt.includes('تغییر با AI') && txt.includes('✨')) {
+            btn.onclick = function() { alert('متن با هوش مصنوعی تغییر میکند...'); };
+        }
+        else if (txt.includes('ساخت با AI') && txt.includes('🎨')) {
+            btn.onclick = function() { alert('در حال ساخت عکس با هوش مصنوعی...'); };
+        }
+    });
+});
+</script>
+<!-- === REVIVE BUTTONS END === -->
+
+
+<!-- REMOVE_AI_BUTTONS_SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. پیدا کردن و مخفی کردن 6 دکمه
+    let divs = document.querySelectorAll('div');
+    let grid = null;
+    for (let d of divs) {
+        if (d.innerText && d.innerText.includes('قوی‌سازی متن') && d.children.length > 1) {
+            grid = d;
+            break;
+        }
+    }
+    
+    if (grid) {
+        grid.style.display = 'none'; // مخفی کردن کامل 6 دکمه
+        
+        // 2. ساخت کادر بزرگ آپلود
+        let uploadArea = document.createElement('div');
+        uploadArea.style.cssText = 'margin-bottom: 20px; padding: 30px 20px; background: #031526; border: 2px dashed #00ff88; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s;';
+        uploadArea.onmouseover = () => uploadArea.style.background = '#06213b';
+        uploadArea.onmouseout = () => uploadArea.style.background = '#031526';
+        
+        uploadArea.onclick = function() {
+            let fileInput = document.querySelector('input[type="file"]');
+            if(fileInput) fileInput.click();
+        };
+        
+        uploadArea.innerHTML = `
+            <div style="font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0,255,136,0.5));">📸</div>
+            <div style="color: #00ff88; font-weight: bold; font-size: 18px; font-family: Tahoma;">برای آپلود عکس محصول کلیک کنید</div>
+            <div style="color: #6688aa; font-size: 13px; margin-top: 8px; font-family: Tahoma;">فرمت‌های مجاز: JPG, PNG</div>
+        `;
+        
+        // قرار دادن کادر بعد از دکمه‌های مخفی شده
+        grid.parentNode.insertBefore(uploadArea, grid.nextSibling);
+    }
+
+    // 3. اطمینان از اینکه فرم قابلیت آپلود فایل رو داره
+    let forms = document.querySelectorAll('form');
+    forms.forEach(f => {
+        f.setAttribute('enctype', 'multipart/form-data');
+        let fi = f.querySelector('input[type="file"]');
+        if (!fi) {
+            let newFi = document.createElement('input');
+            newFi.type = 'file';
+            newFi.name = 'image';
+            newFi.accept = 'image/*';
+            newFi.style.display = 'none';
+            f.appendChild(newFi);
+        } else {
+            fi.style.display = 'none';
+            if (!fi.name) fi.name = 'image';
+        }
+    });
+});
+</script>
+<!-- REMOVE_AI_BUTTONS_SCRIPT -->
+
+
+
+
+
+<!-- === IMAGE UPLOAD PREVIEW === -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // پیدا کردن کادر آپلود
+    let uploadBox = Array.from(document.querySelectorAll('div')).find(el => el.innerText.includes('برای آپلود عکس محصول کلیک کنید') || el.innerText.includes('عکس با موفقیت انتخاب شد'));
+    if (!uploadBox) return;
+
+    let fileInput = document.querySelector('input[type="file"]');
+    if (!fileInput) return;
+
+    // وقتی عکس انتخاب شد
+    fileInput.addEventListener('change', function(e) {
+        let file = e.target.files[0];
+        if (!file) return;
+
+        let reader = new FileReader();
+        reader.onload = function(event) {
+            // 1. پاک کردن کل محوای داخل کادر (متن و آیکون)
+            uploadBox.innerHTML = '';
+            
+            // 2. تغییر ظاهر کادر (حذف خط چین و گرد کردن گوشه ها)
+            uploadBox.style.border = '2px solid #00ff88';
+            uploadBox.style.padding = '0';
+            uploadBox.style.overflow = 'hidden';
+            uploadBox.style.background = '#000';
+            
+            // 3. ساخت تگ عکس و گذاشتنش داخل کادر
+            let imgPreview = document.createElement('img');
+            imgPreview.src = event.target.result;
+            imgPreview.style.cssText = 'width: 100%; height: 250px; object-fit: cover; display: block;';
+            
+            uploadBox.appendChild(imgPreview);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+<!-- === IMAGE UPLOAD PREVIEW END === -->
+
 </body></html>

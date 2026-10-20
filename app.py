@@ -2352,7 +2352,7 @@ if __name__ == "__main__":
     init_contacts_table()
     init_templates_table()
     init_backup_table()
-    import os; app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)), debug=False)
+    import os; import os; app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)), debug=False)), debug=False)
 
 
 

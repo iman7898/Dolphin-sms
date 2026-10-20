@@ -24,25 +24,32 @@ customer_features OK
 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:8080
- * Running on http://7.64.168.232:8080
+ * Running on http://102.45.110.48:8080
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [19/Oct/2026 16:44:03] "GET /customer/home HTTP/1.1" 200 -
-127.0.0.1 - - [19/Oct/2026 16:44:04] "[36mGET /static/icons/icon-192.png HTTP/1.1[0m" 304 -
-127.0.0.1 - - [19/Oct/2026 16:44:04] "[36mGET /static/apple-touch-icon.png HTTP/1.1[0m" 304 -
-[2026-10-19 16:44:04,741] ERROR in app: Exception on /customer/rewards [GET]
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/data/data/com.termux/files/usr/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/data/data/com.termux/files/home/otp_panel/app.py", line 2302, in customer_rewards
-    db = get_db() # تابع اتصال به دیتابیس
-         ^^^^^^
-NameError: name 'get_db' is not defined
-127.0.0.1 - - [19/Oct/2026 16:44:04] "[35m[1mGET /customer/rewards HTTP/1.1[0m" 500 -
-127.0.0.1 - - [19/Oct/2026 16:44:06] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:28] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:56:35] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 22:56:35] "GET /admin/login HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:56:36] "[36mGET /static/scroll-fix.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:36] "[36mGET /static/custom-alert.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:36] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:36] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:36] "[36mGET /static/apple-touch-icon.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:36] "[36mGET /static/icons/icon-192.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:56:43] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 22:56:46] "GET /panel/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:56:46] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:56:46] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [19/Oct/2026 22:56:58] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:57:02] "GET /admin/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:57:02] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:57:05] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Oct/2026 22:57:16] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [19/Oct/2026 22:57:32] "GET /api/notif/count HTTP/1.1" 200 -
+127.0.0.1 - - [20/Oct/2026 08:25:18] "GET /customer/login HTTP/1.1" 200 -
+127.0.0.1 - - [20/Oct/2026 08:25:20] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [20/Oct/2026 08:25:50] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+127.0.0.1 - - [20/Oct/2026 08:25:50] "GET /admin/login HTTP/1.1" 200 -
+127.0.0.1 - - [20/Oct/2026 08:25:50] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+127.0.0.1 - - [20/Oct/2026 08:25:50] "[36mGET /static/icon-512.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [20/Oct/2026 08:25:52] "[36mGET /sw-new.js HTTP/1.1[0m" 304 -
