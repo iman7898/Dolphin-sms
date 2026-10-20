@@ -2326,13 +2326,33 @@ def customer_rewards():
             
     return render_template('customer_rewards.html', points_num=points_num, tier_name=tier_name)
 
+
+@app.route('/panel/activate-admin', methods=['GET', 'POST'])
+def panel_activate_admin():
+    if request.method == 'POST':
+        channel_id = request.form.get('channel_id')
+        max_messages = request.form.get('max_messages')
+        shop_id = session.get('user_id') # یا هر چیزی که برای مغازه‌دار استفاده میکنی
+        
+        import sqlite3
+        conn = sqlite3.connect('panel.db')
+        conn.execute("INSERT OR REPLACE INTO shop_bot_settings (shop_id, channel_id, max_messages, is_active) VALUES (?, ?, ?, 1)", (shop_id, channel_id, max_messages))
+        conn.commit()
+        conn.close()
+        
+        flash('✅ ادمین کانال با موفقیت فعال شد!', 'success')
+        return redirect('/panel/')
+        
+    return render_template('panel_admin_activation.html')
+    
+
 if __name__ == "__main__":
 
     init_db()
     init_contacts_table()
     init_templates_table()
     init_backup_table()
-    app.run(host="0.0.0.0", port=8080, debug=False)
+    import os; app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)), debug=False)
 
 
 
